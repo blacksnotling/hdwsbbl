@@ -1,0 +1,45 @@
+/*
+Theme Name: Team Theme 1 - Crownstar
+*/
+/*
+Used to style the TinyMCE editor.
+*/
+html .mceContentBody {
+	max-width:640px;
+}
+* {
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size: 0.7em;
+	line-height: 160%;
+	text-align: justify;
+}
+p, h2, h3, h4, h5, table, blockquote {
+	margin-bottom: 0.6em;
+}
+ul, ol {
+	line-height: 160%;
+	margin: 0.4em 0 0.6em 1.5em;
+	padding: 0 0.6em 0 1em;
+	list-style-position: inside;
+}
+h2, h3, h4, h5 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	text-align: left;	
+}
+h2 {
+	font-weight: bold;
+	font-size: 1.8em;
+	border-bottom: 1px solid #7A99FF;
+	padding-bottom: 3px;
+	text-transform:capitalize;
+}
+h3 {
+	font-size: 1.4em;
+	padding-bottom: 0.2em;
+}
+h4 {
+	font-size: 1.2em;	
+}
+h5 {
+	font-size: 1.1em;	
+}

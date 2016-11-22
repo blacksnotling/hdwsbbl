@@ -1,0 +1,488 @@
+/*
+Theme Name: Team Theme 2 - Von Lipwig
+Theme URI: http://network.hdwsbbl.co.uk
+Description: Team Theme 2 for the HDWSBBL Team News Network
+Version: 1.0
+Author: The HDWSBBL
+Author URI: http://www.hdwsbbl.co.uk
+*/
+/***** Layout and positioning *****/
+* {
+	margin:0;
+	padding:0;
+}
+html { min-height: 100%; margin-bottom: 1px; } /* FireFox Page-Shift Fix*/
+body {
+	margin: 0;
+	text-align: center;
+	padding:0;
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size: 0.7em;
+	background-color: #fefefe;
+	color: #444;
+}
+#wrapper, #main-wrapper {
+
+}
+/***** HDWSBBL Network Info Box *****/
+#hdwsbblbox {
+	margin: 0;
+	padding: 5px 10px;
+	text-align: right;
+	background-color: #333;
+	color: #fefefe;
+}
+#hdwsbblbox a, #hdwsbblbox a:link, #hdwsbblbox a:visited {
+	color: #fefefe;
+	text-decoration: underline;
+}
+#hdwsbblbox a:hover, #hdwsbblbox a:active {
+	color: #FF4D00;
+	text-decoration: underline;
+}
+/***** Header *****/
+#header {
+	height: 120px;
+	width: 100%;
+	background-color: #685A4B;
+	text-align: left;
+}
+#header h1 {
+	float: left;
+	padding-top: 20px;
+	padding-left: 10px;
+	font-size: 2.5em;
+	font-weight: bold;
+	line-height: 50px;
+}
+#header p {
+	clear:both;
+	color: #ccc;
+	padding-left: 40px;
+	font-size: 1.3em;
+	font-style: italic;
+}
+#header a, #header a:link, #header a:visited {
+	color: #eee;
+	text-decoration: none;
+}
+
+#header a:hover, #header a:active {
+	color: #3366FF;
+	text-decoration: underline;
+}
+/***** Navigation *****/
+#navcontainer {
+	clear:both;
+	display: block;
+	height: 40px; 
+	font-size: 1.4em; 
+	text-align: center;
+	background-color: #f3f3f3;
+	border-bottom: 1px solid #aaa;
+}
+#navcontainer ul {
+	clear:both;
+	list-style: none;
+	text-align: center;
+	margin: 0 auto;
+}
+#navcontainer ul li {
+	float: left;
+}
+#navcontainer ul li a {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size: 1em;	
+	display: block;
+	line-height: 40px;
+	margin: 0;
+	text-align: center;
+	text-decoration: none;
+	padding-left: 16px;
+	padding-right: 5px;
+	color: #333;	
+}
+#navcontainer ul li a:hover {
+	background-color: #ccc;
+}
+/***** Page Content *****/
+#pagecontent {
+	width:730px;
+	margin: 0 auto;
+	text-align: left;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	background: #fefefe url(images/bg_content.gif) top left repeat-y;
+}
+/***** Main Content *****/
+#maincontent {
+	padding: 1em 1em 0 1em;
+	text-align: justify;
+	width: 480px;
+	float: left;
+	line-height: 160%;
+}
+#maincontent p, #maincontent h2, #maincontent h3, #maincontent h4, #maincontent table {
+	margin-bottom: 0.6em;
+}
+#maincontent ul, #maincontent ol {
+	line-height: 160%;
+	margin: 0.4em 0 0.6em 1.5em;
+	padding: 0 0.6em 0 1em;
+	list-style-position: inside;
+}
+#maincontent ul {
+	list-style: square;
+}
+#maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	text-align: left;	
+}
+#maincontent h3, #maincontent h4, #maincontent h5 {
+	padding-top: 0.6em;
+}
+#maincontent h2 {
+	font-weight: bold;
+	font-size: 1.8em;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 3px;
+}
+#maincontent h3 {
+	font-size: 1.4em;
+	padding-bottom: 0.2em;
+}
+#maincontent h4 {
+	font-size: 1.2em;	
+}
+#maincontent h5 {
+	font-size: 1.1em;	
+}
+#breadcrumb {
+	margin-bottom: 2em;
+}
+.postmeta {
+	text-align: right;
+	padding-bottom: 20px;
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #aaa;
+	clear: both;
+}
+.postdate {
+	text-indent: 20px;
+	font-size:smaller;
+	background-image: url(images/clock.gif);
+	background-position: 0;
+	background-repeat: no-repeat;
+	margin-top:-9px;
+}
+.subtext {
+	font-size:larger;
+	font-weight:bold;
+}
+/***** Sub Content (Sidebar) *****/
+#subcontent {
+	float: right;
+	width: 200px;
+	padding: 1em 0.2em 0 0.5em;
+}
+#subcontent p, #subcontent h2, #subcontent ul li ul, #subcontent ol, #subcontent dl, #subcontent img {
+	margin-bottom: 0.6em;
+}
+#subcontent h2 {
+	margin-top: 0.6em;
+}
+#searchform {
+	margin-top: 1em;
+}
+#subcontent ul li ul, #subcontent ol, #subcontent dl {
+	line-height: 140%;
+	margin: 0.4em 0 0.6em 0;
+	padding: 0 0.6em 0 1em;
+	list-style-position: outside;
+}
+#subcontent ul {
+	list-style: none;
+}
+#subcontent ul li ul {
+	list-style: square;
+}
+#subcontent dl {
+	padding-left: 0.4em;
+}
+#subcontent dd {
+	padding-left: 0.7em;	
+}
+#subcontent dt {
+	display:none;
+}
+#subcontent h2 {
+	font-size: 1.2em;
+	border-bottom: 1px solid #ddd;
+	line-height: 140%;
+	padding-bottom: 0.2em;
+	color: #666;
+	text-indent: 22px;
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+	background-image: url(images/page_white.gif);	
+}
+#subcontent li.recent_matches h2{
+	background-image: url(images/helmet.gif);
+}
+#subcontent li.upcoming_matches h2 {
+	background-image: url(images/ball.gif);
+}
+#subcontent li.hdwsbbl_achievements h2{
+	background-image: url(images/trophy.gif);
+}
+#subcontent li.team_sponsor p {
+	background-image: url(images/star.gif);
+	line-height: 140%;
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+	text-indent: 22px;
+}
+/***** Footer *****/
+#footer {
+	clear:both;
+	color: #ccc;
+	font-size: 85%;
+	border-top: 10px solid #67684B;
+	padding: 0.2em 1em 2em;
+	height: 60px;
+	background-color: #685A4B;
+	text-align: left;
+}
+#footertext {
+	float:left;
+	width: 500px;
+}
+#footerimg {
+	float:right;
+	width: 300px;
+}
+#footer a, #footer a:link, #footer a:visited {
+	color: #D7651B;
+	text-decoration: none;
+}
+
+#footer a:hover, #footer a:active {
+	color: #ddd;
+	text-decoration: underline;
+}
+/***** General Styles *****/
+a, a:link, a:visited {
+	color: #65778B;
+	text-decoration: none;
+}
+
+a:hover, a:active {
+	color: #684B59;
+	text-decoration: underline;
+}
+p.readmorelink {
+	border: 1px solid #ddd;
+	padding: 3px;
+	font-weight:bold;
+}
+.info {
+	border:1px solid #6B9CF4;
+	margin: 4px 0;
+	margin-left:2px;
+	padding: 4px;
+	padding-left: 30px;
+	font-family: Verdana;
+	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;	
+}
+.info p {
+	padding-top:4px;
+	margin-bottom:4px;
+}
+.warning {
+	border: 1px solid #FF0B0B;
+	padding: 0.6em 1em 0 2.3em;
+	background: #FF9595 url(../images/exclamation.gif) 4px 50% no-repeat;
+	margin-bottom: 0.6em;
+}
+blockquote {
+	margin: 15px 30px 0 0;
+	padding: 5px 15px 2px 15px;
+	border: 1px dashed #aaa;
+	background-color: #f3f3f3;
+}
+blockquote cite {
+	margin: 5px 0 0;
+	display: block;
+}
+img, img a {
+	border:none;
+}
+form#post, form#statstable {
+	border: 1px solid #333;
+	margin: 5px auto;
+	padding: 5px;
+	width: 75%;
+	text-align: center;
+}
+/* wp default image styles */
+img.alignleft {
+	float:left;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+img.alignright {
+	float:right;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+li.active {
+	background: url(images/star.gif) no-repeat 100% 0;
+	padding: 0 20px 0 0;	
+}
+/***** Tables *********/
+table {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-collapse: collapse;
+}
+table th {
+	border-bottom: 4px solid #aaa;
+	background-color: #f3f3f3;
+	color: #333;
+	font-weight: bold;
+	text-align: center;
+}
+
+table tr.tbl_alt {
+	background-color: #ccc;
+}
+table td {
+	text-align: center;
+	border-left-style: dotted;
+	border-bottom-style: solid;
+	border-color: #aaa;
+	border-width: 1px;
+	padding: 0.3em;
+}
+td.td_title {
+	font-weight: bold;
+	font-style: italic;
+	font-size: 1.2em;
+	background-color: #ffffaa;
+}
+th.totaux {
+	border-bottom: 1px solid #000000;
+}
+th.tbl_matchname {
+	width: 280px;
+}
+th.tbl_matchdate {
+	width: 50px;
+}
+th.tbl_matchgate {
+	width: 40px;
+}
+th.tbl_matchresult {
+	width: 80px;
+}
+th.tbl_matchop {
+	width: 50%;
+}
+th.tbl_stat {
+	width: 5%;
+}
+th.tbl_name {
+	width: 30%;
+}
+/***** Comments *********/
+#comments {
+    padding:19px 0 38px 0;
+}
+#comments-list {
+    padding:0 0 19px 0;
+}
+#comments-list ol,
+#comments-list ul {
+    list-style:none;
+    margin:0;
+}
+#comments-list ol {
+    background-color:#fafafa;
+}
+#comments-list ol {
+    border:1px solid #ccc;
+    border-bottom:none;
+    margin:0;
+}
+#comments-list li {
+    background-color:#fafafa;
+    border-bottom:1px solid #ccc;
+    padding:19px 1.5em 0 1.5em;
+    position:relative;
+}
+#comments-list li.alt {
+    background:#eee;
+}
+#comments-list ul li {
+    border:1px solid #ccc;
+    margin:0 0 19px 0;
+}
+#comments-list li .avatar {
+    position:absolute;
+    top:25px;
+    left:1.5em;
+}
+#comments-list .comment-author {
+    font-weight:bold;
+    padding:9px 0 0 46px;
+}
+#comments-list .comment-meta {
+    color:#666;
+    font-size:11px;
+    padding:0 0 9px 46px;
+}
+.comment-reply-link {
+    font-size:11px;
+    padding:0 0 19px 0;
+    text-align:right;
+}
+.comment-navigation {
+    font-weight:bold;
+    padding:0 0 19px 0;
+    margin-right:0.5em;
+}
+.comment-navigation a {
+    border:1px solid #ccc;
+    font-weight:normal;
+    padding:0.5em 0.75em;
+    text-decoration:none;
+}
+.comment-navigation a,
+.comment-navigation span {
+    margin-right:0.5em;
+}
+form label {
+	font-size: 90%;
+}
+form input {
+	width: 170px;
+	padding: 2px;
+	margin: 5px 5px 1px 0;
+}
+
+form textarea {
+	width: 100%;
+	padding: 2px;
+}
+form #submit {
+	margin: 0;
+	float: right;
+	background-color:#ddd;
+	border:1px solid #999;	
+}
+form p {
+	margin: 5px 0;
+}

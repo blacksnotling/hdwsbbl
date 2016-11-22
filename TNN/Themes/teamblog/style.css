@@ -1,0 +1,426 @@
+/*
+Theme Name: Team Theme 1 - Crownstar
+Theme URI: http://network.hdwsbbl.co.uk
+Description: Team Theme 1 for the HDWSBBL Team News Network
+Version: 1.1
+Author: The HDWSBBL
+Author URI: http://www.hdwsbbl.co.uk
+
+/***** Core Formatting *****/
+* {
+	margin:0;
+	padding:0;
+}
+html { min-height: 100%; margin-bottom: 1px; } /* FireFox Page-Shift Fix*/
+body {
+	margin: 0;
+	text-align: center;
+	padding:0;
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size: 0.7em;
+}
+#wrapper {
+	width:90%;
+	max-width:1400px;
+	margin: 10px auto;
+	color: #61636A;
+	text-align: left;
+	background-color: #FEFEFE;
+}
+/***** HDWSBBL Network Info Box *****/
+#hdwsbblbox {
+	margin: 0;
+	padding: 5px 10px;
+	text-align: right;
+	background-color: #333;
+	color: #fefefe;
+}
+#hdwsbblbox a, #hdwsbblbox a:link, #hdwsbblbox a:visited {
+	color: #fefefe;
+	text-decoration: underline;
+}
+#hdwsbblbox a:hover, #hdwsbblbox a:active {
+	color: #FF4D00;
+	text-decoration: underline;
+}
+/***** Header *****/
+#header {
+	text-align: center;
+	margin-bottom:0.5em;
+}
+#header h1 {
+	font-size:2.8em;
+}
+#header p {
+	font-weight: bold;
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size:1.5em;
+}
+/***** Navigation *****/
+#navcontainer { 
+	display: block;
+	height: 40px; 
+	font-size: 1.2em; 
+	border-top: solid 1px #3366FF;
+	border-bottom: solid 1px #3366FF;
+	text-align: center;
+}
+#navcontainer ul {
+	clear:both;
+	list-style: none;
+	text-align: center;
+	margin: 0 auto;
+}
+#navcontainer ul li {
+	float: left;
+}
+#navcontainer ul li a {
+	font-weight: bold;
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-size: 1em;	
+	display: block;
+	line-height: 30px;
+	margin: 0;
+	text-align: center;
+	text-decoration: none;
+	padding-left: 16px;
+	padding-right: 5px;
+	color: #3366FF;	
+}
+#navcontainer ul li a:hover {
+	color: #FF4D00;
+}
+/***** Main Content *****/
+#maincontent_wrapper {
+	float:left;
+	width:100%
+}
+#maincontent {
+	margin-right: 240px;
+	line-height: 160%;
+	padding: 1em 1em 0 1em;
+	text-align: justify;
+	background-color: #fefefe;
+}
+#maincontent p, #maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5, #maincontent table, #maincontent blockquote {
+	margin-bottom: 0.6em;
+}
+#maincontent ul, #maincontent ol {
+	line-height: 160%;
+	margin: 0.4em 0 0.6em 1.5em;
+	padding: 0 0.6em 0 1em;
+	list-style-position: inside;
+}
+#maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	text-align: left;	
+}
+#maincontent h2 {
+	font-weight: bold;
+	font-size: 1.8em;
+	border-bottom: 1px solid #7A99FF;
+	padding-bottom: 3px;
+	text-transform:capitalize;
+}
+#maincontent h3 {
+	font-size: 1.4em;
+	padding-bottom: 0.2em;
+}
+#maincontent h4 {
+	font-size: 1.2em;	
+}
+#maincontent h5 {
+	font-size: 1.1em;	
+}
+.postmeta {
+	text-align: right;
+	padding-bottom: 20px;
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px solid #7A99FF;
+	clear: both;
+}
+.postdate {
+	text-indent: 20px;
+	font-size:smaller;
+	background-image: url(images/clock.gif);
+	background-position: 0 -2px;
+	background-repeat: no-repeat;
+	margin-top:-10px;
+}
+.subtext {
+	font-size:larger;
+	font-weight:bold;
+}
+.details {
+	padding: 3px;
+	border: 1px solid #aaa;
+	background: #ddd url(images/bg_detail.gif) top repeat-y;
+	margin-bottom: 0.6em;	
+}
+/***** Sub Content (Sidebar) *****/
+#subcontent {
+	float:left;
+	width:200px;
+	padding: 1em 0 0 10px;
+	margin: 0 10px 0 0;
+	margin-left:-220px;
+}
+#subcontent p, #subcontent h2, #subcontent ul li ul, #subcontent ol, #subcontent dl, #subcontent select, #subcontent input {
+	margin-bottom: 0.6em;
+}
+#searchform {
+	margin-top: 1em;
+}
+#subcontent ul li ul, #subcontent ol, #subcontent dl {
+	line-height: 140%;
+	margin: 0.4em 0 0.6em 0;
+	padding: 0 0.6em 0 1em;
+	list-style-position: outside;
+}
+#subcontent ul {
+	list-style: none;
+}
+#subcontent ul li ul {
+	list-style: circle;
+}
+#subcontent dl {
+	padding-left: 0.4em;
+}
+#subcontent dd {
+	padding-left: 0.7em;	
+}
+#subcontent dt {
+	display:none;
+}
+#subcontent h2 {
+	font-size: 1.2em;
+	border-bottom: 1px solid #7A99FF;
+	line-height: 140%;
+	margin-top: 0.6em;
+	padding-bottom: 0.2em;
+	color: #666;
+}
+#subcontent li.recent_matches h2, #subcontent li.upcoming_matches h2, #subcontent li.hdwsbbl_achievements h2, #subcontent li.team_sponsor p {
+	text-indent: 22px;
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+}
+#subcontent li.recent_matches h2 {
+	background-image: url(images/helmet.gif);
+}
+#subcontent li.upcoming_matches h2 {
+	background-image: url(images/ball.gif);
+}
+#subcontent li.hdwsbbl_achievements h2 {
+	background-image: url(images/trophy.gif);
+}
+#subcontent li.team_sponsor p {
+	background-image: url(images/star.gif);
+	line-height: 140%;
+}
+/***** Footer *****/
+#footer {
+	clear:both;
+	border-top: 2px solid #3366FF;
+	padding: 3px;
+	font-size: 85%;
+	padding: 0.2em 0 0.2em 1em;
+}
+#footer P {
+	margin-bottom: 0.6em;
+}
+#footertext {
+	float:left;
+	width: 400px;
+}
+#footerimg {
+	float:right;
+	width: 200px;
+}
+/***** Tables *********/
+table {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #fff;
+	border: 1px solid #000;
+	border-collapse: collapse;
+}
+table th {
+	border-bottom: 4px solid #000;
+	background-color: #0033FF;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+}
+
+table tr.tbl_alt {
+	background-color: #ddd;
+}
+table td {
+	text-align: center;
+	border-left-style: dotted;
+	border-bottom-style: solid;
+	border-color: #000;
+	border-width: 1px;
+	padding: 0.3em;
+}
+td.td_title {
+	font-weight: bold;
+	font-style: italic;
+	font-size: 1.2em;
+	background-color: #ffffaa;
+}
+th.totaux {
+	border-bottom: 1px solid #000000;
+}
+th.tbl_matchname {
+	width: 280px;
+}
+th.tbl_matchdate {
+	width: 50px;
+}
+th.tbl_matchgate {
+	width: 40px;
+}
+th.tbl_matchresult {
+	width: 80px;
+}
+th.tbl_matchop {
+	width: 50%;
+}
+th.tbl_stat {
+	width: 5%;
+}
+th.tbl_name {
+	width: 30%;
+}
+
+/***** General Styles *****/
+select, input {
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	color: #61636A;
+}
+input {
+	padding-left: 2px;
+}
+a, a:link, a:visited {
+	text-decoration: none;
+	color: #3366FF;
+}
+a:hover, a:active {
+	text-decoration: underline;
+	color: #FF4D00;
+}
+blockquote {
+	margin: 15px 30px 0 0;
+	padding-left: 15px;
+	border-left: 1px solid #7A99FF;
+}
+blockquote cite {
+	margin: 5px 0 0;
+	display: block;
+}
+img, img a {
+	border:none;
+}
+/* wp default image styles */
+img.alignleft {
+	float:left;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+img.alignright {
+	float:right;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+/***** Comments *********/
+#comments {
+    padding:19px 0 38px 0;
+}
+#comments-list {
+    padding:0 0 19px 0;
+}
+#comments-list ol,
+#comments-list ul {
+    list-style:none;
+    margin:0;
+}
+#comments-list ol {
+    background-color:#fafafa;
+}
+#comments-list ol {
+    border:1px solid #ccc;
+    border-bottom:none;
+    margin:0;
+}
+#comments-list li {
+    background-color:#fafafa;
+    border-bottom:1px solid #ccc;
+    padding:19px 1.5em 0 1.5em;
+    position:relative;
+}
+#comments-list li.alt {
+    background:#eee;
+}
+#comments-list ul li {
+    border:1px solid #ccc;
+    margin:0 0 19px 0;
+}
+#comments-list li .avatar {
+    position:absolute;
+    top:25px;
+    left:1.5em;
+}
+#comments-list .comment-author {
+    font-weight:bold;
+    padding:9px 0 0 46px;
+}
+#comments-list .comment-meta {
+    color:#666;
+    font-size:11px;
+    padding:0 0 9px 46px;
+}
+.comment-reply-link {
+    font-size:11px;
+    padding:0 0 19px 0;
+    text-align:right;
+}
+.comment-navigation {
+    font-weight:bold;
+    padding:0 0 19px 0;
+    margin-right:0.5em;
+}
+.comment-navigation a {
+    border:1px solid #ccc;
+    font-weight:normal;
+    padding:0.5em 0.75em;
+    text-decoration:none;
+}
+.comment-navigation a,
+.comment-navigation span {
+    margin-right:0.5em;
+}
+form label {
+	font-size: 90%;
+}
+form input {
+	width: 170px;
+	padding: 2px;
+	margin: 5px 5px 1px 0;
+}
+
+form textarea {
+	width: 100%;
+	padding: 2px;
+}
+form #submit {
+	margin: 0;
+	float: right;
+	background-color:#ddd;
+	border:1px solid #999;	
+}
+form p {
+	margin: 5px 0;
+}

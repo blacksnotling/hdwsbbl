@@ -1,0 +1,111 @@
+/*  This identifies the top portion of the login graphic. If you need to use a
+    different graphic type or wish to change the name: do that here. This css 
+    also widens the login form to accept a graphic consistent with WP 2.3.3 
+    and older.
+*/
+#login {
+	background:url( images/login-bkg-tile.jpg ) center top no-repeat;
+	width: 380px; 
+}
+
+#login form {
+	mar gin-top: 0px;
+
+}
+
+/*  This makes the core background color for the login form transparent so 
+    your graphic will show through in all three form states. 
+*/
+#loginform {
+	background-color: transparent;
+	margin-top:35px;
+	border:none;
+	-webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+}
+#registerform, #lostpasswordform {
+	background-color: transparent;
+	margin-top:8px;
+
+}
+
+/*  If you have a light background as your login form graphic, change the color
+    here. #fff = white, #000 = black. This changes the Username, Password and 
+    'Remeber Me' text color. 
+*/
+form {
+	color:#fff;
+}
+
+/*  This hides the WordPress logo. The height parameter also adjust where the 
+    first input or message box begins. 
+*/
+h1 a {
+	background: transparent;
+	height: 86px;
+	width: 380px;
+}
+
+/*  Even though this is the navigation div for the links at the bottom of the 
+    login form, it also controls the bottom image that gives the login form a 
+    nice curved corner feel. 
+*/
+#nav {
+	background:url( images/footer.png ) center bottom no-repeat;
+	height:65px;width:100%;
+	text-indent: 28px;
+	margin:0px; padding: 0px;
+	text-shadow: none;
+}
+
+/*  This will be needed by some to keep border changes to input boxes from 
+    affecting the checkbox. It will keep the border halo from showing if you 
+    change input borders elsewhere.
+*/
+#rememberme {
+	background-color: transparent;
+	border: transparent;
+}
+
+/*  This will allow a background image for the submit button. By removing the 
+    login form entries you will get the default login form button css which I 
+    believe is light-blue with gray text. 
+*/
+#login form .submit input, .submit input:hover {
+	/*background: url( images/fade-button.png );	*/
+	color:#fff;
+	border:1px solid #999;
+	margin-right: 11px;
+}
+
+/*  Hover attributes for submit button. 
+*/
+#login form .submit input:hover {
+	color:#ddd;
+	border:1px solid #777;
+}
+
+/*  Attributes for the errors and messages box. These can be broken up if you 
+    want to display a differnet color scheme for messages and errors. 
+*/
+#login p.message {
+	border: 1px solid #666;
+	padding: 12px;
+	background-color: #ccc;
+	margin: 72px 26px 0px 24px;
+}
+
+#login #login_error {
+	color: #fff;
+	border: 1px solid #fff;
+	padding: 12px;
+	background-color: #c00;
+	margin: 15px 26px 0px 24px;
+}
+
+/*  Form input box attributes. 
+*/
+#user_pass, #user_login, #user_email {
+	font-size: 20px;
+	width: 94%;
+	/* width:318px; this width is the same as 94% */
+}
