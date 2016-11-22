@@ -4,25 +4,16 @@ Template Name: Main Site Blog Page
 */
 /*
 *	Filename: bbtn.view.blog.php
-*	Version: 1.0
 *	Description: .The Template for the news item of the "main-site"
-*/
-/* -- Change History --
-20100815 - 1.0b - Initial creation and completion of file.(beta)
-20100816 - 1.1b - the number of posts is grabbed from the options table rather then being a static number
-20100826 - 0.1 - rename of file and removal of beta tag. development is underway
-20100904 - 0.2 - Updated the Breadcrumb path
-20100910 - 0.3 - Updated the category exclusion part of query_posts to get it working in Live
-20100913 - 1.0 - bump to V1.0
 */
 	require(TEMPLATEPATH . "/header.php"); ?>
 	<?php if (have_posts()) : ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL Team News Network">Team News Network</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL Team News Network">Team News Network</a> &raquo; <?php the_title(); ?></p>
 		</div>
 		<ul class="subnav">
-			<li><a href="<?php echo get_option('home'); ?>/category/main-site/page/2/" title="View Previous News entries">&laquo; Previous Entries</a></li>
+			<li><a href="<?php echo home_url(); ?>/category/main-site/page/2/" title="View Previous News entries">&laquo; Previous Entries</a></li>
 		</ul>
 
 
