@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of RSV Online">RSV Online</a> &raquo; Search Results</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of RSV Online">RSV Online</a> &raquo; Search Results</p>
 		</div>
 
 	<?php if (have_posts()) : ?>

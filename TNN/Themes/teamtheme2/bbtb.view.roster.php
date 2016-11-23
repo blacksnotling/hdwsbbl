@@ -102,7 +102,7 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; <?php the_title(); ?></p>
 		</div>
 
 		<h1><?php the_title(); ?></h1>
@@ -127,7 +127,7 @@ a:hover, a:active {
 	}
 ?>
 			<div id="footerimg">
-				<p>In association with: <img src="<?php bloginfo('template_directory'); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
+				<p>In association with: <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
 <?php
 	if (isset($tname)) {
 ?>

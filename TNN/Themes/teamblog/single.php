@@ -3,7 +3,7 @@
 		<?php while (have_posts()) : the_post(); ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; News &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; News &raquo; <?php the_title(); ?></p>
 		</div>
 
 		<ul class="subnav">

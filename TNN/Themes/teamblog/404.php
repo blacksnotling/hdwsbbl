@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; File Not Found!</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; File Not Found!</p>
 		</div>
 <div class="entry">
 	<h2>Turnover!</h2>
