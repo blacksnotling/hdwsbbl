@@ -25,7 +25,7 @@
 		<?php endwhile; else: ?>
 			<h2>No search results for '<?php the_search_query() ?>'</h2>
 			<p>Sorry, but nothing was found that matched that search. For now the best thing to do is try again:</p>
-			<p><?php include (TEMPLATEPATH . '/searchform.php'); ?></p>
+			<p><?php get_search_form(); ?></p>
 		<?php endif; ?>
 
 <?php

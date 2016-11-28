@@ -5,7 +5,7 @@
 <div class="entry">
 	<h2>Turnover!</h2>
 	<p>It looks like the page you are looking for has moved or the link you where given was incorrect. Please feel free to use the search box below to find what you are looking for:</p>
-	<p><?php include (TEMPLATEPATH . '/searchform.php'); ?></p>
+	<p><?php get_search_form(); ?></p>
 	<p class="postmeta"></p>
 </div>
 
