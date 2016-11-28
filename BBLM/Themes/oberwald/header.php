@@ -3,7 +3,6 @@
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
-<title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
 <script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.js"></script>
 <link rel="shortcut icon" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon.ico" />
 <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>

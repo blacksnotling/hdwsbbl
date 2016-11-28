@@ -1,18 +1,88 @@
 <?php
-//Register Sidebar as Dynamic
-if ( function_exists('register_sidebar') )
-	register_sidebar(array('name'=>'sidebar-posts',
-        'before_widget' => '<li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>',
-    ));
-	register_sidebar(array('name'=>'sidebar-common',
-        'before_widget' => '<li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>',
-    ));
+/** Tell WordPress to run oberwald_theme_setup() when the 'after_setup_theme' hook is run. */
+add_action( 'after_setup_theme', 'oberwald_theme_setup' );
+
+function oberwald_theme_setup() {
+
+	/*
+	 * Make theme available for translation.
+	 * Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/twentysixteen
+	 * If you're building a theme based on Twenty Sixteen, use a find and replace
+	 * to change 'twentysixteen' to the name of your theme in all the template files
+	 */
+	load_theme_textdomain( 'oberwald' );
+	// This theme styles the visual editor with editor-style.css to match the theme style.
+	//add_editor_style();
+
+	// This theme uses post thumbnails
+	//add_theme_support( 'post-thumbnails' );
+
+	// Add default posts and comments RSS feed links to head
+	add_theme_support( 'automatic-feed-links' );
+	add_theme_support('widgets');
+	/*
+	 * Let WordPress manage the document title.
+	 * By adding theme support, we declare that this theme does not use a
+	 * hard-coded <title> tag in the document head, and expect WordPress to
+	 * provide it for us.
+	 */
+	add_theme_support( 'title-tag' );
+
+	// This theme uses wp_nav_menu() in one location.
+	register_nav_menus( array(
+		'primary' => __( 'Primary Navigation', 'oberwald' ),
+	) );
+}
+
+/**
+ * Register widgetized areas,
+ *
+ * To override oberwald_widgets_init() in a child theme, remove the action hook and add your own
+ * function tied to the init hook.
+ *
+ * @uses register_sidebar
+ */
+function oberwald_widgets_init() {
+	register_sidebar(array(
+		'name'=> __( 'sidebar-posts', 'oberwald' ),
+		'id'=> 'sidebar-posts',
+		'description' => __( 'Appears at the top of the sidebar area for all non-warzone pages and posts (unless the teamplate blocks it).', 'oberwald' ),
+		'before_widget' => '<li id="%1$s" class="widget %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>',
+	));
+	register_sidebar(array(
+		'name'=> __( 'sidebar-common', 'oberwald' ),
+		'id'=> 'sidebar-common',
+		'description' => __( 'Appears below the page / post specific content on ALL Pages in the sidebar area.', 'oberwald' ),
+    'before_widget' => '<li id="%1$s" class="widget %2$s">',
+    'after_widget' => '</li>',
+    'before_title' => '<h2>',
+    'after_title' => '</h2>',
+  ));
+	register_sidebar(array(
+		'name'=> __( 'sidebar-warzone', 'oberwald' ),
+		'id'=> 'sidebar-warzone',
+		'description' => __( 'Appears at the top of the sidebar for all WarZone pages (posts / category / warzone page).', 'oberwald' ),
+    'before_widget' => '<li id="%1$s" class="widget %2$s">',
+    'after_widget' => '</li>',
+    'before_title' => '<h2>',
+    'after_title' => '</h2>',
+  ));
+	register_sidebar(array(
+		'name'=> __( 'maincontent-bottom', 'oberwald' ),
+		'id'=> 'maincontent-bottom',
+		'description' => __( 'Appears at the bottom of the maincontent - above the footer', 'oberwald' ),
+    'before_widget' => '<div id="%1$s" class="content-bottom-dynamic %2$s">',
+    'after_widget' => '</div>',
+    'before_title' => '<h3>',
+    'after_title' => '</h3>',
+  ));
+}
+
+/** Register sidebars by running bblm_widgets_init() on the widgets_init hook. */
+add_action( 'widgets_init', 'oberwald_widgets_init' );
 
 //Did You Know Function
 function bblm_display_dyk() {
