@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Search Results</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Search Results</p>
 		</div>
 <h2 class="pagetitle">Search Results</h2>
 		<ul class="subnav">

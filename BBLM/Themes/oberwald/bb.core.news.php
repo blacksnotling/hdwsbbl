@@ -18,10 +18,10 @@ Template Name: News Front Page
 
 		<h2>Latest News</h2>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; News</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; News</p>
 		</div>
 		<ul class="subnav">
-			<li><a href="<?php echo get_option('home'); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
+			<li><a href="<?php echo home_url(); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
 		</ul>
 
 
@@ -46,7 +46,7 @@ Template Name: News Front Page
 
 
 		<ul class="subnav">
-			<li><a href="<?php echo get_option('home'); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
+			<li><a href="<?php echo home_url(); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
 		</ul>
 <?php
 		//Did You Know Display Code

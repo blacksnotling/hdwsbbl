@@ -7,27 +7,12 @@ Template Name: List Resuts
 *	Version: 1.3
 *	Description: Page template to list the matches.
 */
-/* -- Change History --
-20080410 - 1.0b - Initial creation of file.
-20080411 - 1.1b - Added cas results to table
-20080420 - 1,2b - Changed the Competition titles into links to that competition!
-		 - 1.3b - Split the competitions up by division
-20080501 - 1.3.1b - Changed the order of the SQL strings as the dvisions where "upside down"
-20080615 - 1.4b - Added table classes and zebra stripes and breadcrumb
-20080623 - 1.4.1b - Review of table classes
-20080730 - 1.0 - bump to Version 1 for public release.
-20090124 - 1.1 - Addition of Drop down to change layout. Also changed so the comp name is called from the WP table!
-20090330 - 1,2 - Editied to filter out non hdwsbbl details
-20090712 - 1.2.1 - Added DYK code to page
-20100123 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Results</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Results</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

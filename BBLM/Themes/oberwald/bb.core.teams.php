@@ -31,7 +31,7 @@ Template Name: List Teams
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Teams</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Teams</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
@@ -103,10 +103,10 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		//$filename = $_SERVER['DOCUMENT_ROOT']."/".$site_dir."/images/teams/".$team->t_sname."_small.gif";
 		$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$team->t_sname."_small.gif";
 		if (file_exists($filename)) {
-			print("<img src=\"".get_option('home')."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
+			print("<img src=\"".home_url()."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
 		}
 		else {
-			print("<img src=\"".get_option('home')."/images/races/race".$team->r_id."_small_fade.gif\" alt=\"".$team->r_name." Race Logo\" />");
+			print("<img src=\"".home_url()."/images/races/race".$team->r_id."_small_fade.gif\" alt=\"".$team->r_name." Race Logo\" />");
 		}
 		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>".$team->r_name."</td>\n		<td>".number_format($team->t_tv)."gp</td>\n");
 
@@ -124,7 +124,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		if ($cups = $wpdb->get_results($cupscountsql)) {
 			print("		<td class=\"tbl_teamcup\">");
 			foreach ($cups as $cup) {
-			print("<img src=\"".get_option('home')."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
+			print("<img src=\"".home_url()."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
 			}
 			print("</td>\n	</tr>\n");
 		}

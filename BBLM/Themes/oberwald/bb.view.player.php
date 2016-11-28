@@ -45,7 +45,7 @@ get_header(); ?>
 				$pspp = $pd->p_spp;
 ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
 		</div>
 <?php
 			} //end of if playersql
@@ -482,7 +482,7 @@ get_header(); ?>
 			if (!empty($pd->p_img)) {
 				//if the player has an image set, display it.
 ?>
-			<li class="sidelogo"><img src="<?php print(get_option('home')); ?>/images/players/<?php print($pd->p_img); ?>" alt="Picture of <?php the_title(); ?>" /></li>
+			<li class="sidelogo"><img src="<?php print(home_url()); ?>/images/players/<?php print($pd->p_img); ?>" alt="Picture of <?php the_title(); ?>" /></li>
 <?php
 			}
 ?>

@@ -115,20 +115,20 @@ $(document).ready(function(){
 	}
 ?>
 	<div id="tagline"><p>Causing Havoc in the old world since 2506</p></div>
-	<div id="header" onclick="location.href='<?php echo get_option('home'); ?>';" style="cursor: pointer;">
-		<h1><a href="<?php echo get_option('home'); ?>" title="Go to the main page of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>
+	<div id="header" onclick="location.href='<?php echo home_url(); ?>';" style="cursor: pointer;">
+		<h1><a href="<?php echo home_url(); ?>" title="Go to the main page of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>
 		<p><?php bloginfo('description'); ?></p>
 	</div>
 	<div id="navcontainer">
 		<ul id="navigation">
-			<li><a href="<?php echo get_option('home'); ?>/news/" title="Visit the News Section">News</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/teams/" title="View the teams of the HDWSBBL">Teams</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/competitions/" title="View the gruling competitions">Competitions</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/matches/" title="All the results">Results</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/stats/" title="All the Statistics">Stats</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
-			<li><a href="<?php echo get_option('home'); ?>/about/" title="About the HDWSBBL">About</a></li>
+			<li><a href="<?php echo home_url(); ?>/news/" title="Visit the News Section">News</a></li>
+			<li><a href="<?php echo home_url(); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
+			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the HDWSBBL">Teams</a></li>
+			<li><a href="<?php echo home_url(); ?>/competitions/" title="View the gruling competitions">Competitions</a></li>
+			<li><a href="<?php echo home_url(); ?>/matches/" title="All the results">Results</a></li>
+			<li><a href="<?php echo home_url(); ?>/stats/" title="All the Statistics">Stats</a></li>
+			<li><a href="<?php echo home_url(); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
+			<li><a href="<?php echo home_url(); ?>/about/" title="About the HDWSBBL">About</a></li>
 		</ul>
 	</div>
 <!--  GC -->

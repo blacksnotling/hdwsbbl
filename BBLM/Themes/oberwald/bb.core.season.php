@@ -7,22 +7,12 @@ Template Name: List Seasons
 *	Version: 1.1
 *	Description: Page template to list the Stadiums in the league
 */
-/* -- Change History --
-20080603 - 1.0b - Intital creation of file.
-20080712 - 1.1b - brought up to scratch
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DYK code to page
-20090821 - 1.0.2 - modified the code slightly so that the current season is active
-20090829 - 1.0.3 - Changed the style hook as I did not like the previous one!
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Seasons</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Seasons</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

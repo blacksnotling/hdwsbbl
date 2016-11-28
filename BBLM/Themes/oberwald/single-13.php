@@ -5,7 +5,7 @@
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/warzone/" title="Back to the HDWSBBL Warzone">Warzone</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/warzone/" title="Back to the HDWSBBL Warzone">Warzone</a> &raquo; <?php the_title(); ?></p>
 		</div>
 
 		<ul class="subnav">
@@ -40,7 +40,7 @@
 		<ul>
 			<li><h2>About the Warzone</h2>
 				<p>The Warzone is the HDWSBBL's source for the latest team news a gossip. It presents a weekly update on the league and its happenings.</p>
-				<p><a href="<?php echo get_option('home'); ?>/about/#warzone" title="Read more about the Warzone">Read More about the Warzone</a></p>
+				<p><a href="<?php echo home_url(); ?>/about/#warzone" title="Read more about the Warzone">Read More about the Warzone</a></p>
 			</li>
 			<li><h2>Latest From the Warzone</h2>
 			<?php

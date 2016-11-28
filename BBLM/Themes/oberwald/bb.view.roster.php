@@ -272,12 +272,12 @@ a:hover, a:active {
 	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
 	if (file_exists($filename)) {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(get_option('home')); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
+  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
 <?php
 	}
 	else {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(get_option('home')); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
+  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
 <?php
 	}
 ?>
@@ -338,7 +338,7 @@ a:hover, a:active {
 		</div> <!-- End of #maincontent -->
 	</div> <!-- End of #pagecontent -->
 	<div id="footer">
-				<p>Unique content is &copy; <a href="<?php echo get_option('home'); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
+				<p>Unique content is &copy; <a href="<?php echo home_url(); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
 				<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
 				<?php wp_footer(); ?>
 	</div> <!-- End of #footer -->

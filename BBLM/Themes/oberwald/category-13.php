@@ -6,7 +6,7 @@
 
 		<h2>The HDWSBBL:WarZone</h2>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Warzone</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Warzone</p>
 		</div>
 		<ul class="subnav">
 			<?php next_posts_link('<li>&laquo; Previous Entries</li>') ?>
@@ -48,7 +48,7 @@
 		<ul>
 			<li><h2>About the Warzone</h2>
 				<p>The Warzone is the HDWSBBL's source for the latest team news a gossip. It presents a weekly update on the league and its happenings.</p>
-				<p><a href="<?php echo get_option('home'); ?>/about/#warzone" title="Read more about the Warzone">Read More about the Warzone</a></p>
+				<p><a href="<?php echo home_url(); ?>/about/#warzone" title="Read more about the Warzone">Read More about the Warzone</a></p>
 			</li>
 			<li><h2>Latest From the Warzone</h2>
 <?php

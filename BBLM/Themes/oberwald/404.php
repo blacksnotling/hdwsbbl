@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Page not found!</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Page not found!</p>
 		</div>
 <div class="entry">
 	<h2>Illegal Procedure!!</h2>

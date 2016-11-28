@@ -7,21 +7,12 @@ Template Name: View Stadium
 *	Version: 1.1
 *	Description: Page template to view a races details.
 */
-/* -- Change History --
-20080531 - 1.0b - Intital creation of file.
-20080610 - 1.1b - Moved "home team to above the description at the request of alex.
-20080613 - 1.1.1b - some maintance work (breadcrumbs,zebra styping etc)
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DYK code to page
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/stadiums/" title="Back to the Stadium listing">Stadiums</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stadiums/" title="Back to the Stadium listing">Stadiums</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

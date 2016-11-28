@@ -7,21 +7,12 @@ Template Name: Stadium Listing
 *	Version: 1.1
 *	Description: Page template to list the Stadiums in the league
 */
-/* -- Change History --
-20080416 - 1.0b - Intital creation of file.
-20080531 - 1.1b - changed the formatting so that the postmetadata class is included in the edit page span
-20080613 - 1.2b - cosmetc changes such as breadcrumbs etc
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DYK code to page
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Stadiums</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Stadiums</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
@@ -55,6 +46,3 @@ Template Name: Stadium Listing
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
-
-
-

@@ -99,7 +99,7 @@ else {
 					}
 	?>
 
-					<p><a href="<?php echo get_option('home'); ?>/matches/" title="View Full Match Listing">View Full List of Recent Matches &raquo;</a></p>
+					<p><a href="<?php echo home_url(); ?>/matches/" title="View Full Match Listing">View Full List of Recent Matches &raquo;</a></p>
 				<!-- end of #fragment-3 content -->
 
 				</div><!-- end of #fragment-3 -->
@@ -129,7 +129,7 @@ else {
 					}
 	?>
 
-					<p><a href="<?php echo get_option('home'); ?>/fixtures/" title="View Full Fixtures List">View Full Fixtures List &raquo;</a></p>
+					<p><a href="<?php echo home_url(); ?>/fixtures/" title="View Full Fixtures List">View Full Fixtures List &raquo;</a></p>
 				<!-- end of #fragment-4 content -->
 				</div><!-- end of #fragment-4 -->
 				<div id="fragment-5">
@@ -155,7 +155,7 @@ else {
 						print("</table>\n");
 					}
 ?>
-					<p><a href="<?php echo get_option('home'); ?>/teams/" title="View the list of all teams">View the list of all teams &raquo;</a></p>
+					<p><a href="<?php echo home_url(); ?>/teams/" title="View the list of all teams">View the list of all teams &raquo;</a></p>
 
 
 				<!-- end of #fragment-5 content -->
@@ -184,7 +184,7 @@ else {
 						print("</table>\n");
 					}
 ?>
-					<p><a href="<?php echo get_option('home'); ?>/stats/#statstable" title="View more Player Statistics">View more Player Statistics &raquo;</a></p>
+					<p><a href="<?php echo home_url(); ?>/stats/#statstable" title="View more Player Statistics">View more Player Statistics &raquo;</a></p>
 				<!-- end of #fragment-6 content -->
 
 				</div><!-- end of #fragment-6 -->
@@ -221,9 +221,9 @@ else {
 			print("</ul>\n");
 		endif;
 ?>
-		<p><a href="<?php echo get_option('home'); ?>/news/" title="View full News Archive">View full News Archive &raquo;</a></p>
+		<p><a href="<?php echo home_url(); ?>/news/" title="View full News Archive">View full News Archive &raquo;</a></p>
 		</div>
-	
+
 	</div><!-- end of main-left-->
 
 	<div id="main-middle" class="column">
@@ -243,7 +243,7 @@ else {
 			print("</ul>\n");
 		endif;
 		?>
-		<p><a href="<?php echo get_option('home'); ?>/warzone/" title="View full Warzone archive">View full Warzone Archive &raquo;</a></p>
+		<p><a href="<?php echo home_url(); ?>/warzone/" title="View full Warzone archive">View full Warzone Archive &raquo;</a></p>
 		</div>
 
 
