@@ -1,18 +1,37 @@
 <?php
-//Register Sidebar as Dynamic
-if ( function_exists('register_sidebar') )
-	register_sidebar(array('name'=>'sidebar-posts',
-        'before_widget' => '<li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>',
-    ));
-	register_sidebar(array('name'=>'sidebar-common',
-        'before_widget' => '<li id="%1$s" class="widget %2$s">',
-        'after_widget' => '</li>',
-        'before_title' => '<h2>',
-        'after_title' => '</h2>',
-    ));
+/**
+ * Register widgetized areas,
+ *
+ * To override tnnmainsite_widgets_init() in a child theme, remove the action hook and add your own
+ * function tied to the init hook.
+ *
+ * @uses register_sidebar
+ */
+ function tnnmainsite_widgets_init() {
+		register_sidebar(array(
+			'name'=> __( 'sidebar-posts', 'tnnmainsite' ),
+			'id'=> 'sidebar-posts',
+			'description' => __( 'Appears at the top of the sidebar area for all non-warzone pages and posts (unless the teamplate blocks it).', 'tnnmainsite' ),
+			'before_widget' => '<li id="%1$s" class="widget %2$s">',
+			'after_widget' => '</li>',
+			'before_title' => '<h2>',
+			'after_title' => '</h2>',
+	));
+			register_sidebar(array(
+				'name'=> __( 'sidebar-common', 'tnnmainsite' ),
+				'id'=> 'sidebar-common',
+				'description' => __( 'Appears below the page / post specific content on ALL Pages in the sidebar area.', 'tnnmainsite' ),
+				'before_widget' => '<li id="%1$s" class="widget %2$s">',
+				'after_widget' => '</li>',
+				'before_title' => '<h2>',
+				'after_title' => '</h2>',
+		));
+	}
+
+add_theme_support('widgets');
+
+	/** Register sidebars by running tnnmainsite_widgets_init() on the widgets_init hook. */
+add_action( 'widgets_init', 'tnnmainsite_widgets_init' );
 
 function TimeAgoInWords($from_time, $include_seconds = false) {
 //http://yoast.com/wordpress-functions-supercharge-theme/
@@ -177,21 +196,22 @@ return $timestamp;
  // Widgets //
 /////////////
 // http://codex.wordpress.org/Widgets_API
-// http://justintadlock.com/archives/2009/05/26/the-complete-guide-to-creating-widgets-in-wordpress-28
 /**
  * Recent Posts Restricted Class
  */
 class bbtn_RecentPostsRes extends WP_Widget {
 	/** constructor */
-	function bbtn_RecentPostsRes() {
-		$widget_ops = array( 'classname' => 'Recent Posts from a specific category', 'description' => 'Displays the last X number of posts from a specific category.' );
-		/* Widget control settings. */
-		$control_ops = array( 'width' => 250, 'height' => 350, 'id_base' => 'bbtnn_recentpostsres' );
-		parent::WP_Widget( 'bbtnn_recentpostsres', 'HDWSBBL - Recent Posts (restricted)', $widget_ops, $control_ops );
-	}
+//		$widget_ops = array( 'classname' => 'Recent Posts from a specific category', 'description' => 'Displays the last X number of posts from a specific category.' );
+function __construct() {
+	parent::__construct(
+		'bbtn_RecentPostsRes', // Base ID
+		esc_html__( 'HDWSBBL - Recent Posts (restricted)', 'tnnmainsite' ), // Name
+		array( 'description' => esc_html__( 'Displays the last X number of posts from a specific category.', 'tnnmainsite' ), ) // Args
+	);
+}
 
 	/** @see WP_Widget::widget */
-	function widget($args, $instance) {
+	public function widget($args, $instance) {
 		extract( $args );
 		$title = apply_filters('widget_title', $instance['title']);
 		$cat = apply_filters('widget_title', $instance['rpr_cat']);
@@ -215,7 +235,7 @@ class bbtn_RecentPostsRes extends WP_Widget {
 	}
 
 	/** @see WP_Widget::update */
-	function update($new_instance, $old_instance) {
+	public function update($new_instance, $old_instance) {
 	$instance = $old_instance;
 	$instance['title'] = strip_tags($new_instance['title']);
 	$instance['rpr_cat'] = strip_tags($new_instance['rpr_cat']);
@@ -224,7 +244,9 @@ class bbtn_RecentPostsRes extends WP_Widget {
 	}
 
 	/** @see WP_Widget::form */
-	function form($instance) {
+	public function form($instance) {
+		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'New title', 'tnnmainsite' );
+
 		$title = esc_attr($instance['title']);
 		$cat = esc_attr($instance['rpr_cat']);
 		$postnum = esc_attr($instance['rpr_postnum']);
@@ -236,8 +258,11 @@ class bbtn_RecentPostsRes extends WP_Widget {
 	}
 } // class FooWidget
 
-// register FooWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtn_RecentPostsRes");'));
+// register Widgets for theme
+function register_bbtn_widget() {
+    register_widget( 'bbtn_RecentPostsRes' );
+}
+add_action( 'widgets_init', 'register_bbtn_widget' );
 
 
 

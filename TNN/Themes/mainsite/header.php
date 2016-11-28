@@ -11,19 +11,8 @@
 <?php wp_head(); ?>
 </head>
 <body>
-<?php
-	//Begin the custom wrapper class for the front page
-	if ($ismainpage) {
-?>
-<div id="main-wrapper">
-<?php
-	}
-	else {
-?>
+
 <div id="wrapper">
-<?php
-	}
-?>
 	<div id="tagline"><p>The latest team news, in their own words</p></div>
 	<div id="header" onclick="location.href='<?php echo home_url(); ?>';" style="cursor: pointer;">
 		<h1><a href="<?php echo home_url(); ?>" title="Go to the main page of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>

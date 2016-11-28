@@ -1,13 +1,27 @@
 <?php
-//Register Sidebars Widget areas
-if ( function_exists('register_sidebar') ) {
-	register_sidebar(array('name'=>'sidebar-posts',
-		'before_widget' => '<li id="%1$s" class="widget %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h2 class="widgettitle">',
-		'after_title' => '</h2>',
-	));
-}
+/**
+ * Register widgetized areas,
+ *
+ * To override tb1mainsite_widgets_init() in a child theme, remove the action hook and add your own
+ * function tied to the init hook.
+ *
+ * @uses register_sidebar
+ */
+ function tb1mainsite_widgets_init() {
+		register_sidebar(array(
+			'name'=> __( 'sidebar-posts', 'tb1mainsite' ),
+			'id'=> 'sidebar-1',
+			'description' => __( 'Appears at the top of the sidebar area for all pages and posts (unless the teamplate blocks it).', 'tb1mainsite' ),
+			'before_widget' => '<li id="%1$s" class="widget %2$s">',
+			'after_widget' => '</li>',
+			'before_title' => '<h2>',
+			'after_title' => '</h2>',
+		));
+	}
+
+	/** Register sidebars by running tnnmainsite_widgets_init() on the widgets_init hook. */
+add_action( 'widgets_init', 'tb1mainsite_widgets_init' );
+
 //Define what WP features are to be used
 add_theme_support( 'menus' );
 
