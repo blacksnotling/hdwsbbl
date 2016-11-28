@@ -4,14 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
 <title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/includes/jquery.js"></script>
-<link rel="shortcut icon" href="<?php bloginfo('template_directory'); ?>/favicon.ico" />
+<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.js"></script>
+<link rel="shortcut icon" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon.ico" />
 <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
 <?php if (is_home()) { ?>
-<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/main.css?0910" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/main.css?0910" type="text/css" media="screen" />
 
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/includes/ui.tabs.js"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/includes/jquery.newsticker.js"></script>
+<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/ui.tabs.js"></script>
+<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.newsticker.js"></script>
 <script type="text/javascript">
  var $j = jQuery.noConflict();
           $j(document).ready(function(){
@@ -24,7 +24,7 @@
 	} //end of if is_home
 	else {
 ?>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/includes/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.tablesorter.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//JS Code to expand / collapase the stats and recent match tables.
@@ -87,13 +87,13 @@ $(document).ready(function(){
 <?php
 	} //end of if NOT is_home
 	if ($iswarzonepage) { ?>
-<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/warzone.css?0909" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/warzone.css?0909" type="text/css" media="screen" />
 <?php
 	}else { ?>
 <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>?0909" type="text/css" media="screen" />
 <?php
 	} //end of if else cat 13 (warzone) ?>
-<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php wp_head(); ?>
