@@ -13,7 +13,7 @@
 	}
 ?>
 			<div id="footerimg">
-				<p>In association with: <img src="<?php bloginfo('template_directory'); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
+				<p>In association with: <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
 <?php
 	if (isset($tname)) {
 ?>

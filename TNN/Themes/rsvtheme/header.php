@@ -27,12 +27,6 @@
 	<div id="navcontainer">
 		<ul id="navigation">
 		<?php wp_nav_menu($args); ?>
-<!--		<li><a href="#" title="Learn about the history of RSV">History</a></li>-->
-<!--		<li><a href="http://rsv.hdwsbbl.co.uk/team/" title="Find out all the information you need">Team Info</a></li>
-		<li><a href="http://rsv.hdwsbbl.co.uk/players/" title="Find out about the stars of RSV">The Players</a></li>
-		<li><a href="http://rsv.hdwsbbl.co.uk/hall-of-records/" title="See the teams personal hall of records">Hall of Records</a></li>
-		<li><a href="http://rsv.hdwsbbl.co.uk/coaches-corner/" title="Read the ramblings of our Head Coaches">Coaches Corner</a></li>
-		<li><a href="http://rsv.hdwsbbl.co.uk/about/" title="About the team and the site" class="last">About</a></li> -->
 		</ul>
 	</div><!-- end of #navcontainer -->
 

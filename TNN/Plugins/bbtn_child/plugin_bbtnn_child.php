@@ -105,23 +105,23 @@ function bbtnn_child_options_validate($input) {
 /**
  * bbtnnn_TeamIdentity Class
  */
-class bbtnnn_teamidentity extends WP_Widget {
+//class bbtnnn_teamidentity extends WP_Widget {
     /** constructor */
-    function bbtnnn_teamidentity() {
-		$widget_ops = array( 'classname' => 'team_identity', 'description' => 'Displays the name of your team and provides a link to their page on the main HDWSBBL site..' );
+//    function bbtnnn_teamidentity() {
+//		$widget_ops = array( 'classname' => 'team_identity', 'description' => 'Displays the name of your team and provides a link to their page on the main HDWSBBL site..' );
 		/* Widget control settings. */
-		$control_ops = array( 'width' => 250, 'height' => 350, 'id_base' => 'bbtnn_teamidentity' );
+/*		$control_ops = array( 'width' => 250, 'height' => 350, 'id_base' => 'bbtnn_teamidentity' );
 		parent::WP_Widget( 'bbtnn_teamidentity', 'HDWSBBL - Team Identity', $widget_ops, $control_ops );
-    }
+	}*/
 
     /** @see WP_Widget::widget */
-    function widget($args, $instance) {
+/*    function widget($args, $instance) {
     	global $wpdb;
         extract( $args );
-        $title = apply_filters('widget_title', $instance['title']);
+        $title = apply_filters('widget_title', $instance['title']);*/
         ?>
 		<?php
-		$options = get_option('bbtnn_child_options');
+	/*	$options = get_option('bbtnn_child_options');
 		$identsql = "SELECT T.t_name AS teamname, T.t_guid AS turl, T.t_active FROM ".$options['bb_tbl_pre']."team T WHERE T.t_id = ".$options['t_id'];
 		if ($ident = $wpdb->get_row($identsql)) {
 
@@ -141,28 +141,28 @@ class bbtnnn_teamidentity extends WP_Widget {
 			print("the HDWSBBL. You can find more details on <a href=\"".$link."\" title=\"Visit the page on ".$tname." on the official HDWSBBL site\" class=\"external\">".$tname."</a> on the HDWSBBL website.</p>");
 			echo $after_widget;
 		}
-    }
+	}*/
 
     /** @see WP_Widget::update */
-    function update($new_instance, $old_instance) {
+/*    function update($new_instance, $old_instance) {
 	$instance = $old_instance;
 	$instance['title'] = strip_tags($new_instance['title']);
         return $instance;
     }
-
+*/
     /** @see WP_Widget::form */
-    function form($instance) {
+//    function form($instance) {
         //I have to fudge this one!
-        $title = "Team Identity"
+//        $title = "Team Identity"
         ?>
-            <p><?php _e($title); ?></p>
+            <p><?php // _e($title); ?></p>
         <?php
-    }
+//    }
 
 } // class bbtnn_TeamIdentity
 
 // register FooWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_teamidentity");'));
+//add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_teamidentity");'));
 
 
 /**
@@ -237,7 +237,7 @@ class bbtnnn_recentmatches extends WP_Widget {
 } // class bbtnn_recentmatches
 
 // register FooWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_recentmatches");'));
+//add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_recentmatches");'));
 
 /**
  * HDWSBBL achievements Class
@@ -294,7 +294,7 @@ class bbtn_hdwsbblachievements extends WP_Widget {
 } // class hdwsbblachievements
 
 // register hdwsbblachievements widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtn_hdwsbblachievements");'));
+//add_action('widgets_init', create_function('', 'return register_widget("bbtn_hdwsbblachievements");'));
 
 /**
  * Recent Team Sponsor Class
@@ -348,7 +348,7 @@ class bbtn_teamsponsor extends WP_Widget {
 } // class FooWidget
 
 // register FooWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtn_teamsponsor");'));
+//add_action('widgets_init', create_function('', 'return register_widget("bbtn_teamsponsor");'));
 
 /**
  * bbtnnn_UpcomingMatches Class
@@ -414,7 +414,7 @@ class bbtnnn_upcomingmatches extends WP_Widget {
 } // class bbtnn_upcomingmatches
 
 // register FooWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_upcomingmatches");'));
+//add_action('widgets_init', create_function('', 'return register_widget("bbtnnn_upcomingmatches");'));
 
 
   ////////////////////

@@ -4,11 +4,7 @@ Template Name: Team Roster
 */
 /*
 *	Filename: bbtm.view.roster.php
-*	Version: 1.0
 *	Description: .Big blank page sutible for rosters or any other large displays. RSV Online stuff is hard coaded
-*/
-/* -- Change History --
-20091125 - 1.0 - Initial creation of file using the bblm roster page as a template.
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -99,7 +95,7 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of RSV Online">RSV Online</a> &raquo; <a href="<?php print(get_option('home')); ?>/team/" title="View the team information page">Team Information</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of RSV Online">RSV Online</a> &raquo; <a href="<?php print(home_url()); ?>/team/" title="View the team information page">Team Information</a> &raquo; <?php the_title(); ?></p>
 		</div>
 
 		<h1><?php the_title(); ?></h1>

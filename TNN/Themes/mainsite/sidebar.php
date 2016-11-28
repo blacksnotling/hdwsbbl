@@ -8,19 +8,11 @@
 			<?php if ( is_search() ) { ?>
 			<li><p>You have searched the Team News Network archives for <strong>'<?php the_search_query() ?>'</strong>.</p></li>
 			<?php } ?>
-		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-posts') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-		<?php endif; ?>
-		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
+			<?php if ( is_active_sidebar( 'sidebar-posts' ) ) : ?>
+					<?php dynamic_sidebar( 'sidebar-posts' ); ?>
+			<?php endif; ?>
+		<?php if ( is_active_sidebar( 'sidebar-common' ) ) : ?>
+				<?php dynamic_sidebar( 'sidebar-common' ); ?>
 		<?php endif; ?>
 		</ul>
 	</div><!-- end of #subcontent -->

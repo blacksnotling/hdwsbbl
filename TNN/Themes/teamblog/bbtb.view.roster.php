@@ -4,12 +4,7 @@ Template Name: Team Roster
 */
 /*
 *	Filename: bbtm.view.roster.php
-*	Version: 1.0
 *	Description: .Big blank page sutible for rosters or any other large displays. RSV Online stuff is hard coaded
-*/
-/* -- Change History --
-20091125 - 1.0 - Initial creation of file using the bblm roster page as a template.
-20100914 - 1.1 - updated header and footer to bring it in line with the rest of the team theme
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -102,7 +97,7 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a> &raquo; <?php the_title(); ?></p>
 		</div>
 
 		<h1><?php the_title(); ?></h1>
@@ -127,7 +122,7 @@ a:hover, a:active {
 	}
 ?>
 			<div id="footerimg">
-				<p>In association with: <img src="<?php bloginfo('template_directory'); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
+				<p>In association with: <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
 <?php
 	if (isset($tname)) {
 ?>
