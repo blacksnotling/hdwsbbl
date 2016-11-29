@@ -16,7 +16,7 @@ Template Name: View Season
 		$seasonink = get_permalink(htmlspecialchars($options['page_season'], ENT_QUOTES));
 ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php print($seasonink); ?>" title="Back to the Season listing">Seasons</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php print($seasonink); ?>" title="Back to the Season listing">Seasons</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

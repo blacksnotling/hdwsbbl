@@ -80,7 +80,7 @@ if(isset($_POST['bblm_sum_create'])) {
 		<p>
 	<?php
 	if ($sucess) {
-		print("Summary has been saved!. You can now <a href=\"".get_option('home')."/wp-admin/post.php?action=edit&post=".$bblm_post_number."\" title=\"Edit the page\">edit the summary</a> before publishing it</p>");
+		print("Summary has been saved!. You can now <a href=\"".home_url()."/wp-admin/post.php?action=edit&post=".$bblm_post_number."\" title=\"Edit the page\">edit the summary</a> before publishing it</p>");
 		print("<p>Please remember to do the following:</p>\n<ul>	<li>Add the correct categories (<strong>Warzone</strong>, <strong>Summary</strong>, <strong>Season X</strong> and any relevant cups)</li>\n	<li>Please add a post excert for when it is displayed on the front screen.</li>\n</ul>");
 	}
 	else {

@@ -11,7 +11,7 @@ Template Name: View Star Player
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php echo get_option('home'); ?>/star-players/" title="See more Star Players">Star Players</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php echo home_url(); ?>/star-players/" title="See more Star Players">Star Players</a> &raquo; <?php the_title(); ?></p>
 		</div>
 		<?php
 			/*

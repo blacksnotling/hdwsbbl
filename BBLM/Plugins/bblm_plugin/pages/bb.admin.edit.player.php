@@ -166,7 +166,7 @@ if (FALSE !== $wpdb->query($playerupdatewpsql)) {
 	<p>
 	<?php
 	if ($sucess) {
-		print("Player has been renamed. Don't forget to <a href=\"".get_option('home')."/wp-admin/page.php?action=edit&post=".$_POST['bblm_postid']."\" title=\"edit the players description\">edit the players description</a>!");
+		print("Player has been renamed. Don't forget to <a href=\"".home_url()."/wp-admin/page.php?action=edit&post=".$_POST['bblm_postid']."\" title=\"edit the players description\">edit the players description</a>!");
 	}
 	else {
 		print("Something went wrong");

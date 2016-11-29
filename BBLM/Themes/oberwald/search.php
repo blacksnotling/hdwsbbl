@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Search Results</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Search Results</p>
 		</div>
 <h2 class="pagetitle">Search Results</h2>
 		<ul class="subnav">
@@ -25,7 +25,7 @@
 		<?php endwhile; else: ?>
 			<h2>No search results for '<?php the_search_query() ?>'</h2>
 			<p>Sorry, but nothing was found that matched that search. For now the best thing to do is try again:</p>
-			<p><?php include (TEMPLATEPATH . '/searchform.php'); ?></p>
+			<p><?php get_search_form(); ?></p>
 		<?php endif; ?>
 
 <?php

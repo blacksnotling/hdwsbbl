@@ -7,20 +7,12 @@ Template Name: List Cups
 *	Version: 1.2
 *	Description: .Page template to display the championship cups (series_
 */
-/* -- Change History --
-20080611 - 1.0b - Initial creation of file.
-20080730 - 1.0 - bump to Version 1 for public release.
-20090330 - 1,1 - Editied to filter out non hdwsbbl details
-20090712 - 1.1.1 - Added DyK code to page
-20100123 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Championship Cups</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Championship Cups</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

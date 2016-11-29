@@ -31,7 +31,7 @@ Template Name: View Match
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/matches/" title="Back to the result listing">Results</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/matches/" title="Back to the result listing">Results</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 
@@ -55,18 +55,18 @@ Template Name: View Match
 				//Team A
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tA->t_sname."_big.gif";
 				if (file_exists($filename)) {
-					$tAimg = "<img src=\"".get_option('home')."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
+					$tAimg = "<img src=\"".home_url()."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
 				}
 				else {
-					$tAimg = "<img src=\"".get_option('home')."/images/races/race".$tA->r_id.".gif\" alt=\"".$tA->r_name." Logo\" />";
+					$tAimg = "<img src=\"".home_url()."/images/races/race".$tA->r_id.".gif\" alt=\"".$tA->r_name." Logo\" />";
 				}
 				//Team B
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tB->t_sname."_big.gif";
 				if (file_exists($filename)) {
-					$tBimg = "<img src=\"".get_option('home')."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
+					$tBimg = "<img src=\"".home_url()."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
 				}
 				else {
-					$tBimg = "<img src=\"".get_option('home')."/images/races/race".$tB->r_id.".gif\" alt=\"".$tB->r_name." Logo\" />";
+					$tBimg = "<img src=\"".home_url()."/images/races/race".$tB->r_id.".gif\" alt=\"".$tB->r_name." Logo\" />";
 				}
 
 ?>

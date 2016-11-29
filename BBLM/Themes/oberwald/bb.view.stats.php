@@ -11,7 +11,7 @@ Template Name: Statistics
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
@@ -176,12 +176,12 @@ Template Name: Statistics
 				<p>This page only covers the high level statistics.The following links will take you through to more detailed pages.</p>
 				<div id="statslinkscontainer">
 					<ol id="statslinks">
-						<li><a href="<?php echo get_option('home'); ?>/stats/td/" title="View more Touchdown related Statistics">Touchdown Statistics</a></li>
-						<li><a href="<?php echo get_option('home'); ?>/stats/cas/" title="View more Casualty related Statistics">Casualty Statistics </a></li>
-						<li><a href="<?php echo get_option('home'); ?>/stats/misc/" title="View more Miscellaneous Statistics">Miscellaneous Statistics </a></li>
-<!--						<li><a href="<?php echo get_option('home'); ?>/stats/records/" title="View Match Records">Match Records</a></li> -->
-						<li><a href="<?php echo get_option('home'); ?>/stats/awards/" title="View The Awards that have been assigned in the league">Awards</a></li>
-						<li><a href="<?php echo get_option('home'); ?>/stats/milestones/" title="View the HDWSBBL Milestones">Milestones</a></li>
+						<li><a href="<?php echo home_url(); ?>/stats/td/" title="View more Touchdown related Statistics">Touchdown Statistics</a></li>
+						<li><a href="<?php echo home_url(); ?>/stats/cas/" title="View more Casualty related Statistics">Casualty Statistics </a></li>
+						<li><a href="<?php echo home_url(); ?>/stats/misc/" title="View more Miscellaneous Statistics">Miscellaneous Statistics </a></li>
+<!--						<li><a href="<?php echo home_url(); ?>/stats/records/" title="View Match Records">Match Records</a></li> -->
+						<li><a href="<?php echo home_url(); ?>/stats/awards/" title="View The Awards that have been assigned in the league">Awards</a></li>
+						<li><a href="<?php echo home_url(); ?>/stats/milestones/" title="View the HDWSBBL Milestones">Milestones</a></li>
 					</ol>
 				</div>
 

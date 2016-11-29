@@ -7,23 +7,12 @@ Template Name: GraveYard
 *	Version: 1.1
 *	Description: .Page template to display
 */
-/* -- Change History --
-20090820 - 1.0b - Initial creation of file.
-20090921 - 1.0 - Completion of file. I got the Eagle Award to Show
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
-//Some Config -- Not working at present!
-$bblm_league_type = '1'; //LRB
-$bblm_eagle = 16; //In the event I ever change it, this is the ID in the database.
-
-
-*/
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
