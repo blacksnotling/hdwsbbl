@@ -19,7 +19,6 @@ function oberwald_theme_setup() {
 
 	// Add default posts and comments RSS feed links to head
 	add_theme_support( 'automatic-feed-links' );
-	add_theme_support('widgets');
 	/*
 	 * Let WordPress manage the document title.
 	 * By adding theme support, we declare that this theme does not use a
@@ -84,7 +83,160 @@ function oberwald_widgets_init() {
 /** Register sidebars by running bblm_widgets_init() on the widgets_init hook. */
 add_action( 'widgets_init', 'oberwald_widgets_init' );
 
-//Did You Know Function
+/**
+ * Get our wp_nav_menu() fallback, wp_page_menu(), to show a home link.
+ *
+ * To override this in a child theme, remove the filter and optionally add
+ * your own function tied to the wp_page_menu_args filter hook.
+ *
+ */
+function oberwald_page_menu_args( $args ) {
+	$args['show_home'] = true;
+	return $args;
+};
+add_filter( 'wp_page_menu_args', 'oberwald_page_menu_args' );
+
+/**
+ * Returns a "Continue Reading" link for excerpts
+ *
+ * @return string "Continue Reading" link
+ */
+function oberwald_continue_reading_link() {
+	return '<p class="readmorelink">Continue reading <a href="'. get_permalink() . '">'.get_the_title().' &raquo;</a></p>';
+}
+
+/**
+ * Replaces "[...]" (appended to automatically generated excerpts) with an ellipsis and oberwald_continue_reading_link().
+ *
+ * To override this in a child theme, remove the filter and add your own
+ * function tied to the excerpt_more filter hook.
+ *
+ * @return string An ellipsis
+ */
+function oberwald_auto_excerpt_more( $more ) {
+	return ' &hellip;' . oberwald_continue_reading_link();
+}
+add_filter( 'excerpt_more', 'oberwald_auto_excerpt_more' );
+
+/**
+ * Adds a pretty "Continue Reading" link to custom post excerpts.
+ *
+ * To override this link in a child theme, remove the filter and add your own
+ * function tied to the get_the_excerpt filter hook.
+ *
+ * @return string Excerpt with a pretty "Continue Reading" link
+ */
+function oberwald_custom_excerpt_more( $output ) {
+	if ( has_excerpt() && ! is_attachment() ) {
+		$output .= oberwald_continue_reading_link();
+	}
+	return $output;
+}
+add_filter( 'get_the_excerpt', 'oberwald_custom_excerpt_more' );
+
+/**
+ * Prints HTML with meta information for the current post date/time and author.
+ *
+ */
+function oberwald_posted_on() {
+	printf( __( 'Posted on %1$s', 'oberwald' ),
+		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
+			get_permalink(),
+			esc_attr( get_the_time() ),
+			get_the_date()
+		)
+	);
+}
+
+/**
+ * Prints HTML with meta information for the current post (category, tags and permalink).
+ *
+ */
+function oberwald_posted_in() {
+	// Retrieves tag list of current post, separated by commas.
+	$tag_list = get_the_tag_list( '', ', ' );
+
+	if ( taxonomy_exists('post_teams') && taxonomy_exists('post_competitions') ) {
+		//If the custom BBLM taxonomy exist
+		$team_list = get_the_term_list( $post->ID, 'post_teams', '', ', ', '' );
+		$comp_list = get_the_term_list( $post->ID, 'post_competitions', '', ', ', '' );
+		if ( $tag_list && $team_list && $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list && $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list && $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $comp_list && $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
+			$posted_in = __( 'This entry was posted in %1$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else {
+			$posted_in = __( '&lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		}
+		// Prints the string, replacing the placeholders.
+		printf(
+			$posted_in,
+			get_the_category_list( ', ' ),
+			$tag_list,
+			get_permalink(),
+			the_title_attribute( 'echo=0' ),
+			$team_list,
+			$comp_list
+		);
+	}
+	else {
+		//The custom BBLM taxonomy don't exist
+		if ( $tag_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
+			$posted_in = __( 'This entry was posted in %1$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else {
+			$posted_in = __( '&lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		}
+		// Prints the string, replacing the placeholders.
+		printf(
+			$posted_in,
+			get_the_category_list( ', ' ),
+			$tag_list,
+			get_permalink(),
+			the_title_attribute( 'echo=0' )
+		);
+	}
+}
+
+/**
+ * A simple wrapper function to display the number of comments.
+ * A wrapper function is used so that if the text needs to be updated in the future I only hve to change it in one place.
+ *
+ */
+function oberwald_comments_link() {
+	comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;');
+}
+
+/**
+ * Add specific CSS class by filter to body_class
+ *
+ */
+add_filter('body_class','oberwald_add_body_class');
+
+function oberwald_add_body_class($classes) {
+	if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) {
+		// add 'section-warzone' to the $classes array if it is part of the Warzone section
+		$classes[] = 'section-warzone';
+	}
+	return $classes;
+}
+
+/**
+ * Prints a "Did You Know" box when called
+ *
+ */
 function bblm_display_dyk() {
 	global $wpdb;
 
@@ -99,7 +251,7 @@ function bblm_display_dyk() {
 				}
 ?>
 			<?php print(wpautop($d->dyk_desc)); ?>
-			<p class="dykfooter"><a href="<?php bloginfo('url'); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
+			<p class="dykfooter"><a href="<?php echo esc_url( home_url() ); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
 		</div>
 <?php
 }
@@ -161,53 +313,56 @@ function in_array_recursive($needle, $haystack) {
     return false;
 }
 
-// Custom callback to list comments in the your-theme style
-// based off http://themeshaper.com/wordpress-theme-comments-template-tutorial/
-function custom_comments($comment, $args, $depth) {
-  $GLOBALS['comment'] = $comment;
-        $GLOBALS['comment_depth'] = $depth;
-  ?>
-        <li id="comment-<?php comment_ID() ?>" <?php comment_class() ?>>
-                <div class="comment-author vcard"><?php commenter_link() ?></div>
-                <div class="comment-meta"><?php printf(__('Posted %1$s at %2$s <span class="meta-sep">|</span> <a href="%3$s" title="Permalink to this comment">Permalink</a>', 'your-theme'),
-                                        get_comment_date(),
-                                        get_comment_time(),
-                                        '#comment-' . get_comment_ID() );
-                                        edit_comment_link(__('Edit', 'your-theme'), ' <span class="meta-sep">|</span> <span class="edit-link">', '</span>'); ?></div>
+/**
+ * Template for comments and pingbacks.
+ *
+ * Used as a callback by wp_list_comments() for displaying the comments.
+ *
+ * Based off the twerntyeleven theme
+ */
+function oberwald_comment( $comment, $args, $depth ) {
+	$GLOBALS['comment'] = $comment;
+	switch ( $comment->comment_type ) :
+		case 'pingback' :
+		case 'trackback' :
+	?>
+	<li class="post pingback">
+		<p><?php _e( 'Pingback:', 'oberwald' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __( 'Edit', 'oberwald' ), '<span class="edit-link">', '</span>' ); ?></p>
+	<?php
+			break;
+		default :
+	?>
+	<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
+		<div class="comment-author vcard">
+			<?php echo get_avatar( $comment, 39 ); ?>
+			</div><!-- .comment-author .vcard -->
+			<div class="comment-meta">
+				<?php
+				printf( __( '<strong>%1$s</strong><br /> on %2$s <span class="says">said:</span>', 'oberwald' ),
+					sprintf( '<span class="fn">%s</span>', get_comment_author_link() ),
+					sprintf( '<a href="%1$s"><time pubdate datetime="%2$s">%3$s</time></a>',
+						esc_url( get_comment_link( $comment->comment_ID ) ),
+						get_comment_time( 'c' ),
+						sprintf( __( '%1$s at %2$s', 'oberwald' ), get_comment_date(), get_comment_time() )
+					)
+				);
+				?>
+			</div><!-- end of .comment-meta -->
 
-	       		<div class="comment-content">
-	                	<?php comment_text() ?>
-	                </div>
+			<?php edit_comment_link( __( 'Edit', 'oberwald' ), '<span class="edit-link">', '</span>' ); ?>
 
-                <?php // echo the comment reply link
-                        if($args['type'] == 'all' || get_comment_type() == 'comment') :
-                                comment_reply_link(array_merge($args, array(
-                                        'reply_text' => __('Reply','your-theme'),
-                                        'login_text' => __('Log in to reply.','your-theme'),
-                                        'depth' => $depth,
-                                        'before' => '<div class="comment-reply-link">',
-                                        'after' => '</div>'
-                                )));
-                        endif;
-?>
+			<?php if ( $comment->comment_approved == '0' ) : ?>
+				<span class="info"><?php _e( 'Your comment is awaiting moderation.', 'oberwald' ); ?></span>
+				<br />
+			<?php endif; ?>
 
-  				<?php if ($comment->comment_approved == '0') _e("\t\t\t\t\t<span class='info'>Your comment is awaiting moderation.</span>\n", 'your-theme') ?>
+			<div class="comment-content"><?php comment_text(); ?></div>
 
+			<div class="comment-reply-link">
+				<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply <span>&darr;</span>', 'oberwald' ), 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+			</div><!-- .reply -->
 
-
-<?php } // end custom_comments
-
-// Produces an avatar image with the hCard-compliant photo class
-//http://themeshaper.com/wordpress-theme-comments-template-tutorial/
-function commenter_link() {
-        $commenter = get_comment_author_link();
-        if ( ereg( '<a[^>]* class=[^>]+>', $commenter ) ) {
-                $commenter = ereg_replace( '(<a[^>]* class=[\'"]?)', '\\1url ' , $commenter );
-        } else {
-                $commenter = ereg_replace( '(<a )/', '\\1class="url "' , $commenter );
-        }
-        $avatar_email = get_comment_author_email();
-        $avatar = str_replace( "class='avatar", "class='photo avatar", get_avatar( $avatar_email, 38 ) );
-        echo $avatar . ' <span class="fn n">' . $commenter . '</span>';
-} // end commenter_link
-?>
+	<?php
+			break;
+	endswitch;
+}
