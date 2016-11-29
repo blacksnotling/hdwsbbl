@@ -97,7 +97,7 @@ $(document).ready(function(){
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php wp_head(); ?>
 </head>
-<body>
+<body <?php body_class(); ?>>
 <?php
 
 	if(is_home()){ ?>
@@ -133,3 +133,14 @@ $(document).ready(function(){
 <!--  GC -->
 	<div id="pagecontent">
 		<div id="maincontent">
+      <?php 	if (is_home()) {
+      		}
+      		else {
+      			//Dont print the breadcrumbs on the home page
+      ?>
+      		<div id="breadcrumb">
+      			<p><?php oberwald_breadcrumb(); ?></p>
+      		</div>
+      <?php
+      		}
+      ?>

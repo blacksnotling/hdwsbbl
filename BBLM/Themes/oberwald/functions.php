@@ -234,6 +234,16 @@ function oberwald_add_body_class($classes) {
 }
 
 /**
+ * Prints the breadcrumbs
+ * <holder function for now>
+ */
+function oberwald_breadcrumb() {
+
+	return true;
+
+}
+
+/**
  * Prints a "Did You Know" box when called
  *
  */
