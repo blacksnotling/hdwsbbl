@@ -2,9 +2,16 @@
 Theme Name: Oberwald
 Theme URI: http://www.hdwsbbl.co.uk
 Description: Custom Theme for the HDWSBBL. Named after the greatest Star Player of all time.
-Version: 1.5
+Version: 1.1
 Author: Blacksnotling
 Author URI: http://dev.hdwsbbl.co.uk
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: one-column, two-columns, right-sidebar, custom-menu, threaded-comments, blog
+Text Domain: oberwald
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
 */
 /***** Layout and positioning *****/
 html * {
@@ -117,7 +124,7 @@ li.lastnav, #navigation li:last-of-type {
 #maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5 {
 font-family: 'Graduate', cursive;
 font-weight:100;
-	text-align: left;	
+	text-align: left;
 }
 #maincontent h3, #maincontent h4, #maincontent h5 {
 	padding-top: 0.6em;
@@ -135,10 +142,10 @@ font-weight:100;
 	padding-bottom: 0.2em;
 }
 #maincontent h4 {
-	font-size: 1.2em;	
+	font-size: 1.2em;
 }
 #maincontent h5 {
-	font-size: 1.1em;	
+	font-size: 1.1em;
 }
 .postmeta {
 	text-align: right;
@@ -164,7 +171,7 @@ font-weight:100;
 	padding: 3px;
 	border: 1px solid #aaa;
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
-	margin-bottom: 0.6em;	
+	margin-bottom: 0.6em;
 }
 .mcomment {
 	display:none;
@@ -200,7 +207,7 @@ font-weight:100;
 	padding-left: 0.4em;
 }
 #subcontent dd {
-	padding-left: 0.7em;	
+	padding-left: 0.7em;
 }
 #subcontent dt {
 	display:none;
@@ -214,7 +221,7 @@ font-weight:100;
 	text-indent: 22px;
 	background-position: 0 2px;
 	background-repeat: no-repeat;
-	background-image: url(images/page_white.gif);	
+	background-image: url(images/page_white.gif);
 }
 #subcontent li.sideinfo h2{
 	background-image: url(images/star.gif);
@@ -292,7 +299,7 @@ p.readmorelink {
 	padding: 4px;
 	padding-left: 30px;
 	font-family: Verdana;
-	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;	
+	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;
 }
 .info p {
 	padding-top:4px;
@@ -334,9 +341,39 @@ img.alignright {
 	padding-left: 10px;
 	padding-bottom: 10px;
 }
+.entry .aligncenter, img.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 10px;
+}
+.entry .wp-caption {
+	background: #ddd url(images/bg_detail.gif) top repeat-y;
+	line-height: 18px;
+	margin-bottom: 20px;
+	padding: 4px;
+	text-align: center;
+	border: 1px solid #aaa;
+}
+.entry .wp-caption img {
+	margin: 5px 5px 0;
+}
+.entry .wp-caption p.wp-caption-text {
+	color: #888;
+	margin: 5px;
+}
+.entry .wp-caption p.wp-caption-text, dd.gallery-caption {
+	font-size: smaller;
+}
+.entry .sticky {
+	border-top: 1px solid #aaa;
+	padding: 0.2em 0.2em 0 0.2em;
+	margin-bottom: 0.2em;
+}
 li.active {
 	background: url(images/star.gif) no-repeat 100% 0;
-	padding: 0 20px 0 0;	
+	padding: 0 20px 0 0;
 }
 /***** Tables *********/
 table {
@@ -453,7 +490,7 @@ form label {
 	margin: 0;
 	float: right;
 	background-color:#ddd;
-	border:1px solid #999;	
+	border:1px solid #999;
 }
 #commentform p {
 	margin: 5px 0;
@@ -563,7 +600,7 @@ form #submit {
 	margin: 0;
 	float: right;
 	background-color:#ddd;
-	border:1px solid #999;	
+	border:1px solid #999;
 }
 form p {
 	margin: 5px 0;
