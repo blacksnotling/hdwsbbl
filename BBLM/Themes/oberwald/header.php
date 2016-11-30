@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
+<html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
@@ -95,6 +95,13 @@ $(document).ready(function(){
 <link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+<?php
+ 	/* We add some JavaScript to pages with the comment form
+ 	 * to support sites with threaded comments (when in use).
+ 	 */
+ 	if ( is_singular() && get_option( 'thread_comments' ) )
+ 		wp_enqueue_script( 'comment-reply' );
+ ?>
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
