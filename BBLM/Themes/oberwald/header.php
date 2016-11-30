@@ -1,16 +1,23 @@
+<?php
+/*$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}*/
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
-<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.js"></script>
-<link rel="shortcut icon" href="<?php echo esc_url( get_template_directory_uri() ); ?>/favicon.ico" />
+<title><?php wp_title('-','true','right'); ?> <?php print ($bblm_league_name); ?></title>
+<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.js"></script>
+<link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
 <?php if (is_home()) { ?>
-<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/main.css?0910" type="text/css" media="screen" />
-
-<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/ui.tabs.js"></script>
-<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.newsticker.js"></script>
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/main.css?0909" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/ui.tabs.js"></script>
+<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.newsticker.js"></script>
 <script type="text/javascript">
  var $j = jQuery.noConflict();
           $j(document).ready(function(){
@@ -23,7 +30,7 @@
 	} //end of if is_home
 	else {
 ?>
-<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() ); ?>/includes/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.tablesorter.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//JS Code to expand / collapase the stats and recent match tables.
@@ -85,31 +92,25 @@ $(document).ready(function(){
 </script>
 <?php
 	} //end of if NOT is_home
-	if ($iswarzonepage) { ?>
-<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/warzone.css?0909" type="text/css" media="screen" />
-<?php
-	}else { ?>
-<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>?0909" type="text/css" media="screen" />
-<?php
-	} //end of if else cat 13 (warzone) ?>
-<link rel="stylesheet" href="<?php echo esc_url( get_template_directory_uri() ); ?>/print.css" type="text/css" media="print" />
+?>
+<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?1503" />
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php
- 	/* We add some JavaScript to pages with the comment form
- 	 * to support sites with threaded comments (when in use).
- 	 */
- 	if ( is_singular() && get_option( 'thread_comments' ) )
- 		wp_enqueue_script( 'comment-reply' );
- ?>
+	/* We add some JavaScript to pages with the comment form
+	 * to support sites with threaded comments (when in use).
+	 */
+	if ( is_singular() && get_option( 'thread_comments' ) )
+		wp_enqueue_script( 'comment-reply' );
+?>
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php
-
 	if(is_home()){ ?>
 <div id="home-wrapper">
-<?php	}else if ($ismainpage) {
+<?php	}else if (isset($ismainpage)) {
 ?>
 <div id="main-wrapper">
 <?php
@@ -129,25 +130,25 @@ $(document).ready(function(){
 		<ul id="navigation">
 			<li><a href="<?php echo home_url(); ?>/news/" title="Visit the News Section">News</a></li>
 			<li><a href="<?php echo home_url(); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
-			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the HDWSBBL">Teams</a></li>
+			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the <?php print ($bblm_league_name); ?>">Teams</a></li>
 			<li><a href="<?php echo home_url(); ?>/competitions/" title="View the gruling competitions">Competitions</a></li>
 			<li><a href="<?php echo home_url(); ?>/matches/" title="All the results">Results</a></li>
 			<li><a href="<?php echo home_url(); ?>/stats/" title="All the Statistics">Stats</a></li>
 			<li><a href="<?php echo home_url(); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
-			<li><a href="<?php echo home_url(); ?>/about/" title="About the HDWSBBL">About</a></li>
+			<li><a href="<?php echo home_url(); ?>/about/" title="About the <?php print ($bblm_league_name); ?>">About</a></li>
 		</ul>
 	</div>
-<!--  GC -->
+
 	<div id="pagecontent">
 		<div id="maincontent">
-      <?php 	if (is_home()) {
-      		}
-      		else {
-      			//Dont print the breadcrumbs on the home page
-      ?>
-      		<div id="breadcrumb">
-      			<p><?php oberwald_breadcrumb(); ?></p>
-      		</div>
-      <?php
-      		}
-      ?>
+<?php 	if (is_home()) {
+		}
+		else {
+			//Dont print the breadcrumbs on the home page
+?>
+		<div id="breadcrumb">
+			<p><?php oberwald_breadcrumb_root(); ?> <?php the_title(); ?></p>
+		</div>
+<?php
+		}
+?>
