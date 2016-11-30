@@ -10,11 +10,9 @@ Template Name: View Competition
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/competitions/" title="Back to the Competition listing">Competitions</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
 		//$compsql = "SELECT P.post_title, C.c_id, S.series_name, Y.sea_name, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'series S, '.$wpdb->prefix.'season Y, '.$wpdb->prefix.'comp_type T, ".$wpdb->posts." P WHERE Y.sea_id = C.sea_id AND C.c_id = J.tid AND C.series_id = S.series_id AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID =".$post->ID;
 		$compsql = 'SELECT P.post_title, C.c_id, C.sea_id, C.series_id, I.post_title AS SERIES, I.guid AS SERIESLink, G.post_title AS SEASON, G.guid AS SEASONLink, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' G, '.$wpdb->prefix.'comp_type T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' I WHERE C.sea_id = Y.tid AND Y.prefix = \'sea_\' AND Y.pid = G.ID AND C.c_id = J.tid AND C.series_id = U.tid AND U.prefix = \'series_\' AND U.pid = I.ID AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID = '.$post->ID;;
@@ -41,7 +39,7 @@ Template Name: View Competition
 			}
 ?>
 				<div class="details comp">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 
 <?php
@@ -629,17 +627,16 @@ Template Name: View Competition
 
 		} //end of if sql
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
+		</div>
 
 		<?php endwhile;?>
 	<?php endif; ?>
+
+	<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 <?php
@@ -695,15 +692,13 @@ Template Name: View Competition
 			}
 ?>
 			 </li>
-<?php
-if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-<?php endif;
-?>
+			 <?php if ( !dynamic_sidebar('sidebar-common') ) : ?>
+	 			<li><h2 class="widgettitle">Search</h2>
+	 			  <ul>
+	 			   <li><?php get_search_form(); ?></li>
+	 			  </ul>
+	 			</li>
+	 		<?php endif; ?>
 
 		</ul>
 	</div><!-- end of #subcontent -->

@@ -4,20 +4,17 @@ Template Name: List Competitions
 */
 /*
 *	Filename: bb.core.comp.php
-*	Version: 1.1
 *	Description: Page template to list the compettions.
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Competitions</p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				<?php
 
 				$compsql = 'SELECT P.post_title, P.guid, L.post_title AS SEAname, L.guid AS SEAlink, M.post_title AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' M WHERE C.series_id = N.tid AND N.prefix = \'series_\' AND N.pid = M.ID AND K.tid = C.sea_id AND K.prefix = \'sea_\' AND K.pid = L.ID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
@@ -49,17 +46,14 @@ Template Name: List Competitions
 					print("  <p>Sorry, but no Competitions could be retrieved at this time, please try again later.</p>\n");
 				}
 
-						//Did You Know Display Code
-						if (function_exists(bblm_display_dyk)) {
-							bblm_display_dyk();
-						}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 
 
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>

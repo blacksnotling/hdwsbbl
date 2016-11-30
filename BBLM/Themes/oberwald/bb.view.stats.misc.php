@@ -10,13 +10,11 @@ Template Name: Statistics - Misc
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<?php the_content(); ?>
 <?php
 		/*-- Misc -- */
 		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.type_id = 1 ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
@@ -326,15 +324,12 @@ Template Name: Statistics - Misc
 				}
 
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-			</div>
+</div>
+</div>
 
 
 		<?php endwhile;?>

@@ -4,19 +4,17 @@ Template Name: Stadium Listing
 */
 /*
 *	Filename: bb.core.stadium.php
-*	Version: 1.1
 *	Description: Page template to list the Stadiums in the league
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Stadiums</p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+					<?php the_content(); ?>
 <?php
 				$stadiumsql = "SELECT P.post_title, P.guid FROM ".$wpdb->prefix."stadium R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_' ORDER BY P.post_title ASC";
 				if ($stadiums = $wpdb->get_results($stadiumsql)) {
@@ -31,14 +29,11 @@ Template Name: Stadium Listing
 }
 
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>
