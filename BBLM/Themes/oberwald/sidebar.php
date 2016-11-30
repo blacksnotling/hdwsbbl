@@ -1,4 +1,5 @@
 <?php global $the_date_title ?>
+	<?php get_sidebar('content'); ?>
 	</div><!-- end of #maincontent -->
 	<div id="subcontent">
 		<ul>
@@ -8,19 +9,33 @@
 			<?php if ( is_search() ) { ?>
 			<li><p>You have searched the HDWSBBL weblog archives for <strong>'<?php the_search_query() ?>'</strong>. If you are unable to find anything in these search results, you can try one of these links.</p></li>
 			<?php } ?>
-		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-posts') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-		<?php endif; ?>
-		<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-		<?php endif; ?>
+			<?php
+			/*	If the content is part of the WarZone then display the warzone sidebar, else display the
+			*	normal sidebar area. The "common" sidebar is always displayed.
+			*/
+			if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) { ?>
+				<?php if ( !dynamic_sidebar('sidebar-warzone') ) : ?>
+				<li><h2 class="widgettitle">Archive</h2>
+				  <ul>
+				   <?php wp_get_archives( 'type=monthly' ); ?>
+				  </ul>
+				</li>
+			<?php endif; ?>
+			<?php } else { ?>
+			<?php if ( !dynamic_sidebar('sidebar-posts') ) : ?>
+				<li><h2 class="widgettitle">Archive</h2>
+				  <ul>
+				   <?php wp_get_archives( 'type=monthly' ); ?>
+				  </ul>
+				</li>
+			<?php endif; ?>
+			<?php } ?>
+			<?php if ( !dynamic_sidebar('sidebar-common') ) : ?>
+				<li><h2 class="widgettitle">Search</h2>
+				  <ul>
+				   <li><?php get_search_form(); ?></li>
+				  </ul>
+				</li>
+			<?php endif; ?>
 		</ul>
 	</div><!-- end of #subcontent -->
