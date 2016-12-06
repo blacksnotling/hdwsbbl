@@ -3,57 +3,38 @@
 Template Name: News Front Page
 */
 /*
-*	Filename: bb.core.news.php
-*	Version: 1.0.1
+*	Filename: home.php
 *	Description: .The Template for the front page of the news section
-*/
-/* -- Change History --
-20080821 - 1.0 - Initial creation and completion of file.
-20090712 - 1.0.1 - Added DYK code to page
-
 */
 ?>
 <?php get_header(); ?>
-	<?php if (have_posts()) : ?>
-
+		<?php if (have_posts()) : ?>
 		<h2>Latest News</h2>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; News</p>
-		</div>
-		<ul class="subnav">
-			<li><a href="<?php echo home_url(); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
-		</ul>
+			<?php while (have_posts()) : the_post(); ?>
+				<div class="entry">
+					<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+						<h2 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+						<p class="postdate"><?php oberwald_posted_on() ?></p>
+
+						<?php the_content(); ?>
+
+						<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'oberwald' ), 'after' => '</div>' ) ); ?>
+
+						<p class="postmeta"><?php oberwald_posted_in() ?> <?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?> <?php oberwald_comments_link(); ?></p>
+
+					</div>
+				</div>
 
 
-<?php
-	    $recentPosts = new WP_Query();
-	    $recentPosts->query('cat=-13&showposts=6');
-?>
-		<?php while ($recentPosts->have_posts()) : $recentPosts->the_post(); ?>
-			<div class="entry">
-				<h2 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
-				<p class="postdate"><?php the_time('F jS, Y') ?> <!-- by <?php the_author(); ?> --></p>
+			<?php endwhile; ?>
+			<?php endif; ?>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
-
-				<p class="postmeta">Posted in <?php the_category(',') ?> <strong>|</strong> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?>  <?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?></p>
-
-			</div>
-
-
-		<?php endwhile; ?>
-		<?php endif; ?>
-
-
-		<ul class="subnav">
-			<li><a href="<?php echo home_url(); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>
-		</ul>
-<?php
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-?>
+	<?php if (  $wp_query->max_num_pages > 1 ) : ?>
+					<div id="nav-below" class="subnav">
+						<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'bblm' ) ); ?></div>
+						<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
+					</div><!-- #nav-below -->
+	<?php endif; ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

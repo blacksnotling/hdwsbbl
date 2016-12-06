@@ -1,14 +1,22 @@
 <?php get_header(); ?>
 <?php
-/*$options = get_option('bblm_config');
-$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-if ( strlen($bblm_league_name) < 1) {
-	$bblm_league_name = "league";
-}*/
+if ( $options = get_option('bblm_config') ) {
+  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+  if ( strlen($bblm_league_name) < 1) {
+	   $bblm_league_name = "league";
+   }
+ }
+else {
+  $bblm_league_name = "league";
+}
 ?>
 	<?php if (have_posts()) : ?>
 
+<?php if (!is_single()) {
+	?>
+
 		<h2>Entries in the <?php print ($bblm_league_name); ?>: WarZone</h2>
+<?php  } ?>
 
 		<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">

@@ -1,27 +1,4 @@
-<?php
-global $wp;
-/*	print("<pre>");
-	print_r($wp);
-	print("</pre>");*/
-$wp_received_argument = false; //initialize this variable and make it false by default
-foreach ($wp->query_vars as $k=>$v) {
-	if ($v) {
-		$wp_received_argument = true; //I guess so, load index.php
-	}
-}
-if ($wp_received_argument) {
-	require(TEMPLATEPATH . "/index.php"); //loading index.php, execution of home.php is done for
-}
-else {
-	//We got no parameters, so let's load our custom home page.
-?>
-
-<?php query_posts('showposts=1'); ?>
-
-<?php
-	//Define the var so the front page specific stuff is activated in the header
-	$ismainpage = 1;
-	require(TEMPLATEPATH . "/header.php"); ?>
+<?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 
@@ -30,11 +7,6 @@ else {
 					aktt_sidebar_tweets();
 					print("		</div>\n");
 				}
-
-				//Load in the options to determine the WarZone Category
-				$options = get_option('bblm_config');
-				$warzone_category = htmlspecialchars($options['cat_warzone'], ENT_QUOTES);
-
 
 ?>
 
@@ -45,13 +17,36 @@ else {
 				<div id="fragment-1">
 
 				<!-- start of #fragment-1 content -->
-			<div class="entry">
-				<h2>Latest News: <br /><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
-				<?php $last_news = TimeAgoInWords(strtotime($post->post_date)); ?>
-				<p class="postdate"><?php the_time('F jS, Y') ?> (<?php print($last_news); ?>) (<?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?>) <!-- by <?php the_author(); ?> --></p>
+<?php
+			$newslatestpost = array(
+				'post_type' => 'post',
+				'posts_per_page' => 1,
+				'category__not_in' =>  get_cat_ID( 'warzone' ),
+				'post__not_in' => get_option( 'sticky_posts' )
+			);
+			// The Query
+			$the_query = new WP_Query( $newslatestpost );
 
-				<?php the_excerpt(); ?>
-				<p class="readmorelink">Continue Reading: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?> &raquo;</a></p>
+			// The Loop
+			if ( $the_query->have_posts() ) {
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+?>
+<div class="entry">
+	<h2 class="entry-title">Latest News: <br /><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+	<?php $last_news = TimeAgoInWords(strtotime($post->post_date)); ?>
+	<p class="postdate"><?php the_time('F jS, Y') ?> (<?php print($last_news); ?>) (<?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?>) <!-- by <?php the_author(); ?> --></p>
+
+	<?php the_excerpt(); ?>
+	<?php
+
+				} //end of while
+				/* Restore original Post Data */
+				wp_reset_postdata();
+			} //end of have posts
+?>
+
+
 
 		<?php endwhile; ?>
 		<?php endif; ?>
@@ -62,14 +57,14 @@ else {
 				<div id="fragment-2">
 
 				<!-- start of #fragment-2 content -->
-<?php $recent = new WP_Query("cat=".$warzone_category."&showposts=1"); while($recent->have_posts()) : $recent->the_post();?>
+
+<?php $recent = new WP_Query("category_name=warzone&showposts=1"); while($recent->have_posts()) : $recent->the_post();?>
 			<div class="entry">
-				<h2>Warzone Latest: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+				<h2 class="entry-title">Warzone Latest: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
 				<?php $last_warzone = TimeAgoInWords(strtotime($post->post_date)); ?>
 				<p class="postdate"><?php the_time('F jS, Y') ?> (<?php print($last_warzone); ?>) (<?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?>) <!-- by <?php the_author(); ?> --></p>
 
 				<?php the_excerpt(); ?>
-				<p class="readmorelink">Continue Reading: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?> &raquo;</a></p>
 
 			</div>
 <?php endwhile; ?>
@@ -209,19 +204,32 @@ else {
 	<div id="main-left" class="column">
 		<div class="main-content">
 		<h2>Recent News</h2>
-<?php
-		query_posts('showposts=6&offset=1');
-		if (have_posts()) :
-			print("<ul>\n");
-			while (have_posts()) : the_post();
-?>
+		<?php
+					$newsrecentposts = array(
+						'post_type' => 'post',
+						'posts_per_page' => 6,
+						'category__not_in' =>  get_cat_ID( 'warzone' ),
+						'post__not_in' => get_option( 'sticky_posts' ),
+						'offset' => 1
+					);
+					// The Query
+					$the_query = new WP_Query( $newsrecentposts );
+
+					// The Loop
+					if ( $the_query->have_posts() ) {
+						print("<ul>\n");
+						while ( $the_query->have_posts() ) {
+							$the_query->the_post();
+		?>
 		<li><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></li>
-<?php
-			endwhile;
-			print("</ul>\n");
-		endif;
-?>
-		<p><a href="<?php echo home_url(); ?>/news/" title="View full News Archive">View full News Archive &raquo;</a></p>
+
+			<?php
+
+						} //end of while
+						print("</ul>\n");
+					} //end of have posts
+		?>
+		<p><a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" title="View full News Archive">View full News Archive &raquo;</a></p>
 		</div>
 
 	</div><!-- end of main-left-->
@@ -232,18 +240,31 @@ else {
 		<h2>Latest from the Warzone</h2>
 
 		<?php
-		query_posts('cat='.$warzone_category.'&showposts=6&offset=1');
-		if (have_posts()) :
-			print("<ul>\n");
-			while (have_posts()) : the_post();
+					$warzonerecentposts = array(
+						'post_type' => 'post',
+						'posts_per_page' => 6,
+						'category__in' =>  get_cat_ID( 'warzone' ),
+						'post__not_in' => get_option( 'sticky_posts' ),
+						'offset' => 1
+					);
+					// The Query
+					$the_query = new WP_Query( $warzonerecentposts );
+
+					// The Loop
+					if ( $the_query->have_posts() ) {
+						print("<ul>\n");
+						while ( $the_query->have_posts() ) {
+							$the_query->the_post();
 		?>
 		<li><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></li>
-		<?php
-			endwhile;
-			print("</ul>\n");
-		endif;
+
+			<?php
+
+						} //end of while
+						print("</ul>\n");
+					} //end of have posts
 		?>
-		<p><a href="<?php echo home_url(); ?>/warzone/" title="View full Warzone archive">View full Warzone Archive &raquo;</a></p>
+		<p><a href="<?php echo esc_url( get_permalink( get_page_by_title( 'Warzone' ) ) ); ?>" title="View full Warzone archive">View full Warzone Archive &raquo;</a></p>
 		</div>
 
 
@@ -254,8 +275,12 @@ else {
 
 	<div id="main-right" class="column">
 		<!-- note, no container div due to widget printing them -->
-			<?php widget_bblm_listcomps(array()) ?>
 
+<?php
+	if (function_exists('widget_bblm_listcomps')) {
+		widget_bblm_listcomps(array());
+	}
+?>
 	</div><!-- end of main-right-->
 
 </div><!-- end of #main-sub -->
@@ -266,7 +291,3 @@ else {
 
 
 <?php get_footer(); ?>
-
-<?php
-}//end of template detection
-?>

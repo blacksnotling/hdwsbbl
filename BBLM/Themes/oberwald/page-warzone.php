@@ -6,10 +6,14 @@ Template Name: Warzone Front Page
 *	Filename: page.warzone
 *	Description: The Template for the front page of the Warzone section
 */
-$options = get_option('bblm_config');
-$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-if ( strlen($bblm_league_name) < 1) {
-	$bblm_league_name = "league";
+if ( $options = get_option('bblm_config') ) {
+  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+  if ( strlen($bblm_league_name) < 1) {
+	   $bblm_league_name = "league";
+   }
+ }
+else {
+  $bblm_league_name = "league";
 }
 ?>
 <?php get_header(); ?>
@@ -25,8 +29,6 @@ if ( strlen($bblm_league_name) < 1) {
 					<p class="postdate"><?php oberwald_posted_on() ?></p>
 
 					<?php the_content(); ?>
-
-					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) ); ?>
 
 					<p class="postmeta"><?php oberwald_posted_in() ?> <?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?> <?php oberwald_comments_link(); ?></p>
 				</div>
