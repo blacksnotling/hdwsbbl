@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Everthing you need to run a Blood Bowl League via Wordpress!
-Version: 1.5
+Version: 1.6
 Author: Blacksnotling
 Author URI: http://www.hdwsbbl.co.uk/
 */
@@ -31,57 +31,47 @@ function change_wp_login_title() {
 
 add_filter('login_headertitle', 'change_wp_login_title');
 
-/************ Removal of Default Widgets **********/
-function bblm_remove_default_widgets() {
-	if (function_exists('unregister_sidebar_widget')) {
-		unregister_sidebar_widget('Meta');
-	}
-}
-
-add_action('widgets_init','bblm_remove_default_widgets',0);
-
-
 /************ Declaration / insertion of Admin Pages **********/
 function bblm_insert_admin_pages() {
 	//Addition of Top level admin pages
 
-	add_menu_page('League Admin', 'BB: League Admin', 8, 'bblm_plugin/pages/bb.admin.core.welcome.php');
-	add_menu_page('Match Management', 'BB: Match Admin', 8, 'bblm_plugin/pages/bb.admin.core.matchmanagement.php');
-	add_menu_page('Team Management', 'BB: Team Admin', 8, 'bblm_plugin/pages/bb.admin.core.teamm.php');
+	add_menu_page('League Admin', 'BB: League Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.welcome.php');
+	add_menu_page('Match Management', 'BB: Match Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.matchmanagement.php');
+	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'BB Settings', 'BB Settings', 8, 'bblm_plugin/pages/bb.admin.edit.options.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Did You Know', 'Did You Know', 8, 'bblm_plugin/pages/bb.admin.manage.dyk.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'New Season', 'New Season', 8, 'bblm_plugin/pages/bb.admin.add.season.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Cup', 'Add Cup', 8, 'bblm_plugin/pages/bb.admin.add.series.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Competition', 'Add Competition', 8, 'bblm_plugin/pages/bb.admin.add.comp.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Manage Comps', 'Manage Comps', 8, 'bblm_plugin/pages/bb.admin.manage.comps.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Assign teams (comp)', 'Assign teams (comp)', 8, 'bblm_plugin/pages/bb.admin.edit.comp_team.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Set-up Brackets (comp)', 'Set-up Brackets', 8, 'bblm_plugin/pages/bb.admin.add.comp_brackets.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Edit Brackets (comp)', 'Edit Brackets', 8, 'bblm_plugin/pages/bb.admin.edit.comp_brackets.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Stadium', 'Add Stadium', 8, 'bblm_plugin/pages/bb.admin.add.stadium.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 8, 'bblm_plugin/pages/bb.admin.add.award.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Competition', 'Close Comp', 8, 'bblm_plugin/pages/bb.admin.end.comp.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season', 'Close Sea', 8, 'bblm_plugin/pages/bb.admin.end.season.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Generate Weekly Summary', 'Gen Summary', 8, 'bblm_plugin/pages/bb.admin.generate.summary.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'BB Settings', 'BB Settings', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.options.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Did You Know', 'Did You Know', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.dyk.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'New Season', 'New Season', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.season.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Cup', 'Add Cup', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.series.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Competition', 'Add Competition', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Manage Comps', 'Manage Comps', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.comps.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Assign teams (comp)', 'Assign teams (comp)', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_team.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Set-up Brackets (comp)', 'Set-up Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp_brackets.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Edit Brackets (comp)', 'Edit Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_brackets.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Stadium', 'Add Stadium', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.stadium.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.award.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Competition', 'Close Comp', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.comp.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season', 'Close Sea', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.season.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Generate Weekly Summary', 'Gen Summary', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.generate.summary.php');
 
-	//Adds the subpages to the master heading - Match Management Pages
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Match', 'Record Match', 8, 'bblm_plugin/pages/bb.admin.add.match.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Player Actions', 'Player Actions', 8, 'bblm_plugin/pages/bb.admin.add.match_player.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Edit Match details', 'Edit Match', 8, 'bblm_plugin/pages/bb.admin.edit.match.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.edit.match.php', 'Edit Match Trivia', 'Edit Match Trivia', 8, 'bblm_plugin/pages/bb.admin.edit.match_trivia.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Add Fixture', 'Add Fixture', 8, 'bblm_plugin/pages/bb.admin.add.fixture.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Edit Fixture', 'Edit Fixture', 8, 'bblm_plugin/pages/bb.admin.edit.fixture.php');
+//Adds the subpages to the master heading - Match Management Pages
+add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Match', 'Record Match', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Player Actions', 'Player Actions', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match_player.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Edit Match details', 'Edit Match', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.match.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.edit.match.php', 'Edit Match Trivia', 'Edit Match Trivia', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.match_trivia.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Add Fixture', 'Add Fixture', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.fixture.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Edit Fixture', 'Edit Fixture', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.fixture.php');
 
-	//Adds the subpages to the master heading - Team Management Pages
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Team', 'Add Team', 8, 'bblm_plugin/pages/bb.admin.add.team.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Teams', 'Manage Teams', 8, 'bblm_plugin/pages/bb.admin.edit.team.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Race', 'Add Race', 8, 'bblm_plugin/pages/bb.admin.add.race.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Position', 'Add Position', 8, 'bblm_plugin/pages/bb.admin.add.position.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Players', 'Manage Players', 8, 'bblm_plugin/pages/bb.admin.add.player.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 8, 'bblm_plugin/pages/bb.admin.edit.player.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 8, 'bblm_plugin/pages/bb.admin.add.star.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 8, 'bblm_plugin/pages/bb.admin.report.jm.php');
+//Adds the subpages to the master heading - Team Management Pages
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Team', 'Add Team', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.team.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Teams', 'Manage Teams', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.team.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Race', 'Add Race', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.race.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Position', 'Add Position', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.position.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Player', 'Add Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.player.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.player.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.star.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.report.jm.php');
 
 }
 add_action('admin_menu', 'bblm_insert_admin_pages');
