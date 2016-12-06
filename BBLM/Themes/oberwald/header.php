@@ -1,20 +1,23 @@
 <?php
-/*$options = get_option('bblm_config');
-$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-if ( strlen($bblm_league_name) < 1) {
-	$bblm_league_name = "league";
-}*/
+if ( $options = get_option('bblm_config') ) {
+  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+  if ( strlen($bblm_league_name) < 1) {
+	   $bblm_league_name = "league";
+   }
+ }
+else {
+  $bblm_league_name = "league";
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
-<title><?php wp_title('-','true','right'); ?> <?php print ($bblm_league_name); ?></title>
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.js"></script>
 <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
-<?php if (is_home()) { ?>
+<?php if (is_front_page()) { ?>
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/main.css?0909" type="text/css" media="screen" />
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/ui.tabs.js"></script>
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.newsticker.js"></script>
@@ -27,7 +30,7 @@ if ( strlen($bblm_league_name) < 1) {
 </script>
 
 <?php
-	} //end of if is_home
+	} //end of if is_front_page()
 	else {
 ?>
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.tablesorter.js"></script>
@@ -91,7 +94,7 @@ $(document).ready(function(){
 
 </script>
 <?php
-	} //end of if NOT is_home
+	} //end of if NOT is_front_page()
 ?>
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?1503" />
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/print.css" type="text/css" media="print" />
@@ -108,11 +111,9 @@ $(document).ready(function(){
 </head>
 <body <?php body_class(); ?>>
 <?php
-	if(is_home()){ ?>
+	if(is_front_page()){ ?>
+<!-- <div id="home-wrapper"> -->
 <div id="home-wrapper">
-<?php	}else if (isset($ismainpage)) {
-?>
-<div id="main-wrapper">
 <?php
 	}
 	else {
@@ -141,13 +142,13 @@ $(document).ready(function(){
 
 	<div id="pagecontent">
 		<div id="maincontent">
-<?php 	if (is_home()) {
+<?php 	if (is_front_page()) {
 		}
 		else {
 			//Dont print the breadcrumbs on the home page
 ?>
 		<div id="breadcrumb">
-			<p><?php oberwald_breadcrumb_root(); ?> <?php the_title(); ?></p>
+			<p><?php oberwald_breadcrumb(); ?></p>
 		</div>
 <?php
 		}

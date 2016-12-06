@@ -101,7 +101,7 @@ function bs_remove_warzone_cat( $notused )
 
   // Figure out if we need to exclude glossary - exclude from
   // archives (except category archives), feeds, and home page
-  if( is_home() || is_feed() ||
+  if( is_front_page() || is_feed() ||
       ( is_archive() && !is_category() )) {
      $wp_query->query_vars['cat'] = '-' . $warzone_category;
   }
