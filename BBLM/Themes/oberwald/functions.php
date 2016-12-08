@@ -239,6 +239,28 @@ function oberwald_add_body_class($classes) {
  */
 function oberwald_breadcrumb() {
 
+	global $post;
+
+	echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; ';
+
+	    // If there is a parent, display the link.
+	    $parent_title = get_the_title( $post->post_parent );
+
+			if ( $parent_title != wp_get_post_parent_id( $post->ID )) {
+					echo '<a href="' . esc_url( get_permalink( $post->post_parent ) ) . '" alt="' . esc_attr( $parent_title ) . '">' . $parent_title . '</a> » ';
+			}
+	    // Then give the title of the current page.
+			if ( is_single() && !is_date() ) {
+				echo the_title();
+			}
+			elseif ( is_page( 'Warzone' ) ) {
+				echo 'HDWSBBL:WarZone';
+			}
+			else {
+				echo 'Archive';
+			}
+
+
 	return true;
 
 }
