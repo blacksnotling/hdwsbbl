@@ -1,23 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.add.player.php
-*	Version: 1.4
-*	Description: Page used to add a new player to a team.
-*/
-/* -- Change History --
-20080320 - 0.1b - Initial creation of file.
-20080321 - 0.2b - More Work on File.
-20080322 - 1.0b - Finished work.
-20080326 - 1.1b - modified page to accomodate db change and tydied up $_post formatting
-20080405 - 1.2b - checked for any refrences to dev_ rather then the correct $wpdb->
-20080409 - 1.2.1b - Added a full stop to the description of the player!
-20080417 - 1.3b - "fixed" the script to that journey man is not the default option
-20080730 - 1.0 - bump to Version 1 for public release.
-20080812 - 1.1 - modified file to accept team via $_GET and cleaned up form
-20090901 - 1.2 - allowed Mercs to be added, warns if the player costs too much and recieved a face-lift
-20091128 - 1.2.1 - escaped the text that goes in the post to prevent certain chars messing up the insert of the post into the DB (tracker [205])
-20100124 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-20100822 - 1.4 - Updated the selectg position SQL to account for the pos_status field for active positions (tracker [178])
+*	Description: Page used to add a new player to an existing team.
 */
 
 //Check the file is not being accessed directly
@@ -26,27 +10,21 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Add a Player</h2>
-	<p>Use the following form to add a new Player to a team.</p>
+	<p>Use the following form to add a new Player to an existing team.</p>
 
 <?php
 if (isset($_POST['bblm_team_add'])) {
-/*	print("<pre>");
-	print_r($_POST);
-	print("</pre>"); */
 
 	$bblm_safe_input = array();
 
-	if (get_magic_quotes_gpc()) {
-		$_POST['bblm_pname'] = stripslashes($_POST['bblm_pname']);
-	}
-	$bblm_safe_input['pname'] = $wpdb->escape($_POST['bblm_pname']);
+	$bblm_safe_input['pname'] = wp_filter_nohtml_kses($_POST['bblm_pname']);
 
 	if ($_POST['bblm_free'] > 0) {
 		//Player is a JM or a merc and so does not cost the team anything!
 		if ("2" == $_POST['bblm_free']) {
 			$freebooter_type = "merc";
 		}
-			else {
+		else {
 			$freebooter_type = "jm";
 		}
 		$freebooter = 1;
@@ -115,9 +93,6 @@ if (isset($_POST['bblm_team_add'])) {
 	/*
 	Begin Generation of Wp page information
 	*/
-	//generate time NOW.
-	$bblm_date_now = date('Y-m-j H:i:59');
-
 
 	//filter page body
 	$bblm_page_content = "&quot;".$bblm_safe_input['pname']."&quot; is a ";
@@ -150,73 +125,51 @@ if (isset($_POST['bblm_team_add'])) {
 	*/
 
 
-$postsql = 'INSERT INTO '.$wpdb->posts.' (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (\'\', \'1\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \''.$bblm_page_content.'\', \''.$bblm_page_title.'\', \'0\', \'\', \'publish\', \'closed\', \'closed\', \'\', \''.$bblm_page_slug.'\', \'\', \'\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \'\', \''.$bblm_pid.'\', \''.$bblm_guid.'\', \'0\', \'page\', \'\', \'0\')';
+	$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\')';
 
-$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\')';
+	$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$bblm_poscost.'\'';
 
-$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$bblm_poscost.'\'';
 	if (0 == $freebooter) {
 		$teamupdatesql .= ', `t_bank` = t_bank-\''.$bblm_poscost.'\' ';
 	}
         $teamupdatesql .= ' WHERE `t_id` = '.$_POST['bblm_tid'].' LIMIT 1';
 
+	$my_post = array(
+		'post_title' => wp_filter_nohtml_kses($bblm_page_title),
+		'post_content' => $bblm_page_content,
+		'post_type' => 'page',
+		'post_status' => 'publish',
+		'comment_status' => 'closed',
+		'ping_status' => 'closed',
+		'post_parent' => $bblm_pid
+	);
+	if ($bblm_submission = wp_insert_post( $my_post )) {
+		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.player.php');
 
-/*	print("<p>".$postsql."</p>");
-	print("<p>".$playersql."</p>");
-	print("<p>".$teamupdatesql."</p>"); */
+		//Insert into the Player table
+		$wpdb->query($playersql);
 
-if (FALSE !== $wpdb->query($postsql)) {
-	$bblm_post_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
+		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$wpdb->insert_id.'\', \''.$bblm_submission.'\', \'p_\')';
+		$wpdb->query($bblmmappingsql);
 
-$postmetasql = 'INSERT INTO '.$wpdb->postmeta.' (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (\'\', \''.$bblm_post_number.'\', \'_wp_page_template\', \'bb.view.player.php\')';
+		//Update the team
+		$wpdb->query($teamupdatesql);
 
-if (FALSE !== $wpdb->query($postmetasql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
+		$success = 1;
+		$addattempt = 1;
 
-if (FALSE !== $wpdb->query($playersql)) {
-	$bblm_player_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
-
-$joinsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\', \''.$bblm_player_number.'\', \''.$bblm_post_number.'\', \'p_\')';
-
-if (FALSE !== $wpdb->query($joinsql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-if (FALSE !== $wpdb->query($teamupdatesql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-// Now we flush the re-write rules to make them regenerate the rules to include our new page.
-	$wp_rewrite->flush_rules();
+	}
 
 
 ?>
 	<div id="updated" class="updated fade">
 	<p>
 	<?php
-	if ($sucess) {
-		print("Player has been added. <a href=\"".$bblm_guid."\" title=\"View the new Player\">View page</a>");
+	if ($success) {
+		print("Player has been added. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the new Player\">View page</a>");
 	}
 	else {
-		print("Something went wrong");
+		print("Something went wrong! Please try again.");
 	}
 	?>
 </p>
@@ -421,5 +374,4 @@ $teamsql = 'SELECT T.t_id, T.t_name FROM '.$wpdb->prefix.'team T, '.$wpdb->prefi
 <?php
 } //end of else section
 ?>
-
 </div>

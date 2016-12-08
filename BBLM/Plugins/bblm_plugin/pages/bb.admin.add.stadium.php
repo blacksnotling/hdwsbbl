@@ -1,7 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.add.stadium.php
-*	Description: Page used to add a new Stadium to the league
+*	Description: This page is used to add a new Stadium to the BBLM.
 */
 
 //Check the file is not being accessed directly
@@ -14,141 +14,73 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 <?php
 if(isset($_POST['bblm_stadium_submit'])) {
-	$bblm_safe_input = array();
-
-	//think about a for each
-	if (get_magic_quotes_gpc()) {
-	$_POST['bblm_sname'] = stripslashes($_POST['bblm_sname']);
-	$_POST['bblm_sdesc'] = stripslashes($_POST['bblm_sdesc']);
-
-	}
-	$bblm_safe_input['sname'] = stripslashes($_POST['bblm_sname']);
-	$bblm_safe_input['sdesc'] = stripslashes($_POST['bblm_sdesc']);
-
-	$bblm_safe_input['sname'] = $wpdb->escape($bblm_safe_input['sname']);
-	$bblm_safe_input['sdesc'] = $wpdb->escape($bblm_safe_input['sdesc']);
-
-	//generate time NOW.
-	$bblm_date_now = date('Y-m-j H:i:59');
 
 	//pull parent page from somewhere
 	$options = get_option('bblm_config');
 	$bblm_page_parent = htmlspecialchars($options['page_stadium'], ENT_QUOTES);
 
-	//filter page body
-	$bblm_removable = array("<pre>","</pre>","<p>","&nbsp;");
-	$bblm_page_content = $bblm_safe_input['sdesc'];
-	$bblm_page_content = str_replace($bblm_removable,"",$bblm_page_content);
-	$bblm_page_content = str_replace("</p>","\n\n",$bblm_page_content);
+	$my_post = array(
+		'post_title' => wp_filter_nohtml_kses($_POST['bblm_sname']),
+		'post_content' => wp_filter_kses($_POST['bblm_sdesc']),
+		'post_type' => 'page',
+		'post_status' => 'publish',
+		'comment_status' => 'closed',
+		'ping_status' => 'closed',
+		'post_parent' => $bblm_page_parent
+	);
 
-	//snaitise page title
-	$bblm_page_title = $bblm_safe_input['sname'];
+	if ($bblm_submission = wp_insert_post( $my_post )) {
+		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.stadium.php');
 
-	//convert page title to slug
-	$bblm_page_slug = sanitize_title($bblm_page_title);
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'stadium` (`stad_id`, `stad_name`, `stad_img`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \'\')';
+		$wpdb->query($bblmdatasql);
 
-	//generate GUID
-	$bblm_guid = get_bloginfo('wpurl');
-	$bblm_guid .= "/stadiums/";
-	$bblm_guid .= $bblm_page_slug;
+		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$wpdb->insert_id.'\', \''.$bblm_submission.'\', \'stad_\')';
+		$wpdb->query($bblmmappingsql);
 
-
-
-$postsql = 'INSERT INTO '.$wpdb->posts.' (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (\'\', \'1\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \''.$bblm_page_content.'\', \''.$bblm_page_title.'\', \'0\', \'\', \'publish\', \'closed\', \'closed\', \'\', \''.$bblm_page_slug.'\', \'\', \'\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \'\', \''.$bblm_page_parent.'\', \''.$bblm_guid.'\', \'0\', \'page\', \'\', \'0\')';
-
-
-
-if (FALSE !== $wpdb->query($postsql)) {
-	$bblm_post_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
-
-$postmetasql = 'INSERT INTO '.$wpdb->postmeta.' (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (\'\', \''.$bblm_post_number.'\', \'_wp_page_template\', \'bb.view.stadium.php\')';
-
-if (FALSE !== $wpdb->query($postmetasql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-$stadiumsql = 'INSERT INTO `'.$wpdb->prefix.'stadium` (`stad_id`, `stad_name`, `stad_img`) VALUES (\'\', \''.$bblm_page_title.'\', \'\')';
-
-if (FALSE !== $wpdb->query($stadiumsql)) {
-	$bblm_stadium_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
-
-$joinsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\', \''.$bblm_stadium_number.'\', \''.$bblm_post_number.'\', \'stad_\')';
-
-if (FALSE !== $wpdb->query($joinsql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-// Now we flush the re-write rules to make them regenerate the rules to include our new page.
-	$wp_rewrite->flush_rules();
+		$success = 1;
+		$addattempt = 1;
+	} //end of if post insertion was successful
 
 ?>
 	<div id="updated" class="updated fade">
 	<p>
 	<?php
-	if ($sucess) {
-		print("Stadium has been added. <a href=\"".$bblm_guid."\" title=\"View the new Stadium\">View page</a>");
+	if ($success) {
+		print("Stadium has been added. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the new Stadium\">View page</a>");
 	}
 	else {
-		print("Something went wrong");
+		print("Something went wrong! Please try again.");
 	}
 ?>
 </p>
 	</div>
 <?php
-}
+}//end of submit if
 ?>
 
 	<form name="bblm_test" method="post" id="post">
 
-	<fieldset id='addstadiumdiv'><legend>Stadium</legend>
-		<div>
-		  <label for="bblm_sname" class="selectit">Stadium Name</label>
-		  <input type="text" name="bblm_sname" size="20" tabindex="1" value="" maxlength="30" id="bblm_sname">
-		</div>
-	</fieldset>
-
-	<fieldset id="postdivrich"><legend>Stadium Description</legend>
-	<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-	<script type="text/javascript">
-	<!--
-		tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "bblm_sdesc",
-		width : "565",
-		height : "200"
-		});
-	-->
-	</script>
-
-	<div>
-	  <textarea class='mceEditor' rows='10' cols='40' name='bblm_sdesc' tabindex='2' id='bblm_sdesc'></textarea>
-	</div>
-	</fieldset>
+	<table class="form-table">
+		<tr valign="top">
+				<th scope="row"><label for="bblm_sname">Stadium Name</label></th>
+				<td><input type="text" name="bblm_sname" size="40" value="" id="bblm_sname" class="regular-text"/></td>
+		</tr>
+		<tr valign="top">
+				<th scope="row"><label for="bblm_sdesc">Description</label></th>
+				<td><p><textarea rows="10" cols="50" name="bblm_sdesc" id="bblm_sdesc" class="large-text"></textarea></p></td>
+		</tr>
+	</table>
 
 	<p class="submit">
 	<input type="submit" name="bblm_stadium_submit" tabindex="4" value="Add Stadium" title="Add the Stadium"/>
-	</p
+	</p>
 
 	</form>
 
 
 	<h3>Existing Stadiums</h3>
-	<p>The following Stadiums are already set-up:</p>
+	<p>The following Stadiums already exist in the League:</p>
 	<?php
 	$namesql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
 	if ($names = $wpdb->get_results($namesql)) {
