@@ -163,7 +163,7 @@ Template Name: List Awards
 				} // end of for each
 			}
 			else {
-				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the HDWSBBL!</p>\n	</div>\n");
+				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the League!</p>\n	</div>\n");
 			}
 
 

@@ -1,14 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.add.comp.php
-*	Version: 1.2b
 *	Description: Page used to add a new Competition to the BBLM.
-*/
-/* -- Change History --
-20080310 - 1.0b - Initial creation of file.
-20080311 - 1.1b - Corrected one of the sql so correct Prefix was inserted!
-20080407 - 1.2b - Ammended input to take into account new c_showstandings field in db
-
 */
 
 //Check the file is not being accessed directly
@@ -17,7 +10,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Start a competition</h2>
-	<p>Use the following form to Start a new competition in the HDWSBBL.</p>
+	<p>Use the following form to Start a new competition.</p>
 
 <?php
 if(isset($_POST['bblm_comp_submit'])) {

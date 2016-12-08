@@ -1,17 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.match.php
-*	Version: 1.2
 *	Description: Link page to add.edit match reports, coachs comments and match trivia.
-*/
-/* -- Change History --
-20080526 - 0.1b - Initial creation of file.
-20080719 - 0.2b - added the edit button for match comments
-20080730 - 1.0 - bump to Version 1 for public release.
-20080804 - 1.1 - consolidated edit,match_comments and edit.match_trivia into one page. re-designed the main table to match WP styles.
-20080806 - 1.1.1 - added stripslashes to the output of the coaches comments (for editing)
-20100308 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 ?>
 <div class="wrap">
@@ -177,7 +167,7 @@ if (isset($_POST['bblm_comment_edit'])) {
 	else {
 		//Display main form
 ?>
-	<p>Below is a list of matches in the HDWSBBL. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
+	<p>Below is a list of matches that have taken place in the League. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
 
 <?php
 		$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, S.sea_name, C.c_name, Z.guid AS cguid, D.div_name, P.ID, M.m_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND C.sea_id = S.sea_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';

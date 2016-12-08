@@ -50,7 +50,7 @@ Template Name: Statistics - Misc
 			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print($htv->TEAMLink); ?>" title="Read more about this Team"><?php print($htv->TEAM); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
 			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print($ltv->TEAML); ?>" title="Read more about this Team"><?php print($ltv->TEAM); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
 			<li><strong>Team with most players</strong>: <a href="<?php print($tmp->TEAMLink); ?>" title="Read more about this Team"><?php print($tmp->TEAM); ?></a> (<?php print($tmp->VALUE); ?>)</li>
-			<li><strong>Average Career length of a HDWSBBL Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
+			<li><strong>Average Career length of a Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
 		</ul>
 
 
@@ -172,7 +172,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">COMP</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -226,7 +226,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">INT</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -280,7 +280,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">MVP</th>\n		</tr>\n");
 					$zebracount = 1;

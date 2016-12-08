@@ -4,7 +4,6 @@ Template Name: View Player
 */
 /*
 *	Filename: bb.view.player.php
-*	Version: 1.4
 *	Description: Page template to view a players details
 */
 
@@ -145,7 +144,7 @@ get_header(); ?>
 					$statssql = 'SELECT O.guid, O.post_title, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE J.tid = T.t_id AND J.prefix = \'t_\' AND J.pid = O.ID AND P.t_id = T.t_id AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND P.pos_id = Y.pos_id AND M.p_id = '.$pd->p_id.' GROUP BY P.p_id';
 					if ($stats = $wpdb->get_results($statssql)) {
 			?>
-						<h3>HDWSBBL Statistics</h3>
+						<h3>Player Statistics</h3>
 						<table>
  							<tr>
  								<th class="tbl_title">Playing for</th>

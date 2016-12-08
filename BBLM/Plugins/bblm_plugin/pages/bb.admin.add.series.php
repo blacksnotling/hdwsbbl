@@ -10,7 +10,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Add a Championship Cup</h2>
-	<p>Use the following form to add a new Championship Cup to the HDWSBBL.</p>
+	<p>Use the following form to add a new Championship Cup to the League.</p>
 
 <?php
 

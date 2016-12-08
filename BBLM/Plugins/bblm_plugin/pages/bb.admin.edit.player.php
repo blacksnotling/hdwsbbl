@@ -1,26 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.player.php
-*	Version: 1.3
 *	Description: the core edit player screen
-*/
-/* -- Change History --
-20080808 - 0.1b - Initial creation of file.
-20080809 - 0.2b - Implemented edit player stats
-20080811 - 0.3b - Finished edit player match history
-20080812 - 0.4b - bit of a tidy and added ink to add.player
-20080813 - 0.5b - made the links on the main screen context sensitive (ie remove payer only links if the player is active)
-				- Also added in a link to hire a Journeyman permanetly
-20080822 - 0.6b - made some more links context sensitive
-				- Implemented the set player iage stuff
-				- rolled in add.journeyman
-				- rolled in rename.player
-20090120 - 0.7b - incorperated new update_tv() function. cleaned up some of the code around the retirement of players.
-20090129 - 1.0 - Bump to V1 (Should have been done at bblm1.1 launch 3 days ago!)
-20090818 - 1.1 - revised the remove player part, adding more options and features. Also expanded the information when hiring a JM and did a general tidy up to account for the changes to WordPress
-20090819 - 1.1.1 - Added another option (Wizard, W) to the retire player screen.
-20091130 - 1.2 - incorporated the new update_player function to adjust the players SPP in the bb_player table automatically if a match record has changed
-20100308 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -696,7 +677,7 @@ else if ("edit" == $_GET['action']) {
 				//No match result was returned. We still need to establish team id
 				$playerdetailssql = 'SELECT Z.post_title, Y.pos_name, P.t_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Z WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND Y.pos_id = P.pos_id AND P.p_id = '.$pid;
 				$pd = $wpdb->get_row($playerdetailssql);
-				print(" <tr>\n  	<td>".$pd->post_title."</td>\n  	<td>".$pd->pos_name."</td>\n  	<td colspan=\"7\">According to the HDWSBBL Archives, this player has done Nothing!</td>\n </tr>\n			</tbody>\n		</table>\n");
+				print(" <tr>\n  	<td>".$pd->post_title."</td>\n  	<td>".$pd->pos_name."</td>\n  	<td colspan=\"7\">According to the Leagues Archives, this player has done Nothing!</td>\n </tr>\n			</tbody>\n		</table>\n");
 				$t_id = $pd->t_id;
 
 			}

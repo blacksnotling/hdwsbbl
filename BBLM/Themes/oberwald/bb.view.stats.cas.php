@@ -7,6 +7,17 @@ Template Name: Statistics - CAS
 *	Description: .CAS Related Stats
 */
 ?>
+<?php
+if ( $options = get_option('bblm_config') ) {
+  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+  if ( strlen($bblm_league_name) < 1) {
+	   $bblm_league_name = "league";
+   }
+ }
+else {
+  $bblm_league_name = "league";
+}
+?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
@@ -99,7 +110,7 @@ Template Name: Statistics - CAS
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the <?php echo $bblm_league_name; ?>.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">CAS</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -153,7 +164,7 @@ Template Name: Statistics - CAS
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Teams who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Teams who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th>Team</th>\n		<th class=\"tbl_name\">Race</th>\n		<th class=\"tbl_stat\">CAS</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -207,7 +218,7 @@ Template Name: Statistics - CAS
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Kills</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -261,7 +272,7 @@ Template Name: Statistics - CAS
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Teams who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Teams who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th>Team</th>\n		<th class=\"tbl_name\">Race</th>\n		<th class=\"tbl_stat\">Kills</th>\n		</tr>\n");
 					$zebracount = 1;

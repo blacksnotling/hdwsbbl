@@ -89,7 +89,7 @@ Template Name: Statistics - TD
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -143,7 +143,7 @@ Template Name: Statistics - TD
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Teams who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Teams who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th>Team</th>\n		<th class=\"tbl_name\">Race</th>\n		<th class=\"tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;

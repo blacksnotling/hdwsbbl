@@ -65,7 +65,7 @@ Template Name: View Star Player
 		if ($s = $wpdb->get_row($careerstatssql)) {
 			//The Star has played a match so continue
 ?>
-			<h3>HDWSBBL Statistics</h3>
+			<h3>League Statistics</h3>
 			<table>
 				<tr>
 					<th class="tbl_title">Career Total</th>

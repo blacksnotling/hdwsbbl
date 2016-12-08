@@ -99,7 +99,7 @@ Template Name: View Season
 
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.sea_id = '.$sd->sea_id.' GROUP BY T.t_id ORDER BY A.a_id DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
-					print("<h3>HDWSBBL Championship Cup Winners this season</h3>\n");
+					print("<h3>Championship Cup Winners this season</h3>\n");
 					$zebracount = 1;
 					print("<table>\n	<tr>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Championships</th>\n		</tr>\n");
 					foreach ($champions as $champ) {

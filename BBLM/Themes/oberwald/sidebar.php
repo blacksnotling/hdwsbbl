@@ -7,7 +7,7 @@
 			<li><p>You are currently browsing the archives for the <strong><?php single_cat_title(); ?></strong> topic.</p></li>
 			<?php } ?>
 			<?php if ( is_search() ) { ?>
-			<li><p>You have searched the HDWSBBL weblog archives for <strong>'<?php the_search_query() ?>'</strong>. If you are unable to find anything in these search results, you can try one of these links.</p></li>
+			<li><p>You have searched the Leagues archives for <strong>'<?php the_search_query() ?>'</strong>. If you are unable to find anything in these search results, you can try one of these links.</p></li>
 			<?php } ?>
 			<?php
 			/*	If the content is part of the WarZone then display the warzone sidebar, else display the

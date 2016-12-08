@@ -1,16 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.add.stadium.php
-*	Version: 1.1
 *	Description: Page used to add a new Stadium to the league
-*/
-/* -- Change History --
-20080402 - 1.0b - Initial creation of file
-20080403 - 1.1b - Corrected the sqL to display the existing stadiums
-20080405 - 1.2b - checked for any refrences to dev_ rather then the correct $wpdb->
-20080730 - 1.0 - bump to Version 1 for public release.
-20100124 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 
 //Check the file is not being accessed directly
@@ -19,7 +10,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Add a Stadium</h2>
-	<p>Use the following form to add a new Race to the HDWSBBL.</p>
+	<p>Use the following form to add a new Stadium to the League.</p>
 
 <?php
 if(isset($_POST['bblm_stadium_submit'])) {
@@ -157,7 +148,7 @@ else {
 
 
 	<h3>Existing Stadiums</h3>
-	<p>The following Stadiums already exist in the HDWSBBL:</p>
+	<p>The following Stadiums are already set-up:</p>
 	<?php
 	$namesql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
 	if ($names = $wpdb->get_results($namesql)) {
