@@ -422,7 +422,7 @@ Template Name: View Team
 <?php
 		//Gathering data for the sidebar
 		//Current match form
-		$formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.tid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
+		$formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
 		$currentform = "";
 		if ($form = $wpdb->get_results($formsql)) {
 			foreach ($form as $tf) {
