@@ -4,36 +4,14 @@ Template Name: View Match
 */
 /*
 *	Filename: bb.view.match.php
-*	Version: 1.4
 *	Description: .Page template to display the details of a match
-*/
-/* -- Change History --
-20080413 - 0.1b - Initial creation of file.
-20080414 - 1.0b - Finished draft of file.
-20080531 - 1.1b - Swapped the Att and WInnings over as the DB has them stored in the wrong order!!!
-		 - 1.2b - Fixed the bug where the last player on the team would be assigned the mvp award!
-20080703 - 1.3b - Some major updates to bring this file into line (sidebar, validation fixs, display oddities, breadcrumbs etc)
-20080707 - 1.4b - Re-worked the master sql (more work is required!)
-20080717 - 1.5b - In the sidebar the Stage/Division switch is now automated.
-20080718 - 1.6b - fixed a sort error on the player performance tables and reduced the table size
-20080722 - 1.6.1b - added stripslashes() to the "coaches comment" output
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0r1 - Began mass revision of page. added DYK code at bottom
-20090713 - 1.1 - Finished re-work. this time I broke down the big SQL hit at the start into three chunks
-		 - 1.2 - Added the race/custom team logo to the table sumary at the top.
-20090818 - 1.2.1 - fixed bug that came apparent when we moved to PHP 5. One of the objects was mis-typed. PHP 4 was covering this error!
-20091230 - 1.3 - Added support for matches which where conceeded. one team will have two MVPs and the other will have none. The MVP routine was updated to reflect this.
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/matches/" title="Back to the result listing">Results</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 
 <?php
@@ -128,7 +106,7 @@ Template Name: View Match
 
 				<h3>Match Report</h3>
 				<div class="details">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 
 
@@ -370,18 +348,17 @@ Template Name: View Match
 <?php
 		} //end of if match SQL
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
+
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 <?php
@@ -454,14 +431,13 @@ Template Name: View Match
 <?php
 	} //end of if $playeractions
 
-if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-<?php endif;
-?>
+	if ( !dynamic_sidebar('sidebar-common') ) : ?>
+		<li><h2 class="widgettitle">Search</h2>
+			<ul>
+			 <li><?php get_search_form(); ?></li>
+			</ul>
+		</li>
+	<?php endif; ?>
 
 		</ul>
 	</div><!-- end of #subcontent -->

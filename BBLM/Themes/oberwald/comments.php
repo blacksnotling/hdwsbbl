@@ -26,7 +26,7 @@
 
 <?php /* An ordered list of our custom comments callback, custom_comments(), in functions.php   */ ?>
 			<ol>
-<?php wp_list_comments('type=comment&callback=custom_comments'); ?>
+<?php wp_list_comments('type=comment&callback=oberwald_comment'); ?>
 			</ol>
 
 <?php /* If there are enough comments, build the comment navigation */ ?>
@@ -95,7 +95,7 @@
 </p>
 <?php do_action('comment_form', $post->ID); ?>
 <?php
-	if (function_exists(show_subscription_checkbox)) {
+	if (function_exists('show_subscription_checkbox')) {
 	//if the subscrive-to-comments plugin is active, have the option available
 		show_subscription_checkbox();
 	}

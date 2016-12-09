@@ -10,13 +10,11 @@ Template Name: Statistics - TD
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<?php the_content(); ?>
 
 <?php
 		 /*-- Stats part A -- */
@@ -91,7 +89,7 @@ Template Name: Statistics - TD
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -145,7 +143,7 @@ Template Name: Statistics - TD
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Teams who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Teams who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th>Team</th>\n		<th class=\"tbl_name\">Race</th>\n		<th class=\"tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -189,15 +187,12 @@ Template Name: Statistics - TD
 				}
 
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-			</div>
+</div>
+</div>
 
 
 		<?php endwhile;?>

@@ -239,32 +239,33 @@ function oberwald_add_body_class($classes) {
  */
 function oberwald_breadcrumb() {
 
+	global $post;
+
+	echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; ';
+
+	    // If there is a parent, display the link.
+	    $parent_title = get_the_title( $post->post_parent );
+
+			if ( $parent_title != wp_get_post_parent_id( $post->ID )) {
+					echo '<a href="' . esc_url( get_permalink( $post->post_parent ) ) . '" alt="' . esc_attr( $parent_title ) . '">' . $parent_title . '</a> » ';
+			}
+	    // Then give the title of the current page.
+			if ( is_single() && !is_date() ) {
+				echo the_title();
+			}
+			elseif ( is_page( 'Warzone' ) ) {
+				echo 'HDWSBBL:WarZone';
+			}
+			else {
+				echo 'Archive';
+			}
+
+
 	return true;
 
 }
 
-/**
- * Prints a "Did You Know" box when called
- *
- */
-function bblm_display_dyk() {
-	global $wpdb;
 
-	$dyksql = 'SELECT dyk_id, dyk_type, dyk_title, dyk_desc FROM '.$wpdb->prefix.'dyk WHERE dyk_show = 1 ORDER BY rand() LIMIT 1';
-	$d = $wpdb->get_row($dyksql);
-?>
-		<div class="dykcontainer <?php if ($d->dyk_type) { print("dyktrivia"); } else { print("dykfact"); } ?>" id="dyk<?php print($d->dyk_id); ?>">
-			<h3 class="dykheader">HDWSBBL - <?php if($d->dyk_type) { print("Did You Know"); } else { print("Fact"); } ?></h3>
-<?php
-				if ("none" !== $d->dyk_title) {
-					print("			<h4>".$d->dyk_title."</h4>\n");
-				}
-?>
-			<?php print(wpautop($d->dyk_desc)); ?>
-			<p class="dykfooter"><a href="<?php echo esc_url( home_url() ); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
-		</div>
-<?php
-}
 function TimeAgoInWords($from_time, $include_seconds = false) {
 //http://yoast.com/wordpress-functions-supercharge-theme/
   $to_time = time();

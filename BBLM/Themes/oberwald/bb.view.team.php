@@ -4,17 +4,15 @@ Template Name: View Team
 */
 /*
 *	Filename: bb.view.team.php
-*	Description: Page template to display
+*	Description: Page template to display a team in the league
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
 		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
@@ -47,7 +45,7 @@ Template Name: View Team
 			if ($oh = $wpdb->get_row($overallsql)) {
 				if (NULL == $oh->OP) {
 					$has_played = 0;
-					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut in the HDWSBBL. Stay tuned to see how this team develops.</p>\n	</div>\n");
+					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut!. Stay tuned to see how this team develops.</p>\n	</div>\n");
 				}
 				else {
 ?>
@@ -406,25 +404,25 @@ Template Name: View Team
 				}//end of count stats
 			}//end of if plyed a match
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
+
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-			</div>
+</div>
+</div>
 
 
-		<?php endwhile;?>
-	<?php endif; ?>
+<?php endwhile;?>
+<?php endif; ?>
+
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 <?php
 		//Gathering data for the sidebar
 		//Current match form
-		$formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.tid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
+		$formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
 		$currentform = "";
 		if ($form = $wpdb->get_results($formsql)) {
 			foreach ($form as $tf) {
@@ -516,21 +514,20 @@ Template Name: View Team
 
 			$otherteamssql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.t_id != '.$tid.' AND T.type_id = 1 ORDER BY RAND() LIMIT 5';
 			if ($oteam = $wpdb->get_results($otherteamssql)) {
-				print("<li>\n	<h2>Other Teams in the HDWSBBL</h2>\n	<ul>\n");
+				print("<li>\n	<h2>Other Teams in the League</h2>\n	<ul>\n");
 				foreach ($oteam as $ot) {
 					print("	<li><a href=\"".$ot->guid."\" title=\"Read more about ".$ot->post_title."\">".$ot->post_title."</a></li>\n");
 				}
 				print("</ul>\n</li>\n");
 			}
 
-if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
-<?php endif;
-?>
+			if ( !dynamic_sidebar('sidebar-common') ) : ?>
+				<li><h2 class="widgettitle">Search</h2>
+				  <ul>
+				   <li><?php get_search_form(); ?></li>
+				  </ul>
+				</li>
+			<?php endif; ?>
 
 		</ul>
 	</div><!-- end of #subcontent -->

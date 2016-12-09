@@ -4,33 +4,9 @@ Template Name: View Player
 */
 /*
 *	Filename: bb.view.player.php
-*	Version: 1.4
 *	Description: Page template to view a players details
 */
-/* -- Change History --
-20080406 - 0.1b - Intital creation of file..
-20080411 - 0.2b - Added a mising closing > on a th
-20080416 - 0.3b - moved the player descrition to be below the initial chracteristics.
-20080418 - 0.4b - Various bug fixing and re-formatting.
-20080623 - 0.5b - gave this page some lovin. I removed the sidebar and tidied up a few bits and bobs
-20080624 - 0.6b - fully implemented the sidebar and added awards. just a fw more bits to clear up
-20080625 - 1.0b - Version 1 Beta reached.
-20080702 - 1.0.1b - added some thead and tbody tags to the sortable tables
-20080718 - 1.0.2b - added a skills class to the player overview to reduce the text size
-20080719 - 1.1b - fixed the player rank swith at last! in match history, MNG is  now a Y not a 1
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DYK code to page
-20090827 - 1.1.1r1 - If one has been entered the player image is shown. the "other players does not show this player"
-				 - If the player is a captain (or was) then it is mentioend in the sidebar
-20090830 - 1.1.1r2 - fixed the debut date. it now only appears when the player has actually played a game!
-			   - If the player has died, list their obituary
-20090831 - 1.2 - If the player is a killer, it lists who they have killed!
-20091230 - 1.3 - Fixed the debut date. the pid was hardcoaded as player 1 hence the wrong date!
-				 The obituary box now only displays when a player has died. it was always being displayed for inactive players due to a missing bracket
-				 The "killer" title no longer appears if the player has only killed themself!
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
 
-*/
 get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
@@ -43,11 +19,7 @@ get_header(); ?>
 			//if ($player = $wpdb->get_results($playersql)) {
 			if ($pd = $wpdb->get_row($playersql)) {
 				$pspp = $pd->p_spp;
-?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
-		</div>
-<?php
+
 			} //end of if playersql
 
 				switch ($pspp) {
@@ -88,8 +60,9 @@ get_header(); ?>
 				}
 		?>
 
-				<div class="entry">
-					<h2><?php the_title(); ?></h2>
+		<div class="entry">
+			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				<h2 class="entry-title"><?php the_title(); ?></h2>
 
 					<table>
 						<tr>
@@ -115,7 +88,7 @@ get_header(); ?>
 					</table>
 <!-- <?php print($pspp); ?> -->
 					<div class="details playerdet">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 					</div>
 
 <?php
@@ -171,7 +144,7 @@ get_header(); ?>
 					$statssql = 'SELECT O.guid, O.post_title, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE J.tid = T.t_id AND J.prefix = \'t_\' AND J.pid = O.ID AND P.t_id = T.t_id AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND P.pos_id = Y.pos_id AND M.p_id = '.$pd->p_id.' GROUP BY P.p_id';
 					if ($stats = $wpdb->get_results($statssql)) {
 			?>
-						<h3>HDWSBBL Statistics</h3>
+						<h3>Player Statistics</h3>
 						<table>
  							<tr>
  								<th class="tbl_title">Playing for</th>
@@ -440,14 +413,11 @@ get_header(); ?>
 						print("	<div class=\"info\">\n	 <p>This player has not made their Debut yet. Stay tuned for further developments.</p>\n	</div>\n");
 					}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
+			</div>
 		<?php
 		endwhile; ?>
 
@@ -474,6 +444,7 @@ get_header(); ?>
 	$playerchampionshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.c_id AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 ?>
 
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 	<div id="subcontent">
@@ -566,12 +537,12 @@ get_header(); ?>
 ?>
 				</ul>
 			</li>
-<?php if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Oops</h2>
-			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
-			  </ul>
-			</li>
+			<?php if ( !dynamic_sidebar('sidebar-common') ) : ?>
+				<li><h2 class="widgettitle">Search</h2>
+				  <ul>
+				   <li><?php get_search_form(); ?></li>
+				  </ul>
+				</li>
 <?php endif;?>
 
 		</ul>

@@ -41,11 +41,18 @@ body {
 	color: #f3f3f3;
 	height: 15px;
 }
+body.section-warzone #tagline {
+	background: #548ac3 url(images/bg_nav_hover_red.gif) bottom repeat-x;
+	color: #eee;
+}
 #header {
 	background: #f3f3f3 url(images/hdwsbbl-slim.gif) bottom repeat-x;
 	color: #f3f3f3;
 	height: 100px;
 	width: 960px;
+}
+body.section-warzone #header {
+	background: #f3f3f3 url(images/hdwsbbl-slim-wz.gif) bottom repeat-x;
 }
 #header * {
 	display: none;
@@ -57,6 +64,9 @@ body {
 	display: block;
 	height: 40px;
 	font-size: 1.2em;
+}
+body.section-warzone #navcontainer {
+	background: #548ac3 url(images/bg_nav_red.gif) bottom repeat-x;
 }
 #navigation {
 	clear:both;
@@ -71,11 +81,17 @@ body {
 	float: left;
 	background: url(images/ball.gif) no-repeat 6px 14px;
 }
+body.section-warzone #navigation li {
+	border-right: 1px solid #9F2500;
+}
 li.lastnav, #navigation li:last-of-type {
 	border: none;
 }
 #navigation li:hover {
 	background: #244f91 url(images/bg_nav_hover.jpg) top repeat-x;
+}
+body.section-warzone #navigation li:hover {
+	background: #244f91 url(images/bg_nav_hover_red.gif) top repeat-x;
 }
 #navigation li a {
 	color: #accae6;
@@ -87,6 +103,9 @@ li.lastnav, #navigation li:last-of-type {
 	padding-left: 25px;
 	padding-right: 14px;
 	font-family: 'Graduate', cursive;
+}
+body.section-warzone #navigation li a {
+	color: #eee;
 }
 #navigation li a:hover {
 	color: #fff;
@@ -260,6 +279,9 @@ font-weight:100;
 	background: #548ac3 url(images/bg_nav.jpg) bottom repeat-x;
 	height: 50px;
 }
+body.section-warzone #footer {
+	background: #548ac3 url(images/bg_nav_hover_red.gif) bottom repeat-x;
+}
 #footertext {
 	float:left;
 	width: 480px;
@@ -272,7 +294,9 @@ font-weight:100;
 	color: #D7651B;
 	text-decoration: none;
 }
-
+body.section-warzone #footer a, body.section-warzone #footer a:link, body.section-warzone #footer a:visited {
+	color: #eee;
+}
 #footer a:hover, #footer a:active {
 	color: #ddd;
 	text-decoration: underline;
@@ -286,6 +310,12 @@ a, a:link, a:visited {
 a:hover, a:active {
 	color: #D7651B;
 	text-decoration: underline;
+}
+body.section-warzone a, body.section-warzone a:link, body.section-warzone a:visited {
+	color: #9F2500;
+}
+body.section-warzone a:hover, body.section-warzone a:active {
+	color: #3366ff;
 }
 p.readmorelink {
 	border: 1px solid #ddd;
@@ -427,7 +457,9 @@ table th {
 	font-weight: bold;
 	text-align: center;
 }
-
+body.section-warzone table th {
+	background-color: #9F2500;
+}
 table tr.tbl_alt, table tr.odd {
 	background-color: #ddd;
 }

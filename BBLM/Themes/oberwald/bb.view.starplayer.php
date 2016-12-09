@@ -10,19 +10,18 @@ Template Name: View Star Player
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php echo home_url(); ?>/star-players/" title="See more Star Players">Star Players</a> &raquo; <?php the_title(); ?></p>
-		</div>
-		<?php
+<?php
 			/*
 			Gather Information for page
 			*/
 			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
 ?>
-		<h2><?php the_title(); ?></h2>
-		<div class="details">
-			<?php the_content('Read the rest of this entry &raquo;'); ?>
+<div class="entry">
+	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<h2 class="entry-title"><?php the_title(); ?></h2>
+	<div class="details">
+		<?php the_content(); ?>
 		</div>
 			<table>
 				<tr>
@@ -66,7 +65,7 @@ Template Name: View Star Player
 		if ($s = $wpdb->get_row($careerstatssql)) {
 			//The Star has played a match so continue
 ?>
-			<h3>HDWSBBL Statistics</h3>
+			<h3>League Statistics</h3>
 			<table>
 				<tr>
 					<th class="tbl_title">Career Total</th>
@@ -300,15 +299,12 @@ Template Name: View Star Player
 
 
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-			</div>
+</div>
+</div>
 
 
 		<?php endwhile;?>

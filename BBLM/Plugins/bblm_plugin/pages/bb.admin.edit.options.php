@@ -30,6 +30,7 @@
 		$options['page_season'] = strip_tags(stripslashes($_POST['bblm_options_page_season']));
 		$options['page_stars'] = strip_tags(stripslashes($_POST['bblm_options_page_stars']));
 		$options['display_stats'] = strip_tags(stripslashes($_POST['bblm_options_display_stats']));
+		$options['league_name'] = strip_tags(stripslashes($_POST['bblm_options_league_name']));
 		$options['team_tbd'] = strip_tags(stripslashes($_POST['bblm_options_team_tbd']));
 		$options['team_star'] = strip_tags(stripslashes($_POST['bblm_options_team_star']));
 		$options['race_star'] = strip_tags(stripslashes($_POST['bblm_options_race_star']));
@@ -54,6 +55,7 @@
 	$page_season = htmlspecialchars($options['page_season'], ENT_QUOTES);
 	$page_stars = htmlspecialchars($options['page_stars'], ENT_QUOTES);
 	$display_stats = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+	$league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
 	$cat_warzone = htmlspecialchars($options['cat_warzone'], ENT_QUOTES);
 	$team_tbd = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
 	$team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
@@ -63,6 +65,18 @@
 
 ?>
 <form name="bblm_test" method="post" id="post">
+
+	<h3>League Settings</h3>
+		<table class="form-table">
+	 	<tr>
+	 		<th scope="row" valign="top">League name</th>
+	 		<td>
+	 			<input id="bblm_options_league_name" name="bblm_options_league_name" type="text" value="<?php echo $league_name ?>" maxlength="20" size="10" />
+	  	 	<label for="bblm_options_league_name">Displayed on various pages - nest to use the short name eg. *bbl.</label>
+	 		</td>
+	 	</tr>
+		</table>
+
 <h3>Display Settings</h3>
 <table class="form-table">
  <tr>

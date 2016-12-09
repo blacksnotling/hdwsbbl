@@ -4,28 +4,17 @@ Template Name: List Awards
 */
 /*
 *	Filename: bb.core.awards.php
-*	Version: 1.2
 *	Description: .Page template to display
-*/
-/* -- Change History --
-20080606 - 1.0 - Initial creation of file.
-20090712 - 1.0.1 - Added DYK code to page
-20090830 - 1.1 - Moved the site under statistics
-			   - removed the qualified award from the listing
-			   - cleaned up the sql of the pages.
-20100123 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+					<?php the_content(); ?>
 <?php
 			$awardssql = 'SELECT * FROM '.$wpdb->prefix.'awards WHERE a_id !=4 ORDER BY a_id ASC';
 			if ($awards = $wpdb->get_results($awardssql)) {
@@ -174,19 +163,16 @@ Template Name: List Awards
 				} // end of for each
 			}
 			else {
-				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the HDWSBBL!</p>\n	</div>\n");
+				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the League!</p>\n	</div>\n");
 			}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>

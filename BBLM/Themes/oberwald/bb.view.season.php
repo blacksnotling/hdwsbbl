@@ -15,14 +15,12 @@ Template Name: View Season
 		$options = get_option('bblm_config');
 		$seasonink = get_permalink(htmlspecialchars($options['page_season'], ENT_QUOTES));
 ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php print($seasonink); ?>" title="Back to the Season listing">Seasons</a> &raquo; <?php the_title(); ?></p>
-		</div>
-			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+<div class="entry">
+		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			<h2 class="entry-title"><?php the_title(); ?></h2>
 
 				<div class="details season">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 <?php
 				//Grab the season ID for use in the database
@@ -101,7 +99,7 @@ Template Name: View Season
 
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.sea_id = '.$sd->sea_id.' GROUP BY T.t_id ORDER BY A.a_id DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
-					print("<h3>HDWSBBL Championship Cup Winners this season</h3>\n");
+					print("<h3>Championship Cup Winners this season</h3>\n");
 					$zebracount = 1;
 					print("<table>\n	<tr>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Championships</th>\n		</tr>\n");
 					foreach ($champions as $champ) {
@@ -378,14 +376,11 @@ Template Name: View Season
 					print("	<div class=\"info\">\n		<p>No matches have been played in this Season yet. Stay tuned for further updates as the games start rolling in.</p>\n	</div>\n");
 				}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>

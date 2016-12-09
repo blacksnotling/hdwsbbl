@@ -1,17 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.team.php
-*	Version: 1.2
 *	Description: the main page used to edit a team
-*/
-/* -- Change History --
-20080808 - 0.1b - Initial creation of file.
-20080812 - 0.2b - implemented edit team info and link to add.player
-20080813 - 0.2.1b - cosmetic change. page refered to as Manage Teams.
-020080822 - 0.3b - made the links context sensitive
-				- Implemented the set team captain stuff
-20090129 - 1.0 - Bump to V1 (Should have been done at bblm1.1 launch 3 days ago!)
-20100124 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -288,7 +278,7 @@ else {
 ///////////////////////////
 ?>
 <form name="bblm_playeroptions" method="post" id="post">
-	<p>Below are all the teams in the HDWSBBL. Please select one of the options below to continue with your request.</p>
+	<p>Below are all the teams that have played in the League. Please select one of the options below to continue with your request.</p>
 
 <?php
 

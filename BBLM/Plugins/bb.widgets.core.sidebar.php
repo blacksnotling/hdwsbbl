@@ -4,24 +4,12 @@ Plugin Name: bblm_sidebar widgits
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Provides a list of "other pages" and cutom "topic/cat listing"
 Author: Blacksnotling
-Version: 1.4
+Version: 1.1
 Author URI: http://www.blacksnotling.com/
 */
 
 /*
 *	Filename: bb.widgets.core.sidebar.php
-*/
-/* -- Change History --
-20080227 - 0.1b - Intital creation of file.
-20080301 - 0.2b - Changed name of file and tidied up widgets
-20080609 - 0.3b - Added the List Competitions widget
-20080616 - 0.3.1b - added a missing </div to list comps
-20080730 - 1.0 - bump to Version 1 for public release.
-20080805 - 1.1 - converted the restricted cat widgit to a dropdown
-20080814 - 1.2 - fixed the date chacking below as the upcoming/active/recent status for comps was incorrect (formed 1.0.1)
-20090330 - 1,3 - Editied to filter out non hdwsbbl details
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 
   //////////////////////////////
@@ -38,7 +26,7 @@ function widget_bblm_listcomps_init() {
 		//Just print out the before_widget bit. note we are skipping the normal title part
 		echo $before_widget;
 
-		$url_parts = parse_url(get_bloginfo('home'));
+		$url_parts = parse_url(get_bloginfo('url'));
 
 		//meaty content goes here!
 		//determine current Season
@@ -134,7 +122,7 @@ function widget_bblm_othertopics_init() {
 		echo $before_widget . $before_title . $title . $after_title;
 
 
-		$url_parts = parse_url(get_bloginfo('home')); ?>
+		$url_parts = parse_url(get_bloginfo('url')); ?>
 
  		<ul>
 		<?php

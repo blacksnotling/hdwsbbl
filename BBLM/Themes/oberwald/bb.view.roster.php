@@ -4,27 +4,14 @@ Template Name: Team Roster
 */
 /*
 *	Filename: bb.view.roster.php
-*	Version: 1.3
 *	Description: .Page template to display
-*/
-/* -- Change History --
-20080622 - 1.0b - Initial creation of file.
-20080623 - 1.0.1b - Fixed some validation errors
-20080722 - 1.1b - changed MNG from 1 to Y, added some more number formattion
-20080730 - 1.0 - bump to Version 1 for public release.
-20090117 - 1.1 - Changed title tag to have roster name then hdwsbbl
-			   - Added Injuries to the roster
-			   - The Team Captain (if assigned) is highlighted.
-20090331 - 1.2 - The Roster will display the team logo if present and the race logo if not
-20090824 - 1.2.1 - re-arranged the HTML title tag as it began with arrows and was annoying me!
-20100123 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [225])
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
+<html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?php wp_title(); ?> - HDWSBBL </title>
+<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+<link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 <?php wp_head(); ?>
 <style type="text/css">
 html * {

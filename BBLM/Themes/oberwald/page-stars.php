@@ -10,24 +10,16 @@ Template Name: Star Players race View
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/races/" title="Back to the Race listing">Races</a> &raquo; <?php the_title(); ?></p>
-		</div>
-			<div>
-				<h2><?php the_title(); ?></h2>
-				<div class="details">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+					<div class="details">
+					<?php the_content(); ?>
+					</div>
+
+					<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ) ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
 				</div>
-
-<?php
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-?>
-
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
-
 			</div>
 
 

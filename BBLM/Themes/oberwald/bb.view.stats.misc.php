@@ -10,13 +10,11 @@ Template Name: Statistics - Misc
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<?php the_content(); ?>
 <?php
 		/*-- Misc -- */
 		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.type_id = 1 ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
@@ -52,7 +50,7 @@ Template Name: Statistics - Misc
 			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print($htv->TEAMLink); ?>" title="Read more about this Team"><?php print($htv->TEAM); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
 			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print($ltv->TEAML); ?>" title="Read more about this Team"><?php print($ltv->TEAM); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
 			<li><strong>Team with most players</strong>: <a href="<?php print($tmp->TEAMLink); ?>" title="Read more about this Team"><?php print($tmp->TEAM); ?></a> (<?php print($tmp->VALUE); ?>)</li>
-			<li><strong>Average Career length of a HDWSBBL Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
+			<li><strong>Average Career length of a Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
 		</ul>
 
 
@@ -174,7 +172,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">COMP</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -228,7 +226,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">INT</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -282,7 +280,7 @@ Template Name: Statistics - Misc
 				print("</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					if ($period_alltime) {
-						print("	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">MVP</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -326,15 +324,12 @@ Template Name: Statistics - Misc
 				}
 
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-			</div>
+</div>
+</div>
 
 
 		<?php endwhile;?>

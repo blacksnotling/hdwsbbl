@@ -4,20 +4,17 @@ Template Name: List Resuts
 */
 /*
 *	Filename: bb.core.matches.php
-*	Version: 1.3
 *	Description: Page template to list the matches.
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Results</p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 
 				<form name="bblm_filterlayout" method="post" id="post" action="" class="selectbox">
 				<p>Order Resuts by
@@ -168,17 +165,12 @@ Template Name: List Resuts
 					print("  <p>Sorry, but no Matches could be retrieved at this time, please try again later.</p>\n");
 				}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
-
-
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 
 			</div>
+		</div>
 
 
 		<?php endwhile;?>

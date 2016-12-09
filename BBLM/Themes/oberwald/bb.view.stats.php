@@ -7,16 +7,25 @@ Template Name: Statistics
 *	Description: .Page template to display statistics
 */
 ?>
+<?php
+if ( $options = get_option('bblm_config') ) {
+  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+  if ( strlen($bblm_league_name) < 1) {
+	   $bblm_league_name = "league";
+   }
+ }
+else {
+  $bblm_league_name = "league";
+}
+?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<?php the_content(); ?>
 
 <?php
 				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID';
@@ -49,7 +58,7 @@ Template Name: Statistics
 
 				<h3>Overall Statistics</h3>
 
-				<p>Since the <strong>HDWSBBL's</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
+				<p>Since the <strong><?php echo $bblm_league_name; ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
 				<ul>
 					<li>Score <strong><?php print($tottd); ?></strong> Touchdowns (average <strong><?php print(round($tottd/$matchnum,1)); ?></strong> per match);</li>
 					<li>Make <strong><?php print($totcomp); ?></strong> successful Completions (average <strong><?php print(round($totcomp/$matchnum,1)); ?></strong> per match);</li>
@@ -59,7 +68,7 @@ Template Name: Statistics
 					<li>Earn a total of <strong><?php print($sppnum); ?></strong> Star Player Points.</li>
 				</ul>
 
-				<h3>HDWSBBL Cup Winners</h3>
+				<h3><?php echo $bblm_league_name; ?> Cup Winners</h3>
 <?php
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.type_id = 1 GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
@@ -181,7 +190,7 @@ Template Name: Statistics
 						<li><a href="<?php echo home_url(); ?>/stats/misc/" title="View more Miscellaneous Statistics">Miscellaneous Statistics </a></li>
 <!--						<li><a href="<?php echo home_url(); ?>/stats/records/" title="View Match Records">Match Records</a></li> -->
 						<li><a href="<?php echo home_url(); ?>/stats/awards/" title="View The Awards that have been assigned in the league">Awards</a></li>
-						<li><a href="<?php echo home_url(); ?>/stats/milestones/" title="View the HDWSBBL Milestones">Milestones</a></li>
+						<li><a href="<?php echo home_url(); ?>/stats/milestones/" title="View the Milestones of the League">Milestones</a></li>
 					</ol>
 				</div>
 
@@ -238,7 +247,7 @@ Template Name: Statistics
 				 // All time Top Players //
 				//////////////////////////
 				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
+				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -282,13 +291,10 @@ Template Name: Statistics
 					print("	<div class=\"info\">\n		<p>Nobody has scored any Star Player Points!</p>\n	</div>\n");
 				}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
+			</div>
 			</div>
 
 
