@@ -128,7 +128,8 @@ $(document).ready(function(){
 		<p><?php bloginfo('description'); ?></p>
 	</div>
 	<div id="navcontainer">
-		<ul id="navigation">
+    <?php wp_nav_menu( array( 'theme_location' => 'primary', 'container_id' => 'navigation' ) ); ?>
+<!--		<ul id="navigation">
 			<li><a href="<?php echo home_url(); ?>/news/" title="Visit the News Section">News</a></li>
 			<li><a href="<?php echo home_url(); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
 			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the <?php print ($bblm_league_name); ?>">Teams</a></li>
@@ -137,7 +138,7 @@ $(document).ready(function(){
 			<li><a href="<?php echo home_url(); ?>/stats/" title="All the Statistics">Stats</a></li>
 			<li><a href="<?php echo home_url(); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
 			<li><a href="<?php echo home_url(); ?>/about/" title="About the <?php print ($bblm_league_name); ?>">About</a></li>
-		</ul>
+		</ul> -->
 	</div>
 
 	<div id="pagecontent">
