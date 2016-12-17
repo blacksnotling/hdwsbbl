@@ -77,25 +77,6 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM R
 add_action('admin_menu', 'bblm_insert_admin_pages');
 
 
-/************ Warzone Fitering **********/
-$options = get_option('bblm_config');
-$warzone_category = htmlspecialchars($options['cat_warzone'], ENT_QUOTES);
-
-
-add_action('pre_get_posts', 'bs_remove_warzone_cat' );
-
-function bs_remove_warzone_cat( $notused )
-{
-  global $wp_query;
-  global $warzone_category;
-
-  // Figure out if we need to exclude glossary - exclude from
-  // archives (except category archives), feeds, and home page
-  if( is_front_page() || is_feed() ||
-      ( is_archive() && !is_category() )) {
-     $wp_query->query_vars['cat'] = '-' . $warzone_category;
-  }
-}
 
 /************ Update TV function. Version 0.2 (20100123) **********/
 function bblm_update_tv($tid) {
