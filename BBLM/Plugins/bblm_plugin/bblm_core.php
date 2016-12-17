@@ -10,27 +10,6 @@ Author URI: http://www.hdwsbbl.co.uk/
 //stop people from accessing the file directly and causing errors.
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 
-/************ Custom Login Box **********/
-
-function bblm_custom_login() {
-	echo '<link rel="stylesheet" type="text/css" href="' . get_settings('siteurl') . '/wp-content/plugins/bblm_plugin/bblm_plugin.css" />';
-}
-
-add_action('login_head', 'bblm_custom_login');
-
-function change_wp_login_url() {
-    echo  get_option('siteurl');
-}
-
-add_filter('login_headerurl', 'change_wp_login_url');
-
-
-function change_wp_login_title() {
-    echo  'Powered by ' . get_option('blogname');
-}
-
-add_filter('login_headertitle', 'change_wp_login_title');
-
 /************ Declaration / insertion of Admin Pages **********/
 function bblm_insert_admin_pages() {
 	//Addition of Top level admin pages

@@ -378,3 +378,23 @@ function oberwald_comment( $comment, $args, $depth ) {
 			break;
 	endswitch;
 }
+/************ Custom Login Box **********/
+
+function bblm_custom_login() {
+	echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo('stylesheet_directory') . '/includes/oberwald_login.css" />';
+}
+
+add_action('login_head', 'bblm_custom_login');
+
+function bblm_wp_login_url() {
+    return get_bloginfo( 'url' );
+}
+
+add_filter('login_headerurl', 'bblm_wp_login_url');
+
+
+function bblm_wp_login_title() {
+		return 'Powered by the HDWSBBL';
+}
+
+add_filter('login_headertitle', 'bblm_wp_login_title');
