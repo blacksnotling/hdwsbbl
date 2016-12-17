@@ -4,7 +4,7 @@ Plugin Name: bblm_sidebar widgits
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Provides a list of "other pages" and cutom "topic/cat listing"
 Author: Blacksnotling
-Version: 1.1
+Version: 1.1.1
 Author URI: http://www.blacksnotling.com/
 */
 
@@ -16,7 +16,7 @@ Author URI: http://www.blacksnotling.com/
  // List Competitions Widgit //
 //////////////////////////////
 function widget_bblm_listcomps_init() {
-	if ( !function_exists('register_sidebar_widget') )
+	if ( !function_exists('wp_register_sidebar_widget') )
 		return;
 
 	function widget_bblm_listcomps($args) {
@@ -89,7 +89,14 @@ function widget_bblm_listcomps_init() {
 		echo $after_widget;
 
 	}
-	register_sidebar_widget(array('bblm_List Comps', 'widgets'), 'widget_bblm_listcomps');
+	wp_register_sidebar_widget(
+		'bblm_List Comps',			// your unique widget id
+		'bblm_List Comps',			// widget name
+		'widget_bblm_listcomps',	// callback function to display widget
+			array(							// options
+					'description' => 'Displays a list of active and recent Competitions'
+			)
+	);
 }
 
   /////////////////////////
@@ -102,7 +109,7 @@ function widget_bblm_othertopics_init() {
 
 	// Check for the required plugin functions. This will prevent fatal
 	// errors occurring when you deactivate the dynamic-sidebar plugin.
-	if ( !function_exists('register_sidebar_widget') )
+	if ( !function_exists('wp_register_sidebar_widget') )
 		return;
 	// This is the function that outputs our little widgit.
 	function widget_bblm_othertopics($args) {
@@ -162,11 +169,22 @@ function widget_bblm_othertopics_init() {
 
 	// This registers our widget so it appears with the other available
 	// widgets and can be dragged and dropped into any active sidebars.
-	register_sidebar_widget(array('bblm_Pages', 'widgets'), 'widget_bblm_othertopics');
+	wp_register_sidebar_widget(
+		'bblm_Pages',				// your unique widget id
+		'bblm_Pages',				// widget name
+		'widget_bblm_othertopics',	// callback function to display widget
+		array(						 // options
+			'description' => 'Lists related pages to the league'
+		)
+	);
 
 	// This registers our optional widget control form. Because of this
 	// our widget will have a button that reveals a 300x100 pixel form.
-	register_widget_control(array('bblm_Pages', 'widgets'), 'widget_bblm_othertopics_control', 300, 100);
+	wp_register_widget_control(
+		'bblm_Pages',						// id
+		'bblm_Pages',						// name
+		'widget_bblm_othertopics_control'	// callback function
+	);
 }
 
 
@@ -176,7 +194,7 @@ function widget_bblm_othertopics_init() {
 
 function widget_bblm_restricted_cat_init() {
 
-	if ( !function_exists('register_sidebar_widget') )
+	if ( !function_exists('wp_register_sidebar_widget') )
 		return;
 	function widget_bblm_restricted_cat($args) {
 
@@ -234,8 +252,19 @@ function widget_bblm_restricted_cat_init() {
 	}
 
 
-	register_sidebar_widget(array('bblm_Categories', 'widgets'), 'widget_bblm_restricted_cat');
-	register_widget_control(array('bblm_Categories', 'widgets'), 'widget_bblm_restricted_cat_control', 300, 100);
+	wp_register_sidebar_widget(
+		'bblm_Categories',				// your unique widget id
+		'bblm_Categories',				// widget name
+		'widget_bblm_restricted_cat',	// callback function to display widget
+	    array(							// options
+	        'description' => 'Restricts Caregories from displaying'
+	    )
+	);
+	wp_register_widget_control(
+		'bblm_Categories',						// id
+		'bblm_Categories',						// name
+		'widget_bblm_restricted_cat_control'	// callback function
+	);
 }
 
 
@@ -243,17 +272,6 @@ function widget_bblm_restricted_cat_init() {
 add_action('widgets_init', 'widget_bblm_othertopics_init');
 add_action('widgets_init', 'widget_bblm_restricted_cat_init');
 add_action('widgets_init', 'widget_bblm_listcomps_init');
-
-//Finally, we remove the default widgets that these two will replace
-function bblm_remove_replaced_widgets() {
-	if (function_exists('unregister_sidebar_widget')) {
-		unregister_sidebar_widget('Pages');
-		unregister_sidebar_widget('Categories 1');
-	}
-}
-
-add_action('widgets_init','bblm_remove_replaced_widgets',0);
-
 
 
 ?>
