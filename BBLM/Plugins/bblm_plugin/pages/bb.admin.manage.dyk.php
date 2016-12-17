@@ -1,14 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.manage.dyk.php
-*	Version: 1.1
 *	Description: Management page for "Did You Know"
-*/
-/* -- Change History --
-20090130 - 0.1b - Initial creation of file. Frame work Laid out.
-20090131 - 0.2b - Added the De/activation bit, added the addition bit and began work on editing a DYK!
-20090831 - 1.0 - Extended the title fiele to match that of the one in the DB!, added cancel links
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -147,8 +140,14 @@ else if (isset($_POST['bblm_edit_dyk'])) {
   ////////////////////
  // $_GET checking //
 ////////////////////
-if ("edit" == $_GET['action']) {
-	if ("activate" == $_GET['item']) {
+if (!empty($_GET['action'])) {
+	$dyk_action = $_GET['action'];
+}
+else {
+	$dyk_action = "";
+}
+if ("edit" == $dyk_action) {
+	if ("activate" == $dyk_action) {
 		  /////////////////////////
 		 // De/Activate the DYK //
 		/////////////////////////
@@ -224,7 +223,7 @@ if ("edit" == $_GET['action']) {
 <?php
 	}
 }//end of if $_GET action edit
-else if ("add" == $_GET['action']) {
+else if ("add" == $dyk_action) {
 	  /////////////////
 	 // Add New DYK //
 	/////////////////
@@ -369,7 +368,7 @@ else {
 <?php
 	}//end of if SQL
 	else {
-		print("	<p><strong>There appears to be no Did YOu Knows! Would you lie to create some?</strong></p>");
+		print("	<p><strong>There appears to be no Did YOu Knows! Would you like to create some?</strong></p>");
 	}
 
 ?>

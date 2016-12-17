@@ -75,25 +75,32 @@ else {
 
 				//the default is to show the stats for all time (this comes into pay when showing active players
 				$period_alltime = 1;
+				$statsqlmodp = "";
+				$statsqlmodt = "";
+				$statsqlmodt2 = "";
 
 				//determine the status we are looking up
-				if (isset($_POST['bblm_status'])) {
+				if (!empty($_POST['bblm_status'])) {
 					$status = $_POST['bblm_status'];
 					//note that the sql is only modified if the "active" option is selected
 					switch ($status) {
 						case ("active" == $status):
 					    	$statsqlmodp .= 'AND T.t_active = 1 AND P.p_status = 1 ';
 					    	$statsqlmodt .= 'AND Z.t_active = 1 ';
+								$statsqlmodt2 .= 'AND T.t_active = 1 '; //added as a work around to get most visious teams working
 					    	$period_alltime = 0;
 						    break;
 					}
+				}
+				else {
+					$status = "";
 				}
 ?>
 				<form name="bblm_filterstats" method="post" id="statstable" action="#statstable">
 				<p>For the below Statistics tables, show the records for
 					<select name="bblm_status" id="bblm_status">
-						<option value="alltime"<?php if (alltime == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>All Time</option>
-						<option value="active"<?php if (active == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>Active Players / Teams</option>
+						<option value="alltime"<?php if ("alltime" == $status) { print(" selected=\"selected\""); } ?>>All Time</option>
+						<option value="active"<?php if ("active" == $status) { print(" selected=\"selected\""); } ?>>Active Players / Teams</option>
 					</select>
 				<input name="bblm_filter_submit" type="submit" id="bblm_filter_submit" value="Filter" /></p>
 				</form>
@@ -250,7 +257,7 @@ else {
 							else {
 								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
 							}
-							print("	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TEAMLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TeamLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -264,7 +271,7 @@ else {
 				  ///////////////////////
 				 // Top Killing Teams //
 				///////////////////////
-				$statsql = 'SELECT COUNT(*) AS VALUE , T.t_name AS TEAM, T.t_guid AS TeamLink, T.t_active, R.r_name FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
+				$statsql = 'SELECT COUNT(*) AS VALUE , T.t_name AS TEAM, T.t_guid AS TeamLink, T.t_active, R.r_name FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
 				print("<h4>Most Deadly Teams");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -299,10 +306,10 @@ else {
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $period_alltime) {
-							print("	<td><strong><a href=\"".$ts->TEAMLink."\" title=\"View more details on ".$ts->TEAM."\">".$ts->TEAM."</a></strong></td>\n");
+							print("	<td><strong><a href=\"".$ts->TeamLink."\" title=\"View more details on ".$ts->TEAM."\">".$ts->TEAM."</a></strong></td>\n");
 							}
 							else {
-							print("	<td><a href=\"".$ts->TEAMLink."\" title=\"View more details on ".$ts->TEAM."\">".$ts->TEAM."</a></td>\n");
+							print("	<td><a href=\"".$ts->TeamLink."\" title=\"View more details on ".$ts->TEAM."\">".$ts->TEAM."</a></td>\n");
 							}
 							print("	<td>".$ts->r_name."</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;

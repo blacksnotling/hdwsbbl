@@ -45,7 +45,7 @@ function oberwald_widgets_init() {
 	register_sidebar(array(
 		'name'=> __( 'sidebar-posts', 'oberwald' ),
 		'id'=> 'sidebar-posts',
-		'description' => __( 'Appears at the top of the sidebar area for all non-warzone pages and posts (unless the teamplate blocks it).', 'oberwald' ),
+		'description' => __( 'Appears at the top of the sidebar area for all non-warzone pages and posts (unless the template blocks it).', 'oberwald' ),
 		'before_widget' => '<li id="%1$s" class="widget %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h2>',
@@ -153,6 +153,7 @@ function oberwald_posted_on() {
  *
  */
 function oberwald_posted_in() {
+global $post;
 	// Retrieves tag list of current post, separated by commas.
 	$tag_list = get_the_tag_list( '', ', ' );
 

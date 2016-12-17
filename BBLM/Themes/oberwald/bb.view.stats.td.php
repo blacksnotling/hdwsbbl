@@ -54,9 +54,11 @@ Template Name: Statistics - TD
 
 				//the default is to show the stats for all time (this comes into pay when showing active players
 				$period_alltime = 1;
+				$statsqlmodp = "";
+				$statsqlmodt = "";
 
 				//determine the status we are looking up
-				if (isset($_POST['bblm_status'])) {
+				if (!empty($_POST['bblm_status'])) {
 					$status = $_POST['bblm_status'];
 					//note that the sql is only modified if the "active" option is selected
 					switch ($status) {
@@ -67,12 +69,15 @@ Template Name: Statistics - TD
 						    break;
 					}
 				}
+				else {
+					$status = "";
+				}
 ?>
 				<form name="bblm_filterstats" method="post" id="statstable" action="#statstable">
 				<p>For the below Statistics tables, show the records for
 					<select name="bblm_status" id="bblm_status">
-						<option value="alltime"<?php if (alltime == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>All Time</option>
-						<option value="active"<?php if (active == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>Active Players / Teams</option>
+						<option value="alltime"<?php if ("alltime" == $status) { print(" selected=\"selected\""); } ?>>All Time</option>
+						<option value="active"<?php if ("active" == $status) { print(" selected=\"selected\""); } ?>>Active Players / Teams</option>
 					</select>
 				<input name="bblm_filter_submit" type="submit" id="bblm_filter_submit" value="Filter" /></p>
 				</form>

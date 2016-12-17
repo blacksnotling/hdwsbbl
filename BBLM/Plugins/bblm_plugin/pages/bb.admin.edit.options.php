@@ -16,7 +16,7 @@
 	}
 
 	//handle form sumit now
-	if ( $_POST['bblm_options_submit'] ) {
+	if ( isset( $_POST['bblm_options_submit'] ) ) {
 
 
 		// Remember to sanitize and format use input appropriately.

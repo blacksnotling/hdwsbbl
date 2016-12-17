@@ -20,7 +20,7 @@ Template Name: Stadium Listing
 				if ($stadiums = $wpdb->get_results($stadiumsql)) {
 					print("<ul>\n");
 					foreach ($stadiums as $stad) {
-						print("	<li><a href=\"".$stad->guid."\" title=\"View more informaton about ".$race->post_title."\">".$stad->post_title."</a></li>\n");
+						print("	<li><a href=\"".$stad->guid."\" title=\"View more informaton about ".$stad->post_title."\">".$stad->post_title."</a></li>\n");
 					}
 					print("</ul>\n");
 				}

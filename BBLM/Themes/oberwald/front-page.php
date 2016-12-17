@@ -278,7 +278,7 @@
 
 <?php
 	if (function_exists('widget_bblm_listcomps')) {
-		widget_bblm_listcomps(array());
+		widget_bblm_listcomps(array("before_widget" => "", "after_widget" => ""));
 	}
 ?>
 	</div><!-- end of main-right-->

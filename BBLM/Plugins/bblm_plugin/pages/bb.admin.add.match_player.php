@@ -18,9 +18,6 @@ if (isset($_POST['bblm_player_increase'])) {
 	 // Step 4: Updating the Player records and recording increases //
 	/////////////////////////////////////////////////////////////////
 
-/*	print("<hr>\n<pre>\n");
-	print_r($_POST);
-	print("</pre>\n<hr>\n");*/
 
 	//Set initil values for loop
 	$p = 1;
@@ -54,24 +51,6 @@ while ($p <= $pmax){
 //Now we must set the match to complete
 $updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '.$_POST['bblm_mid'].' LIMIT 1';
 
-//our final step is to work out the new team TV values now that all the players have been moved about!
-/*old code retired in 1.1 - replaced with new function in sql block below
-$playerAsql = 'SELECT SUM(p_cost_ng) AS cost FROM '.$wpdb->prefix.'player WHERE p_status = 1 AND p_mng = 0 AND t_id = '.$_POST['bblm_teamA'];
-	$teamA_pc = $wpdb->get_var($playerAsql);
-$teamAsql = 'SELECT SUM((R.r_rrcost*T.t_rr) + (T.t_ff+T.t_apoc+T.t_cl+T.t_ac)*10000) AS SUM FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND T.t_id = '.$_POST['bblm_teamA'];
-	$teamA_tc = $wpdb->get_var($teamAsql);
-	$teamA_tv = $teamA_pc + $teamA_tc;
-
-$updateteamAsql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = \''.$teamA_tv.'\' WHERE `t_id` = '.$_POST['bblm_teamA'].' LIMIT 1';
-
-$playerBsql = 'SELECT SUM(p_cost_ng) AS cost FROM '.$wpdb->prefix.'player WHERE p_status = 1 AND p_mng = 0 AND t_id = '.$_POST['bblm_teamB'];
-	$teamB_pc = $wpdb->get_var($playerBsql);
-$teamBsql = 'SELECT SUM((R.r_rrcost*T.t_rr) + (T.t_ff+T.t_apoc+T.t_cl+T.t_ac)*10000) AS SUM FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND T.t_id = '.$_POST['bblm_teamB'];
-	$teamB_tc = $wpdb->get_var($teamBsql);
-	$teamB_tv = $teamB_pc + $teamB_tc;
-
-$updateteamBsql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = \''.$teamB_tv.'\' WHERE `t_id` = '.$_POST['bblm_teamB'].' LIMIT 1';
-*/
 
 //for debugging
 /*
@@ -262,7 +241,7 @@ else {
 	<input type="hidden" name="bblm_teamB" size="3" value="<?php print($_POST['bblm_teamB']); ?>">
 
 	<h3>Record Changes to Players</h3>
-	<p>Below are all the players who took part in the match. If they had an increase, please ensure that the "Chnged?" box is ticked. The Skills and Injuries box's should be automatically filled but you will have to update any changes to Stats manually.</p>
+	<p>Below are all the players who took part in the match. If they had an increase, please ensure that the "Chnged?" box is ticked. The Skills and Injuries boxs should be automatically filled but you will have to update any changes to Stats manually.</p>
 
 <?php
 $playersql = 'SELECT P.*, M.mp_inj, M.mp_inc, T.t_name FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.p_id = M.p_id AND m_id = '.$_POST['bblm_mid'].' AND M.t_id = T.t_id ORDER BY P.t_id, P.p_num';

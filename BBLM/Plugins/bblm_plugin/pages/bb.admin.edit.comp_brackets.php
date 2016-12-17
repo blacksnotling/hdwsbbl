@@ -1,18 +1,18 @@
 <?php
 /*
 *	Filename: bb.admin.edit.comp_brackets.php
-*	Version: 0.2
 *	Description: Page used to set up the brackets for a knock out tournament (or final of a standard comp).
-*/
-/* -- Change History --
-20080823 - 0.1 - Initial creation of file.
-20100308 - 0.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 
+if (!empty($_GET['action'])) {
+	$bra_action = $_GET['action'];
+}
+else {
+	$bra_action = "";
+}
 
 function bblm_return_div_id($games) {
 //function takes in the number of games this round and returns the matching ID from the database.
@@ -158,8 +158,9 @@ if (isset($_POST['bblm_update_bracket'])) {
   ////////////////////
  // $_GET checking //
 ////////////////////
-else if ("edit" == $_GET['action']) {
-	if ("cbracket" == $_GET['item']) {
+
+else if ("edit" == $bra_action) {
+	if ("cbracket" == $bra_action) {
 		  //////////////////////////
 		 // Editing Comp Brackey //
 		//////////////////////////

@@ -48,7 +48,7 @@ Template Name: Statistics - Misc
  			<li><strong>Highest Recorded Attendance</strong>: <?php print(number_format($bcn->VALUE)); ?> fans (<a href="<?php print($bcn->MATCHLink); ?>" title="Read the full report of this match"><?php print($bcn->MATCHT); ?></a>)</li>
  			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<a href="<?php print($lc->MATCHLink); ?>" title="Read the full report of this match"><?php print($lc->MATCHT); ?></a>)</li>
 			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print($htv->TEAMLink); ?>" title="Read more about this Team"><?php print($htv->TEAM); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
-			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print($ltv->TEAML); ?>" title="Read more about this Team"><?php print($ltv->TEAM); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
+			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print($ltv->TEAMLink); ?>" title="Read more about this Team"><?php print($ltv->TEAM); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
 			<li><strong>Team with most players</strong>: <a href="<?php print($tmp->TEAMLink); ?>" title="Read more about this Team"><?php print($tmp->TEAM); ?></a> (<?php print($tmp->VALUE); ?>)</li>
 			<li><strong>Average Career length of a Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
 		</ul>
@@ -70,7 +70,7 @@ Template Name: Statistics - Misc
 		<ul>
 			<li><strong>Most Star Player Points earnt in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print($mxps->pos_name); ?> for <a href="<?php print($mxps->TEAMLink); ?>" title="Learn more about this Team"><?php print($mxps->TEAM); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
 			<li><strong>Most Star Player Points earnt in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print($mxpc->pos_name); ?> for <a href="<?php print($mxpc->TEAMLink); ?>" title="Learn more about this Team"><?php print($mxpc->TEAM); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
-			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print($mxpm->pos_name); ?> for <a href="<?php print($mxtm->TEAMLink); ?>" title="Learn more about this Team"><?php print($mxpm->TEAM); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print($mxpm->pos_name); ?> for <a href="<?php print($mxpm->TEAMLink); ?>" title="Learn more about this Team"><?php print($mxpm->TEAM); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
 		<h4>Completion Related</h4>
@@ -137,9 +137,11 @@ Template Name: Statistics - Misc
 
 				//the default is to show the stats for all time (this comes into pay when showing active players
 				$period_alltime = 1;
+				$statsqlmodp = "";
+				$statsqlmodt = "";
 
 				//determine the status we are looking up
-				if (isset($_POST['bblm_status'])) {
+				if (!empty($_POST['bblm_status'])) {
 					$status = $_POST['bblm_status'];
 					//note that the sql is only modified if the "active" option is selected
 					switch ($status) {
@@ -149,13 +151,16 @@ Template Name: Statistics - Misc
 					    	$period_alltime = 0;
 						    break;
 					}
+				} else {
+					$status = "";
 				}
+
 ?>
 				<form name="bblm_filterstats" method="post" id="statstable" action="#statstable">
 				<p>For the below Statistics tables, show the records for
 					<select name="bblm_status" id="bblm_status">
-						<option value="alltime"<?php if (alltime == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>All Time</option>
-						<option value="active"<?php if (active == $_POST['bblm_status']) { print(" selected=\"selected\""); } ?>>Active Players</option>
+						<option value="alltime"<?php if ("alltime" == $status) { print(" selected=\"selected\""); } ?>>All Time</option>
+						<option value="active"<?php if ("active" == $status) { print(" selected=\"selected\""); } ?>>Active Players</option>
 					</select>
 				<input name="bblm_filter_submit" type="submit" id="bblm_filter_submit" value="Filter" /></p>
 				</form>

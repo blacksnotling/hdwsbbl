@@ -16,27 +16,30 @@ Template Name: List Fixtures
 
 					<?php the_content(); ?>
 
+<?php if (!empty($_POST['bblm_flayout'])) {
+		$bblm_flayout = $_POST['bblm_flayout'];
+} else {
+		$bblm_flayout = "";
+} ?>
 				<form name="bblm_filterlayout" method="post" id="post" action="" class="selectbox">
 				<p>Order Fixtures by
 					<select name="bblm_flayout" id="bblm_flayout">
-						<option value="bycomp"<?php if (bycomp == $_POST['bblm_flayout']) { print(" selected=\"selected\""); } ?>>Competition</option>
-						<option value="bydate"<?php if (bydate == $_POST['bblm_flayout']) { print(" selected=\"selected\""); } ?>>Date</option>
+						<option value="bycomp"<?php if ("bycomp" == $bblm_flayout) { print(" selected=\"selected\""); } ?>>Competition</option>
+						<option value="bydate"<?php if ("bydate" == $bblm_flayout) { print(" selected=\"selected\""); } ?>>Date</option>
 					</select>
 				<input name="bblm_filter_submit" type="submit" id="bblm_filter_submit" value="Filter" /></p>
 				</form>
 <?php
 				//Initial SQL
 				$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS mdate, P.post_title AS cname, P.guid as clink, D.div_name, X.post_title AS TA, X.guid AS TAlink, Z.post_title AS TB, Z.guid AS TBlink, T.t_id AS TAid, R.t_id AS TBid, F.f_id FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp W, '.$wpdb->posts.' X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND T.t_id = W.tid AND W.prefix = \'t_\' AND W.pid = X.ID AND R.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = Z.ID AND F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND C.type_id = 1 AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY ';
-
+				$layout = "";
 				//determine the required Layout
-				if (isset($_POST['bblm_flayout'])) {
-					$flay = $_POST['bblm_flayout'];
-					switch ($flay) {
-						case ("bycomp" == $flay):
+					switch ($bblm_flayout) {
+						case ("bycomp" == $bblm_flayout):
 					    	$layout .= 1;
 					    	$fixturesql .= 'F.c_id DESC, F.div_id DESC, F.f_date ASC';
 						    break;
-						case ("bydate" == $flay):
+						case ("bydate" == $bblm_flayout):
 					    	$layout .= 0;
 					    	$fixturesql .= 'F.f_date ASC, F.c_id DESC, F.div_id DESC';
 						    break;
@@ -45,12 +48,6 @@ Template Name: List Fixtures
 					    	$fixturesql .= 'F.c_id DESC, F.div_id DESC, F.f_date ASC';
 						    break;
 					}
-				}
-				else {
-					//form not submitted so load in default values
-					$layout .= 1;
-					$fixturesql .= 'F.c_id DESC, F.div_id DESC, F.f_date ASC';
-				}
 
 
 				//Run the Query. If successful....

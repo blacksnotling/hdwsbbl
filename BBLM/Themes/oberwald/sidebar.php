@@ -47,11 +47,6 @@
 				</li>
 				<?php //load the warzone sidebar if it exists
 				if ( !dynamic_sidebar('sidebar-warzone') ) : ?>
-				<li><h2 class="widgettitle">Archive</h2>
-				  <ul>
-				   <?php wp_get_archives( 'type=monthly' ); ?>
-				  </ul>
-				</li>
 			<?php endif; ?>
 			<?php } else { ?>
 			<?php if ( !dynamic_sidebar('sidebar-posts') ) : ?>

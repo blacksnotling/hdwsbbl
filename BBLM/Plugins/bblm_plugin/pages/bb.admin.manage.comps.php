@@ -1,14 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.manage.comps.php
-*	Version: 0.3b
 *	Description: Management page for Competitions
-*/
-/* -- Change History --
-20091130 - 0.1a - Initial creation of file. Frame work Laid out.
-20091201 - 0.1b - The default list is showing correctly
-20091227 - 0.2b - Completed the initial work to get the edit comp bit working (tracker [198])
-20100123 - 0.3b - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -84,8 +77,14 @@ else if (isset($_POST['bblm_edit_dyk'])) {
   ////////////////////
  // $_GET checking //
 ////////////////////
-if ("edit" == $_GET['action']) {
-	if ("comp" == $_GET['item']) {
+if (!empty($_GET['action'])) {
+	$comp_action = $_GET['action'];
+}
+else {
+	$comp_action = "";
+}
+if ("edit" == $comp_action) {
+	if ("comp" == $comp_action) {
 		  //////////////////
 		 // Editing Comp //
 		//////////////////
@@ -165,7 +164,7 @@ if ("edit" == $_GET['action']) {
 		}
 	}
 }//end of if $_GET action edit
-else if ("add" == $_GET['action']) {
+else if ("add" == $comp_action) {
 	  //////////////////
 	 // Add New Comp //
 	//////////////////
