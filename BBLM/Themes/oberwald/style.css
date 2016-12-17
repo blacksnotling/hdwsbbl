@@ -68,7 +68,7 @@ body.section-warzone #header {
 body.section-warzone #navcontainer {
 	background: #548ac3 url(images/bg_nav_red.gif) bottom repeat-x;
 }
-#navigation {
+#navigation ul {
 	clear:both;
 	list-style: none;
 	border-top: 1px solid #548ac3;

@@ -2,7 +2,7 @@
 Description: Print Styles for the Oberwald theme
 Version: 20090828
 */
-#tagline, form, #navcontainer, #subcontent, #breadcrumb, div.dykcontainer { {
+#tagline, form, #navcontainer, #subcontent, #breadcrumb, div.dykcontainer {
 	 display: none !important;
 }
 /***** Layout and positioning *****/
@@ -45,7 +45,7 @@ body {
 }
 #maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5 {
 	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
-	text-align: left;	
+	text-align: left;
 }
 #maincontent h3, #maincontent h4, #maincontent h5 {
 	padding-top: 0.6em;
@@ -61,10 +61,10 @@ body {
 	padding-bottom: 0.2em;
 }
 #maincontent h4 {
-	font-size: 1.2em;	
+	font-size: 1.2em;
 }
 #maincontent h5 {
-	font-size: 1.1em;	
+	font-size: 1.1em;
 }
 .postmeta {
 	text-align: right;
@@ -86,7 +86,7 @@ body {
 .details {
 	padding: 3px;
 	border: 1px solid #aaa;
-	margin-bottom: 0.6em;	
+	margin-bottom: 0.6em;
 }
 /***** Sub Content (Sidebar) *****/
 /***** Footer *****/
@@ -111,7 +111,7 @@ a:hover, a:active {
 	padding: 4px;
 	padding-left: 30px;
 	font-family: Verdana;
-	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;	
+	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;
 }
 .info p {
 	padding-top:4px;
@@ -243,4 +243,4 @@ td.score {
 }
 .comment_alt {
 	background-color: #eee;
-}	
+}
