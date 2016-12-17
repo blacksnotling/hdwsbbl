@@ -379,6 +379,7 @@ get_header(); ?>
 							$safail = 1;
 						}
 
+						$cafail = 0;
 						$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.apc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($cawards = $wpdb->get_results($compawardssql)) {
 							$zebracount = 1;

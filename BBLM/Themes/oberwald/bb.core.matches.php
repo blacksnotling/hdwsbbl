@@ -15,19 +15,23 @@ Template Name: List Resuts
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 
 					<?php the_content(); ?>
-
+<?php if (!empty($_POST['bblm_flayout'])) {
+		$bblm_flayout = $_POST['bblm_flayout'];
+} else {
+		$bblm_flayout = "";
+} ?>
 				<form name="bblm_filterlayout" method="post" id="post" action="" class="selectbox">
 				<p>Order Resuts by
 					<select name="bblm_flayout" id="bblm_flayout">
-						<option value="bycomp"<?php if (bycomp == $_POST['bblm_flayout']) { print(" selected=\"selected\""); } ?>>Competition</option>
-						<option value="bydate"<?php if (bydate == $_POST['bblm_flayout']) { print(" selected=\"selected\""); } ?>>Date</option>
+						<option value="bycomp"<?php if ("bycomp" == $bblm_flayout) { print(" selected=\"selected\""); } ?>>Competition</option>
+						<option value="bydate"<?php if ("bydate" == $bblm_flayout) { print(" selected=\"selected\""); } ?>>Date</option>
 					</select>
 				<input name="bblm_filter_submit" type="submit" id="bblm_filter_submit" value="Filter" /></p>
 				</form>
 
 <?php
 				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, S.sea_name, Z.post_title AS c_name, Z.guid AS cguid, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND C.sea_id = S.sea_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\'  AND C.type_id = 1 AND C.c_show = 1 AND J.pid = P.ID ORDER BY ';
-
+				$layout = "";
 				//determine the required Layout
 				if (isset($_POST['bblm_flayout'])) {
 					$flay = $_POST['bblm_flayout'];

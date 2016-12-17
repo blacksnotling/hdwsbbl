@@ -51,7 +51,7 @@ Template Name: Star Players Team View
 <?php if (0 < $totint) { ?>	<li>Catch <strong><?php print($totint); ?></strong> Interceptions (average <strong><?php print(round($totint/$matchnum,1)); ?></strong> per appearance).</li> <?php } ?>
 <?php if (0 < $totmvp) { ?>	<li>Deprive Players a total of <strong><?php print($totmvp); ?></strong> MVP awards.</li> <?php } ?>
 <?php if (0 < $totspp) { ?>	<li>Earn a total of <strong><?php print($totspp); ?></strong> Star Player Points.</li> <?php } ?>
-<?php if (0 < $killnum) { ?>	<li>Kill <strong><?php print($killnum); ?></strong> players (average <strong><?php print(round($killsnum/$matchnum,1)); ?></strong> per appearance).</li> <?php } ?>
+<?php if (0 < $killnum) { ?>	<li>Kill <strong><?php print($killnum); ?></strong> players (average <strong><?php print(round($killnum/$matchnum,1)); ?></strong> per appearance).</li> <?php } ?>
 				</ul>
 				<p>So far, the teams of the league have spent <strong><?php print(number_format($totcost)); ?></strong>gp on hiring Star Players!</p>
 <?php
@@ -121,7 +121,7 @@ Template Name: Star Players Team View
 		}
 ?>
 
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ) ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
 		</div>

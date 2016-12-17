@@ -177,31 +177,31 @@ Template Name: View Cup
 
 					//Generates an array containing all the Stats that are going to be checked
 					$playerstatsarray = array();
-					$playerstatsarray[0][item] = "mp_spp";
-					$playerstatsarray[0][title] = "Best Players";
-					$playerstatsarray[0][error] = "The Best Player list is not available at the moment";
-					$playerstatsarray[1][item] = "mp_td";
-					$playerstatsarray[1][title] = "Top Scorers";
-					$playerstatsarray[1][error] = "The Touch Downs have been made yet!";
-					$playerstatsarray[2][item] = "mp_cas";
-					$playerstatsarray[2][title] = "Most Vicious";
-					$playerstatsarray[2][error] = "No casualties have been caused yet";
-					$playerstatsarray[3][item] = "mp_comp";
-					$playerstatsarray[3][title] = "Top Passers";
-					$playerstatsarray[3][error] = "No Completions have been recorded yet";
-					$playerstatsarray[4][item] = "mp_int";
-					$playerstatsarray[4][title] = "Top Interceptors";
-					$playerstatsarray[4][error] = "No Inteceptions have been recorded yet";
-					$playerstatsarray[5][item] = "mp_mvp";
-					$playerstatsarray[5][title] = "Most Valuable Players (MVP)";
-					$playerstatsarray[5][error] = "The Most Valuable Players list is not available at the moment";
+					$playerstatsarray[0]['item'] = "mp_spp";
+					$playerstatsarray[0]['title'] = "Best Players";
+					$playerstatsarray[0]['error'] = "The Best Player list is not available at the moment";
+					$playerstatsarray[1]['item'] = "mp_td";
+					$playerstatsarray[1]['title'] = "Top Scorers";
+					$playerstatsarray[1]['error'] = "The Touch Downs have been made yet!";
+					$playerstatsarray[2]['item'] = "mp_cas";
+					$playerstatsarray[2]['title'] = "Most Vicious";
+					$playerstatsarray[2]['error'] = "No casualties have been caused yet";
+					$playerstatsarray[3]['item'] = "mp_comp";
+					$playerstatsarray[3]['title'] = "Top Passers";
+					$playerstatsarray[3]['error'] = "No Completions have been recorded yet";
+					$playerstatsarray[4]['item'] = "mp_int";
+					$playerstatsarray[4]['title'] = "Top Interceptors";
+					$playerstatsarray[4]['error'] = "No Inteceptions have been recorded yet";
+					$playerstatsarray[5]['item'] = "mp_mvp";
+					$playerstatsarray[5]['title'] = "Most Valuable Players (MVP)";
+					$playerstatsarray[5]['error'] = "The Most Valuable Players list is not available at the moment";
 
 					//For each of the stats, print the top players list. If none are found, display the relevant error
 					foreach ($playerstatsarray as $tpa) {
 						//Generic SQL Call, populated with the stat we are looking for
-						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 
-						print("<h4>".$tpa[title]."</h4>\n");
+						print("<h4>".$tpa['title']."</h4>\n");
 						if ($topstats = $wpdb->get_results($statsql)) {
 							print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
 							$zebracount = 1;
@@ -268,7 +268,7 @@ Template Name: View Cup
 								else {
 									print("	<td><strong>".$zebracount."</strong></td>\n");
 								}
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TEAMLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TeamLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 								$prevvalue = $ts->VALUE;
 							}
 							$zebracount++;

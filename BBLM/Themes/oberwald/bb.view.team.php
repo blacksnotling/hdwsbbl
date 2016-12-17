@@ -283,6 +283,7 @@ Template Name: View Team
 				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, P.post_title AS TAname, O.post_title AS TBname, P.guid AS TAlink, O.guid AS TBlink, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp K, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->posts.' P, '.$wpdb->posts.' O, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1 AND C.c_counts = 1 AND N.m_id = M.m_id AND T.t_id = J.tid AND R.t_id = K.tid AND J.prefix = \'t_\' AND K.prefix = \'t_\' AND J.pid = P.ID AND K.pid = O.ID AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
 				if ($matchs = $wpdb->get_results($matchssql)) {
 				$zebracount = 1;
+				$alt = "FALSE";
 					print("<table class=\"sortable expandable\" id=\"recentmatches\">\n	<thead>\n		 <tr>\n		   <th>Date</th>\n		   <th class=\"tbl_matchname\">Opponent</th>\n		   <th class=\"tbl_stat\">TF</th>\n		   <th class=\"tbl_stat\">TA</th>\n		   <th class=\"tbl_stat\">CF</th>\n		   <th class=\"tbl_stat\">CA</th>\n		   <th>Fans</th>\n		   <th>TV</th>\n		   <th>Result</th>\n		 </tr>\n	</thead>\n	<tbody>\n");
 					foreach ($matchs as $ms) {
 						/*
@@ -374,6 +375,7 @@ Template Name: View Team
 					$safail = 1;
 				}
 
+				$cafail = 0;
 				$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($cawards = $wpdb->get_results($compawardssql)) {
 					$zebracount = 1;

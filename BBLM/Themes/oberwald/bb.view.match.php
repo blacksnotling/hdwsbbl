@@ -44,7 +44,7 @@ Template Name: View Match
 					$tBimg = "<img src=\"".home_url()."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
 				}
 				else {
-					$tBimg = "<img src=\"".home_url()."/images/races/race".$tB->r_id.".gif\" alt=\"".$tB->r_name." Logo\" />";
+					$tBimg = "<img src=\"".home_url()."/images/races/race".$tB->r_id.".gif\" alt=\"Race Logo\" />";
 				}
 
 ?>
