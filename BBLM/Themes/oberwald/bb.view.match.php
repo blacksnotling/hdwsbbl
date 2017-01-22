@@ -36,7 +36,7 @@ Template Name: View Match
 					$tAimg = "<img src=\"".home_url()."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
 				}
 				else {
-					$tAimg = "<img src=\"".home_url()."/images/races/race".$tA->r_id.".gif\" alt=\"".$tA->r_name." Logo\" />";
+					$tAimg = "<img src=\"".home_url()."/images/races/race".$tA->r_id.".gif\" alt=\"Race Logo\" />";
 				}
 				//Team B
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tB->t_sname."_big.gif";
