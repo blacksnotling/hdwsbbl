@@ -1,0 +1,15 @@
+CHANGES TO BE MADE FROM VX TO 2.0
+The below will document all changes required to be performed - it could be lengthy!
+
+ Files
+  - Remove old plugin files
+  - Upload new files to the website
+  -
+
+Database
+ - Posts
+  - Change the post type of Stadiums to bblm_stadium
+
+Front End
+ - arrange widgets as required
+ - create menus as required
