@@ -10,6 +10,10 @@ Database
  - Posts
   - Change the post type of Stadiums to bblm_stadium
 
+Admin
+ - Delete the "Stadiums" pages
+ - Enter text for the bblm_stadium cpt in the settings page
+
 Front End
  - arrange widgets as required
  - create menus as required
