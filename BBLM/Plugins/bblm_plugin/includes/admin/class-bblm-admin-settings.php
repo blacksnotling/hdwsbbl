@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Loads the settings page, and lets the user edit the settings
+ * Loads the settings page, and lets the user edit the settings.
  * Code adapted from https://www.smashingmagazine.com/2016/04/three-approaches-to-adding-configurable-fields-to-your-plugin/
  *
  * @class 		BBLM_Settings_Admin
@@ -16,6 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class BBLM_Settings_Admin {
 
+	/**
+	 * Constructor
+	 */
     public function __construct() {
 
     	// Hook into the admin menu
@@ -27,6 +30,9 @@ class BBLM_Settings_Admin {
 
     }
 
+	/**
+	 * Creats a submenu page for this options page
+   */
     public function bblm_create_plugin_settings_page() {
 
       add_submenu_page(
@@ -40,12 +46,15 @@ class BBLM_Settings_Admin {
 
     }
 
+	/**
+	 * Constructs the start of the form, and kicks off the Settings API
+   */
     public function plugin_settings_page_content() {
 ?>
 
     	<div class="wrap">
     		<h2>League Settings</h2>
-        <p>Use the following page to define the various settings required to maintain the website</p>
+        <p>Use the following page to define the various settings required to maintain the Blood Bowl league.</p>
         <?php
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
                   $this->admin_notice();
@@ -61,7 +70,9 @@ class BBLM_Settings_Admin {
     	</div>
 <?php
     }
-
+	/**
+	 * The notification that is given to the user upon successful save
+   */
     public function admin_notice() {
       ?>
         <div class="notice notice-success is-dismissible">
@@ -70,6 +81,9 @@ class BBLM_Settings_Admin {
         <?php
     }
 
+	/**
+	 * Define the different sections of the form
+   */
     public function setup_sections() {
 
         add_settings_section( 'first_section', __( 'League Settings', 'bblm' ), array( $this, 'section_callback' ), 'bblm_options' );
@@ -78,22 +92,28 @@ class BBLM_Settings_Admin {
 
     }
 
+	/**
+	 * Define the text for the different sections of the form
+   */
     public function section_callback( $arguments ) {
 
     	switch ( $arguments['id'] ){
     		case 'first_section':
     			break;
     		case 'second_section':
-    			echo 'What the website displays';
+    			echo 'Various display settings for the websute';
     			break;
     		case 'third_section':
-    			echo 'Old settings which might be retired!';
+    			echo 'Obsolete settings which might be retired!';
     			break;
 
     	}
 
     }
 
+	/**
+	 * Define the fields that will appear on the page in array format
+   */
     public function setup_fields() {
 
         $fields = array(
@@ -265,6 +285,9 @@ class BBLM_Settings_Admin {
 
     }
 
+	/**
+	 * Output of the form itself, based on the array provided
+   */
     public function field_callback( $arguments ) {
 
         $setting = (array) get_option( 'bblm_config' );

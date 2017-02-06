@@ -21,7 +21,7 @@ if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
 class BBLM_Admin_Menus {
 
 	/**
-	 * Hook in tabs.
+	 * Set up the hooks to call the top level menus
 	 */
 	public function __construct() {
 
@@ -45,7 +45,7 @@ class BBLM_Admin_Menus {
 			100
 		);
 
-		//Create a submenu page, cakking hte same function as the parent page above
+		//Create a submenu page, calling the same function as the parent page above
 		add_submenu_page(
 			'bblm_main_menu',
 			__( 'Overview', 'bblm' ),

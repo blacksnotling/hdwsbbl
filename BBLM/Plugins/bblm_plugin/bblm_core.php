@@ -186,7 +186,6 @@ final class BBowlLeagueMan {
 
 	/**
 	 * @var BBowlLeagueMan The single instance of the class
-	 * @since 1.0
 	 */
 	protected static $_instance = null;
 
@@ -206,7 +205,6 @@ final class BBowlLeagueMan {
 	 *
 	 * Ensures only one instance of BBowlLeagueMan is loaded or can be loaded.
 	 *
-	 * @since 1.0
 	 * @static
 	 * @see BBLM()
 	 * @return BBowlLeagueMan - Main instance
@@ -221,7 +219,6 @@ final class BBowlLeagueMan {
 	/**
 	 * Cloning is forbidden.
 	 *
-	 * @since 1.0
 	 */
 	public function __clone() {
 		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '2.0' );
@@ -230,7 +227,6 @@ final class BBowlLeagueMan {
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 *
-	 * @since 1.0
 	 */
 	public function __wakeup() {
 		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '2.0' );
@@ -398,7 +394,6 @@ if ( ! function_exists( 'BBLM' ) ):
 /**
  * Returns the main instance of BBLM to prevent the need to use globals.
  *
- * @since  1.0
  * @return BBowlLeagueMan
  */
 function BBLM() {

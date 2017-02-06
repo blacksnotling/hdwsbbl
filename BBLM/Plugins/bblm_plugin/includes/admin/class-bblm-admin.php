@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * BBowlLeagueMan Admin.
+ * Includes all the relevent Admin classes and functions required to operate the website.
+ * These will not be called on the frontend.
  *
  * @class 		BBLM_Admin
  * @author 		Blacksnotling

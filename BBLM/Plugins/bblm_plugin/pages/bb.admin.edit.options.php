@@ -1,10 +1,18 @@
 <?php
-/*
-*	Filename: bb.admin.edit.options.php
-*	Description: Page to manage options and settings of the League.
-*/
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
+/**
+ * Former page to manage the League Options.
+ *
+ * @author 		Blacksnotling
+ * @category 	Admin
+ * @package 	BBowlLeagueMan/Admin
+ * @drepreciated 2.0
+ */
 ?>
 <div class="wrap">
 	<h2>Obsolete!</h2>
-	<p>This page is no longer required. Please use the correct version!</p>
+		<p>You have come here in error. This file is not in use and will be deleted in a future version.</p>
 </div>
