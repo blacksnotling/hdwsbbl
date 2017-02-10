@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: BloodBowl League Manager for the HDWSBBL
-Version: 20170202
+Version: 20170210
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -320,7 +320,7 @@ final class BBowlLeagueMan {
 	 */
 	public function frontend_includes() {
 
-//		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
+		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
 
 	}
 
@@ -328,9 +328,6 @@ final class BBowlLeagueMan {
 	 * Init BBowlLeagueMan when WordPress Initialises.
 	 */
 	public function init() {
-
-		// Load class instances
-//		$this->templates = new SP_Templates();	// Templates class
 
 		//flush rules on plugin init so that the custom permalinks all work (hopefully).
 		flush_rewrite_rules();
