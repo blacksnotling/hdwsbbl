@@ -24,7 +24,6 @@ function bblm_insert_admin_pages() {
 	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Did You Know', 'Did You Know', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.dyk.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'New Season', 'New Season', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.season.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Cup', 'Add Cup', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.series.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Competition', 'Add Competition', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp.php');
@@ -312,8 +311,8 @@ final class BBowlLeagueMan {
 			$this->frontend_includes();
 		}
 
-		// Post types
-//		include_once( 'includes/class-bblm-post-types.php' );						// Registers post types
+		//Post types
+		include_once( 'includes/class-bblm-post-types.php' );						// Registers post types
 	}
 
 	/**
@@ -322,7 +321,6 @@ final class BBowlLeagueMan {
 	public function frontend_includes() {
 
 //		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
-
 
 	}
 

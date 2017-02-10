@@ -10,8 +10,10 @@ Database
  - Posts
   - Change the post type of Stadiums to bblm_stadium
 
-Admin
+Admin [need to check that all subpages are not deleted when I remove a post.....]
  - Delete the "Stadiums" pages
+ - Delete the DYK page
+ - Import the DYK into the new post type
  - Enter text for the bblm_stadium cpt in the settings page
 
 Front End
