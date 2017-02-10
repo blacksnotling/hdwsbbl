@@ -7,7 +7,21 @@
  * @author 		Blacksnotliung
  */
 
-get_header(); ?>
+get_header();
+
+if ( $options = get_option('bblm_config') ) {
+
+  $bblm_league_name = htmlspecialchars( $options['league_name'], ENT_QUOTES );
+
+	if ( strlen( $bblm_league_name ) == 0 ) {
+
+	   $bblm_league_name = "League";
+
+	}
+
+}
+
+?>
 
 <?php if (have_posts()) : ?>
 
@@ -22,7 +36,7 @@ get_header(); ?>
 ?>
 
 				<div class="dykcontainer dyk<?php echo strtolower( $type ); ?>" id="dyk<?php echo the_ID(); ?>">
-					<h3 class="dykheader">HDWSBBL - <?php if( "Trivia" == $type ) { print("Did You Know"); } else { print("Fact"); } ?></h3>
+					<h3 class="dykheader"><?php echo $bblm_league_name; ?> - <?php if( "Trivia" == $type ) { print("Did You Know"); } else { print("Fact"); } ?></h3>
 <?php
 
 				if ( strlen( get_the_title() ) !== 0 ) {
