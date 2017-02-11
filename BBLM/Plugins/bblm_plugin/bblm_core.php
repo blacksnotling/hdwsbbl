@@ -313,7 +313,8 @@ final class BBowlLeagueMan {
 		}
 
 		//Post types
-		include_once( 'includes/class-bblm-post-types.php' );						// Registers post types
+		include_once( 'includes/class-bblm-post-types.php' );		// Registers post types
+		include_once( 'includes/class-bblm-widgets.php' );			// Loads the Widgets			
 	}
 
 	/**
