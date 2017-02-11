@@ -9,6 +9,7 @@ The below will document all changes required to be performed - it could be lengt
 Database
  - Posts
   - Change the post type of Stadiums to bblm_stadium
+  [validate] - do i need to remove post parent before deleting the stadium page?
 
 Admin [need to check that all subpages are not deleted when I remove a post.....]
  - Delete the "Stadiums" pages

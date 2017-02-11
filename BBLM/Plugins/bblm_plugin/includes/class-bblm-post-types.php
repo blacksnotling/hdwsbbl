@@ -58,11 +58,37 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Did You Know
+    register_post_type( 'bblm_stadium',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Stadiums', 'bblm' ),
+					'singular_name' 		=> __( 'Stadium', 'bblm' ),
+					'add_new_item' 			=> __( 'Add New Stadium', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Stadium', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Stadium', 'bblm' ),
+					'view_items' 			=> __( 'View Stadiums', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Stadiums', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'stadiums' ),
+				'supports' 				=> array( 'title', 'editor', 'author'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+        'menu_icon' 			=> 'dashicons-store',
+        'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Stadiums
 
 	}
-
-
-
 
 } //End of Class
 
