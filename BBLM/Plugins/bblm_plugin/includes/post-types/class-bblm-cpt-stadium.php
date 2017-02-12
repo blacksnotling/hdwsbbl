@@ -57,11 +57,11 @@ class BBLM_CPT_Stadium {
 			 if ( $hometeam = $wpdb->get_results($hometeamsql) ) {
 
 				 //Check to see how many teams are returned
-				 if (1 < count($hometeam)) {
+				 if ( 1 < count( $hometeam ) ) {
 
 					 //we have more than one team
 					 echo  "<p>".__( 'At Present, the following teams call this stadium their home.' , 'bblm' )."</p>\n<ul>\n";
-					 foreach ($hometeam as $ht) {
+					 foreach ( $hometeam as $ht ) {
 
 						 echo "	<li><a href=\"".$ht->guid."\" title=\"Read more about ".$ht->t_name."\">".$ht->t_name."</a></li>\n";
 
@@ -72,7 +72,7 @@ class BBLM_CPT_Stadium {
 				 else {
 
 					 //only one team is retuned
-					 foreach ($hometeam as $ht) {
+					 foreach ( $hometeam as $ht ) {
 
 						 echo "<p>At Present, only <a href=\"".$ht->guid."\" title=\"Read more about ".$ht->t_name."\">".$ht->t_name."</a> call this stadium their home.</p>\n";
 
@@ -99,25 +99,25 @@ class BBLM_CPT_Stadium {
 		 	global $wpdb;
 
 			$recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, C.c_name, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND M.div_id = D.div_id AND M.stad_id = '.get_the_ID().' ORDER BY M.m_date DESC';
-			if ($recmatch = $wpdb->get_results($recentmatchsql)) {
+			if ( $recmatch = $wpdb->get_results($recentmatchsql) ) {
 
 				$zebracount = 1;
 				echo "<table class=\"sortable\">\n	<tr>\n		<th>".__( 'Date', 'bblm' )."</th>\n		<th>".__( 'Match', 'bblm' )."</th>\n		<th>".__( 'Competition', 'bblm' )."</th>\n		<th>".__( 'Attendance', 'bblm' )."</th>\n	</tr>\n";
-				foreach ($recmatch as $rm) {
+				foreach ( $recmatch as $rm ) {
 
-					if (($zebracount % 2) && (10 < $zebracount)) {
+					if ( ($zebracount % 2) && (10 < $zebracount) ) {
 
 						echo "		<tr class=\"tb_hide\">\n";
 
 					}
 
-					else if (($zebracount % 2) && (10 >= $zebracount)) {
+					else if ( ($zebracount % 2) && (10 >= $zebracount) ) {
 
 						echo "		<tr>\n";
 
 					}
 
-					else if (10 < $zebracount) {
+					else if ( 10 < $zebracount ) {
 
 						echo "		<tr class=\"tbl_alt tb_hide\">\n";
 
