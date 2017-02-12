@@ -20,3 +20,6 @@ Admin [need to check that all subpages are not deleted when I remove a post.....
 Front End
  - arrange widgets as required
  - create menus as required
+
+ V2.1
+ Any custom table storing WP ID values should be converted to BIGINT(20) for future compatability
