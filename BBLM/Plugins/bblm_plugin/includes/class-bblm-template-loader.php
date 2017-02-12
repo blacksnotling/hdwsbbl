@@ -18,7 +18,9 @@ class BBLM_Template_Loader {
 	 * Constructor
 	 */
 	public function __construct() {
+
 		add_filter( 'template_include', array( $this, 'template_loader' ) );
+
 	}
 
 	/**
@@ -67,6 +69,7 @@ class BBLM_Template_Loader {
 
 		return $template;
 	}
+
 }
 
 new BBLM_Template_Loader();

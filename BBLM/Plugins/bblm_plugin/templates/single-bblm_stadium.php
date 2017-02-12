@@ -1,30 +1,28 @@
 <?php
-/*
-Template Name: View Stadium
-*/
-/*
-*	Filename: bb.view.Stadium.php
-*	Description: Page template to view the details of a stadium.
-*/
-?>
-<?php get_header(); ?>
+/**
+ * The template for displaying 'Stadiums' - Single View
+ *
+ * @package		BBowlLeagueMan/Templates
+ * @category	Template
+ * @author 		Blacksnotliung
+ */
+
+get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-				$stadidsql = 'SELECT stad_id FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
-				$stad_id = $wpdb->get_var($stadidsql);
 
 				//code for "home" teams
-				$hometeamsql = 'SELECT T.t_name, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.stad_id = '.$stad_id;
-				print("<h3>Home Teams</h3>\n");
+				$hometeamsql = 'SELECT T.t_name, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.stad_id = '.get_the_ID();
+				echo "<h3>".__( 'Home Teams', 'bblm' )."</h3>\n";
 				if ($hometeam = $wpdb->get_results($hometeamsql)) {
 					//Check to see how many teams are returned
 					if (1 < count($hometeam)) {
 						//we have more than one team
-						print("<p>At Present, the following teams call this stadium their home.</p>\n<ul>\n");
+						echo "<p>".__( 'At Present, the following teams call this stadium their home.' , 'bblm' )."</p>\n<ul>\n";
 						foreach ($hometeam as $ht) {
 							print("	<li><a href=\"".$ht->guid."\" title=\"Read more about ".$ht->t_name."\">".$ht->t_name."</a></li>\n");
 						}
@@ -38,7 +36,7 @@ Template Name: View Stadium
 					}
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>At present, no teams use this stadium for their home games.</p>\n	</div>\n");
+					echo "	<div class=\"info\">\n		<p>".__('At present, no teams use this stadium for their home games.', 'bblm' )."</p>\n	</div>\n";
 				}
 ?>
 				<div class="details staddet">
@@ -48,11 +46,11 @@ Template Name: View Stadium
 
 
 				//Recent Matches
-				$recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, C.c_name, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND M.div_id = D.div_id AND M.stad_id = '.$stad_id.' ORDER BY M.m_date DESC';
+				$recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, C.c_name, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND M.div_id = D.div_id AND M.stad_id = '.get_the_ID().' ORDER BY M.m_date DESC';
 				if ($recmatch = $wpdb->get_results($recentmatchsql)) {
 					$zebracount = 1;
-					print("<h3>Recent Matches in this stadium</h3>\n");
-					print("<table>\n	<tr>\n		<th>Date</th>\n		<th>Match</th>\n		<th>Competition</th>\n		<th>Attendance</th>\n	</tr>\n");
+					echo "<h3>".__( 'Matches that have taken place in this stadium', 'bblm' )."</h3>\n";
+					echo "<table class=\"sortable\">\n	<tr>\n		<th>".__( 'Date', 'bblm' )."</th>\n		<th>".__( 'Match', 'bblm' )."</th>\n		<th>".__( 'Competition', 'bblm' )."</th>\n		<th>".__( 'Attendance', 'bblm' )."</th>\n	</tr>\n";
 					foreach ($recmatch as $rm) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
 							print("		<tr class=\"tb_hide\">\n");
@@ -73,7 +71,7 @@ Template Name: View Stadium
 				}
 
 ?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'bblm' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 			</div>
 			</div>

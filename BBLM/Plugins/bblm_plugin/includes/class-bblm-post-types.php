@@ -22,6 +22,7 @@ class BBLM_Post_types {
 	public function __construct() {
 
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
+    add_action( 'init', array( $this, 'include_post_type_handlers' ) );
 
 	}
 
@@ -89,6 +90,16 @@ class BBLM_Post_types {
 		); //end of Stadiums
 
 	}
+
+  /**
+	 * Loads all the CPT handler classes front end
+	 */
+	public function include_post_type_handlers() {
+
+    include_once( 'post-types/class-bblm-cpt-dyk.php' );
+    include_once( 'post-types/class-bblm-cpt-stadium.php' );
+
+ }
 
 } //End of Class
 
