@@ -134,6 +134,14 @@ class BBLM_Settings_Admin {
             'helper' => 'The number of players and teams to display on the "top X" lists',
         	),
           array(
+            'uid' => 'archive_stad_text',
+            'label' => 'Stadium Page Text',
+            'section' => 'second_section',
+            'placeholder' => 'Enter a description here',
+            'type' => 'textarea',
+            'helper' => 'Text entered here appears at the top of the Stadiums page',
+          ),
+          array(
         		'uid' => 'site_dir',
         		'label' => 'Site Directory',
         		'section' => 'third_section',
@@ -253,18 +261,6 @@ class BBLM_Settings_Admin {
             'placeholder' => '',
             'helper' => 'The ID number for the "Merc" Position',
         	),
-
-/* saved for future use!
-          array(
-        		'uid' => 'awesome_textarea',
-        		'label' => 'Sample Text Area',
-        		'section' => 'first_section',
-            'placeholder' => 'longer text goes here',
-        		'type' => 'textarea',
-            'helper' => 'Does this help?',
-        	),
-*/
-
 
         );
 

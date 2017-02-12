@@ -10,6 +10,19 @@
 get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<h2><?php echo __( 'Stadiums', 'bblm'); ?></h2>
+<?php
+		if ( $options = get_option('bblm_config') ) {
+
+			$archive_stad_text = htmlspecialchars( $options['archive_stad_text'], ENT_QUOTES );
+
+			//validates if something was not set
+			if ( strlen( $archive_stad_text ) !== 0 ) {
+
+				 echo "<p>".nl2br( $archive_stad_text )."</p>\n";
+
+			}
+		}
+?>
 		<ul>
 		<?php while (have_posts()) : the_post(); ?>
 
