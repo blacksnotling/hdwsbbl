@@ -107,7 +107,36 @@ if (isset($_POST['bblm_stadium_teams'])) {
       }//end of if sql was successful
 
   } // end of if (isset($_POST['bblm_stadium_match'])) {
+/****
+* END OF Stadiums
+*
+* START OF Championship Cups
+*/
 
+if (isset($_POST['bblm_cup_cupcpt'])) {
+
+  $cuppostsql = "SELECT P.ID, R.series_id, P.post_title, R.series_type FROM ".$wpdb->prefix."series R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.series_id = J.tid AND P.ID = J.pid and J.prefix = 'series_' ORDER BY P.ID ASC";
+    if ($stadposts = $wpdb->get_results($cuppostsql)) {
+//      echo '<ul>';
+      foreach ($stadposts as $stad) {
+        $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_cup' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+//        print("<li>".$stadupdatesql."</li>");
+//        print("<li>Meta -> '".$stad->ID."', 'cup_type', '".$stad->series_type."'</li>");
+        if ( $wpdb->query($stadupdatesql) ) {
+          $result = true;
+          add_post_meta( $stad->ID, 'cup_type', $stad->series_type, true );
+        }
+        else {
+          $result = false;
+        }
+
+      } //end of foreach
+//      echo '</ul>';
+      if ( $result ) {
+        print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Championships Page! <strong>Now you can delete the Championship Cups page!</strong></p></div>\n");
+      }
+    }//end of if sql was successful
+} //end of if (isset($_POST['bblm_cup_cupcpt']))
 
 
     /**
@@ -118,14 +147,24 @@ if (isset($_POST['bblm_stadium_teams'])) {
 
   <p>This screen should only be used when performing the cutover. Use eachn option <strong>only once</strong>.</p>
 
-  <h3>Stadiums</h3>
   <form name="bblm_cutovermain" method="post" id="post">
+    <h3>Stadiums</h3>
     <ul>
-  	<li><input type="submit" name="bblm_stadium_stadcpt" value="Convert Stadium Post Types" title="Convert the Stadium Post Types"/></li>
-    <li>Now you can delete the Stadiums Page!</li>
-    <li><input type="submit" name="bblm_stadium_teams" value="Update Stadium in Teams" title="Update Stadium in Teams"/></li>
-    <li><input type="submit" name="bblm_stadium_match" value="Update Stadium in Matches" title="Update Stadium in Matches"/></li>
-  </ul>
+       <li>First take a copy of the text at the top of the Stadiums page</li>
+  	   <li><input type="submit" name="bblm_stadium_stadcpt" value="Convert Stadium Post Types" title="Convert the Stadium Post Types"/></li>
+       <li>Now you can delete the Stadiums Page!</li>
+       <li><input type="submit" name="bblm_stadium_teams" value="Update Stadium in Teams" title="Update Stadium in Teams"/></li>
+       <li><input type="submit" name="bblm_stadium_match" value="Update Stadium in Matches" title="Update Stadium in Matches"/></li>
+    </ul>
+
+
+    <h3>Championship Cups</h3>
+    <ul>
+      <li>First take a copy of the text at the top of the Championships page</li>
+      <li><input type="submit" name="bblm_cup_cupcpt" value="Convert Championship Post Types" title="Convert the Championship Post Types"/></li>
+      <li>Now you can delete the Championship Cups Page!</li>
+      <li>Also delete the BBBL sevens cup.... (sorry A)</li>
+    </ul>
   </form>
 
 

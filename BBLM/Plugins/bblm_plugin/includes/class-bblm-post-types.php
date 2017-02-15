@@ -88,6 +88,35 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Stadiums
+    register_post_type( 'bblm_cup',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Championships', 'bblm' ),
+					'singular_name' 		=> __( 'Championship', 'bblm' ),
+					'add_new_item' 			=> __( 'Add New Championship', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Championship', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Championship', 'bblm' ),
+					'view_items' 			=> __( 'View Championships', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Championships', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'cups' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+        'menu_icon' 			=> 'dashicons-awards',
+        'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Championships / Cups
 
 	}
 
@@ -98,6 +127,7 @@ class BBLM_Post_types {
 
     include_once( 'post-types/class-bblm-cpt-dyk.php' );
     include_once( 'post-types/class-bblm-cpt-stadium.php' );
+    include_once( 'post-types/class-bblm-cpt-cup.php' );
 
  }
 

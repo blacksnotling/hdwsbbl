@@ -142,6 +142,14 @@ class BBLM_Settings_Admin {
             'helper' => __( 'Text entered here appears at the top of the Stadiums page', 'bblm' ),
           ),
           array(
+            'uid' => 'archive_cup_text',
+            'label' => __( 'Championship Cup Page Text', 'bblm' ),
+            'section' => 'second_section',
+            'placeholder' => 'Enter a description here',
+            'type' => 'textarea',
+            'helper' => __( 'Text entered here appears at the top of the Championship Cups page', 'bblm' ),
+          ),
+          array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),
         		'section' => 'third_section',

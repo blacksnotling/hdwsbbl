@@ -31,6 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function include_post_type_handlers() {
 
     include_once( 'post-types/class-bblm-admin-cpt-dyk.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-cup.php' );
 
  }
 
@@ -40,6 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	public function include_post_meta_boxes() {
 
 		include_once( 'post-types/meta-boxes/class-bblm-meta-dyk.php' );
+		include_once( 'post-types/meta-boxes/class-bblm-meta-cup.php' );
 
 	}
 
