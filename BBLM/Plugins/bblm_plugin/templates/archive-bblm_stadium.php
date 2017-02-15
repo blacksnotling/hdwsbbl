@@ -31,6 +31,7 @@ get_header(); ?>
 
 		<?php endwhile;?>
 	</ul>
+	<p class="postmeta">&nbsp;</p>
 	<?php endif; ?>
 
 <?php get_sidebar(); ?>

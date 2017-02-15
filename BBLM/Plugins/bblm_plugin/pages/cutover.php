@@ -60,7 +60,7 @@ if (isset($_POST['bblm_stadium_teams'])) {
     if ($teamposts = $wpdb->get_results($teampostsql)) {
       //echo '<ul>';
       foreach ($teamposts as $stad) {
-        $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_team`.`t_id` = $stad->t_id;";
+        $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `stad_id` = '".$stad->ID."' WHERE t_id` = $stad->t_id;";
         //print("<li>".$stad->t_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
         //print("<li>".$stadupdatesql."</li>");
         if ( $wpdb->query($stadupdatesql) ) {
@@ -89,7 +89,7 @@ if (isset($_POST['bblm_stadium_teams'])) {
       if ($matchposts = $wpdb->get_results($matchpostsql)) {
         //echo '<ul>';
         foreach ($matchposts as $stad) {
-          $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_match`.`m_id` = ".$stad->m_id.";";
+          $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `stad_id` = '".$stad->ID."' WHERE `".$wpdb->prefix."match`.`m_id` = ".$stad->m_id.";";
           //print("<li>".$stad->m_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
           //print("<li>".$stadupdatesql."</li>");
           if ( $wpdb->query($stadupdatesql) ) {
@@ -136,7 +136,37 @@ if (isset($_POST['bblm_cup_cupcpt'])) {
         print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Championships Page! <strong>Now you can delete the Championship Cups page!</strong></p></div>\n");
       }
     }//end of if sql was successful
+
 } //end of if (isset($_POST['bblm_cup_cupcpt']))
+
+/**
+ *
+ * UPDATING COMPETITIONS TABLE FOR THE NEW CHAMPIONSHIPS IDs
+ */
+if (isset($_POST['bblm_cup_comp'])) {
+
+    $comppostsql = "SELECT T.c_id, T.series_id, P.ID FROM ".$wpdb->prefix."comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.series_id = J.tid AND P.ID = J.pid and J.prefix = 'series_'";
+    if ($teamposts = $wpdb->get_results($comppostsql)) {
+      //echo '<ul>';
+      foreach ($teamposts as $stad) {
+        $stadupdatesql = "UPDATE `".$wpdb->prefix."comp` SET `series_id` = '".$stad->ID."' WHERE `c_id` = $stad->c_id;";
+        //print("<li>".$stad->c_id." = ".$stad->series_id." -> ".$stad->ID."</li>");
+        //print("<li>".$stadupdatesql."</li>");
+        if ( $wpdb->query($stadupdatesql) ) {
+          $result = true;
+        }
+        else {
+          $result = false;
+        }
+
+      } //end of foreach
+      //echo '</ul>';
+      if ( $result ) {
+        print("<div id=\"updated\" class=\"updated fade\"><p>Competitions table updated with the new Championships!</p></div>\n");
+      }
+    }//end of if sql was successful
+
+} // end of if (isset($_POST['bblm_cup_comp'])) {
 
 
     /**
@@ -164,6 +194,7 @@ if (isset($_POST['bblm_cup_cupcpt'])) {
       <li><input type="submit" name="bblm_cup_cupcpt" value="Convert Championship Post Types" title="Convert the Championship Post Types"/></li>
       <li>Now you can delete the Championship Cups Page!</li>
       <li>Also delete the BBBL sevens cup.... (sorry A)</li>
+      <li><input type="submit" name="bblm_cup_comp" value="Update Championship Cups in Competitions" title="Update Championship Cups in Competitions"/></li>
     </ul>
   </form>
 

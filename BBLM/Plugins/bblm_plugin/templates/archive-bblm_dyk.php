@@ -40,7 +40,7 @@ get_header(); ?>
 
 		</div>
 	</div>
-
+<p class="postmeta">&nbsp;</p>
 <?php endif; ?>
 
 <?php get_sidebar(); ?>

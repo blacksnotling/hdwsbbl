@@ -55,6 +55,25 @@ class BBLM_CPT_Cup {
 
 	  }
 
+		/**
+		* Echos a list of the number of competitions for this championshiop cup
+		*
+		* @return string
+		*/
+		public function echo_number_competitions( $cup  = null) {
+		 global $post;
+		 global $wpdb;
+
+		 if ( null == $cup ) {
+			 $cup = $post->get_the_id();
+		 }
+
+		 $compcountsql = 'SELECT COUNT(*) FROM '.$wpdb->prefix.'comp WHERE series_id = '.$cup;
+		 $count = $wpdb->get_var($compcountsql);
+		 echo $count;
+
+	 }
+
 
 }
 
