@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: BloodBowl League Manager for the HDWSBBL
-Version: 20170210
+Version: 20170218
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -24,7 +24,6 @@ function bblm_insert_admin_pages() {
 	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'New Season', 'New Season', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.season.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Competition', 'Add Competition', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Manage Comps', 'Manage Comps', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.comps.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Assign teams (comp)', 'Assign teams (comp)', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_team.php');

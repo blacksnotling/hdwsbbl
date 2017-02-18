@@ -112,7 +112,10 @@ if (isset($_POST['bblm_stadium_teams'])) {
 *
 * START OF Championship Cups
 */
-
+/**
+ *
+ * UPDATING WP Posts TABLE FOR THE NEW CHAMPIONSHIPS CPT
+ */
 if (isset($_POST['bblm_cup_cupcpt'])) {
 
   $cuppostsql = "SELECT P.ID, R.series_id, P.post_title, R.series_type FROM ".$wpdb->prefix."series R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.series_id = J.tid AND P.ID = J.pid and J.prefix = 'series_' ORDER BY P.ID ASC";
@@ -167,7 +170,82 @@ if (isset($_POST['bblm_cup_comp'])) {
     }//end of if sql was successful
 
 } // end of if (isset($_POST['bblm_cup_comp'])) {
+  /****
+  * END OF Championship Cups
+  *
+  * START OF Seasons
+  */
+  /**
+   *
+   * UPDATING WP Posts TABLE FOR THE NEW SEASONS CPT
+   */
+  if (isset($_POST['bblm_season_seacpt'])) {
 
+    $cuppostsql = "SELECT P.ID, R.sea_id, P.post_title, UNIX_TIMESTAMP(R.sea_sdate) AS sdate, UNIX_TIMESTAMP(R.sea_fdate) AS fdate FROM ".$wpdb->prefix."season R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.sea_id = J.tid AND P.ID = J.pid and J.prefix = 'sea_' ORDER BY P.ID ASC";
+      if ($stadposts = $wpdb->get_results($cuppostsql)) {
+//        echo '<ul>';
+        foreach ($stadposts as $stad) {
+          $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_season' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+//          print("<li>".$stadupdatesql."</li>");
+          if ( date("Y-m-d", $stad->fdate) == '1970-01-01' ) {
+            $fdate = '0000-00-00';
+          }
+          else {
+            $fdate = date("Y-m-d", $stad->fdate);
+          }
+//          print("<li>Meta -> '".$stad->ID."', 'season_sdate', '".date("Y-m-d", $stad->sdate)."'</li>");
+//          print("<li>Meta -> '".$stad->ID."', 'season_fdate', '".$fdate."'</li>");
+          if ( $wpdb->query($stadupdatesql) ) {
+            $result = true;
+            add_post_meta( $stad->ID, 'season_sdate', date("Y-m-d", $stad->sdate), true );
+            add_post_meta( $stad->ID, 'season_fdate', $fdate, true );
+          }
+          else {
+            $result = false;
+          }
+
+        } //end of foreach
+//        echo '</ul>';
+        if ( $result ) {
+          print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Seasons Page! <strong>Now you can delete the Seasons page!</strong></p></div>\n");
+        }
+      }//end of if sql was successful
+
+  } //end of if (isset($_POST['bblm_season_seacpt']))
+
+  /**
+   *
+   * UPDATING COMPETITIONS TABLE FOR THE NEW SEASONS IDs
+   */
+  if (isset($_POST['bblm_season_comp'])) {
+
+      $comppostsql = "SELECT T.c_id, T.sea_id, P.ID FROM ".$wpdb->prefix."comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.sea_id = J.tid AND P.ID = J.pid and J.prefix = 'sea_'";
+      if ($teamposts = $wpdb->get_results($comppostsql)) {
+        //echo '<ul>';
+        foreach ($teamposts as $stad) {
+          $stadupdatesql = "UPDATE `".$wpdb->prefix."comp` SET `sea_id` = '".$stad->ID."' WHERE `c_id` = $stad->c_id;";
+          //print("<li>".$stad->c_id." = ".$stad->sea_id." -> ".$stad->ID."</li>");
+          //print("<li>".$stadupdatesql."</li>");
+          if ( $wpdb->query($stadupdatesql) ) {
+            $result = true;
+          }
+          else {
+            $result = false;
+          }
+
+        } //end of foreach
+        //echo '</ul>';
+        if ( $result ) {
+          print("<div id=\"updated\" class=\"updated fade\"><p>Competitions table updated with the new Seasons!</p></div>\n");
+        }
+      }//end of if sql was successful
+
+  } // end of if (isset($_POST['bblm_season_comp'])) {
+    /****
+    * END OF Seasons
+    *
+    * START OF ?
+    */
 
     /**
      *
@@ -195,6 +273,19 @@ if (isset($_POST['bblm_cup_comp'])) {
       <li>Now you can delete the Championship Cups Page!</li>
       <li>Also delete the BBBL sevens cup.... (sorry A)</li>
       <li><input type="submit" name="bblm_cup_comp" value="Update Championship Cups in Competitions" title="Update Championship Cups in Competitions"/></li>
+    </ul>
+
+    <h3>Seasons</h3>
+    <ul>
+      <li>First take a copy of the text at the top of the Seasons page.</li>
+      <li><input type="submit" name="bblm_season_seacpt" value="Convert Season Post Types" title="Convert the Season Post Types"/></li>
+      <li>Now you can delete the Seasons Page!</li>
+      <li><input type="submit" name="bblm_season_comp" value="Update Seasons in Competitions" title="Update Seasons Cups in Competitions"/></li>
+
+    <h3>Did You Know</h3>
+    <ul>
+      <li>Delete the Did You Know Page</li>
+      <li>Import the existing DiD Yopu Knows - there is a refere3nce availible here: -TODO!-</li>
     </ul>
   </form>
 
