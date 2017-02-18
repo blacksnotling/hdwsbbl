@@ -13,17 +13,7 @@ get_header(); ?>
 			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 				<h2 class="entry-title"><?php echo __( 'Seasons', 'bblm'); ?></h2>
 <?php
-		if ( $options = get_option('bblm_config') ) {
-
-			$archive_season_text = htmlspecialchars( $options['archive_season_text'], ENT_QUOTES );
-
-			//validates if something was not set
-			if ( strlen( $archive_season_text ) !== 0 ) {
-
-				 echo "<p>".nl2br( $archive_season_text )."</p>\n";
-
-			}
-		}
+		bblm_echo_archive_desc( 'season' );
 
 		$sea = new BBLM_CPT_Season;
 ?>
@@ -34,9 +24,10 @@ get_header(); ?>
 
 		<?php endwhile;?>
 		</ul>
+		<p class="postmeta">&nbsp;</p>
 	</div>
 </div>
-<p class="postmeta">&nbsp;</p>
+
 	<?php endif; ?>
 
 <?php get_sidebar(); ?>

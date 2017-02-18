@@ -41,3 +41,29 @@ function bblm_get_league_name () {
   return $bblm_league_name;
 
 }
+
+/**
+ * If set, echo an archive description for a CPT set in the options page
+ */
+ function bblm_echo_archive_desc( $cpt ) {
+
+   if ( !isset( $cpt ) ) {
+
+     return $cpt;
+
+   }
+   else {
+
+     //We have a value, function starts here
+     $options = get_option('bblm_config');
+     $archive_text = htmlspecialchars( $options['archive_'.$cpt.'_text'], ENT_QUOTES );
+       //validates if something was not set
+       if ( strlen( $archive_text ) !== 0 ) {
+
+         echo "<p>".nl2br( $archive_text )."</p>\n";
+
+       }
+
+     }
+
+ }

@@ -13,7 +13,7 @@ get_header(); ?>
 
 	<div class="entry">
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<h2 class="entry-title">Did You Know?</h2>
+			<h2 class="entry-title"><?php echo __( 'Did You Know?', 'bblm'); ?></h2>
 
 	<?php while (have_posts()) : the_post(); ?>
 
@@ -38,9 +38,10 @@ get_header(); ?>
 
 	<?php endwhile;?>
 
+			<p class="postmeta">&nbsp;</p>
 		</div>
 	</div>
-<p class="postmeta">&nbsp;</p>
+
 <?php endif; ?>
 
 <?php get_sidebar(); ?>
