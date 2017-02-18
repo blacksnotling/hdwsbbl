@@ -1,46 +1,42 @@
 <?php
-/*
-Template Name: List Seasons
-*/
-/*
-*	Filename: bb.core.season.php
-*	Description: Page template to list the Stadiums in the league
-*/
-?>
-<?php get_header(); ?>
+/**
+ * The template for displaying 'Seasons' - Archive View
+ *
+ * @package		BBowlLeagueMan/Templates
+ * @category	Template
+ * @author 		Blacksnotliung
+ */
+
+get_header(); ?>
 	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
-
-					<?php the_content(); ?>
+		<div class="entry">
+			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				<h2 class="entry-title"><?php echo __( 'Seasons', 'bblm'); ?></h2>
 <?php
-				$seasonsql = 'SELECT S.sea_active, P.guid, P.post_title FROM '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID ORDER BY sea_active DESC, sea_sdate DESC';
-				if ($seasons = $wpdb->get_results($seasonsql)) {
-					print("	<ul>\n");
-					foreach ($seasons as $s) {
-						print("<li");
-						if ($s->sea_active) {
-							print(" class=\"active\"");
-						}
-						print("><a href=\"".$s->guid."\" title=\"View more informaton about ".$s->post_title."\">".$s->post_title."</a></li>\n");
-					}
-					print("</ul>\n");
-				}
-				else {
-					print("<p>There are no Seasons currently set-up!</p>\n");
-}
+		if ( $options = get_option('bblm_config') ) {
 
+			$archive_season_text = htmlspecialchars( $options['archive_season_text'], ENT_QUOTES );
 
+			//validates if something was not set
+			if ( strlen( $archive_season_text ) !== 0 ) {
+
+				 echo "<p>".nl2br( $archive_season_text )."</p>\n";
+
+			}
+		}
+
+		$sea = new BBLM_CPT_Season;
 ?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+		<ul class="season_status">
+		<?php while (have_posts()) : the_post(); ?>
 
-			</div>
-		</div>
-
+			<li id="post-<?php the_ID(); ?>" class="entry-title <?php echo $sea->season_status(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="View <?php the_title(); ?>"><?php the_title(); ?></a></li>
 
 		<?php endwhile;?>
+		</ul>
+	</div>
+</div>
+<p class="postmeta">&nbsp;</p>
 	<?php endif; ?>
 
 <?php get_sidebar(); ?>
