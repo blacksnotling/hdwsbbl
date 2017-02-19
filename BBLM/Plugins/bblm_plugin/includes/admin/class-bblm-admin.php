@@ -23,6 +23,7 @@ class BBLM_Admin {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'includes' ) );
+		add_action( 'dashboard_glance_items', array( $this, 'add_dashboard_counts' ) );
 
 	}
 
@@ -35,8 +36,20 @@ class BBLM_Admin {
 
 		// Classes for functionality
 		include_once( 'class-bblm-admin-post-types.php' );
+		include_once( 'class-gamajo-dashboard-glancer.php' );
 
 	}
+
+	/**
+	 * Dashboard glancer - courtesy of Gary Jones (Gamajo)
+	 */
+	 function add_dashboard_counts() {
+
+	   $glancer = new Gamajo_Dashboard_Glancer;
+     $my_post_types = array( 'bblm_cup', 'bblm_season', 'bblm_dyk', 'bblm_stadium' );
+     $glancer->add( $my_post_types, array( 'publish' ) );
+
+	 }
 
 }
 
