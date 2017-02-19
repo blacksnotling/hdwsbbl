@@ -56,6 +56,10 @@ class BBLM_Admin_Menus {
 			array( $this, 'bblm_main_page_content' )
 		);
 
+		//Create the 'Manage Positions Page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-positions.php' );
+		new BBLM_Manage_Positions();
+
 	}
 
 	/**
@@ -68,7 +72,7 @@ class BBLM_Admin_Menus {
 	}
 
 	/**
-	 * Loads the content of the Settings screen of BBowlLeagueMan
+	 * Loads the content of the Cutover page for the BBowlLeagueMan
 	 */
 	public function cutover_menu() {
 
