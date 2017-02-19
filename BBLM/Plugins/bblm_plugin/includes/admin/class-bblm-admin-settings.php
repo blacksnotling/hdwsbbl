@@ -158,6 +158,14 @@ class BBLM_Settings_Admin {
             'helper' => __( 'Text entered here appears at the top of the Seasons page', 'bblm' ),
           ),
           array(
+            'uid' => 'archive_race_text',
+            'label' => __( 'Race Page Text', 'bblm' ),
+            'section' => 'second_section',
+            'placeholder' => 'Enter a description here',
+            'type' => 'textarea',
+            'helper' => __( 'Text entered here appears at the top of the Races page', 'bblm' ),
+          ),
+          array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),
         		'section' => 'third_section',

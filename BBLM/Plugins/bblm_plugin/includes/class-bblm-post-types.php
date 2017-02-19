@@ -146,7 +146,35 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Seasons
-
+    register_post_type( 'bblm_race',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Races', 'bblm' ),
+					'singular_name' 		=> __( 'Race', 'bblm' ),
+					'add_new_item' 			=> __( 'New Race', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Race and Positions', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Race', 'bblm' ),
+					'view_items' 			=> __( 'View Races', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Races', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'races' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+        'menu_icon' 			=> 'dashicons-universal-access-alt',
+        'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Races
 	}
 
   /**
