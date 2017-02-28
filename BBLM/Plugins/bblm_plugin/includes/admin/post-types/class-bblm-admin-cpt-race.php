@@ -77,7 +77,7 @@ class BBLM_Admin_CPT_Race {
 				$cost = get_post_meta( $post_id, 'race_hide', true );
 				if ( empty( $cost ) ) {
 
-					echo 'Positions';
+					echo '<a href="'.admin_url().'admin.php?page=bblm_positions&bblm_filter='.$post_id.'">Manage Positions</a>';
 
 				}
 				else {

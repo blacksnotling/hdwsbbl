@@ -46,13 +46,10 @@ class BBLM_Positions_List extends WP_List_Table {
 		global $wpdb;
 
 		$sql = "SELECT * FROM {$wpdb->prefix}position";
-    if ( isset( $_POST[ 'bblm_position_filter' ] ) ) {
+    if ( ( isset( $_REQUEST[ 'bblm_filter' ] ) ) && ( 0 !== absint( $_REQUEST[ 'bblm_filter' ] ) ) ) {
 
-      if ( 'x' !== $_POST[ 'bblm_filter' ] ) {
+      $sql .= " WHERE r_id = ". absint( $_REQUEST[ 'bblm_filter' ] ) ;
 
-        $sql .= " WHERE r_id = ". (int) $_POST[ 'bblm_filter' ];
-
-      }
 
     }
 
