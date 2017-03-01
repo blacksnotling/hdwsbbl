@@ -63,23 +63,6 @@ class BBLM_Positions_List extends WP_List_Table {
 		return $result;
 	}
 
-
-	/**
-	 * Delete a Position.
-	 *
-	 * @param int $id position ID
-	 */
-	public static function delete_position( $id ) {
-		global $wpdb;
-
-		$wpdb->delete(
-			"{$wpdb->prefix}position",
-			[ 'pos_id' => $id ],
-			[ '%d' ]
-		);
-	}
-
-
 	/**
 	 * Returns the count of records in the database.
 	 *
@@ -126,7 +109,7 @@ class BBLM_Positions_List extends WP_List_Table {
 
 
       case 'edit':
-      return '<input type="submit" name="bblm_position_editform" id="bblm_position_editform" value="Edit" title="Edit" />';
+			return '<a href="'.admin_url().'admin.php?page=bblm_positions&bblm_action=edit&pos_id='.$item[ 'pos_id' ].'">Edit</a>';
 
       case 'pos_ma':
       case 'pos_st':
@@ -181,11 +164,7 @@ class BBLM_Positions_List extends WP_List_Table {
 
 		$title = '<strong>' . $item['pos_name'] . '</a></strong>';
 
-		$actions = [
-			'delete' => sprintf( '<a href="?page=%s&action=%s&position=%s&_wpnonce=%s">Delete</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['pos_id'] ), $delete_nonce )
-		];
-
-		return $title . $this->row_actions( $actions );
+		return $title;
 	}
 
 
@@ -360,28 +339,32 @@ class BBLM_Manage_Positions {
 ?>
 		<div class="wrap">
       <h1 class="wp-heading-inline">Positions</h1>
+ 			<a href="<?php echo admin_url(); ?>admin.php?page=bblm_positions&bblm_action=new" class="page-title-action">Add Position</a>
 
 <?php
     if ( isset( $_POST['bblm_position_add'] ) ) {
 
-      //If we have submitted a new or updated position then pass to the correc function
-      $this->submit_handling();
+      //If we have submitted a new position then pass to the correct function to save
+      $this->submit_handling_new();
 
     }
 
-    //if ( isset( $_GET['action'] ) && 'new' == $_GET['action'] ) {
-    if (( isset( $_POST['bblm_position_addform'] ) ) || ( isset( $_POST['bblm_position_editform'] ) )) {
+		if ( isset( $_POST['bblm_position_edit'] ) ) {
+
+      //If we have submitted an updated position then pass to the correct function to save
+      $this->submit_handling_update();
+
+    }
+
+		if ( isset( $_GET['bblm_action'] ) && ( 'new' == $_GET['bblm_action'] || 'edit' == $_GET['bblm_action'] ) ) {
 
       //we are adding or updating a postion so we pass to the correct function
       $this->neworupdate_handling();
 
     }
-    else {
+		else {
       //we are displaying the overall form
 ?>
-
-    <form id="addpositionbutton" method="post" action=""><input type="submit" name="bblm_position_addform" id="bblm_position_addform" value="Add Position" title="Add New position to Race" class="page-title-action" /></form>
-    <p>Don't delete any poistions that currently have players assigned to them!!!</p>
     <p><form id="filterracebutton" method="post" action="">
       <?php
                $raceargs = array(
@@ -453,15 +436,51 @@ class BBLM_Manage_Positions {
 	 * Displays the form for adding and updating a new position
 	 */
    public function neworupdate_handling() {
+		 global $wpdb;
+
+		 $bblm_isediting = 0;
+		 //ininalise array to hold the details of the position
+		 $pos = array( array(
+			 'pos_id' => '',
+			 'pos_name' => '',
+			 'r_id' => '',
+			 'pos_limit' => '',
+			 'pos_ma' => '',
+			 'pos_st' => '',
+			 'pos_ag' => '',
+			 'pos_av' => '',
+			 'pos_skills' => '',
+			 'pos_cost' => '',
+			 'pos_freebooter' => '',
+			 'pos_status' => '',
+		 ),
+	 		);
 ?>
      <div class="form-wrap">
-       <h2>Add New Position</h2>
-       <form id="addposition" method="post" action="" class="validate">
+			 <form id="addposition" method="post" action="" class="validate">
          <?php wp_nonce_field( 'bblm_add_position', 'bblm_positions' ); ?>
          <table>
            <tr>
              <td>
 <?php
+		if ( 'edit' == $_GET['bblm_action'] && isset( $_GET['pos_id'] ) ) {
+			//we are editing a position
+
+			$bblm_isediting = 1;
+			echo '<h2>Edit Position</h2>';
+
+			//retrieve the position details from the database and populate an array
+			$sql = "SELECT * FROM ".$wpdb->prefix."position where pos_id = ".absint( $_GET['pos_id'] );
+			$pos = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+		}
+		else {
+			//we are adding a new position
+
+			echo '<h2>Add New Position</h2>';
+
+		}
+
          $raceargs = array(
            'post_type' => 'bblm_race',
            'orderby' => 'title',
@@ -480,46 +499,62 @@ class BBLM_Manage_Positions {
          if ( $query->have_posts() ) : ?>
          <select name="bblm_rid" id="bblm_rid">
          <?php while ( $query->have_posts() ) : $query->the_post(); ?>
-             <option value="<?php the_ID(); ?>"><?php the_title(); ?></option>
+             <option value="<?php the_ID(); ?>"<?php if ( get_the_ID() == $pos[0][ 'r_id' ] ) { echo ' selected="selected"'; } ?>><?php the_title(); ?></option>
          <?php endwhile; wp_reset_postdata();?>
          </select>
        <?php endif; ?>
              </td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pname">Position Name: </label><input type="text" name="bblm_pname" size="20" maxlength="20" value="" id="bblm_pname"></td>
+             <td colspan="5"><label for="bblm_pname">Position Name: </label><input type="text" name="bblm_pname" size="20" maxlength="20" value="<?php if ( '' !== $pos[0][ 'pos_name' ] ) { echo $pos[0][ 'pos_name' ]; } ?>" id="bblm_pname"></td>
            </tr>
            <tr>
-             <td><label for="bblm_plimit">limit: </label>0-<input type="text" name="bblm_plimit" size="3" maxlength="2" value="0" id="bblm_plimit"></td>
-             <td><label for="bblm_pma">MA: </label><input type="text" name="bblm_pma" size="3" maxlength="2" value="4" id="bblm_pma"></td>
-             <td><label for="bblm_pst">ST: </label><input type="text" name="bblm_pst" size="3" maxlength="2" value="4" id="bblm_pst"></td>
-             <td><label for="bblm_pag">AG: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="4" id="bblm_pag"></td>
-             <td><label for="bblm_pav">AV: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="4" id="bblm_pav"></td>
+             <td><label for="bblm_plimit">Limit: </label>0-<input type="text" name="bblm_plimit" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_limit' ] ) { echo '0'; } else { echo $pos[0][ 'pos_limit' ]; } ?>" id="bblm_plimit"></td>
+             <td><label for="bblm_pma">MA: </label><input type="text" name="bblm_pma" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ma' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ma' ]; } ?>" id="bblm_pma"></td>
+             <td><label for="bblm_pst">ST: </label><input type="text" name="bblm_pst" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_st' ] ) { echo '4'; } else { echo $pos[0][ 'pos_st' ]; } ?>" id="bblm_pst"></td>
+             <td><label for="bblm_pag">AG: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ag' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ag' ]; } ?>" id="bblm_pag"></td>
+             <td><label for="bblm_pav">AV: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_av' ] ) { echo '4'; } else { echo $pos[0][ 'pos_av' ]; } ?>" id="bblm_pav"></td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pskills">Skills: </label><textarea name="pskills" cols="100" rows="3">none</textarea></td>
+             <td colspan="5"><label for="bblm_pskills">Skills: </label><textarea name="pskills" cols="100" rows="3"><?php if ( '' == $pos[0][ 'pos_skills' ] ) { echo 'none'; } else { echo $pos[0][ 'pos_skills' ]; } ?></textarea></td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pcost">Cost: </label><input type="text" name="bblm_pcost" size="7" maxlength="6" value="50000" id="bblm_pcost">GP
+             <td colspan="5"><label for="bblm_pcost">Cost: </label><input type="text" name="bblm_pcost" size="7" maxlength="6" value="<?php if ( '' == $pos[0][ 'pos_cost' ] ) { echo '50000'; } else { echo $pos[0][ 'pos_cost' ]; } ?>" id="bblm_pcost">GP
                      <p>(No Commas)</p></td>
            </tr>
-         </table>
+<?php
+					//Only display these if we are editing an existing position
+					if ( $bblm_isediting ) {
+?>
+					<tr>
+						<td colspan="5"><label for="bblm_pfreebooter">Freebooter: </label><input type="text" name="bblm_pfreebooter" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_freebooter' ]; ?>" id="bblm_pfreebooter">
+						<p>(Do Journeymen use this position? There should only be ONE for each race! 1 = Yes, 0 = No</p></td>
+					</tr>
+					<tr>
+						<td colspan="5"><label for="bblm_pstatus">Still active? </label><input type="text" name="bblm_pstatus" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_status' ]; ?>" id="bblm_pstatus">
+						<p>1 = Yes, 0 = No. Yes will allow new players to be hired into this position. Set to 0 for legacy positions</p></td>
+					</tr>
+					</table>
+					<input type="hidden" name="bblm_ppid" value="<?php echo $pos[0][ 'pos_id' ]; ?>" />
+					<p class="submit"><input type="submit" name="bblm_position_edit" id="bblm_position_edit" value="Save changes to Position" title="Save changes to Position" class="button button-primary" /> or <a href="<?php echo admin_url(); ?>admin.php?page=bblm_positions">Cancel</a></p></form>
+<?php
+					} // end of the "if editing" chunk
+					else {
+						//We are adding a position so end the table and show the add position button
+?>
 
+				 </table>
          <p class="submit"><input type="submit" name="bblm_position_add" id="bblm_position_add" value="Add Position to Race" title="Add position to Race" class="button button-primary" /></p></form>
 
 <?php
+					}//end of else not editing
    }
 
   /**
-	 * handles the any Post Data on this page
+	 * handles the submission of a new position
 	 */
-   public function submit_handling() {
+   public function submit_handling_new() {
      global $wpdb;
-
-/*     print("<pre>");
-     print_r($_POST);
-     print("</pre>");
-*/
 
       // Verify nonce
    		if ( !isset( $_POST['bblm_position_add'] ) || !isset( $_POST['bblm_positions'] ) || !wp_verify_nonce( $_POST['bblm_positions'], 'bblm_add_position' ) ) {
@@ -540,9 +575,6 @@ class BBLM_Manage_Positions {
       $bblm_pcost = (int) str_replace(',', '', $_POST['bblm_pcost'] );
 
       $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`, `pos_limit`, `pos_ma`, `pos_st`, `pos_ag`, `pos_av`, `pos_skills`, `pos_cost`, `pos_freebooter`, `pos_status`) VALUES (\'\', \''.$bblm_pname.'\', \''.$bblm_race.'\', \''.$bblm_limit.'\', \''.$bblm_pma.'\', \''.$bblm_pst.'\', \''.$bblm_pag.'\', \''.$bblm_pav.'\', \''.$bblm_pskills.'\', \''.$bblm_pcost.'\', \'0\', \'1\')';
-//      echo '<p>'.$addsql.'</p>';
-
-
 
         $sucess = "";
     	if (FALSE !== $wpdb->query($addsql)) {
@@ -566,6 +598,58 @@ class BBLM_Manage_Positions {
   </div>
 <?php
    }
+
+	 /**
+ 	 * handles the submission of updates for an position
+ 	 */
+    public function submit_handling_update() {
+      global $wpdb;
+
+       // Verify nonce
+    		if ( !isset( $_POST['bblm_position_edit'] ) || !isset( $_POST['bblm_positions'] ) || !wp_verify_nonce( $_POST['bblm_positions'], 'bblm_add_position' ) ) {
+    			return false;
+    		}
+
+     	//think about a for each
+     	$bblm_pname = wp_kses( esc_sql( $_POST['bblm_pname'] ), array() );
+     	$bblm_pskills = wp_kses( esc_sql( $_POST['pskills'] ), array() );
+
+     	//sanitise vars
+			 $bblm_ppid = (int) $_POST['bblm_ppid'];
+			 $bblm_race = (int) $_POST['bblm_rid'];
+       $bblm_limit = (int) $_POST['bblm_plimit'];
+       $bblm_pma = (int) $_POST['bblm_pma'];
+       $bblm_pst = (int) $_POST['bblm_pst'];
+       $bblm_pag = (int) $_POST['bblm_pag'];
+       $bblm_pav = (int) $_POST['bblm_pav'];
+       $bblm_pcost = (int) str_replace(',', '', $_POST['bblm_pcost'] );
+			 $bblm_pfreebooter = (int) $_POST['bblm_pfreebooter'];
+			 $bblm_pstatus = (int) $_POST['bblm_pstatus'];
+
+			 $updatesql = 'UPDATE `'.$wpdb->prefix.'position` SET `pos_name` = \''.$bblm_pname.'\', `r_id` = \''.$bblm_race.'\', `pos_limit` = \''.$bblm_limit.'\', `pos_ma` = \''.$bblm_pma.'\', `pos_st` = \''.$bblm_pst.'\', `pos_ag` = \''.$bblm_pag.'\', `pos_av` = \''.$bblm_pav.'\', `pos_skills` = \''.$bblm_pskills.'\', `pos_cost` = \''.$bblm_pcost.'\', `pos_freebooter` = \''.$bblm_pfreebooter.'\', `pos_status` = \''.$bblm_pstatus.'\' WHERE `pos_id` = '.$bblm_ppid.';';
+
+         $sucess = "";
+     	if (FALSE !== $wpdb->query($updatesql)) {
+     		$sucess = TRUE;
+     	}
+     	else {
+     		$wpdb->print_error();
+     	}
+ ?>
+   <div id="updated" class="updated fade">
+     <p>
+       <?php
+       if ($sucess) {
+         print("Position was Updated!");
+       }
+       else {
+         print("Something went wrong");
+       }
+       ?>
+     </p>
+   </div>
+ <?php
+    }
 
 
 	/** Singleton instance */
