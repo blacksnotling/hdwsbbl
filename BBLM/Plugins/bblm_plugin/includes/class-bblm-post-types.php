@@ -22,6 +22,7 @@ class BBLM_Post_types {
 	public function __construct() {
 
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
+		add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 10 );
     add_action( 'init', array( $this, 'include_post_type_handlers' ) );
 
 	}
@@ -176,6 +177,37 @@ class BBLM_Post_types {
 			)
 		); //end of Races
 	}
+
+/**
+ * Register taxonomies.
+ */
+public static function register_taxonomies() {
+
+	register_taxonomy(
+		'post_teams',
+		'post',
+		array(
+			'label' => __('Teams'),
+			'sort' => true,
+			'args' => array('orderby' => 'term_order'),
+			'rewrite' => array('slug' => 'team-post'),
+		)
+	);
+
+	register_taxonomy(
+		'post_competitions',
+		'post',
+		array(
+			'label' => __('Competitions'),
+			'sort' => true,
+			'args' => array('orderby' => 'term_order'),
+			'rewrite' => array('slug' => 'competition-post'),
+		)
+	);
+
+	}
+
+
 
   /**
 	 * Loads all the CPT handler classes front end
