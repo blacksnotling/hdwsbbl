@@ -187,22 +187,24 @@ public static function register_taxonomies() {
 		'post_teams',
 		'post',
 		array(
-			'label' => __('Teams'),
+			'label' => __( 'Teams', 'bblm'),
 			'sort' => true,
-			'args' => array('orderby' => 'term_order'),
-			'rewrite' => array('slug' => 'team-post'),
+			'args' => array( 'orderby' => 'term_order' ),
+			'rewrite' => array( 'slug' => 'team-post' ),
 		)
+
 	);
 
 	register_taxonomy(
 		'post_competitions',
 		'post',
 		array(
-			'label' => __('Competitions'),
+			'label' => __( 'Competitions', 'bblm' ),
 			'sort' => true,
-			'args' => array('orderby' => 'term_order'),
-			'rewrite' => array('slug' => 'competition-post'),
+			'args' => array( 'orderby' => 'term_order' ),
+			'rewrite' => array( 'slug' => 'competition-post' ),
 		)
+
 	);
 
 	}
