@@ -28,6 +28,8 @@ class BBLM_Admin_Menus {
 		add_action( 'admin_menu', array( $this, 'admin_main_setup_menu' ), 6 );
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 7 );
 		add_action( 'admin_menu', array( $this, 'cutover_menu' ), 8 );
+		add_action( 'admin_menu', array( $this, 'move_tax_menu'), 11 );
+		add_action( 'parent_file', array( $this, 'highlight_taxonomy_parent_menu' ) );
 
 	}
 
@@ -96,6 +98,36 @@ class BBLM_Admin_Menus {
 		new BBLM_Settings_Admin();
 
 	}
+
+	/**
+	 * Creates a Fummy menu so that the Custom taxonomies for Competitions can be displayed
+	 */
+	 function move_tax_menu() {
+
+		 add_submenu_page(
+		 	'bblm_main_menu',
+			esc_html__( 'Competition Types', 'bblm' ),
+			esc_html__( 'Competition Types', 'bblm' ),
+			'manage_categories',
+			'edit-tags.php?taxonomy=comp_type'
+		);
+
+	 }
+
+	 /**
+ 	 * Ensures that the correct menu is hihglighted when we use the "dummy" menu
+ 	 */
+	 function highlight_taxonomy_parent_menu( $parent_file ) {
+
+		 if ( get_current_screen()->taxonomy == 'comp_type' ) {
+
+			 $parent_file = 'bblm_main_menu';
+
+		 }
+
+		 return $parent_file;
+
+	 }
 
 
 }

@@ -339,6 +339,67 @@ if (isset($_POST['bblm_cup_comp'])) {
 
       } // end of if (isset($_POST['bblm_race_race2star'])) {
 
+				/****
+		    * END OF Races
+		    *
+		    * START OF Competitions
+		    */
+				/**
+		     *
+		     * UPDATING WP Posts TABLE FOR THE NEW Competitions
+		     */
+		    if (isset($_POST['bblm_comp_compcpt'])) {
+
+		      $comppostsql = "SELECT P.ID, R.ct_id, R.c_active FROM ".$wpdb->prefix."comp R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_' ORDER BY P.ID ASC";
+		        if ($stadposts = $wpdb->get_results($comppostsql)) {
+							//Define the array to handle the competition types
+							$comptypes = array(
+								1 => 'open-league',
+								2 => 'scheduled-league',
+								3 => 'knockout-tournament',
+								4 => 'ko-tourny-return',
+								5 => 'round-robin',
+								6 => 'world-series',
+							);
+
+//							echo '<pre>'.var_dump($comptypes).'</pre>';
+//		          echo '<ul>';
+		          foreach ($stadposts as $stad) {
+		            $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_comp' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+//		            print("<li>".$stadupdatesql."</li>");
+								$category = get_term_by( 'slug', $comptypes[ $stad->ct_id ], 'comp_type' );
+				        $cat = $category->slug;
+				        //wp_set_object_terms($stad->ID, $cat, 'comp_type');
+//								echo 'Comp Type => set term ('.$stad->ID.', '.$cat.', "comp_type")';
+
+//		            if ( ! $stad->c_active ) {
+//		              print("<li>Meta -> '".$stad->ID."', 'comp_complete', '1'</li>");
+//		            }
+		            if ( $wpdb->query($stadupdatesql) ) {
+		              $result = true;
+		              wp_set_object_terms($stad->ID, $cat, 'comp_type');
+		              if ( ! $stad->c_active ) {
+		                add_post_meta( $stad->ID, 'comp_complete', '1', true );
+		              }
+		            }
+		            else {
+		              $result = false;
+		            }
+
+		          } //end of foreach
+//		          echo '</ul>';
+		          if ( $result ) {
+		            print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Competitions! <strong>Now you can delete the Competitions page!</strong></p></div>\n");
+		          }
+		        }//end of if sql was successful
+
+		    } //end of if (isset($_POST['bblm_comp_compcpt']))
+				/****
+				* END OF Competitions
+				*
+				* START OF ?
+				*/
+
     /**
      *
      * MAIN PAGE CONTENT FOLLOWS
@@ -381,6 +442,17 @@ if (isset($_POST['bblm_cup_comp'])) {
         <li>Now you can delete the Races Page!</li>
         <li><input type="submit" name="bblm_race_positions" value="Update Races in Positions" title="Update Races in Positions Table"/></li>
         <li><input type="submit" name="bblm_race_race2star" value="Update Races in Race2star" title="Update Races in Race2star Table"/></li>
+      </ul>
+
+			<h3>Competitions</h3>
+      <ul>
+        <li>First take a copy of the text at the top of the Competitons page.</li>
+				<li>Add a new column ID (bigingt 20 - index on) to the *comp DB table</lI>
+				<li>Define the Competition Types</lI>
+        <li><input type="submit" name="bblm_comp_compcpt" value="Convert Competition Post Types" title="Convert the Competition Post Types"/></li>
+        <li>Now you can delete the Competition Page!</li>
+				<li>TODO- Update Comps table</li>
+				<li>TODO- Update: matches, comp_brackets </li>
       </ul>
 
     <h3>Did You Know</h3>

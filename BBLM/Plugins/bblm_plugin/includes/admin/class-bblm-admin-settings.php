@@ -165,6 +165,14 @@ class BBLM_Settings_Admin {
             'type' => 'textarea',
             'helper' => __( 'Text entered here appears at the top of the Races page', 'bblm' ),
           ),
+					array(
+            'uid' => 'archive_comp_text',
+            'label' => __( 'Competition Page Text', 'bblm' ),
+            'section' => 'second_section',
+            'placeholder' => 'Enter a description here',
+            'type' => 'textarea',
+            'helper' => __( 'Text entered here appears at the top of the Competitions page', 'bblm' ),
+          ),
           array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),

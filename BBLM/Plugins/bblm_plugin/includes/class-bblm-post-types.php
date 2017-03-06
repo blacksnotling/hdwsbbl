@@ -176,6 +176,35 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Races
+		register_post_type( 'bblm_comp',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Competitions', 'bblm' ),
+					'singular_name' 		=> __( 'Competition', 'bblm' ),
+					'add_new_item' 			=> __( 'New Comp', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Competition', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Competition', 'bblm' ),
+					'view_items' 			=> __( 'View Competition', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Competitions', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'competitions' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+        'menu_icon' 			=> 'dashicons-shield-alt',
+        'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Competitions
 	}
 
 /**
@@ -183,6 +212,8 @@ class BBLM_Post_types {
  */
 public static function register_taxonomies() {
 
+
+	// Teams Tax for posts
 	register_taxonomy(
 		'post_teams',
 		'post',
@@ -195,6 +226,7 @@ public static function register_taxonomies() {
 
 	);
 
+	// Competitions Tax for posts
 	register_taxonomy(
 		'post_competitions',
 		'post',
@@ -206,6 +238,35 @@ public static function register_taxonomies() {
 		)
 
 	);
+
+	// Add "Competition type" Tax for Competitions
+	$labels = array(
+			'name'                       => _x( 'Competition Type', 'bblm' ),
+			'singular_name'              => _x( 'Competition Type', 'bblm' ),
+			'search_items'               => __( 'Search Competition Types', 'bblm' ),
+			'all_items'                  => __( 'All Competition Types', 'bblm' ),
+			'parent_item'                => __( 'Parent Competition Type', 'bblm' ),
+			'parent_item_colon'          => __( 'Parent Competition Type:', 'bblm' ),
+			'edit_item'                  => __( 'Edit Competition Type', 'bblm' ),
+			'update_item'                => __( 'Update Competition Type', 'bblm' ),
+			'add_new_item'               => __( 'Add New Competition Type', 'bblm' ),
+			'new_item_name'              => __( 'New Competition Type', 'bblm' ),
+			'not_found'                  => __( 'No Competition Types defined', 'bblm' ),
+			'menu_name'                  => __( 'Competition Types', 'bblm' ),
+	);
+
+	$args = array(
+			'hierarchical'          => true,
+			'labels'                => $labels,
+			'show_ui'               => true,
+			'show_admin_column'     => true,
+			'query_var'             => true,
+			'rewrite'               => array( 'slug' => 'comp_type' ),
+	);
+
+	register_taxonomy( 'comp_type', 'bblm_comp', $args );
+
+
 
 	}
 
