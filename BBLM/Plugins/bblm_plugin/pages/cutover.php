@@ -394,6 +394,37 @@ if (isset($_POST['bblm_cup_comp'])) {
 		        }//end of if sql was successful
 
 		    } //end of if (isset($_POST['bblm_comp_compcpt']))
+				/**
+	       *
+	       * UPDATING race2star TABLE FOR THE NEW Race IDs
+	       */
+	      if (isset($_POST['bblm_comp_comptbl'])) {
+
+	        $teampostsql = "SELECT T.c_id, P.ID FROM ".$wpdb->prefix."comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+	          if ($teamposts = $wpdb->get_results($teampostsql)) {
+	//            echo '<ul>';
+	            foreach ($teamposts as $stad) {
+	              $stadupdatesql = "UPDATE `".$wpdb->prefix."comp` SET `ID` = '".$stad->ID."' WHERE c_id = ".$stad->c_id.";";
+	//              print("<li>".$stad->r_id." and ".$stad->p_id." -> ".$stad->ID." and ".$stad->p_id."</li>");
+	//              print("<li>".$stadupdatesql."</li>");
+	              if ( $wpdb->query($stadupdatesql) ) {
+	                $result = true;
+	              }
+	              else {
+	                $result = false;
+	              }
+
+	            } //end of foreach
+	  //          echo '</ul>';
+	            if ( $result ) {
+	              print("<div id=\"updated\" class=\"updated fade\"><p>The Competition table updated with the WP IDs!</p></div>\n");
+	            }
+	          }//end of if sql was successful
+
+	      } // end of if (isset($_POST['bblm_comp_comptbl'])) {
+
+
+
 				/****
 				* END OF Competitions
 				*
@@ -451,7 +482,7 @@ if (isset($_POST['bblm_cup_comp'])) {
 				<li>Define the Competition Types</lI>
         <li><input type="submit" name="bblm_comp_compcpt" value="Convert Competition Post Types" title="Convert the Competition Post Types"/></li>
         <li>Now you can delete the Competition Page!</li>
-				<li>TODO- Update Comps table</li>
+				<li><input type="submit" name="bblm_comp_comptbl" value="Update Competition Table" title="Update the Competition Table"/></li>
 				<li>TODO- Update: matches, comp_brackets </li>
       </ul>
 
