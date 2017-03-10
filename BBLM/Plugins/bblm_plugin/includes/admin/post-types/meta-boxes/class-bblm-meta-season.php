@@ -26,11 +26,11 @@ class BBLM_Meta_Season {
 
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_meta_boxes' ),  10, 2 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_stadium_date_picker' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_date_picker' ) );
 
 	}
 
-	public function add_stadium_date_picker( $hook_suffix ) {
+	public function add_date_picker( $hook_suffix ) {
 		$cpt = 'bblm_season';
 
 		if( in_array( $hook_suffix, array('post.php', 'post-new.php') ) ) {
@@ -90,7 +90,14 @@ class BBLM_Meta_Season {
 </script>
 <div class="field">
 		<p><label for="season_sdate">Start Date: </label><br><input type="text" class="custom_date" name="season_sdate" value="<?php echo $sdate; ?>"/></p>
+<?php
+		if ( "0000-00-00" !== $fdate ) {
+			//Only allow the seasons end date to be displayed if the season is over
+?>
 		<p><label for="season_fdate">End Date: </label><br><input type="text" class="custom_date" name="season_fdate" value="<?php echo $fdate; ?>"/></p>
+<?php
+		}
+?>
 </div>
 <?php
 
