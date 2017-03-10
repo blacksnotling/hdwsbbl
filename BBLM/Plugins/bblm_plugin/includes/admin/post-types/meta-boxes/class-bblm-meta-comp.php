@@ -26,11 +26,11 @@ class BBLM_Meta_Comp {
 
     add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_meta_boxes' ),  10, 2 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_stadium_date_picker' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_date_picker' ) );
 
 	}
 
-	public function add_stadium_date_picker( $hook_suffix ) {
+	public function add_date_picker( $hook_suffix ) {
 		$cpt = 'bblm_comp';
 
 		if( in_array( $hook_suffix, array('post.php', 'post-new.php') ) ) {
@@ -47,7 +47,6 @@ class BBLM_Meta_Comp {
 			}
 
 		}
-
 
 	}
 
@@ -288,7 +287,7 @@ class BBLM_Meta_Comp {
 <?php
  		}
 		else {
-			//otherwise hide the end date field so it cannot be "closed" manually
+			//otherwise hide the option so it can only be changed once the competition is set
 ?>
 		<input type="hidden" name="comp_showstandings" value="0"/>
 <?php
@@ -350,7 +349,6 @@ class BBLM_Meta_Comp {
 
 		}
 
-
  	}
 
 /**
@@ -365,14 +363,10 @@ class BBLM_Meta_Comp {
 
 		$wpdb->query( $bblmdatasql );
 
-
-
-
-
 	}
 
 /**
-	* Add a new COmpetition to the Database
+	* Add a new Competition to the Database
 	*
 	*/
 	function update_competition( $post_id, $meta ) {
@@ -384,8 +378,6 @@ class BBLM_Meta_Comp {
 	 	$wpdb->query( $updatesql );
 
  }
-
-
 
 }
 new BBLM_Meta_Comp();
