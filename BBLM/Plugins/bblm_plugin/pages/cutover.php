@@ -350,7 +350,7 @@ if (isset($_POST['bblm_cup_comp'])) {
 		     */
 		    if (isset($_POST['bblm_comp_compcpt'])) {
 
-		      $comppostsql = "SELECT P.ID, R.ct_id, R.c_active FROM ".$wpdb->prefix."comp R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_' ORDER BY P.ID ASC";
+		      $comppostsql = "SELECT P.ID, R.ct_id, R.c_active, R.sea_id FROM ".$wpdb->prefix."comp R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_' ORDER BY P.ID ASC";
 		        if ($stadposts = $wpdb->get_results($comppostsql)) {
 							//Define the array to handle the competition types
 							$comptypes = array(
@@ -381,6 +381,7 @@ if (isset($_POST['bblm_cup_comp'])) {
 		              if ( ! $stad->c_active ) {
 		                add_post_meta( $stad->ID, 'comp_complete', '1', true );
 		              }
+									add_post_meta( $stad->ID, 'comp_season', $stad->sea_id, true );
 		            }
 		            else {
 		              $result = false;
@@ -396,7 +397,7 @@ if (isset($_POST['bblm_cup_comp'])) {
 		    } //end of if (isset($_POST['bblm_comp_compcpt']))
 				/**
 	       *
-	       * UPDATING race2star TABLE FOR THE NEW Race IDs
+	       * UPDATING competitions TABLE FOR THE NEW Comps IDs
 	       */
 	      if (isset($_POST['bblm_comp_comptbl'])) {
 
@@ -437,7 +438,7 @@ if (isset($_POST['bblm_cup_comp'])) {
      */
 ?>
 
-  <p>This screen should only be used when performing the cutover. Use eachn option <strong>only once</strong>.</p>
+  <p>This screen should only be used when performing the cutover. Use each option <strong>only once</strong>.</p>
 
   <form name="bblm_cutovermain" method="post" id="post">
     <h3>Stadiums</h3>
@@ -489,7 +490,7 @@ if (isset($_POST['bblm_cup_comp'])) {
     <h3>Did You Know</h3>
     <ul>
       <li>Delete the Did You Know Page</li>
-      <li>Import the existing DiD Yopu Knows - there is a refere3nce availible here: -TODO!-</li>
+      <li>Import the existing DiD Yopu Knows - there is a reference availible here: -TODO!-</li>
     </ul>
 
     <h3>Next Steps</h3>

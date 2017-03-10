@@ -58,7 +58,8 @@ class BBLM_Admin_CPT_Season {
       /* If displaying the 'competition' column. */
       case 'competition' :
 
-        echo 'View Comps';
+        echo '<a href="'.admin_url().'edit.php?s&post_status=all&post_type=bblm_comp&action=-1&m=0&bblm_comp_filter_status&bblm_comp_filter_season='.$post->ID.'&filter_action=Filter&paged=1&action2=-1">View Competions</a>';
+
 
       break;
 
