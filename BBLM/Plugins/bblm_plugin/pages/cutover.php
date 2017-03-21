@@ -308,7 +308,36 @@ if (isset($_POST['bblm_cup_comp'])) {
           }
         }//end of if sql was successful
 
-    } // end of if (isset($_POST['bblm_race_positions'])) {
+    } // end of if (isset($_POST['bblm_race_teams'])) {
+			/**
+	     *
+	     * UPDATING Teams TABLE FOR THE NEW Race IDs
+	     */
+	    if (isset($_POST['bblm_race_teams'])) {
+
+	      $teampostsql = "SELECT T.r_id, T.t_id, T.tID, P.ID FROM ".$wpdb->prefix."team T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_'";
+	        if ($teamposts = $wpdb->get_results($teampostsql)) {
+//	          echo '<ul>';
+	          foreach ($teamposts as $stad) {
+	            $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `r_id` = '".$stad->ID."' WHERE t_id = '".$stad->t_id."';";
+//	            print("<li>".$stad->t_id." = ".$stad->r_id." -> ".$stad->ID."</li>");
+//	            print("<li>".$stadupdatesql."</li>");
+
+	            if ( $wpdb->query($stadupdatesql) ) {
+					      $result = true;
+	            }
+	            else {
+	              $result = false;
+	            }
+
+	          } //end of foreach
+//	          echo '</ul>';
+	          if ( $result ) {
+	            print("<div id=\"updated\" class=\"updated fade\"><p>Teams table updated with the new Races!</p></div>\n");
+	          }
+	        }//end of if sql was successful
+
+	    } // end of if (isset($_POST['bblm_race_teams'])) {
 
       /**
        *
@@ -499,6 +528,33 @@ if (isset($_POST['bblm_cup_comp'])) {
 	          }//end of if sql was successful
 
 	      } // end of if (isset($_POST['bblm_team_teamtbl'])) {
+					/**
+					 *
+					 * UPDATING players TABLE FOR THE NEW teams IDs
+					 */
+					if (isset($_POST['bblm_team_playertbl'])) {
+
+					  $teampostsql = "SELECT T.p_id, T.t_id, P.ID FROM ".$wpdb->prefix."player T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_'";
+					    if ($teamposts = $wpdb->get_results($teampostsql)) {
+		//			      echo '<ul>';
+					      foreach ($teamposts as $stad) {
+					        $stadupdatesql = "UPDATE `".$wpdb->prefix."player` SET `t_id` = '".$stad->ID."' WHERE `p_id` = $stad->p_id;";
+	//				        print("<li>".$stadupdatesql."</li>");
+					        if ( $wpdb->query($stadupdatesql) ) {
+					          $result = true;
+					        }
+					        else {
+					          $result = false;
+					        }
+
+					      } //end of foreach
+//					      echo '</ul>';
+					      if ( $result ) {
+					        print("<div id=\"updated\" class=\"updated fade\"><p>Players table updated with the new teams!</p></div>\n");
+					      }
+					    }//end of if sql was successful
+
+					} // end of if (isset($_POST['bblm_team_playertbl'])) {
 
 				/****
 				* END OF TEAMS
@@ -575,7 +631,7 @@ if (isset($_POST['bblm_cup_comp'])) {
 		    } //end of if (isset($_POST['bblm_team_rostercpt']))
 				/**
 	       *
-	       * UPDATING Player TABLE FOR THE NEW team IDs
+	       * UPDATING Player TABLE FOR THE NEW player IDs
 	       */
 	      if (isset($_POST['bblm_team_playertbl'])) {
 
@@ -600,8 +656,6 @@ if (isset($_POST['bblm_cup_comp'])) {
 	          }//end of if sql was successful
 
 	      } // end of if (isset($_POST['bblm_team_playertbl'])) {
-
-
 
 				/****
 				* END OF PLAYERS AND ROSTERS
@@ -652,6 +706,8 @@ if (isset($_POST['bblm_cup_comp'])) {
         <li>Now you can delete the Races Page!</li>
         <li><input type="submit" name="bblm_race_positions" value="Update Races in Positions" title="Update Races in Positions Table"/></li>
         <li><input type="submit" name="bblm_race_race2star" value="Update Races in Race2star" title="Update Races in Race2star Table"/></li>
+				<li><input type="submit" name="bblm_race_teams" value="Update Races in Teams" title="Update Teams in Race2star Table"/></li>
+
       </ul>
 
 			<h3>Competitions</h3>
@@ -662,7 +718,6 @@ if (isset($_POST['bblm_cup_comp'])) {
         <li><input type="submit" name="bblm_comp_compcpt" value="Convert Competition Post Types" title="Convert the Competition Post Types"/></li>
         <li>Now you can delete the Competition Page!</li>
 				<li><input type="submit" name="bblm_comp_comptbl" value="Update Competition Table" title="Update the Competition Table"/></li>
-				<li>TODO- Update: matches, comp_brackets </li>
       </ul>
 
 			<h3>Teams</h3>
@@ -672,14 +727,26 @@ if (isset($_POST['bblm_cup_comp'])) {
         <li><input type="submit" name="bblm_team_teamcpt" value="Convert Team Post Types" title="Convert the Team Post Types"/></li>
 				<li>Now you can delete the Teams Page!</li>
 				<li><input type="submit" name="bblm_team_teamtbl" value="Update Team Table" title="Update the Team Table"/></li>
+				<li><input type="submit" name="bblm_team_playertbl" value="Update Player Table" title="Update the Player Table"/></li>
 			</ul>
 
 			<h3>Players and Rosters</h3>
-			<li>Add a new column ID (bigingt 20 - index on) to the *player DB table</li>
-			<li><input type="submit" name="bblm_team_playercpt" value="Convert Player Post Types" title="Convert the Player Post Types"/></li>
-			<li><input type="submit" name="bblm_team_rostercpt" value="Convert Roster Post Types" title="Convert the Roster Post Types"/></li>
-			<li><input type="submit" name="bblm_team_playertbl" value="Update Player Table" title="Update the Player Table"/></li>
 			<ul>
+				<li>Add a new column ID (bigingt 20 - index on) to the *player DB table</li>
+				<li><input type="submit" name="bblm_team_playercpt" value="Convert Player Post Types" title="Convert the Player Post Types"/></li>
+				<li><input type="submit" name="bblm_team_rostercpt" value="Convert Roster Post Types" title="Convert the Roster Post Types"/></li>
+				<li><input type="submit" name="bblm_team_playertbl" value="Update Player Table" title="Update the Player Table"/></li>
+			</ul>
+
+		</ul>
+			<li><input type="submit" name="bblm_team_delme" value="ignore me" title="ignore me"/></li>
+		</ul>
+
+			</ul>
+				<li>TODO- Update: Competitions in matches, comp_brackets </li>
+				<li>TODO- Update: Teams in team_comp, matches </li>
+				<li>TODO- Update: Players in player_match</li>
+				<li>TODO- AWARDS!!!!!!</li>
 			</ul>
 
     <h3>Did You Know</h3>
