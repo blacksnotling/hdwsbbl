@@ -173,6 +173,14 @@ class BBLM_Settings_Admin {
             'type' => 'textarea',
             'helper' => __( 'Text entered here appears at the top of the Competitions page', 'bblm' ),
           ),
+					array(
+            'uid' => 'archive_team_text',
+            'label' => __( 'Team Page Text', 'bblm' ),
+            'section' => 'second_section',
+            'placeholder' => 'Enter a description here',
+            'type' => 'textarea',
+            'helper' => __( 'Text entered here appears at the top of the Teams page', 'bblm' ),
+          ),
           array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),

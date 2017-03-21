@@ -425,12 +425,190 @@ if (isset($_POST['bblm_cup_comp'])) {
 	      } // end of if (isset($_POST['bblm_comp_comptbl'])) {
 
 
-
 				/****
 				* END OF Competitions
 				*
+				* START OF TEAMS
+				*/
+				/**
+		     *
+		     * UPDATING WP Posts TABLE FOR THE NEW Team CPT
+		     */
+		    if (isset($_POST['bblm_team_teamcpt'])) {
+
+		      $cuppostsql = "SELECT P.ID, R.r_id, R.t_id, R.t_show, R.t_active FROM ".$wpdb->prefix."team R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_' ORDER BY P.ID ASC";
+		        if ($stadposts = $wpdb->get_results($cuppostsql)) {
+//		          echo '<ul>';
+		          foreach ($stadposts as $stad) {
+		            $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_team' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+/*		            print("<li>".$stadupdatesql."</li>");
+		            print("<li>Meta -> '".$stad->ID."', 'team_race', '".$stad->r_id."'</li>");
+		            if ( ! $stad->t_show ) {
+		              print("<li>Meta -> '".$stad->ID."', 'team_hide', '1'</li>");
+		            }
+								if ( ! $stad->t_active ) {
+		              print("<li>Meta -> '".$stad->ID."', 'team_retired', '1'</li>");
+		            }
+*/		            if ( $wpdb->query($stadupdatesql) ) {
+		              $result = true;
+		              add_post_meta( $stad->ID, 'team_race', $stad->r_id, true );
+		              if ( ! $stad->t_show ) {
+		                add_post_meta( $stad->ID, 'team_hide', '1', true );
+		              }
+									if ( ! $stad->t_active ) {
+		                add_post_meta( $stad->ID, 'team_retired', '1', true );
+		              }
+		            }
+		            else {
+		              $result = false;
+		            }
+
+		          } //end of foreach
+//		          echo '</ul>';
+		          if ( $result ) {
+		            print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Team CPT! <strong>Now you can delete the team page!</strong></p></div>\n");
+		          }
+		        }//end of if sql was successful
+
+		    } //end of if (isset($_POST['bblm_team_teamcpt']))
+
+				/**
+	       *
+	       * UPDATING teams TABLE FOR THE NEW team IDs
+	       */
+	      if (isset($_POST['bblm_team_teamtbl'])) {
+
+	        $teampostsql = "SELECT T.t_id, P.ID FROM ".$wpdb->prefix."team T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_'";
+	          if ($teamposts = $wpdb->get_results($teampostsql)) {
+//	            echo '<ul>';
+	            foreach ($teamposts as $stad) {
+	              $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `tID` = '".$stad->ID."' WHERE t_id = ".$stad->t_id.";";
+	//              print("<li>".$stadupdatesql."</li>");
+	              if ( $wpdb->query($stadupdatesql) ) {
+	                $result = true;
+	              }
+	              else {
+	                $result = false;
+	              }
+
+	            } //end of foreach
+//	            echo '</ul>';
+	            if ( $result ) {
+	              print("<div id=\"updated\" class=\"updated fade\"><p>The Teams table updated with the WP IDs!</p></div>\n");
+	            }
+	          }//end of if sql was successful
+
+	      } // end of if (isset($_POST['bblm_team_teamtbl'])) {
+
+				/****
+				* END OF TEAMS
+				*
+				* START OF PLAYERS and ROSTERS
+				*/
+				/**
+		     *
+		     * UPDATING WP Posts TABLE FOR THE NEW Player CPT
+		     */
+		    if (isset($_POST['bblm_team_playercpt'])) {
+
+		      $cuppostsql = "SELECT P.ID, R.p_id, R.t_id, R.p_status FROM ".$wpdb->prefix."player R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.p_id = J.tid AND P.ID = J.pid and J.prefix = 'p_' ORDER BY P.ID ASC";
+		        if ($stadposts = $wpdb->get_results($cuppostsql)) {
+//		          echo '<ul>';
+		          foreach ($stadposts as $stad) {
+		            $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_type` = 'bblm_player' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+//								print("<li>".$stadupdatesql."</li>");
+//		            print("<li>Meta -> '".$stad->ID."', 'player_team', '".$stad->t_id."'</li>");
+/*		            if ( 52 == $stad->t_id ) {
+		              print("<li>Meta -> '".$stad->ID."', 'player_star', '1'</li>");
+		            }
+								if ( ! $stad->p_status ) {
+		              print("<li>Meta -> '".$stad->ID."', 'player_retired', '1'</li>");
+		            }
+*/	            if ( $wpdb->query($stadupdatesql) ) {
+		              $result = true;
+		              add_post_meta( $stad->ID, 'player_team', $stad->t_id, true );
+		              if ( 52 == $stad->t_id ) {
+		                add_post_meta( $stad->ID, 'player_star', '1', true );
+		              }
+									if ( ! $stad->p_status ) {
+		                add_post_meta( $stad->ID, 'player_retired', '1', true );
+		              }
+		            }
+		            else {
+		              $result = false;
+		            }
+
+		          } //end of foreach
+//		          echo '</ul>';
+		          if ( $result ) {
+		            print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Player CPT!</p></div>\n");
+		          }
+		        }//end of if sql was successful
+
+		    } //end of if (isset($_POST['bblm_team_playercpt']))
+				/**
+		     *
+		     * UPDATING WP Posts TABLE FOR THE NEW ROSTER CPT
+		     */
+		    if (isset($_POST['bblm_team_rostercpt'])) {
+
+		      $cuppostsql = "SELECT T.t_id, P.ID FROM ".$wpdb->prefix."team T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.t_id = J.tid AND P.ID = J.pid and J.prefix = 'roster'";
+		        if ($stadposts = $wpdb->get_results($cuppostsql)) {
+//		          echo '<ul>';
+		          foreach ($stadposts as $stad) {
+		            $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_type` = 'bblm_roster' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+//								print("<li>".$stadupdatesql."</li>");
+	            if ( $wpdb->query($stadupdatesql) ) {
+		              $result = true;
+		            }
+		            else {
+		              $result = false;
+		            }
+
+		          } //end of foreach
+//		          echo '</ul>';
+		          if ( $result ) {
+		            print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Roster CPT!</p></div>\n");
+		          }
+		        }//end of if sql was successful
+
+		    } //end of if (isset($_POST['bblm_team_rostercpt']))
+				/**
+	       *
+	       * UPDATING Player TABLE FOR THE NEW team IDs
+	       */
+	      if (isset($_POST['bblm_team_playertbl'])) {
+
+	        $teampostsql = "SELECT T.p_id, P.ID FROM ".$wpdb->prefix."player T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.p_id = J.tid AND P.ID = J.pid and J.prefix = 'p_'";
+	          if ($teamposts = $wpdb->get_results($teampostsql)) {
+//	            echo '<ul>';
+	            foreach ($teamposts as $stad) {
+	              $stadupdatesql = "UPDATE `".$wpdb->prefix."player` SET `ID` = '".$stad->ID."' WHERE p_id = ".$stad->p_id.";";
+	//              print("<li>".$stadupdatesql."</li>");
+	              if ( $wpdb->query($stadupdatesql) ) {
+	                $result = true;
+	              }
+	              else {
+	                $result = false;
+	              }
+
+	            } //end of foreach
+//	            echo '</ul>';
+	            if ( $result ) {
+	              print("<div id=\"updated\" class=\"updated fade\"><p>The Player table updated with the WP IDs!</p></div>\n");
+	            }
+	          }//end of if sql was successful
+
+	      } // end of if (isset($_POST['bblm_team_playertbl'])) {
+
+
+
+				/****
+				* END OF PLAYERS AND ROSTERS
+				*
 				* START OF ?
 				*/
+
 
     /**
      *
@@ -486,6 +664,23 @@ if (isset($_POST['bblm_cup_comp'])) {
 				<li><input type="submit" name="bblm_comp_comptbl" value="Update Competition Table" title="Update the Competition Table"/></li>
 				<li>TODO- Update: matches, comp_brackets </li>
       </ul>
+
+			<h3>Teams</h3>
+			<ul>
+				<li>First take a copy of the text at the top of the Teams page.</li>
+				<li>Add a new column tID (bigingt 20 - index on) to the *team DB table</lI>
+        <li><input type="submit" name="bblm_team_teamcpt" value="Convert Team Post Types" title="Convert the Team Post Types"/></li>
+				<li>Now you can delete the Teams Page!</li>
+				<li><input type="submit" name="bblm_team_teamtbl" value="Update Team Table" title="Update the Team Table"/></li>
+			</ul>
+
+			<h3>Players and Rosters</h3>
+			<li>Add a new column ID (bigingt 20 - index on) to the *player DB table</li>
+			<li><input type="submit" name="bblm_team_playercpt" value="Convert Player Post Types" title="Convert the Player Post Types"/></li>
+			<li><input type="submit" name="bblm_team_rostercpt" value="Convert Roster Post Types" title="Convert the Roster Post Types"/></li>
+			<li><input type="submit" name="bblm_team_playertbl" value="Update Player Table" title="Update the Player Table"/></li>
+			<ul>
+			</ul>
 
     <h3>Did You Know</h3>
     <ul>

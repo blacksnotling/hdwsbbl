@@ -205,6 +205,93 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Competitions
+		register_post_type( 'bblm_team',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Teams', 'bblm' ),
+					'singular_name' 		=> __( 'Team', 'bblm' ),
+					'add_new_item' 			=> __( 'New Team', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Team', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Team', 'bblm' ),
+					'view_items' 			=> __( 'View Teams', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Teams found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Teams found.', 'bblm' ),
+					'all_items' 			=> __( 'Teams', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> true,
+				'rewrite' 				=> array( 'slug' => 'teams' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+        'menu_icon' 			=> 'dashicons-clipboard',
+        'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Competitions
+		register_post_type( 'bblm_player',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Players', 'bblm' ),
+					'singular_name' 		=> __( 'Player', 'bblm' ),
+					'add_new_item' 			=> __( 'New Player', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Player', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Player', 'bblm' ),
+					'view_items' 			=> __( 'View Players', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Players found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Players found.', 'bblm' ),
+					'all_items' 			=> __( 'Players', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false,
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'players'  ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'menu_icon' 			=> 'dashicons-universal-access',
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Players
+		register_post_type( 'bblm_roster',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Rosters', 'bblm' ),
+					'singular_name' 		=> __( 'Roster', 'bblm' ),
+					'add_new_item' 			=> __( 'New Roster', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Rostrer', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Roster', 'bblm' ),
+					'view_items' 			=> __( 'View Rosters', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Rosters found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Rosters found.', 'bblm' ),
+					'all_items' 			=> __( 'Rosters', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'rosters' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'menu_icon' 			=> 'dashicons-nametag',
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Rosters
 	}
 
 /**
