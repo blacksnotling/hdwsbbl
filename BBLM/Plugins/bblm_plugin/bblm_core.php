@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: BloodBowl League Manager for the HDWSBBL
-Version: 20170321
+Version: 20170418
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -303,7 +303,7 @@ final class BBowlLeagueMan {
 		// Add image sizes
 		add_image_size( 'bblm-crop-medium',  300, 300, true );
 		add_image_size( 'bblm-fit-medium',  300, 300, false );
-		add_image_size( 'bblm-fit-icon',  128, 128, false );
+		add_image_size( 'bblm-fit-icon',  158, 158, false );
 		add_image_size( 'bblm-fit-mini',  32, 32, false );
 	}
 
