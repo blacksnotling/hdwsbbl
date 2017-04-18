@@ -169,7 +169,7 @@ class BBLM_Post_types {
 				'exclude_from_search' 	=> false,
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'races' ),
-				'supports' 				=> array( 'title', 'editor'),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail'),
 				'has_archive' 			=> true,
 				'show_in_nav_menus' 	=> true,
         'menu_icon' 			=> 'dashicons-universal-access-alt',

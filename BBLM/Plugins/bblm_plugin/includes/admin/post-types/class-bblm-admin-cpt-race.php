@@ -37,6 +37,7 @@ class BBLM_Admin_CPT_Race {
   function my_edit_columns( $columns ) {
 
   	$columns = array(
+			'picture' => __( 'Logo', 'bblm' ),
   		'cb' => '<input type="checkbox" />',
   		'title' => __( 'Race Name', 'bblm' ),
   		'cost' => __( 'ReRoll Cost', 'bblm' ),
@@ -53,7 +54,14 @@ class BBLM_Admin_CPT_Race {
   function my_manage_columns( $column, $post_id ) {
   	global $post;
 
-    switch( $column ) {
+		switch( $column ) {
+
+			// If displaying the 'picture' column.
+      case 'picture' :
+
+        the_post_thumbnail( 'bblm-fit-icon');
+
+      break;
 
       // If displaying the 'cost' column.
       case 'cost' :
