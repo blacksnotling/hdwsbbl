@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.player.php
-*	Description: the core edit player screen
-*/
+/**
+ * BBowlLeagueMan Edit Player Admin page
+ *
+ * The core edit player screen.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -813,7 +818,7 @@ else {
 ?>
 <form name="bblm_playeroptions" method="post" id="post">
 	<input type="hidden" name="bblm_tid" size="3" value="<?php print($tid); ?>">
-	<p>Below are all the players on this team. Please select one of the options below to continue with your request.</p>
+	<p>Below are all the players on this team. Please select one of the options below.</p>
 
 <?php
   /////////////////////////
@@ -836,7 +841,7 @@ else {
 				print("		   <td>".$p->p_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$p->ID."\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
+				print("/wp-admin/post.php?post=".$p->ID."&action=edit\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
 
 				print("							<td><a href=\"");
 				bloginfo('url');

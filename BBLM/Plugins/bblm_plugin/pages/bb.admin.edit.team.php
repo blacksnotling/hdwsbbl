@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.team.php
-*	Description: the main page used to edit a team
-*/
+/**
+ * BBowlLeagueMan Edit Team Admin page
+ *
+ * Main page used to edit teams.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -302,7 +307,7 @@ else {
 				print("		   <td>".$t->t_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$t->ID."\">".$t->post_title."</a> - ".$t->r_name."</td>\n");
+				print("/wp-admin/post.php?post=".$t->ID."&action=edit\">".$t->post_title."</a> - ".$t->r_name."</td>\n");
 
 				print("							<td><a href=\"");
 				bloginfo('url');

@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.match.php
-*	Description: Link page to add.edit match reports, coachs comments and match trivia.
-*/
+/**
+ * BBowlLeagueMan Edit Match Admin page
+ *
+ * Link page to add/edit match reports, coachs comments, and match trivia.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 ?>
 <div class="wrap">
 	<h2>Edit Matches</h2>
@@ -187,7 +192,7 @@ if (isset($_POST['bblm_comment_edit'])) {
 				print("		   <td>".$m->m_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$m->ID."\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".$m->c_name." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
+				print("/wp-admin/post.php?post=".$m->ID."&action=edit\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".$m->c_name." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
 
 				print("<td><a href=\"");
 				bloginfo('url');

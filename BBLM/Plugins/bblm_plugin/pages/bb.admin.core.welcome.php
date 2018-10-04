@@ -1,6 +1,6 @@
 <?php
 /**
- * BBowlLeagueMan Common Functions
+ * BBowlLeagueMan Welcome Menu Page
  *
  * A generic welcome page to the BBLM section of the admin section.
  *
