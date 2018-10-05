@@ -1,17 +1,14 @@
 /*
 Theme Name: Oberwald
-Theme URI: http://www.hdwsbbl.co.uk
+Theme URI: https://github.com/blacksnotling/HDWSBBL-Themes
 Description: Custom Theme for the HDWSBBL. Named after the greatest Star Player of all time.
-Version: 1.1.1
-Author: Blacksnotling
-Author URI: http://dev.hdwsbbl.co.uk
+Version: 20181005
+Author: The HDWSBBL
+Author URI: https://github.com/blacksnotling
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, two-columns, right-sidebar, custom-menu, threaded-comments, blog
 Text Domain: oberwald
-
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
 */
 /***** Layout and positioning *****/
 html * {
