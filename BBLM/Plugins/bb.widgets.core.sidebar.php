@@ -26,8 +26,6 @@ function widget_bblm_listcomps_init() {
 		//Just print out the before_widget bit. note we are skipping the normal title part
 		echo $before_widget;
 
-		$url_parts = parse_url(get_bloginfo('url'));
-
 		//meaty content goes here!
 		//determine current Season
 		$seasonsql = 'SELECT S.sea_id FROM '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID AND S.sea_active = 1 ORDER BY S.sea_sdate DESC LIMIT 1';
@@ -127,9 +125,6 @@ function widget_bblm_othertopics_init() {
 		// but as you can see here, they can also be very, very simple.
 
 		echo $before_widget . $before_title . $title . $after_title;
-
-
-		$url_parts = parse_url(get_bloginfo('url')); ?>
 
  		<ul>
 		<?php
