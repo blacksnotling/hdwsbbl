@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Cup
+ *
+ * Page Template to view a Championship Cup details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Cup
-*/
-/*
-*	Filename: bb.view.cup.php
-*	Description: .Page template to display details of a championship cup
-*/
+ * Template Name: View Cup
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -235,7 +240,7 @@ Template Name: View Cup
 							print("</table>\n");
 						}
 						else {
-							print("	<div class=\"info\">\n		<p>".$tpa[error]."</p>\n	</div>\n");
+							print("	<div class=\"info\">\n		<p>".$tpa[ 'error' ]."</p>\n	</div>\n");
 						}
 					}
 				//==================

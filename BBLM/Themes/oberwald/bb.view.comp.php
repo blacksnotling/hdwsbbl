@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Competition
+ *
+ * Page Template to view a competitions details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Competition
-*/
-/*
-*	Filename: bb.view.comp.php
-*	Description: Page template to view a competitions details.
-*/
+ * Template Name: View Competition
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -491,7 +496,7 @@ Template Name: View Competition
 						print("</table>\n");
 					}
 					else {
-						print("	<div class=\"info\">\n		<p>".$tpa[error]."</p>\n	</div>\n");
+						print("	<div class=\"info\">\n		<p>".$tpa[ 'error' ]."</p>\n	</div>\n");
 					}
 				}
 
