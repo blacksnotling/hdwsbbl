@@ -4,7 +4,7 @@ Plugin Name: bblm_sidebar widgits
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Provides a list of "other pages" and cutom "topic/cat listing"
 Author: Blacksnotling
-Version: 1.1.1
+Version: 1.2
 Author URI: http://www.blacksnotling.com/
 */
 
@@ -97,92 +97,6 @@ function widget_bblm_listcomps_init() {
 	);
 }
 
-  /////////////////////////
- // Other Topics Widgit //
-/////////////////////////
-
-// Put functions into one big function we'll call at the plugins_loaded
-// action. This ensures that all required plugin functions are defined.
-function widget_bblm_othertopics_init() {
-
-	// Check for the required plugin functions. This will prevent fatal
-	// errors occurring when you deactivate the dynamic-sidebar plugin.
-	if ( !function_exists('wp_register_sidebar_widget') )
-		return;
-	// This is the function that outputs our little widgit.
-	function widget_bblm_othertopics($args) {
-
-		// $args is an array of strings that help widgets to conform to
-		// the active theme: before_widget, before_title, after_widget,
-		// and after_title are the array keys. Default tags: li and h2.
-		extract($args);
-		// Each widget can store its own options. We keep strings here.
-		$options = get_option('widget_bblm_othertopics');
-		$title = $options['title'];
-		$topics = $options['topics'];
-
-		// These lines generate our output. Widgets can be very complex
-		// but as you can see here, they can also be very, very simple.
-
-		echo $before_widget . $before_title . $title . $after_title;
-
- 		<ul>
-		<?php
-		wp_list_pages('sort_column=menu_order&title_li=&include='.$topics ); ?>
-		</ul>
-
-
-		<?php
-		echo $after_widget;
-	}
-
-	// This is the function that outputs the form to let the users edit
-	function widget_bblm_othertopics_control() {
-
-		// Get our options and see if we're handling a form submission.
-		$options = get_option('widget_bblm_othertopics');
-		if ( !is_array($options) )
-			$options = array('title'=>'', 'topics'=>'');
-		if ( $_POST['bblm_ot-submit'] ) {
-
-			// Remember to sanitize and format use input appropriately.
-			$options['title'] = strip_tags(stripslashes($_POST['bblm_ot-title']));
-			$options['topics'] = strip_tags(stripslashes($_POST['bblm_ot-topics']));
-			update_option('widget_bblm_othertopics', $options);
-		}
-
-		// Be sure you format your options to be valid HTML attributes.
-		$title = htmlspecialchars($options['title'], ENT_QUOTES);
-		$topics = htmlspecialchars($options['topics'], ENT_QUOTES);
-
-		// Here is our little form segment. Notice that we don't need a
-		// complete form. This will be embedded into the existing form.
-				echo '<p style="text-align:right;"><label for="bblm_ot-title">' . __('Title:') . ' <input style="width: 200px;" id="bblm_ot-title" name="bblm_ot-title" type="text" value="'.$title.'" /></label></p>';
-		echo '<p style="text-align:right;"><label for="bblm_ot-topics">' . __('Show Pages:') . ' <input style="width: 200px;" id="bblm_ot-topics" name="bblm_ot-topics" type="text" value="'.$topics.'"/></label></p>';
-				echo '<input type="hidden" id="bblm_ot-submit" name="bblm_ot-submit" value="1" />';
-	}
-
-	// This registers our widget so it appears with the other available
-	// widgets and can be dragged and dropped into any active sidebars.
-	wp_register_sidebar_widget(
-		'bblm_Pages',				// your unique widget id
-		'bblm_Pages',				// widget name
-		'widget_bblm_othertopics',	// callback function to display widget
-		array(						 // options
-			'description' => 'Lists related pages to the league'
-		)
-	);
-
-	// This registers our optional widget control form. Because of this
-	// our widget will have a button that reveals a 300x100 pixel form.
-	wp_register_widget_control(
-		'bblm_Pages',						// id
-		'bblm_Pages',						// name
-		'widget_bblm_othertopics_control'	// callback function
-	);
-}
-
-
   ///////////////////////////
  // Restricted Cat Widgit //
 ///////////////////////////
@@ -264,7 +178,6 @@ function widget_bblm_restricted_cat_init() {
 
 
 // Run our code later in case this loads prior to any required plugins.
-add_action('widgets_init', 'widget_bblm_othertopics_init');
 add_action('widgets_init', 'widget_bblm_restricted_cat_init');
 add_action('widgets_init', 'widget_bblm_listcomps_init');
 
