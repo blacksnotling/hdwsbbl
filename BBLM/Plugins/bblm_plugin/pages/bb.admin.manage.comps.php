@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.manage.comps.php
-*	Description: Management page for Competitions
-*/
+/**
+ * BBowlLeagueMan Manage Competitions Admin page
+ *
+ * Management page for all competitions
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -263,7 +268,7 @@ else {
 			}
 ?>
 			<td><?php print($c->c_id); ?></td>
-			<td><a href="<?php print(bloginfo('url')); ?>/wp-admin/page.php?action=edit&post=<?php print($c->ID); ?>" title="Edit the description of <?php print($c->post_title); ?>"><?php print($c->post_title); ?></a></td>
+			<td><a href="<?php print(bloginfo('url')); ?>/wp-admin/post.php?post=<?php print($c->ID); ?>&action=edit" title="Edit the description of <?php print($c->post_title); ?>"><?php print($c->post_title); ?></a></td>
 			<td><a href="<?php print(bloginfo('url')); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php&action=edit&item=comp&id=<?php print($c->c_id); ?>" title="Edit the Settings of <?php print($c->post_title); ?>">Edit Settings</a></td>
 			<td>Edit / Add Teams</td>
 <?php
