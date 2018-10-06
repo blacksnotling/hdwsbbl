@@ -13,10 +13,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Record a match</h2>
-	<p>Use the following page to record the details of a match that took place in the league.</p>
+	<p>Use the following page to record the details of a match that took place in the League.</p>
 
 	<?php
-	if (isset($_POST['bblm_match_add'])) {
+	if ( isset( $_POST[ 'bblm_match_add' ] ) ) {
 
 		$bblm_safe_input = array();
 
@@ -57,9 +57,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		$bblm_safe_input['tBwin'] = $_POST['tBwin'];
 		$bblm_safe_input['tAff'] = $_POST['tAff'];
 		$bblm_safe_input['tBff'] = $_POST['tBff'];
-		//	$bblm_safe_input['tAres'] = $_POST['teamAres']; //no longer used
-		//	$bblm_safe_input['tBres'] = $_POST['teamBres']; //no longer used
-
 
 		/*
 		-- Obtain Team Information --
@@ -96,13 +93,13 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		-- Generate WP Page information --
 		*/
 		//get page # for parent from DB
-		$options = get_option('bblm_config');
-		$bblm_page_match = htmlspecialchars($options['page_match'], ENT_QUOTES);
+		$options = get_option( 'bblm_config' );
+		$bblm_page_match = htmlspecialchars( $options[ 'page_match' ], ENT_QUOTES );
 
 		//Filter trivia and generate
 		$bblm_removable = array("<pre>","</pre>","<p>","&nbsp;");
 		$bblm_trivia_content = $bblm_safe_input['mtrivia'];
-		$bblm_trivia_content = str_replace($bblm_removable,"",$bblm_trivia_content);
+		$bblm_trivia_content = str_replace( $bblm_removable,"",$bblm_trivia_content );
 		$bblm_trivia_content = str_replace("</p>","\n\n",$bblm_trivia_content);
 
 		$bblm_page_content = "No Report Filed Yet";
@@ -110,6 +107,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		//sanitise page title
 		$bblm_page_title = $teamA['name']." vs ".$teamB['name'];
 		$bblm_page_title = $wpdb->escape($bblm_page_title);
+
+		/*
+		 * Generate match and team record
+		 */
 
 		/*
 		-- Generate stat totals --
@@ -315,24 +316,13 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	//////////////////////////////////
 	//  Main Stage - Match Details  //
 	//////////////////////////////////
-	if(isset($_POST['bblm_matchcomp_select'])) {
+	//If a match has been selected
+	if ( isset( $_POST[ 'bblm_matchcomp_select' ] ) ) {
 		//actual page content goes here.
 
 		//  Common elements of form  //
 		?>
 		<form name="bblm_editcompteam" method="post" id="post">
-			<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-			<script type="text/javascript">
-			<!--
-			tinyMCE.init({
-				theme : "advanced",
-				mode : "exact",
-				elements : "matchtrivia",
-				width : "565",
-				height : "200"
-			});
-			-->
-			</script>
 
 			<h3>Enter match details</h3>
 			<fieldset>
@@ -340,291 +330,320 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 				<?php
 				$f_id = $_POST['bblm_fid'];
 
+				//Check to see if a fixture was submitted, or a blank match
 				if ("F" == $_POST['bblm_mtype']) {
+
 					$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, F.c_id, D.div_name, D.div_id, T.t_name AS TA, R.t_name AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
-					if ($fixturedt = $wpdb->get_results($fixturedetailsql)) {
+
+					if ($fixturedt = $wpdb->get_results($fixturedetailsql)) { //check the fixture exists
+
 						foreach ($fixturedt as $fd) {
 							$comp_name = $fd->c_name;
 							$div_name = $fd->div_name;
 							$comp_id = $fd->c_id;
 							$div_id = $fd->div_id;
-							?>
-							<ul>
-								<li><strong>Competition</strong>: <?php print($comp_name); ?></li>
-								<li><strong>Division</strong>: <?php print($div_name); ?></li>
-							</ul>
-
-							<table>
-								<tr>
-									<th>&nbsp;</th>
-									<th>Team A</th>
-									<th>&nbsp;</th>
-									<th>Team B</th>
-									<th>&nbsp;</th>
-								</tr>
-								<tr>
-									<td>Teams</td>
-									<td><strong><?php print($fd->TA); ?></strong><input name="bblm_teama" type="hidden" value="<?php print($fd->f_teamA); ?>"></td>
-									<td>&nbsp;</td>
-									<td><strong><?php print($fd->TB); ?></strong><input name="bblm_teamb" type="hidden" value="<?php print($fd->f_teamB); ?>"></td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>Team Value:</td>
-									<td><input name="tAtr" type="text" size="7" maxlength="7" value="<?php print($fd->TAtv); ?>"></td>
-									<td>Vs</td>
-									<td><input name="tBtr" type="text" size="7" maxlength="7" value="<?php print($fd->TBtv); ?>"></td>
-									<td class="comment">The team value <em>before</em> the game.</td>
-								</tr>
-								<tr>
-									<td>Date:</td>
-									<td colspan="3"><input name="mdate" type="text" size="12" maxlength="10" value="<?php print(date('Y-m-d', $fd->mdate)); ?>"></td>
-									<td class="comment">This is the scheduled date, feel free to change it..</td>
-								</tr>
-								<tr>
-									<td>Location:</td>
-									<td colspan="3">
-										<select name="mstad" id="mstad">
-											<?php
-											$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-											if ($stadiums = $wpdb->get_results($stadsql)) {
-												foreach ($stadiums as $stad) {
-													print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
-												}
-											}
-											?>
-										</select></td>
-										<td class="comment">The Stadium where this game took place.</td>
-									</tr>
-									<?php
-								}//end of for each fixture detail
-							}//end of sql statement
-							else {
-								//sql failed
-								print("<p>".$fixturedetailsql."</p>");
-							}
-
-
-
-							$is_fixture = 1;
-						} //end of is_fixture
-						else { //not a fixture, so display fields to enter team names.
-							//else it is a new match selection
-							//SQL to gather names and IDs of Competitions and Division
-							$compsql = "SELECT c_name, c_id FROM ".$wpdb->prefix."comp WHERE c_id = ".$_POST['bblm_mcomp'];
-							$divsql = "SELECT div_name, div_id FROM ".$wpdb->prefix."division WHERE div_id = ".$_POST['bblm_mdiv'];
-
-
-							//Detemining the comp / div name and ID
-							if ($result = $wpdb->get_results($compsql)) {
-								foreach ($result as $res) {
-									$comp_name = $res->c_name;
-									$comp_id = $res->c_id;
-								}
-							}
-							if ($result = $wpdb->get_results($divsql)) {
-								foreach ($result as $res) {
-									$div_name = $res->div_name;
-									$div_id = $res->div_id;
-								}
-							}
-							?>
-							<ul>
-								<li><strong>Competition</strong>: <?php print($comp_name); ?></li>
-								<li><strong>Division</strong>: <?php print($div_name); ?></li>
-							</ul>
-
-							<table>
-								<tr><th>&nbsp;</th><th>Team A</th><th>&nbsp;</th><th>Team B</th><th>&nbsp;</th></tr>
-
-								<tr><td>Teams</td>
-									<?php
-									if (13 == $_POST['bblm_mdiv']) {
-										//Cross Division has been selected, All the teams in the compeition are slected
-										$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp'];
-									}
-									else {
-										//Just select the temas in this division
-										$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp']." AND C.div_id = ".$_POST['bblm_mdiv'];
-									}
-
-
-									if ($extteam = $wpdb->get_results($existingteamssql)) {
-										//copy for later. should be replaced with a reset object or something.
-										$extteam2 = $extteam;
-
-										$teamlist = "";
-										foreach ($extteam as $et) {
-											$teamlist .= "<option value=\"".$et->t_id."\">".$et->t_name."</option>\n";
-										}
-
-										print("<td><select name=\"bblm_teama\" id=\"bblm_teama\">".$teamlist."</select>\n</td>\n");
-
-										print("<td>&nbsp;</td>");
-
-										print("<td><select name=\"bblm_teamb\" id=\"bblm_teamb\">".$teamlist."</select>\n</td>\n");
-										print("<td>&nbsp;</td>\n</tr>");
-									}
-									else {
-										?>
-										<td colspan="3">There are currently no teams in this competition! Please <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Add some first</a></td></tr>
-										<?php
-
-									}
-									?>
-									<tr><td>Team Value:</td><td><input name="tAtr" type="text" size="7" maxlength="7" value="1000000"></td><td>Vs</td><td><input name="tBtr" type="text" size="7" maxlength="7" value="1000000"></td><td class="comment">The team value <em>before</em> the game.</td></tr>
-
-									<tr><td>Date:</td><td colspan="3"><input name="mdate" type="text" size="12" maxlength="10" value="<?php print(date('Y-m-d', strtotime('last thursday'))); ?>"></td><td class="comment">The date the game took place.</td></tr>
-
-									<tr><td>Location:</td><td colspan="3">
-										<select name="mstad" id="mstad">
-											<?php
-											$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-
-											if ($stadiums = $wpdb->get_results($stadsql)) {
-												foreach ($stadiums as $stad) {
-													print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
-												}
-											}
-											?>
-										</select></td><td class="comment">The Stadium where this game took place.</td></tr>
-										<?php
-									} //end of if not a fixture
-									//now normal flow of page resumes.
-
-									if (13 == $_POST['bblm_mdiv'] || 13 == $div_id) {
-										//if this is a cross-divisional game then I need the admin to input the actual divisions the teams are in!. Not ideal
-										?>
-										<tr><td><strong>Original Division</strong></td><td>	  <select name="tAcddiv" id="tAcddiv">
-											<?php
-											$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
-											if ($divs = $wpdb->get_results($divsql)) {
-												foreach ($divs as $div) {
-													print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
-												}
-											}
-											?>
-										</select></td><td>Vs</td><td>	  <select name="tBcddiv" id="tBcddiv">
-											<?php
-											$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
-											if ($divs = $wpdb->get_results($divsql)) {
-												foreach ($divs as $div) {
-													print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
-												}
-											}
-											?>
-										</select></td><td class="comment">The Divisions the teams actually belong in!</td></tr>
-										<?php
-									} // end of of cross-divisional
-									?>
-
-
-									<tr><td>Score:</td><td><input name="tAtd" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBtd" type="text" size="3" maxlength="2" value="0"></td><td class="comment">The FInal Score of the teams</td></tr>
-									<tr><td>Casualties:</td><td><input name="tAcas" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcas" type="text" size="3" maxlength="2" value="0"></td><td class="comment">casualties caused by each team (Players only).</td></tr>
-
-									<tr><td>Interceptions:</td><td><input name="tAint" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBint" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Interceptions for each team.</td></tr>
-									<tr><td>Completions:</td><td><input name="tAcomp" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcomp" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Completions for each team.</td></tr>
-
-									<tr><td>Attendance:</td><td><input name="tAatt" type="text" size="6" maxlength="6" value="2000"></td><td>Vs</td><td><input name="tBatt" type="text" size="6" maxlength="6" value="2000"></td><td class="comment">Number of fans from each team.</td></tr>
-
-									<tr><td>Gate:</td><td colspan="3"><input name="gate" type="text" size="6" maxlength="6" value="4000"></td><td class="comment">The <strong>total</strong> number of fans in attendence.</td></tr>
-
-									<tr><td>Winnings:</td><td><input name="tAwin" type="text" size="6" maxlength="6" value="10000"></td><td>Vs</td><td><input name="tBwin" type="text" size="6" maxlength="6" value="10000"></td><td class="comment">Include extras for winning, tornament finals etc.</td></tr>
-									<tr><td>Match Trivia:</td><td colspan="3"><textarea name="matchtrivia" cols="80" rows="6"></textarea></td><td class="comment">Points of note, injuries, debuts, etc.</td></tr>
-									<tr><td>Weather:</td><td><select id="mweather" name="mweather"><option value="1">Nice</option><option value="2">Very Sunny</option><option value="3">Blizzard</option><option value="4">Pouring Rain</option><option value="5">Sweltering Heat</option>
-									</select></td><td> - </td><td><select id="mweather2" name="mweather2"><option value="1">Nice</option><option value="2">Very Sunny</option><option value="3">Blizzard</option><option value="4">Pouring Rain</option><option value="5">Sweltering Heat</option>
-									</select></td><td class="comment">The weather for the match. Please enter values for 1<sup>st</sup> and 2<sup>nd</sup> half.</td></tr>
-									<tr><td>Fan Factor:</td><td><input name="tAff" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBff" type="text" size="3" maxlength="2" value="0"></td><td class="comment">The change in FF (if any).</td></tr>
-
-									<!-- <tr><td>Result:</td><td><select id="tAres" name="teamAres">
-									<option value="W">Win</option><option value="L">Loss</option><option value="D" selected="selected">Draw</option></select></td><td>Vs</td><td><select id="tBres" name="teamBres">
-									<option value="W">Win</option><option value="L">Loss</option><option value="D" selected="selected">Draw</option></select></td><td class="comment">No Comment</td></tr> -->
-									<tr><td>Comments:</td><td><textarea name="tAnotes" cols="40" rows="8">No comment</textarea></td><td>Vs</td><td><textarea name="tBnotes" cols="40" rows="8">No Comment</textarea></td><td class="comment">Any team specific comments, coach comments etc</td></tr>
-								</table>
-							</fieldset>
-
-
-
-							<input type="hidden" name="bblm_comp" size="3" value="<?php print($comp_id); ?>">
-							<input type="hidden" name="bblm_div" size="2" value="<?php print($div_id); ?>">
-							<?php
-							if ($is_fixture) {
-								print("<input type=\"hidden\" name=\"bblm_fid\" size=\"3\" value=\"".$f_id."\">\n");
-							}
-
-							?>
-
-							<p class="submit">
-								<input type="submit" name="bblm_match_add" value="Submit match details" title="submit match details" class="button-primary"/>
-							</p>
-
-						</form>
-						<?php
-
-					} // end of if the fist part of the form was submitted
-					else if (!isset($finished)) {
-						////////////////////////////////////////////
-						// First Stage - Comp / Fixture Selection //
-						////////////////////////////////////////////
 						?>
-						<form name="bblm_addmatch" method="post" id="post">
+						<ul>
+							<li><strong>Competition</strong>: <?php print($comp_name); ?></li>
+							<li><strong>Division</strong>: <?php print($div_name); ?></li>
+						</ul>
 
-							<p>There are two ways of recording details of a match; You can select the details from a fixture that has been entered, or select the Competition and division that the match took place in:</p>
+						<table>
+							<tr>
+								<th>&nbsp;</th>
+								<th>Team A</th>
+								<th>&nbsp;</th>
+								<th>Team B</th>
+								<th>&nbsp;</th>
+							</tr>
+							<tr>
+								<td>Teams</td>
+								<td><strong><?php print($fd->TA); ?></strong><input name="bblm_teama" type="hidden" value="<?php print($fd->f_teamA); ?>"></td>
+								<td>&nbsp;</td>
+								<td><strong><?php print($fd->TB); ?></strong><input name="bblm_teamb" type="hidden" value="<?php print($fd->f_teamB); ?>"></td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>Team Value:</td>
+								<td><input name="tAtr" type="text" size="7" maxlength="7" value="<?php print($fd->TAtv); ?>"></td>
+								<td>Vs</td>
+								<td><input name="tBtr" type="text" size="7" maxlength="7" value="<?php print($fd->TBtv); ?>"></td>
+								<td class="comment">The team value <em>before</em> the game.</td>
+							</tr>
+							<tr>
+								<td>Date:</td>
+								<td colspan="3"><input name="mdate" type="text" size="12" maxlength="10" value="<?php print(date('Y-m-d', $fd->mdate)); ?>"></td>
+								<td class="comment">This is the scheduled date, feel free to change it..</td>
+							</tr>
+							<tr>
+								<td>Location:</td>
+								<td colspan="3">
+									<select name="mstad" id="mstad">
+										<?php
+										$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
+										if ($stadiums = $wpdb->get_results($stadsql)) {
+											foreach ($stadiums as $stad) {
+												print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
+											}
+										}
+										?>
+									</select>
+								</td>
+								<td class="comment">The Stadium where this game took place.</td>
+							</tr>
+							<?php
+							}//end of for each fixture detail
 
-							<p><input type="radio" value="M" name="bblm_mtype" checked="yes"> New Match - Select a Competition and Division below:</p>
-							<fieldset id='addmatchdiv'><legend>Select a Competition</legend>
+						}//end of if Fixture exists
+						else {
+							//Fixture does not exist - something has gone wrong, or someone is up to something
+							print("<p>".$fixturedetailsql."</p>");
+						}
 
-								<label for="bblm_mcomp" class="selectit">Competition:</label>
-								<select name="bblm_mcomp" id="bblm_mcomp">
+						$is_fixture = 1;
+
+					} //end of checking to see if a fixture was submitted
+					else { //not a fixture, so display fields to enter team names.
+
+						//If we are here then this is a new match - not based on a fixture
+						//SQL to gather names and IDs of Competitions and Division
+						$compsql = "SELECT c_name, c_id FROM ".$wpdb->prefix."comp WHERE c_id = ".$_POST['bblm_mcomp'];
+						$divsql = "SELECT div_name, div_id FROM ".$wpdb->prefix."division WHERE div_id = ".$_POST['bblm_mdiv'];
+
+						//Detemining the comp / div name and ID
+						if ( $result = $wpdb->get_results( $compsql ) ) {
+							foreach ($result as $res) {
+								$comp_name = $res->c_name;
+								$comp_id = $res->c_id;
+							}
+						}
+						if ($result = $wpdb->get_results($divsql)) {
+							foreach ($result as $res) {
+								$div_name = $res->div_name;
+								$div_id = $res->div_id;
+							}
+						}
+						?>
+						<ul>
+							<li><strong>Competition</strong>: <?php print($comp_name); ?></li>
+							<li><strong>Division</strong>: <?php print($div_name); ?></li>
+						</ul>
+
+						<table>
+							<tr><th>&nbsp;</th><th>Team A</th><th>&nbsp;</th><th>Team B</th><th>&nbsp;</th></tr>
+							<tr><td>Teams</td>
+								<?php
+								if (13 == $_POST['bblm_mdiv']) {
+									//Cross Division has been selected, All the teams in the compeition are slected
+									$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp'];
+								}
+								else {
+									//Just select the temas in this division
+									$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp']." AND C.div_id = ".$_POST['bblm_mdiv'];
+								}
+
+								if ($extteam = $wpdb->get_results($existingteamssql)) {
+									//copy for later. should be replaced with a reset object or something.
+									$extteam2 = $extteam;
+									$teamlist = "";
+									foreach ($extteam as $et) {
+										$teamlist .= "<option value=\"".$et->t_id."\">".$et->t_name."</option>\n";
+									}
+									print("<td><select name=\"bblm_teama\" id=\"bblm_teama\">".$teamlist."</select>\n</td>\n");
+									print("<td>&nbsp;</td>");
+									print("<td><select name=\"bblm_teamb\" id=\"bblm_teamb\">".$teamlist."</select>\n</td>\n");
+									print("<td>&nbsp;</td>\n</tr>");
+								}
+								else {
+									?>
+									<td colspan="3">There are currently no teams in this competition! Please <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Add some first</a></td></tr>
 									<?php
-									$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
-									//This line should work but for some reason prpduces blanks!
-									//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, dev_posts P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
-									if ($comps = $wpdb->get_results($compsql)) {
-										foreach ($comps as $comp) {
-											print("<option value=\"".$comp->c_id."\">".$comp->c_name."</option>\n");
+								}
+								?>
+							<tr><td>Team Value:</td><td><input name="tAtr" type="text" size="7" maxlength="7" value="1000000"></td><td>Vs</td><td><input name="tBtr" type="text" size="7" maxlength="7" value="1000000"></td><td class="comment">The team value <em>before</em> the game.</td></tr>
+							<tr><td>Date:</td><td colspan="3"><input name="mdate" type="text" size="12" maxlength="10" value="<?php print(date('Y-m-d', strtotime('last thursday'))); ?>"></td><td class="comment">The date the game took place.</td></tr>
+							<tr>
+								<td>Location:</td>
+								<td colspan="3"><select name="mstad" id="mstad">
+									<?php
+									$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
+
+									if ($stadiums = $wpdb->get_results($stadsql)) {
+										foreach ($stadiums as $stad) {
+											print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
 										}
 									}
 									?>
-								</select>
+								</select></td>
+								<td class="comment">The Stadium where this game took place.</td>
+							</tr>
+							<?php
 
-								<label for="bblm_mdiv">Division:</label>
-								<select name="bblm_mdiv" id="bblm_mdiv">
-									<?php
-									$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
-									if ($divs = $wpdb->get_results($divsql)) {
-										foreach ($divs as $div) {
-											print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+						} //end of if not a fixture, then it is a match
+
+						/*
+						 * now normal flow of page resumes.
+						 * This incliudes closing the table, fieldset, and form
+						 * We should habe not got to this point without something above being generated!
+						 */
+						 if ( 13 == $_POST[ 'bblm_mdiv' ] || 13 == $div_id ) {
+							 //if this is a cross-divisional game then I need the admin to input the actual divisions the teams are in!. Not ideal
+/* HELP */
+							 ?>
+							<tr>
+								<td><strong>Original Division</strong></td>
+								<td>
+									<select name="tAcddiv" id="tAcddiv">
+										<?php
+										$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
+										if ($divs = $wpdb->get_results($divsql)) {
+											foreach ($divs as $div) {
+												print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+											}
 										}
-									}
-									?>
-								</select>
-							</fieldset>
-
-							<p><input type="radio" value="F" name="bblm_mtype"> Fixture - Please select the fixture from the below list:</p>
-							<fieldset id='selectfixturediv'><legend>Select a Fixture</legend>
-								<label for="bblm_fid">Fixture:</label>
-								<select name="bblm_fid" id="bblm_fid">
-									<?php
-									$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, D.div_name, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
-									if ($fixtures = $wpdb->get_results($fixturesql)) {
-										foreach ($fixtures as $fd) {
-											print("<option value=\"".$fd->f_id."\">".$fd->TA." vs ".$fd->TB." (".$fd->c_name."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
+										?>
+									</select>
+								</td>
+								<td>Vs</td>
+								<td>
+									<select name="tBcddiv" id="tBcddiv">
+										<?php
+										$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
+										if ($divs = $wpdb->get_results($divsql)) {
+											foreach ($divs as $div) {
+												print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+											}
 										}
-									}
-									else {
-										print("<option vlaue=\"x\">There are currently no fixtures lined up, please use the above option for manual entry.</option>\n");
-									}
-									?>
-								</select>
+										?>
+									</select>
+								</td>
+								<td class="comment">The Divisions the teams actually belong in!</td>
+							</tr>
 
-							</fieldset>
-							<p class="submit">
-								<input type="submit" name="bblm_matchcomp_select" value="Continue" title="Continue with selection" class="button-primary"/>
-							</p>
-						</form>
-						<?php
-					} //end of else section
+							<?php ////////
+ /* HELP */
+						} // end of of cross-divisional
+
+						?>
+							<tr><td>Score:</td><td><input name="tAtd" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBtd" type="text" size="3" maxlength="2" value="0"></td><td class="comment">The FInal Score of the teams</td></tr>
+							<tr><td>Casualties:</td><td><input name="tAcas" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcas" type="text" size="3" maxlength="2" value="0"></td><td class="comment">casualties caused by each team (Players only).</td></tr>
+							<tr><td>Interceptions:</td><td><input name="tAint" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBint" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Interceptions for each team.</td></tr>
+							<tr><td>Completions:</td><td><input name="tAcomp" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcomp" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Completions for each team.</td></tr>
+							<tr><td>Attendance:</td><td><input name="tAatt" type="text" size="6" maxlength="6" value="2000"></td><td>Vs</td><td><input name="tBatt" type="text" size="6" maxlength="6" value="2000"></td><td class="comment">Number of fans from each team.</td></tr>
+							<tr><td>Gate:</td><td colspan="3"><input name="gate" type="text" size="6" maxlength="6" value="4000"></td><td class="comment">The <strong>total</strong> number of fans in attendence.</td></tr>
+							<tr><td>Winnings:</td><td><input name="tAwin" type="text" size="6" maxlength="6" value="10000"></td><td>Vs</td><td><input name="tBwin" type="text" size="6" maxlength="6" value="10000"></td><td class="comment">Include extras for winning, tornament finals etc.</td></tr>
+							<tr><td>Match Trivia:</td><td colspan="3"><textarea name="matchtrivia" cols="80" rows="6"></textarea></td><td class="comment">Points of note, injuries, debuts, etc.</td></tr>
+							<tr>
+								<td>Weather:</td>
+								<td>
+									<select id="mweather" name="mweather">
+										<option value="1">Nice</option>
+										<option value="2">Very Sunny</option>
+										<option value="3">Blizzard</option>
+										<option value="4">Pouring Rain</option>
+										<option value="5">Sweltering Heat</option>
+									</select>
+								</td>
+								<td> - </td>
+								<td>
+									<select id="mweather2" name="mweather2">
+										<option value="1">Nice</option>
+										<option value="2">Very Sunny</option>
+										<option value="3">Blizzard</option>
+										<option value="4">Pouring Rain</option>
+										<option value="5">Sweltering Heat</option>
+									</select>
+								</td>
+								<td class="comment">The weather for the match. Please enter values for 1<sup>st</sup> and 2<sup>nd</sup> half.</td>
+							</tr>
+							<tr><td>Fan Factor:</td><td><input name="tAff" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBff" type="text" size="3" maxlength="2" value="0"></td><td class="comment">The change in FF (if any).</td></tr>
+							<!-- <tr><td>Result:</td><td><select id="tAres" name="teamAres">
+							<option value="W">Win</option><option value="L">Loss</option><option value="D" selected="selected">Draw</option></select></td><td>Vs</td><td><select id="tBres" name="teamBres">
+							<option value="W">Win</option><option value="L">Loss</option><option value="D" selected="selected">Draw</option></select></td><td class="comment">No Comment</td></tr> -->
+							<tr><td>Comments:</td><td><textarea name="tAnotes" cols="40" rows="8">No comment</textarea></td><td>Vs</td><td><textarea name="tBnotes" cols="40" rows="8">No Comment</textarea></td><td class="comment">Any team specific comments, coach comments etc</td></tr>
+						</table>
+					</fieldset>
+
+					<input type="hidden" name="bblm_comp" size="3" value="<?php print($comp_id); ?>">
+					<input type="hidden" name="bblm_div" size="2" value="<?php print($div_id); ?>">
+					<?php
+					if ( $is_fixture ) {
+						print("<input type=\"hidden\" name=\"bblm_fid\" size=\"3\" value=\"".$f_id."\">\n");
+					}
 					?>
+					<p class="submit">
+						<input type="submit" name="bblm_match_add" value="Submit match details" title="submit match details" class="button-primary"/>
+					</p>
+				</form>
+				<?php
 
-				</div>
+			} // end of if the fist part of the form was submitted (( isset( $_POST[ 'bblm_matchcomp_select' ] ) )
+
+
+			else if (!isset($finished)) {
+				////////////////////////////////////////////
+				// First Stage - Comp / Fixture Selection //
+				////////////////////////////////////////////
+				?>
+				<form name="bblm_addmatch" method="post" id="post">
+
+					<p>There are two ways of recording details of a match; You can select the details from a fixture that has been entered, or select the Competition and division that the match took place in:</p>
+					<p><input type="radio" value="M" name="bblm_mtype" checked="yes"> New Match - Select a Competition and Division below:</p>
+
+					<fieldset id='addmatchdiv'>
+						<legend>Select a Competition</legend>
+
+						<label for="bblm_mcomp" class="selectit">Competition:</label>
+						<select name="bblm_mcomp" id="bblm_mcomp">
+							<?php
+							$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
+
+							//This line should work but for some reason prpduces blanks!
+							//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, dev_posts P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
+							if ($comps = $wpdb->get_results($compsql)) {
+								foreach ($comps as $comp) {
+									print("<option value=\"".$comp->c_id."\">".$comp->c_name."</option>\n");
+								}
+							}
+							?>
+						</select>
+
+						<label for="bblm_mdiv">Division:</label>
+						<select name="bblm_mdiv" id="bblm_mdiv">
+							<?php
+							$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
+							if ($divs = $wpdb->get_results($divsql)) {
+								foreach ($divs as $div) {
+									print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+								}
+							}
+							?>
+						</select>
+					</fieldset>
+
+					<p><input type="radio" value="F" name="bblm_mtype"> Fixture - Please select the fixture from the below list:</p>
+					<fieldset id='selectfixturediv'><legend>Select a Fixture</legend>
+						<label for="bblm_fid">Fixture:</label>
+						<select name="bblm_fid" id="bblm_fid">
+							<?php
+							$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, D.div_name, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
+							if ($fixtures = $wpdb->get_results($fixturesql)) {
+								foreach ($fixtures as $fd) {
+									print("<option value=\"".$fd->f_id."\">".$fd->TA." vs ".$fd->TB." (".$fd->c_name."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
+								}
+							}
+							else {
+								print("<option vlaue=\"x\">There are currently no fixtures lined up, please use the above option for manual entry.</option>\n");
+							}
+							?>
+						</select>
+					</fieldset>
+
+					<p class="submit">
+						<input type="submit" name="bblm_matchcomp_select" value="Continue" title="Continue with selection" class="button-primary"/>
+					</p>
+				</form>
+				<?php
+			} //end of else if (!isset($finished)) section
+			?>
+		</div> <!-- end of .wrap -->
