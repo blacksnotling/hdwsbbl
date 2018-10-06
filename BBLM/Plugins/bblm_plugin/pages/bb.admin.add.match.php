@@ -514,8 +514,8 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 											}
 											?>
 										</select></td><td class="comment">The Divisions the teams actually belong in!</td></tr>
-										<?
-									} / end of of cross-divisional
+										<?php
+									} // end of of cross-divisional
 									?>
 
 
