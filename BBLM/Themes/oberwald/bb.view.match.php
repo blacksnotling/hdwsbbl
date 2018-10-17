@@ -131,6 +131,7 @@ Template Name: View Match
 				//First we initialize some valuables
 				$tamvp="";
 				$tbmvp="";
+				$playeractions="";
 
 				$taplayersql = 'SELECT M.*, S.guid, S.post_title, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = '.$m->m_id.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
 				if ($taplayer = $wpdb->get_results($taplayersql)) {
