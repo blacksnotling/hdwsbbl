@@ -27,7 +27,7 @@ class BBLM_Admin_Menus {
 
 		add_action( 'admin_menu', array( $this, 'admin_main_setup_menu' ), 6 );
 		add_action( 'admin_menu', array( $this, 'settings_menu' ), 7 );
-		//add_action( 'admin_menu', array( $this, 'cutover_menu' ), 8 );
+		add_action( 'admin_menu', array( $this, 'cutover_menu' ), 8 );
 
 	}
 
@@ -92,9 +92,6 @@ class BBLM_Admin_Menus {
 		new BBLM_Settings_Admin();
 
 	}
-
-
-
 
 }
 

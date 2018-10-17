@@ -25,7 +25,7 @@ get_header(); ?>
 					<h3 class="dykheader"><?php echo bblm_get_league_name(); ?> - <?php if( "Trivia" == $type ) { print("Did You Know"); } else { print("Fact"); } ?></h3>
 <?php
 
-				if ( strlen( get_the_title() ) !== 0 ) {
+				if ( ( strlen( get_the_title() ) !== 0 ) && ( "none" !== strtolower( get_the_title() ) ) ) {
 ?>
 					<h4><?php the_title(); ?></h4>
 <?php
