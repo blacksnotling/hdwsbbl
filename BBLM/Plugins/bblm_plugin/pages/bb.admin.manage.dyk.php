@@ -1,15 +1,20 @@
 <?php
-/*
-*	Filename: bb.admin.manage.dyk.php
-*	Description: Management page for "Did You Know"
-*/
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
-//Check the file is not being accessed directly
-if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
-
+/**
+ * Former page to manage "Did You Know's"
+ *
+ * @author 		Blacksnotling
+ * @category 	Admin
+ * @package 	BBowlLeagueMan/Admin
+ * @drepreciated 1.2
+ */
 ?>
 <div class="wrap">
 	<h2>"Did You Know" Management</h2>
+	<p><strong>Warning:</strong> This page has been deprecated and will be removed in the future.</p>
 <?php
   /*
     Note: The $_POST checking is not tied into the main if else structure because depending on the he outcome of the

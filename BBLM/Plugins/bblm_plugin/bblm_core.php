@@ -255,6 +255,7 @@ final class BBowlLeagueMan {
 		// Hooks
 		add_action( 'init', array( $this, 'init' ), 0 );
 		add_action( 'after_setup_theme', array( $this, 'setup_environment' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'bblm_include_scripts' ) );
 
 	}
 
@@ -309,6 +310,12 @@ final class BBowlLeagueMan {
 			include_once( 'includes/admin/class-bblm-admin.php' );
 		}
 
+		if ( ! is_admin() ) {
+			$this->frontend_includes();
+		}
+
+		include_once( 'includes/class-bblm-post-types.php' );		// Registers post types
+
 	}
 
 	/**
@@ -316,9 +323,19 @@ final class BBowlLeagueMan {
 	 */
 	public function frontend_includes() {
 
-
+		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
 
 	}
+
+	/**
+	 * Includes any CSS or Javascript required by the plugin. These will load
+	 * on ALL pages.
+	 */
+function bblm_include_scripts() {
+
+	wp_enqueue_style( 'bblm_core_styles', $this->plugin_url() . '/includes/CSS/bblm.css' );
+
+}
 
 	/**
 	 * Init BBowlLeagueMan when WordPress Initialises.

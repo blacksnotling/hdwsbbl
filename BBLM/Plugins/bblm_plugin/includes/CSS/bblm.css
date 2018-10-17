@@ -1,0 +1,31 @@
+/*
+ *
+ * CSS used by the plugin. This can be overwritten in your own style.css within
+ * you theme folder
+ *
+*/
+
+/***** Did You Knows *****/
+div.dykcontainer {
+	clear:both;
+	border: 2px solid #333;
+	width: 400px;
+	margin: 10px auto;
+	text-align: Justify;
+	padding-top: 50px;
+}
+div.dyktrivia {
+	background: #fefefe url(../images/dyk-header.gif) top repeat-x;
+}
+div.dykfact {
+	background: #fefefe url(../images/dyk-fact.gif) top repeat-x;
+}
+h3.dykheader {
+	display: none;
+}
+div.dykcontainer p, div.dykcontainer h4 {
+	padding: 0 10px;
+}
+div.dykcontainer p.dykfooter {
+	text-align: right;
+}

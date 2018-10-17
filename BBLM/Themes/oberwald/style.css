@@ -2,7 +2,7 @@
 Theme Name: Oberwald
 Theme URI: https://github.com/blacksnotling/HDWSBBL-Themes
 Description: Custom Theme for the HDWSBBL. Named after the greatest Star Player of all time.
-Version: 20181005
+Version: 1.2
 Author: The HDWSBBL
 Author URI: https://github.com/blacksnotling
 License: GNU General Public License v2 or later
@@ -663,30 +663,6 @@ form p {
 	margin: 5px 0;
 }
 .bypostauthor {
-}
-/***** Did You Knows *****/
-div.dykcontainer {
-	clear:both;
-	border: 2px solid #333;
-	width: 400px;
-	margin: 10px auto;
-	text-align: Justify;
-	padding-top: 50px;
-}
-div.dyktrivia {
-	background: #fefefe url(images/dyk-header.gif) top repeat-x;
-}
-div.dykfact {
-	background: #fefefe url(images/dyk-fact.gif) top repeat-x;
-}
-h3.dykheader {
-	display: none;
-}
-div.dykcontainer p, div.dykcontainer h4 {
-	padding: 0 10px;
-}
-div.dykcontainer p.dykfooter {
-	text-align: right;
 }
 /***** Graveyard *****/
 div.gycontainer {

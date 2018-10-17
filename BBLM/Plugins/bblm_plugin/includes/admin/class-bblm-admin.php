@@ -34,6 +34,7 @@ class BBLM_Admin {
 		include( 'class-bblm-admin-menus.php' );
 
 		// Classes for functionality
+    include_once( 'class-bblm-admin-post-types.php' );
 
 	}
 
