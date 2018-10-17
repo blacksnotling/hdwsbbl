@@ -14,7 +14,7 @@
 <h2>Welcome to the Blood Blowl League Manager</h2>
 <p>From these pages you can administrate your Blood Bowl League!</p>
 <ul>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.options.php" title="View the options page">Edit the league options.</a></li>
+  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_settings" title="View the options page">Manage your Leagues options.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Manage DYK">Did You Know?</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.series.php" title="Add a new series / cup">Add a new Championship Series / Cup.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.season.php" title="Start a new Season">Start a new season.</a></li>

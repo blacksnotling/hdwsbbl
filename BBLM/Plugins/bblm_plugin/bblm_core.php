@@ -24,7 +24,6 @@ function bblm_insert_admin_pages() {
 	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'BB Settings', 'BB Settings', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.options.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Did You Know', 'Did You Know', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.dyk.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'New Season', 'New Season', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.season.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Cup', 'Add Cup', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.series.php');
@@ -58,7 +57,7 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add S
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.report.jm.php');
 
 }
-add_action('admin_menu', 'bblm_insert_admin_pages');
+add_action('admin_menu', 'bblm_insert_admin_pages', 11);
 
 
 
@@ -304,6 +303,11 @@ final class BBowlLeagueMan {
 	 */
 	private function includes() {
 
+		include_once( 'includes/bblm-common-functions.php' );
+
+		if ( is_admin() ) {
+			include_once( 'includes/admin/class-bblm-admin.php' );
+		}
 
 	}
 
