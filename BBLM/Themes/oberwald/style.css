@@ -245,7 +245,7 @@ font-weight:100;
 #subcontent li.sideawards h2{
 	background-image: url(images/trophy.gif);
 }
-#bblm_recentmatches h2 {
+#subcontent li.widget_bblm_recentmatches h2 {
 	background-image: url(images/helmet.gif);
 }
 #bblm_list-comps h2 {
