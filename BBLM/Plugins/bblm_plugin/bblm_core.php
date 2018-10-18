@@ -117,44 +117,6 @@ function bblm_roles_init() {
 }
 
 /**
- * Defnes the new Taxonomies used within BBLM
- *
- */
-function bblm_tax_init() {
-	bblm_tax_team_init();
-	bblm_tax_comp_init();
-}
-
-function bblm_tax_team_init() {
-  // create a new taxonomy
-  register_taxonomy(
-    'post_teams',
-    'post',
-    array(
-      'label' => __('Teams'),
-      'sort' => true,
-      'args' => array('orderby' => 'term_order'),
-      'rewrite' => array('slug' => 'team-post'),
-    )
-  );
-}
-
-function bblm_tax_comp_init() {
-  // create a new taxonomy
-  register_taxonomy(
-    'post_competitions',
-    'post',
-    array(
-      'label' => __('Competitions'),
-      'sort' => true,
-      'args' => array('orderby' => 'term_order'),
-      'rewrite' => array('slug' => 'competition-post'),
-    )
-  );
-}
-add_action( 'init', 'bblm_tax_init' );
-
-/**
  *	New Class structure below!
  */
 

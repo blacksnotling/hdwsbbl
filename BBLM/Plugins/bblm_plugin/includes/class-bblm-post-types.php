@@ -22,6 +22,7 @@ class BBLM_Post_types {
 	public function __construct() {
 
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
+    add_action( 'init', array( __CLASS__, 'register_taxonomies' ), 10 );
     add_action( 'init', array( $this, 'include_post_type_handlers' ) );
 
 	}
@@ -60,6 +61,37 @@ class BBLM_Post_types {
 			)
 		); //end of Did You Know
 	}
+
+  /**
+   * Register taxonomies.
+   */
+   public static function register_taxonomies() {
+
+     // Teams Tax for posts
+     register_taxonomy(
+       'post_teams',
+       'post',
+       array(
+         'label' => __( 'Teams', 'bblm'),
+         'sort' => true,
+         'args' => array( 'orderby' => 'term_order' ),
+         'rewrite' => array( 'slug' => 'team-post' ),
+       )
+     );
+
+     // Competitions Tax for posts
+     register_taxonomy(
+       'post_competitions',
+       'post',
+       array(
+         'label' => __( 'Competitions', 'bblm' ),
+         'sort' => true,
+         'args' => array( 'orderby' => 'term_order' ),
+         'rewrite' => array( 'slug' => 'competition-post' ),
+       )
+     );
+
+   }
 
 
   /**
