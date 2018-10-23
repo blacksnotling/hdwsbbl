@@ -242,6 +242,13 @@ function oberwald_breadcrumb() {
 
 	global $post;
 
+	if ( is_404() ) {
+
+		echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Page not found ';
+
+	} //end of is_404
+	else {
+
 	echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; ';
 
 	    // If there is a parent, display the link.
@@ -261,7 +268,7 @@ function oberwald_breadcrumb() {
 				echo 'Archive';
 			}
 
-
+	} //end of is_404 else
 	return true;
 
 }
