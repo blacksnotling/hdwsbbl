@@ -9,13 +9,19 @@
 
 get_header(); ?>
 
+<?php do_action( 'bblm_template_before_posts' ); ?>
+
 <?php if (have_posts()) : ?>
+
+	<?php do_action( 'bblm_template_before_loop' ); ?>
 
 	<div class="entry">
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<h2 class="entry-title"><?php echo __( 'Did You Know?', 'bblm'); ?></h2>
 
 	<?php while (have_posts()) : the_post(); ?>
+
+		<?php do_action( 'bblm_template_before_content' ); ?>
 
 <?php
 				$type = get_post_meta( get_the_ID(), 'dyk_type', true );
@@ -35,14 +41,20 @@ get_header(); ?>
 					<p><?php edit_post_link( __( 'Edit', 'bblm' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 				</div>
 
+	<?php do_action( 'bblm_template_after_content' ); ?>
+
 
 	<?php endwhile;?>
+
+	<?php do_action( 'bblm_template_after_loop' ); ?>
 
 			<p class="postmeta">&nbsp;</p>
 		</div>
 	</div>
 
 <?php endif; ?>
+
+<?php do_action( 'bblm_template_after_posts' ); ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
