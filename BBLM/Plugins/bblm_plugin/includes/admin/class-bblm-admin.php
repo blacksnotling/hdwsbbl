@@ -24,6 +24,7 @@ class BBLM_Admin {
 
 		add_action( 'init', array( $this, 'includes' ) );
     add_action( 'dashboard_glance_items', array( $this, 'add_dashboard_counts' ) );
+		add_action('wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
 
 	}
 
@@ -51,6 +52,16 @@ class BBLM_Admin {
      $glancer->add( $my_post_types, array( 'publish' ) );
 
    }
+
+	 /**
+		* Adds the freebooter (JM) report to the admin dashboard.
+		* It calls the bblm_jm_report() function from the common admin functions file
+		*/
+   function add_dashboard_freebooter_report() {
+
+     wp_add_dashboard_widget('bblm_jm_widget', 'Blood Bowl: Freebooter Report', 'bblm_jm_report' );
+
+		}
 
 }
 
