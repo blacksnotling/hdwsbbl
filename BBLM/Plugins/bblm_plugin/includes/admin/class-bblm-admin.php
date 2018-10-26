@@ -33,6 +33,7 @@ class BBLM_Admin {
 	public function includes() {
 
 		include( 'class-bblm-admin-menus.php' );
+		include_once( 'bblm-common-admin-functions.php' );
 
 		// Classes for functionality
     include_once( 'class-bblm-admin-post-types.php' );
