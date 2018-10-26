@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.fixture.php
-*	Description: Page used to add new Fixtures
-*/
+/**
+ * BBowlLeagueMan page to add Fixtures
+ *
+ * Allows an admin to set new fixtures for specific competiions and devisions.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -95,7 +100,7 @@ if (isset($_POST['bblm_comp_select'])) {
 			$teamlist = "";
 			$teamlist .= "<option value=\"".$bblm_tbd_team."\">To be Determined</option>\n";
 			foreach ($teams as $t) {
-					$teamlist .= "<option value=\"".$t[t_id]."\">".$t[t_name]."</option>\n";
+					$teamlist .= "<option value=\"".$t['t_id']."\">".$t['t_name']."</option>\n";
 			}
 			//Now we set our counter up
 			$p = 1;
