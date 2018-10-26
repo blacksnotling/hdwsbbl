@@ -16,3 +16,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Loads all the Widgets used in the league
  */
+include_once( 'widgets/class-hdwsbbl-widget-recentnews.php' );
