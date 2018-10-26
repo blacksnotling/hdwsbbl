@@ -16,7 +16,7 @@ class BBLM_Widget_DYK extends WP_Widget {
   function __construct() {
 
     $widget_ops = array('classname' => 'widget_bblm widget_dyk', 'description' => __( 'Display a single Did You Know entry', 'bblm' ) );
-    parent::__construct('bblm_dyk', __( 'Did You Know', 'bblm' ), $widget_ops);
+    parent::__construct('bblm_dyk', __( 'BB:All: Did You Know?', 'bblm' ), $widget_ops);
 
   }
 

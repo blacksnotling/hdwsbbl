@@ -16,7 +16,7 @@ class BBLM_Widget_RecentMatchSum extends WP_Widget {
   function __construct() {
 
     $widget_ops = array('classname' => 'widget_bblm widget_bblm_recentmatches', 'description' => __( 'Display a summary of recent matches', 'bblm' ) );
-    parent::__construct('bblm_recentmatches', __( 'BB: Recent Match', 'bblm' ), $widget_ops);
+    parent::__construct('bblm_recentmatches', __( 'BB:All: Recent Match', 'bblm' ), $widget_ops);
 
   }
 

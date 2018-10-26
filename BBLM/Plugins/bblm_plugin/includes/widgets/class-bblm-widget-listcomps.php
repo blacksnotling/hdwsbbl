@@ -16,7 +16,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
   function __construct() {
 
     $widget_ops = array('classname' => 'widget_bblm widget_bblm_listcomps', 'description' => __( 'Display a List of recent, active, and upcoming Competitions', 'bblm' ) );
-    parent::__construct('bblm_listcomps', __( 'BB: Competitions List', 'bblm' ), $widget_ops);
+    parent::__construct('bblm_listcomps', __( 'BB:All: Competitions List', 'bblm' ), $widget_ops);
 
   }
 
