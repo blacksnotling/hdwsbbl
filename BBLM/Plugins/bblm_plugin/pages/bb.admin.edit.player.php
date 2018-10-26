@@ -174,7 +174,7 @@ else if(isset($_POST['bblm_journeyman_add'])) {
 	print("</pre>"); */
 
 $teamsql = "UPDATE `".$wpdb->prefix."team` SET `t_bank` = t_bank-'".$_POST['bblm_cost']."' WHERE `t_id` = ".$_POST['bblm_team'];
-$playersql = "UPDATE `'.$wpdb->prefix.'player` SET `pos_id` = '".$_POST['bblm_position']."' WHERE `p_id` = ".$_POST['bblm_player'];
+$playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_position']." WHERE `p_id` = ".$_POST['bblm_player'];
 
 	if (FALSE !== $wpdb->query($teamsql)) {
 		$sucess = TRUE;
@@ -519,7 +519,7 @@ else if ("edit" == $_GET['action']) {
 ?>
 <h3>Permanently Add a Journeyman To This Team</h3>
 <?php
-		$playerdetailssql = "SELECT P.p_id, P.p_name, P.p_cost, T.t_name, T.t_bank, T.r_id, P.t_id, P.pos_id FROM ".$wpdb->prefix."player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.p_id = ".$bblm_player;
+		$playerdetailssql = "SELECT P.p_id, P.p_name, P.p_cost, T.t_name, T.t_bank, T.r_id, P.t_id, P.pos_id FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."team T WHERE P.t_id = T.t_id AND P.p_id = ".$bblm_player;
 		$jm = $wpdb->get_row($playerdetailssql);
 		//Check to see if the player is actually a Journeyman
 		if (1 == $jm->pos_id) {
