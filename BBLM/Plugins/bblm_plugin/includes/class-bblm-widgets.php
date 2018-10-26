@@ -19,3 +19,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 include_once( 'widgets/class-bblm-widget-dyk.php' );
 include_once( 'widgets/class-bblm-widget-recentmatches.php' );
+include_once( 'widgets/class-bblm-widget-listcomps.php' );
