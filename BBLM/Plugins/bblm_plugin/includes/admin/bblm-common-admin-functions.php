@@ -75,7 +75,7 @@ function bblm_jm_report() {
 	$options = get_option('bblm_config');
 	$merc_pos = htmlspecialchars($options['player_merc'], ENT_QUOTES);
 
-	$jmsql = 'SELECT P.post_title AS Player, O.post_title AS Team, X.p_num, Z.pos_name, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND X.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.') ORDER BY X.t_id, X.p_num';
+	$jmsql = 'SELECT P.post_title AS Player, O.post_title AS Team, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND X.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.') ORDER BY X.t_id, X.p_num';
 
 	if ( $journeymen = $wpdb->get_results($jmsql) ) {
 		$is_first = 1;
@@ -93,14 +93,36 @@ function bblm_jm_report() {
 				print("<h3>".$jm->Team."</h3>\n <ul>\n");
 				$is_first = 0;
 			}
-			print ("   <li># ".$jm->p_num." - ".$jm->Player." (<em>".$jm->pos_name."</em>) -- <<a href=\"");
-			bloginfo('url');
-			print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=remove&id=".$jm->p_id."\" title=\"Remove this freebooter from the team\">Retire / Remove</a>></li>\n");
+      //Output player details
+			print ("   <li># ".$jm->p_num." - ".$jm->Player." (<em>".$jm->pos_name."</em>)");
+
+      //Work out the number of games played
+      $PlrPldsql = "SELECT COUNT(M.m_id) as PLYD FROM hdbb_match_player M WHERE M.p_id = ".$jm->p_id." GROUP BY M.p_id";
+      if ( $pplyd = $wpdb->get_row($PlrPldsql) ) {
+        //They have played a game so list the matches played and the hire / fire options.
+        echo ' - '.$pplyd->PLYD.' match(s) played';
+        echo ' - <a href="';
+        bloginfo('url');
+        echo '/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=remove&id='.$jm->p_id.'" title="'.__( 'Remove this freebooter from the team', 'bblm').'">['.__( 'Fire / Remove', 'bblm').']</a>';
+
+        if ( $merc_pos !== $jm->pos_id ) {
+          //Mercenarys should not have a hire button!
+           echo ' OR <a href="';
+           bloginfo('url');
+           echo '/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=jmstatus&id='.$jm->p_id.'" title="'.__( 'Hire this freebooter to the team', 'bblm').'">['.__( 'Hire', 'bblm').']</a>';
+        }
+        echo '</li>';
+      }
+      else {
+        //They have not played a game so just list their name
+        echo __( ' - Not played a match</li>', 'bblm');
+      }
+
 		}
 		print("</ul>\n");
 	}
 	else {
-		print("<p><strong>There are no Journeymen or Mercs currently active in the league!</strong></p>\n");
+    echo __( '<p><strong>There are no Journeymen or Mercenarys currently active in the league!</strong></p>', 'bblm');
 	}
 
 }
