@@ -429,7 +429,7 @@ get_header(); ?>
 <?php
 	//Gathering data for the sidebar
 	//determine player race
-	$racesql = 'SELECT B.guid, R.r_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' B WHERE R.r_id = J.tid AND J.prefix = \'r_\' AND J.pid = B.ID AND O.pos_id = P.pos_id AND O.r_id = R.r_id AND P.p_id = '.$pd->p_id;
+	$racesql = 'SELECT B.guid, R.r_name, R.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' B WHERE R.r_id = J.tid AND J.prefix = \'r_\' AND J.pid = B.ID AND O.pos_id = P.pos_id AND O.r_id = R.r_id AND P.p_id = '.$pd->p_id;
 	$rd = $wpdb->get_row($racesql);
 
 	//determine debut season
@@ -476,8 +476,16 @@ get_header(); ?>
 			   <li><strong>Rank:</strong> <?php print($plevel); ?></li>
 			   <li><strong>Team:</strong> <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a></li>
 			   <li><strong>Position Number:</strong> #<?php print($pd->p_num); ?></li>
+<?php
+				 $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned
+				 if ( !empty($race_check) ) {
+					 //Mercs and Journeymen will not return a race ID as the race positions are not assigned to a race
+					 //Only display the players race if they are a pernament race position
+?>
 			   <li><strong>Race:</strong> <a href="<?php print($rd->guid); ?>" title="Learn more about <?php print($rd->r_name); ?> teams"><?php print($rd->r_name); ?></a></li>
 <?php
+				 }
+
 			if ($has_played) {
 ?>
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
