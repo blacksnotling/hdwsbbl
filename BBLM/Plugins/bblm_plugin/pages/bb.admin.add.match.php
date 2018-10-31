@@ -322,9 +322,23 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 		//  Common elements of form  //
 		?>
+
+		<script type="text/javascript">
+		function BBLM_UpdateGate() {
+			/*		Calcuate the players SPP		*/
+			var tot_a = document.getElementById('tAatt').value;
+			var tot_b = document.getElementById('tBatt').value;
+			var tot_att = Number(tot_a) + Number(tot_b);
+			document.getElementById('gate').value = tot_att;
+
+		}
+		</script>
+
 		<form name="bblm_editcompteam" method="post" id="post">
 
 			<h3>Enter match details</h3>
+
+			<p><strong><?php echo __( 'Remember to add Journeymen and Mercenaries before you enter the below so the Team Values are accurate!', 'bblm' ); ?></strong></p>
 			<fieldset>
 
 				<?php
@@ -529,8 +543,8 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 							<tr><td>Casualties:</td><td><input name="tAcas" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcas" type="text" size="3" maxlength="2" value="0"></td><td class="comment">casualties caused by each team (Players only).</td></tr>
 							<tr><td>Interceptions:</td><td><input name="tAint" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBint" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Interceptions for each team.</td></tr>
 							<tr><td>Completions:</td><td><input name="tAcomp" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBcomp" type="text" size="3" maxlength="2" value="0"></td><td class="comment">Number of Completions for each team.</td></tr>
-							<tr><td>Attendance:</td><td><input name="tAatt" type="text" size="6" maxlength="6" value="2000"></td><td>Vs</td><td><input name="tBatt" type="text" size="6" maxlength="6" value="2000"></td><td class="comment">Number of fans from each team.</td></tr>
-							<tr><td>Gate:</td><td colspan="3"><input name="gate" type="text" size="6" maxlength="6" value="4000"></td><td class="comment">The <strong>total</strong> number of fans in attendence.</td></tr>
+							<tr><td>Attendance:</td><td><input name="tAatt" id="tAatt" type="text" size="6" maxlength="6" value="2000" onChange="BBLM_UpdateGate()"></td><td>Vs</td><td><input name="tBatt" id="tBatt" type="text" size="6" maxlength="6" value="2000" onChange="BBLM_UpdateGate()"></td><td class="comment">Number of fans from each team.</td></tr>
+							<tr><td>Gate:</td><td colspan="3"><input name="gate" id="gate" type="text" size="6" maxlength="6" value="4000"></td><td class="comment">The <strong>total</strong> number of fans in attendence.</td></tr>
 							<tr><td>Winnings:</td><td><input name="tAwin" type="text" size="6" maxlength="6" value="10000"></td><td>Vs</td><td><input name="tBwin" type="text" size="6" maxlength="6" value="10000"></td><td class="comment">Include extras for winning, tornament finals etc.</td></tr>
 							<tr><td>Match Trivia:</td><td colspan="3"><textarea name="matchtrivia" cols="80" rows="6"></textarea></td><td class="comment">Points of note, injuries, debuts, etc.</td></tr>
 							<tr>
