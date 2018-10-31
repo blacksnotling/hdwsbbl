@@ -70,8 +70,17 @@ if (isset($_POST['bblm_dyk_convert'])) {
 <form name="bblm_cutovermain" method="post" id="post">
   <h3>General</h3>
   <ul>
-    <li>Make sure all the menus and widgets are configured</li>
+		<li>Create a new page called "front page" (if it does not already exist)</li>
+		<li>Configure the static front page in settings -> reading</li>
+		<li>remove custom template from the news page</li>
+		<li>Create main Navigation Menu and insert along the top menu area</li>
+		<li>Enter league name into settings</li>
+		<li>Enter other new settings (Archive descriptions)</li>
+		<li>Activate HDWSBBL Plugin</li>
+		<li>Validate Settings</li>
+    <li>Make sure all the widgets are configured (including DYK)</li>
   </ul>
+
 
   <h3>Did You Know</h3>
   <ul>
@@ -82,4 +91,4 @@ if (isset($_POST['bblm_dyk_convert'])) {
 
 </form>
 
-</div>`
+</div>
