@@ -22,7 +22,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ////////////////////////////////////
 if (isset($_POST['bblm_trivia_edit'])) {
 
-	$bblm_safe_input['mtrivia'] = $wpdb->escape($_POST['matchtrivia']);
+	$bblm_safe_input['mtrivia'] = esc_sql( $_POST['matchtrivia'] );
 
 	$bblm_removable = array("<pre>","</pre>","<p>","&nbsp;", "<br>", "<br />");
 	$bblm_trivia_content = $bblm_safe_input['mtrivia'];
@@ -58,8 +58,8 @@ if (isset($_POST['bblm_comment_edit'])) {
   //////////////////////////////////////
  // Submit changes to Coach Comments //
 //////////////////////////////////////
-	$bblm_safe_input['mcA'] = $wpdb->escape($_POST['matchcomment1']);
-	$bblm_safe_input['mcB'] = $wpdb->escape($_POST['matchcomment2']);
+	$bblm_safe_input['mcA'] = esc_sql( $_POST['matchcomment1'] );
+	$bblm_safe_input['mcB'] = esc_sql( $_POST['matchcomment2'] );
 
 	//$updatesql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_trivia` = \''.$bblm_trivia_content.'\' WHERE `m_id` = '.$_POST['mid'].' LIMIT 1';
 	$updatesql = 'UPDATE `'.$wpdb->prefix.'match_team` SET `mt_comment` = \''.$bblm_safe_input['mcA'].'\' WHERE `m_id` = '.$_POST['mid'].' AND `t_id` = '.$_POST['team_a'].' LIMIT 1';
@@ -222,7 +222,10 @@ $sucess = false;
 	echo '<div id="updated" class="updated fade">';
 
 	if ( $sucess ) {
-		echo '<p>'.__( 'The match has been updated', 'bblm' ).'</p></div>';
+		echo '<p>'.__( 'The match has been updated', 'bblm' );
+?>
+		<a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Back to the match edit screen</a></p></div>
+<?php
 	}
 	else {
 		echo '<p>'.__( 'Something went wrong, please try again!', 'bblm' ).'</p></div>';

@@ -27,9 +27,9 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 			$_POST['tBnotes'] = stripslashes($_POST['tBnotes']);
 		}
 
-		$bblm_safe_input['mtrivia'] = $wpdb->escape($_POST['matchtrivia']);
-		$bblm_safe_input['tAnotes'] = $wpdb->escape($_POST['tAnotes']);
-		$bblm_safe_input['tBnotes'] = $wpdb->escape($_POST['tBnotes']);
+		$bblm_safe_input['mtrivia'] = esc_sql( $_POST['matchtrivia'] );
+		$bblm_safe_input['tAnotes'] = esc_sql( $_POST['tAnotes'] );
+		$bblm_safe_input['tBnotes'] = esc_sql( $_POST['tBnotes'] );
 
 		$bblm_safe_input['mdate'] = $_POST['mdate'] ." 12:00:00";
 		$bblm_safe_input['mstad'] = $_POST['mstad'];
@@ -106,7 +106,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 		//sanitise page title
 		$bblm_page_title = $teamA['name']." vs ".$teamB['name'];
-		$bblm_page_title = $wpdb->escape($bblm_page_title);
+		$bblm_page_title = esc_sql( $bblm_page_title );
 
 		/*
 		 * Generate match and team record

@@ -34,7 +34,7 @@ if (isset($_POST['bblm_remove_player'])) {
 	if (get_magic_quotes_gpc()) {
 		$_POST['bblm_fdesc'] = stripslashes($_POST['bblm_fdesc']);
 	}
-	$bblm_safe_input['fdesc'] = $wpdb->escape($_POST['bblm_fdesc']);
+	$bblm_safe_input['fdesc'] = esc_sql( $_POST['bblm_fdesc'] );
 	$bblm_player = $_POST['bblm_pid'];
 	$bblm_match = $_POST['bblm_fmatch'];
 	$bblm_team = $_POST['bblm_tid'];

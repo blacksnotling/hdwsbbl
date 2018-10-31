@@ -1,16 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.award.php
-*	Version: 1.1
-*	Description: Page used to add a new award.
-*/
-/* -- Change History --
-20080407 - 1.0b - Initial creation of file.
-20080602 - 1.1b - modified sql below to take into account change in db structure
-20080730 - 1.0 - bump to Version 1 for public release.
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
+/**
+ * BBowlLeagueMan Add Award
+ *
+ * Page used to add a new award to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -38,8 +35,8 @@ if (isset($_POST['bblm_award_add'])) {
 		$_POST['bblm_aname'] = stripslashes($_POST['bblm_aname']);
 		$_POST['bblm_adesc'] = stripslashes($_POST['bblm_adesc']);
 	}
-	$bblm_safe_input['aname'] = $wpdb->escape($_POST['bblm_aname']);
-	$bblm_safe_input['adesc'] = $wpdb->escape($_POST['bblm_adesc']);
+	$bblm_safe_input['aname'] = esc_sql( $_POST['bblm_aname'] );
+	$bblm_safe_input['adesc'] = esc_sql( $_POST['bblm_adesc'] );
 
 
 $addsql = 'INSERT INTO `'.$wpdb->prefix.'awards` (`a_id`, `a_name`, `a_desc`, `a_cup`) VALUES (\'\', \''.$bblm_safe_input['aname'].'\', \''.$bblm_safe_input['adesc'].'\', \'0\')';

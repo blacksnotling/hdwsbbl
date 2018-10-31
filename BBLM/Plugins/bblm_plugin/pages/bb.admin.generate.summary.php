@@ -31,8 +31,8 @@ if(isset($_POST['bblm_sum_create'])) {
 			$_POST['bblm_stitle'] = stripslashes($_POST['bblm_stitle']);
 			$_POST['bblm_soutput'] = stripslashes($_POST['bblm_soutput']);
 		}
-		$bblm_safe_input['stitle'] = $wpdb->escape($_POST['bblm_stitle']);
-		$bblm_safe_input['scontent'] = $wpdb->escape($_POST['bblm_soutput']);
+		$bblm_safe_input['stitle'] = esc_sql( $_POST['bblm_stitle'] );
+		$bblm_safe_input['scontent'] = esc_sql( $_POST['bblm_soutput'] );
 
 		//generate time NOW.
 		$bblm_date_now = date('Y-m-j H:i:59');

@@ -38,10 +38,10 @@ if (isset($_POST['bblm_editcomp_submit'])) {
 
 	$bblm_safe_input = array();
 
-	$bblm_safe_input['csdate'] = $wpdb->escape($_POST['bblm_editcomp_sdate']);
-	$bblm_safe_input['cedate'] = $wpdb->escape($_POST['bblm_editcomp_edate']);
-	$bblm_safe_input['cstand'] = $wpdb->escape($_POST['bblm_editcomp_standings']);;
-	$bblm_safe_input['cid'] = $wpdb->escape($_POST['bblm_editcomp_id']);;
+	$bblm_safe_input['csdate'] = esc_sql( $_POST['bblm_editcomp_sdate'] );
+	$bblm_safe_input['cedate'] = esc_sql( $_POST['bblm_editcomp_edate'] );
+	$bblm_safe_input['cstand'] = esc_sql( $_POST['bblm_editcomp_standings'] );;
+	$bblm_safe_input['cid'] = esc_sql( $_POST['bblm_editcomp_id'] );;
 
 	//$editcompsql = 'UPDATE `'.$wpdb->prefix.'comp` SET `c_sdate` = \'2009-09-22 00:00:01\', `c_edate` = \'0000-00-01 00:00:00\', `c_showstandings` = \'0\' WHERE `c_id` = 17 LIMIT 1';
 	$editcompsql = 'UPDATE `'.$wpdb->prefix.'comp` SET `c_sdate` = \''.$bblm_safe_input['csdate'].'\', `c_edate` = \''.$bblm_safe_input['cedate'].'\', `c_showstandings` = \''.$bblm_safe_input['cstand'].'\' WHERE `c_id` = \''.$bblm_safe_input['cid'].'\' LIMIT 1';
@@ -82,14 +82,8 @@ else if (isset($_POST['bblm_edit_dyk'])) {
   ////////////////////
  // $_GET checking //
 ////////////////////
-if (!empty($_GET['action'])) {
-	$comp_action = $_GET['action'];
-}
-else {
-	$comp_action = "";
-}
-if ("edit" == $comp_action) {
-	if ("comp" == $comp_action) {
+if ( "edit" == $_GET['action'] ) {
+	if ( "comp" == $_GET['item'] ) {
 		  //////////////////
 		 // Editing Comp //
 		//////////////////
@@ -169,7 +163,7 @@ if ("edit" == $comp_action) {
 		}
 	}
 }//end of if $_GET action edit
-else if ("add" == $comp_action) {
+else if ("add" == $_GET['action']) {
 	  //////////////////
 	 // Add New Comp //
 	//////////////////
