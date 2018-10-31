@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @drepreciated 1.2
+ * @drepreciated 1.7
  */
 ?>
 <div class="wrap">

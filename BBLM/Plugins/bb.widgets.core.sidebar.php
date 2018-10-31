@@ -4,7 +4,7 @@ Plugin Name: bblm_sidebar widgits
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Provides a list of "other pages" and cutom "topic/cat listing" (Defunct)
 Author: Blacksnotling
-Version: 1.2
+Version: 1.7
 Author URI: http://www.blacksnotling.com/
 */
 
@@ -13,7 +13,7 @@ Author URI: http://www.blacksnotling.com/
 */
 
 /**
- * Obsolete as of BBLM 1.2.
+ * Obsolete as of BBLM 1.7.
  * This file will be deeleted in the future
  */
 ?>

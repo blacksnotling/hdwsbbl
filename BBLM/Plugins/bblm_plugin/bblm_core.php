@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: A BloodBowl League Manager
-Version: 1.2
+Version: 1.7
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -90,14 +90,14 @@ if ( ! class_exists( 'BBowlLeagueMan' ) ) :
  * Main BBowlLeagueMan Class
  *
  * @class BBowlLeagueMan
- * @version	1.2
+ * @version	1.7
  */
 final class BBowlLeagueMan {
 
 	/**
 	 * @var string
 	 */
-	public $version = '1.2';
+	public $version = '1.7';
 
 	/**
 	 * @var BBowlLeagueMan The single instance of the class
@@ -136,7 +136,7 @@ final class BBowlLeagueMan {
 	 *
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '1.2' );
+		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '1.7' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class BBowlLeagueMan {
 	 *
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '1.2' );
+		_doing_it_wrong( __FUNCTION__, __( 'Illegal Procedure', 'bblm' ), '1.7' );
 	}
 
 	/**
