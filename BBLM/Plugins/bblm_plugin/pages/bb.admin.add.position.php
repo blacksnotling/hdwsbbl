@@ -1,18 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.position.php
-*	Version: 1.2
-*	Description: Page used to add a new Position to a race.
-*/
-/* -- Change History --
-20080320 - 1.0b - Initial creation of file
-20080405 - 1.1b - checked for any refrences to dev_ rather then the correct $wpdb->
-20080408 - 1.2b - Made "none" the default skill entry.
-20080730 - 1.0 - bump to Version 1 for public release.
-20080805 - 1.1 - modified to take into account addition of pos_status field
-20100124 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
+/**
+ * BBowlLeagueMan Add Position
+ *
+ * Used to add a position to a Blood Bowl race
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -39,8 +34,8 @@ if (isset($_POST['bblm_position_add'])) {
 		$_POST['bblm_pname'] = stripslashes($_POST['bblm_pname']);
 		$_POST['bblm_pskills'] = stripslashes($_POST['pskills']);
 	}
-	$bblm_safe_input['pname'] = $wpdb->escape($_POST['bblm_pname']);
-	$bblm_safe_input['pskills'] = $wpdb->escape($_POST['bblm_pskills']);
+	$bblm_safe_input['pname'] = esc_sql( $_POST['bblm_pname'] );
+	$bblm_safe_input['pskills'] = esc_sql( $_POST['bblm_pskills'] );
 
 	//sanitise vars
 	$bblm_race = $_POST['bblm_rid'];

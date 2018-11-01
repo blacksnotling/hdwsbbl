@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.player.php
-*	Description: Page used to add a new player to an existing team.
-*/
+/**
+ * BBowlLeagueMan Add Player
+ *
+ * Page used to add a new player to an existing team
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -108,7 +113,7 @@ if (isset($_POST['bblm_team_add'])) {
 		$bblm_page_content .= $bblm_posname;
 	}
 	$bblm_page_content .= " for ".$bblm_tname." playing as number ".$_POST['bblm_pnum'].".";
-	$bblm_page_content = $wpdb->escape($bblm_page_content);
+	$bblm_page_content = esc_sql( $bblm_page_content );
 
 	//snaitise page title
 	$bblm_page_title = $bblm_safe_input['pname'];

@@ -14,7 +14,7 @@
 			*	normal sidebar area. The "common" sidebar is always displayed.
 			*/
 			if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) { ?>
-				<li class="sideinfo"><h2>About the Warzonews</h2>
+				<li class="sideinfo"><h2>About the Warzone</h2>
 					<p>The Warzone is the leagues's source for the latest team news a gossip. It presents a weekly update on the league and its happenings.</p>
 					<p><a href="<?php echo esc_url( get_permalink( get_page_by_title( 'about' ) ) ); ?>#warzone" title="Read more about the Warzone">Read More about the Warzone</a></p>
 				</li>

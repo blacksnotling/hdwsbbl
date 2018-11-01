@@ -31,8 +31,8 @@ Template Name: News Front Page
 
 	<?php if (  $wp_query->max_num_pages > 1 ) : ?>
 					<div id="nav-below" class="subnav">
-						<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'bblm' ) ); ?></div>
-						<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
+						<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'oberwald' ) ); ?></div>
+						<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'oberwald' ) ); ?></div>
 					</div><!-- #nav-below -->
 	<?php endif; ?>
 

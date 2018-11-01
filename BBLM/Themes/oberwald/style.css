@@ -1,17 +1,14 @@
 /*
 Theme Name: Oberwald
-Theme URI: http://www.hdwsbbl.co.uk
+Theme URI: https://github.com/blacksnotling/HDWSBBL-Themes
 Description: Custom Theme for the HDWSBBL. Named after the greatest Star Player of all time.
-Version: 1.1.1
-Author: Blacksnotling
-Author URI: http://dev.hdwsbbl.co.uk
+Version: 1.7
+Author: The HDWSBBL
+Author URI: https://github.com/blacksnotling
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, two-columns, right-sidebar, custom-menu, threaded-comments, blog
 Text Domain: oberwald
-
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
 */
 /***** Layout and positioning *****/
 html * {
@@ -248,10 +245,10 @@ font-weight:100;
 #subcontent li.sideawards h2{
 	background-image: url(images/trophy.gif);
 }
-#bblm_recentmatches h2 {
+#subcontent li.widget_bblm_recentmatches h2 {
 	background-image: url(images/helmet.gif);
 }
-#bblm_list-comps h2 {
+#subcontent li.widget_bblm_listcomps h2 {
 	background-image: url(images/trophy.gif);
 }
 #subcontent li.sideinfo, #subcontent li.sideawards {
@@ -666,30 +663,6 @@ form p {
 	margin: 5px 0;
 }
 .bypostauthor {
-}
-/***** Did You Knows *****/
-div.dykcontainer {
-	clear:both;
-	border: 2px solid #333;
-	width: 400px;
-	margin: 10px auto;
-	text-align: Justify;
-	padding-top: 50px;
-}
-div.dyktrivia {
-	background: #fefefe url(images/dyk-header.gif) top repeat-x;
-}
-div.dykfact {
-	background: #fefefe url(images/dyk-fact.gif) top repeat-x;
-}
-h3.dykheader {
-	display: none;
-}
-div.dykcontainer p, div.dykcontainer h4 {
-	padding: 0 10px;
-}
-div.dykcontainer p.dykfooter {
-	text-align: right;
 }
 /***** Graveyard *****/
 div.gycontainer {

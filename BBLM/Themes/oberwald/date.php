@@ -6,7 +6,7 @@
 <?php elseif ( is_month() ) : ?>
 				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'oberwald' ), get_the_date('F Y') ); ?>
 <?php elseif ( is_year() ) : ?>
-				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'oberwld' ), get_the_date('Y') ); ?>
+				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'oberwald' ), get_the_date('Y') ); ?>
 <?php else : ?>
 				<?php _e( 'Blog Archives', 'oberwald' ); ?>
 <?php endif; ?></h2>
@@ -18,11 +18,11 @@
 					<p class="postdate"><?php oberwald_posted_on() ?></p>
 <?php 				if ( is_year() ) {
 						the_excerpt();
-						wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) );
+						wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'oberwald' ), 'after' => '</div>' ) );
 					}
 					else {
 						the_content();
-						wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) );
+						wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'oberwald' ), 'after' => '</div>' ) );
 					}
 ?>
 
@@ -38,8 +38,8 @@
 
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
 				<div id="nav-below" class="subnav">
-					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'bblm' ) ); ?></div>
-					<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'oberwald' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'oberwald' ) ); ?></div>
 				</div><!-- #nav-below -->
 <?php endif; ?>
 

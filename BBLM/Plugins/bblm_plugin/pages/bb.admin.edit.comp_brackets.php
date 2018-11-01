@@ -1,18 +1,16 @@
 <?php
-/*
-*	Filename: bb.admin.edit.comp_brackets.php
-*	Description: Page used to set up the brackets for a knock out tournament (or final of a standard comp).
-*/
+/**
+ * BBowlLeagueMan Edit Competition brackets
+ *
+ * Page used to set up the brackerts for a knock out tournament (or final of a standard competition)
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
-
-if (!empty($_GET['action'])) {
-	$bra_action = $_GET['action'];
-}
-else {
-	$bra_action = "";
-}
 
 function bblm_return_div_id($games) {
 //function takes in the number of games this round and returns the matching ID from the database.
@@ -100,7 +98,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 				$tBlink = "<a href=\"".$fd[TBlink]."\" title=\"View more information on this team\">".$fd[TB]."</a>";
 			}
 			$match_text = $tAlink." vs<br />".$tBlink;
-			$match_text = $wpdb->escape($match_text);
+			$match_text = esc_sql( $match_text );
 		}
 	}
 	else {
@@ -127,7 +125,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 				$tBlink = "<a href=\"".$md[TBlink]."\" title=\"View more information on this team\">".$md[TB]."</a>";
 			}
 			$match_text = $tAlink." <strong>".$md[m_teamAtd]."</strong><br />".$tBlink." <strong>".$md[m_teamBtd]."</strong>";
-			$match_text = $wpdb->escape($match_text);
+			$match_text = esc_sql( $match_text );
 		}
 	}
 	//end of text generation
@@ -159,14 +157,14 @@ if (isset($_POST['bblm_update_bracket'])) {
  // $_GET checking //
 ////////////////////
 
-else if ("edit" == $bra_action) {
-	if ("cbracket" == $bra_action) {
+else if ( "edit" == $_GET['action'] ) {
+	if ( "cbracket" == $_GET['item'] ) {
 		  //////////////////////////
 		 // Editing Comp Brackey //
 		//////////////////////////
 		$bid = $_GET['id'];
 		print("<h3>Editing Bracket</h3>\n");
-		print("<p>Below is the bracket as it will be saved. <strong>Note</strong>: If you are updting a fixture, it may be displayed differentyl below than on the site. if in doubt, hit save!</p>\n");
+		print("<p>Below is the bracket as it will be saved. <strong>Note</strong>: If you are updting a fixture, it may be displayed differently below than on the site. if in doubt, hit save!</p>\n");
 		$cbdetailssql = 'SELECT * FROM '.$wpdb->prefix.'comp_brackets WHERE cb_id = '.$bid.' LIMIT 1';
 		if ($cb = $wpdb->get_row($cbdetailssql)) {
 ?>
@@ -207,11 +205,11 @@ else if ("edit" == $bra_action) {
 			//generate output into a static string
 			print("				<option value=\"0\">To Be Determined</option>\n");
 			foreach ($fixtures as $f) {
-					print("				<option value=\"".$f[f_id]."\"");
-					if ($f[f_id] == $cb->f_id) {
+					print("				<option value=\"".$f['f_id']."\"");
+					if ($f['f_id'] == $cb->f_id) {
 						print(" selected=\"selected\"");
 					}
-					print(">".$f[TA]." vs ".$f[TB]."</option>\n");
+					print(">".$f['TA']." vs ".$f['TB']."</option>\n");
 			}
 		}
 ?>
@@ -244,7 +242,7 @@ else if (isset($_POST['bblm_select_comp'])) {
 	//end of copy and past code
 
 	//gather brackets from data base, they MUST be sorted by div, order. blanks must be present if there are any byes
-	$bracketssql = 'SELECT C.cb_text, D.div_name, C.cb_id FROM '.$wpdb->prefix.'comp_brackets C, '.$wpdb->prefix.'division D WHERE C.div_id = D.div_id AND C.c_id = '.$cid.' ORDER BY C.div_ID DESC, cb_order ASC';
+	$bracketssql = 'SELECT C.cb_text, D.div_name, C.cb_id FROM '.$wpdb->prefix.'comp_brackets C, '.$wpdb->prefix.'division D WHERE C.div_id = D.div_id AND C.c_id = '.$cid.' ORDER BY C.div_ID DESC, C.cb_order ASC';
 	$brackets = $wpdb->get_results($bracketssql, ARRAY_N);
 	//determine number of games (which determines the layout to be used
 	$numgames = count($brackets);
@@ -336,7 +334,7 @@ else if (isset($_POST['bblm_select_comp'])) {
 	} //end of else if 15 games
 	else {
 		//something has gone wrong (not one a 4,8 or 16 team tourney!)
-		print("<p>something has gone wrong</p>");
+		print("<p>something has gone wrong - more fixtures than expected.</p>");
 	}
 } //end of select_comp
 else {

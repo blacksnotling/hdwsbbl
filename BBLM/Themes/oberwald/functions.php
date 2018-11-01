@@ -242,6 +242,13 @@ function oberwald_breadcrumb() {
 
 	global $post;
 
+	if ( is_404() ) {
+
+		echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Page not found ';
+
+	} //end of is_404
+	else {
+
 	echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; ';
 
 	    // If there is a parent, display the link.
@@ -261,7 +268,7 @@ function oberwald_breadcrumb() {
 				echo 'Archive';
 			}
 
-
+	} //end of is_404 else
 	return true;
 
 }
@@ -381,13 +388,13 @@ function oberwald_comment( $comment, $args, $depth ) {
 /************ Custom Login Box **********/
 
 function bblm_custom_login() {
-	echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo('stylesheet_directory') . '/includes/oberwald_login.css" />';
+	echo '<link rel="stylesheet" type="text/css" href="' . get_stylesheet_directory_uri() . '/includes/oberwald_login.css" />';
 }
 
 add_action('login_head', 'bblm_custom_login');
 
 function bblm_wp_login_url() {
-    return get_bloginfo( 'url' );
+    return home_url();
 }
 
 add_filter('login_headerurl', 'bblm_wp_login_url');

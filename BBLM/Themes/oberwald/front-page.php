@@ -161,8 +161,11 @@
 				<!-- start of #fragment-6 content -->
 					<h2>Top Players of the Moment</h2>
 <?php
+					$options = get_option('bblm_config');
+					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+
 					//$playersql = 'SELECT W.post_title AS Pname, W.guid AS Plink, L.post_title AS Tname, L.guid AS Tlink, SUM(M.mp_spp) AS VALUE, Z.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position Z WHERE Z.pos_id = P.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND P.p_id = Q.tid AND Q.prefix = \'p_\' AND Q.pid = W.ID AND T.t_id = K.tid AND K.prefix = \'t_\' AND K.pid = L.ID AND M.mp_spp > 0 AND P.p_status = 1 AND T.t_active = 1 GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 6';
-					$playersql = 'SELECT D.post_title AS Pname, D.guid AS Plink, P.pos_name, T.t_name AS Tname, T.t_guid AS Tlink, A.p_spp AS VALUE FROM '.$wpdb->prefix.'player A, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' D, '.$wpdb->prefix.'position P, '.$wpdb->prefix.'team T WHERE A.p_id = S.tid AND S.prefix = \'p_\' AND S.pid = D.ID AND A.pos_id = P.pos_id AND A.t_id = T.t_id AND T.type_id = 1 AND A.p_status = 1 AND T.t_active = 1 AND A.p_spp > 1 ORDER BY A.p_spp DESC LIMIT 6';
+					$playersql = 'SELECT D.post_title AS Pname, D.guid AS Plink, P.pos_name, T.t_name AS Tname, T.t_guid AS Tlink, A.p_spp AS VALUE FROM '.$wpdb->prefix.'player A, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' D, '.$wpdb->prefix.'position P, '.$wpdb->prefix.'team T WHERE A.p_id = S.tid AND S.prefix = \'p_\' AND S.pid = D.ID AND A.pos_id = P.pos_id AND A.t_id = T.t_id AND T.type_id = 1 AND A.p_status = 1 AND T.t_active = 1 AND A.p_spp > 1 AND T.t_id != '.$bblm_star_team.' ORDER BY A.p_spp DESC LIMIT 6';
 					if ($player = $wpdb->get_results($playersql)) {
 						print("<table>\n	<tr>\n		<th>Player</th>\n		<th>Position</th>\n		<th>Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
 						$zebracount = 1;

@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Season
+ *
+ * Page Template to view a Season's details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Season
-*/
-/*
-*	Filename: bb.view.season.php
-*	Description: .Page template to display information of a season.
-*/
+ * Template Name: View Season
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -242,7 +247,7 @@ Template Name: View Season
 							print("</table>\n");
 						}
 						else {
-							print("	<div class=\"info\">\n		<p>".$tpa[error]."</p>\n	</div>\n");
+							print("	<div class=\"info\">\n		<p>".$tpa[ 'error' ]."</p>\n	</div>\n");
 						}
 					}
 				//==================

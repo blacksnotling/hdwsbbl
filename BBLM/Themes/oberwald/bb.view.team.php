@@ -1,10 +1,15 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Team
+ *
+ * Page Template to view a Teams's details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
 Template Name: View Team
-*/
-/*
-*	Filename: bb.view.team.php
-*	Description: Page template to display a team in the league
 */
 ?>
 <?php get_header(); ?>
@@ -157,6 +162,10 @@ Template Name: View Team
 
 			<h3>Players</h3>
 <?php
+
+			//Initialise variables
+			$teamcap = 0;
+
 			//determine Team Captain
 			$teamcaptainsql = 'SELECT * FROM '.$wpdb->prefix.'team_captain WHERE tcap_status = 1 and t_id = '.$tid;
 			if ($tcap = $wpdb->get_row($teamcaptainsql)) {
@@ -332,6 +341,10 @@ Template Name: View Team
 
 				<h3 id="awardsfull">Awards list in full</h3>
 <?php
+				//Initialise variables
+				$ccfail = 0;
+				$cafail = 0;
+				$safail = 0;
 				$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($champs = $wpdb->get_results($championshipssql)) {
 					$has_cups = 1;
@@ -375,7 +388,6 @@ Template Name: View Team
 					$safail = 1;
 				}
 
-				$cafail = 0;
 				$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($cawards = $wpdb->get_results($compawardssql)) {
 					$zebracount = 1;

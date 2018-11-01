@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Competition
+ *
+ * Page Template to view a competitions details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Competition
-*/
-/*
-*	Filename: bb.view.comp.php
-*	Description: Page template to view a competitions details.
-*/
+ * Template Name: View Competition
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -236,6 +241,8 @@ Template Name: View Competition
 			  /////////////
 			 // Matches //
 			/////////////
+			$match_present = 0;
+			print("<h3>Matches</h3>\n");
 			$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = '.$cd->c_id.' AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY M.m_date DESC';
 			if ($match = $wpdb->get_results($matchsql)) {
 				//We have matches so we can proceed
@@ -259,7 +266,6 @@ Template Name: View Competition
 
 					</ul>
 <?php
-				print("<h3>Matches</h3>\n");
 				print("<table class=\"expandable\">\n	<thead>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   <th class=\"tbl_matchresult\">Result</th>\n		   <th class=\"tbl_matchgate\">Gate</th>\n		 </tr>\n	</thead>\n	<tbody>");
 				$zebracount = 1;
 				foreach ($match as $md) {
@@ -491,7 +497,7 @@ Template Name: View Competition
 						print("</table>\n");
 					}
 					else {
-						print("	<div class=\"info\">\n		<p>".$tpa[error]."</p>\n	</div>\n");
+						print("	<div class=\"info\">\n		<p>".$tpa[ 'error' ]."</p>\n	</div>\n");
 					}
 				}
 

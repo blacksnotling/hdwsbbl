@@ -1,10 +1,15 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Cup
+ *
+ * Page Template to view Misc stats
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
 Template Name: Statistics - Misc
-*/
-/*
-*	Filename: bb.view.stats.misc.php
-*	Description: .Misc Stats
 */
 ?>
 <?php get_header(); ?>
@@ -16,8 +21,13 @@ Template Name: Statistics - Misc
 
 				<?php the_content(); ?>
 <?php
+
+		$options = get_option('bblm_config');
+		$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+		$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+
 		/*-- Misc -- */
-		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.type_id = 1 ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
+		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.type_id = 1 AND T.t_id != '.$bblm_star_team.' ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
 		$mep = $wpdb->get_row($mostexpplayersql);
 		$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND C.c_counts = 1 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 		$bc = $wpdb->get_row($biggestattendcesql);
@@ -29,7 +39,7 @@ Template Name: Statistics - Misc
 		$htv = $wpdb->get_row($highesttvsql);
 		$lowesttvsql = 'SELECT T.t_name AS TEAM, T.t_guid AS TEAMLink, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 ORDER BY VALUE ASC, MDATE ASC LIMIT 0, 30 ';
 		$ltv = $wpdb->get_row($lowesttvsql);
-		$teammostplayerssql = 'SELECT COUNT(*) AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id GROUP BY P.t_id ORDER BY VALUE DESC, P.t_id ASC LIMIT 1';
+		$teammostplayerssql = 'SELECT COUNT(*) AS VALUE, T.t_name AS TEAM, T.t_guid AS TEAMLink FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND T.t_id != '.$bblm_star_team.' GROUP BY P.t_id ORDER BY VALUE DESC, P.t_id ASC LIMIT 1';
 		$tmp = $wpdb->get_row($teammostplayerssql);
 
 		//Bits for the Player Career
@@ -57,7 +67,7 @@ Template Name: Statistics - Misc
 
 
 		<h3>Performance related Stats</h3>
-		<h4>Star Player Related</h4>
+		<h4>Star Player Point Related</h4>
 <?php
 		 /*-- SPP -- */
 		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.t_name AS TEAM, S.post_title, S.guid, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' S, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = S.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND T.type_id = 1 AND A.a_id = 10 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
@@ -130,10 +140,6 @@ Template Name: Statistics - Misc
 				  ///////////////////////////////
 				 // Filtering of Stats tables //
 				///////////////////////////////
-
-				$options = get_option('bblm_config');
-				$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
-				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 				//the default is to show the stats for all time (this comes into pay when showing active players
 				$period_alltime = 1;

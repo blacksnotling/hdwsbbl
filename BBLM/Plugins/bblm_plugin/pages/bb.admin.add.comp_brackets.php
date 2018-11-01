@@ -1,20 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.comp_brackets.php
-*	Version: 1.1
-*	Description: Page used to set up the brackets for a knowck out tournament (or final of a standard comp).
-*/
-/* -- Change History --
-20080425 - 0.1b - Initial creation of file.
-20080426 - 1.0b - Initial working draft of file completed.
-20080428 - 1.1b - Modification of SQL string to take into account db hange (unique cb id added)
-		 - 1.2b - Modified the sql gneration to include links to the teams (and escape it)
-20080429 - 1.2.1b - repaced dev_posts with '.$wpdb->posts.'
-		 - 1.3b - editied the two fuctions below due to them displaying the wrong ID (they where assigning the QF's to the 3rd place play-off!
-20080730 - 1.0 - bump to Version 1 for public release.
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
+/**
+ * BBowlLeagueMan Add Competition brackets
+ *
+ * Page used to set up brackets for a knock out tournament (or final of a standard competition)
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -100,7 +93,7 @@ if (isset($_POST['bblm_create_brackets'])) {
 					while ($p <= $games_this_round) {
 						$match_text = "x";
 						//check to see if a match_id was submitted
-						if (F== $_POST['bblm_game-'.$div_id.'-'.$p]) {
+						if ("F"== $_POST['bblm_game-'.$div_id.'-'.$p]) {
 							$match_id = 0;
 							$fixture_id = $_POST['bblm_fixture-'.$div_id.'-'.$p];
 							if (0 == $fixture_id) {
@@ -111,20 +104,20 @@ if (isset($_POST['bblm_create_brackets'])) {
 								$fixturesql = 'SELECT T.t_name AS TA, T.t_id AS TAid, O.guid AS TAlink, R.t_name AS TB, R.t_id AS TBid, V.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'bb2wp P, '.$wpdb->posts.' O WHERE R.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND T.t_id = P.tid AND P.prefix = \'t_\' AND P.pid = O.ID AND F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.f_id = '.$fixture_id.' AND F.f_complete = 0 ORDER BY F.div_id LIMIT 0, 30 ';
 								$fd = $wpdb->get_row($fixturesql, ARRAY_A);
 								//check to see if either team_id matches the default TBD and build the link string.
-								if ($bblm_tbd_team == $fd[TAid]) {
-									$tAlink = $fd[TA];
+								if ($bblm_tbd_team == $fd['TAid']) {
+									$tAlink = $fd['TA'];
 								}
 								else {
-									$tAlink = "<a href=\"".$fd[TAlink]."\" title=\"View more information on this team\">".$fd[TA]."</a>";
+									$tAlink = "<a href=\"".$fd['TAlink']."\" title=\"View more information on this team\">".$fd['TA']."</a>";
 								}
-								if ($bblm_tbd_team == $fd[TBid]) {
-									$tBlink = $fd[TB];
+								if ($bblm_tbd_team == $fd['TBid']) {
+									$tBlink = $fd['TB'];
 								}
 								else {
-									$tBlink = "<a href=\"".$fd[TBlink]."\" title=\"View more information on this team\">".$fd[TB]."</a>";
+									$tBlink = "<a href=\"".$fd['TBlink']."\" title=\"View more information on this team\">".$fd['TB']."</a>";
 								}
 								$match_text = $tAlink." vs<br />".$tBlink;
-								$match_text = $wpdb->escape($match_text);
+								$match_text = esc_sql( $match_text );
 							}
 
 						}
@@ -152,7 +145,7 @@ if (isset($_POST['bblm_create_brackets'])) {
 									$tBlink = "<a href=\"".$md[TBlink]."\" title=\"View more information on this team\">".$md[TB]."</a>";
 								}
 								$match_text = $tAlink." <strong>".$md[m_teamAtd]."</strong><br />".$tBlink." <strong>".$md[m_teamBtd]."</strong>";
-								$match_text = $wpdb->escape($match_text);
+								$match_text = esc_sql( $match_text );
 							}
 						}
 						//we only want a comma added for all but the first
@@ -170,7 +163,6 @@ if (isset($_POST['bblm_create_brackets'])) {
 
 					$games_this_round = ($games_this_round/2);
 			}
-			print("<p>".$insertsql."</p>");
 
 			if (FALSE !== $wpdb->query($insertsql)) {
 				$sucess = TRUE;
@@ -201,10 +193,6 @@ if (isset($_POST['bblm_create_brackets'])) {
  // All done!! //
 ////////////////
 else if (isset($_POST['bblm_comp_select'])) {
-	print("<pre>");
-	print_r($_POST);
-	print("</pre>");
-	print("<hr />");
 
 	$numteams = $_POST['bblm_cbteams'];
 	$comp_id = $_POST['bblm_cbcomp']
@@ -226,7 +214,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 			//generate output into a static string
 			$fixturelist = "<option value=\"0\">To Be Determined</option>\n";
 			foreach ($fixtures as $f) {
-					$fixturelist .= "<option value=\"".$f[f_id]."\">".$f[TA]." vs ".$f[TB]."</option>\n";
+					$fixturelist .= "<option value=\"".$f['f_id']."\">".$f['TA']." vs ".$f['TB']."</option>\n";
 			}
 		}
 

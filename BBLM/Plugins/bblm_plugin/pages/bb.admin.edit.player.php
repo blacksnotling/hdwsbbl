@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.player.php
-*	Description: the core edit player screen
-*/
+/**
+ * BBowlLeagueMan Edit Player Admin page
+ *
+ * The core edit player screen.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -29,7 +34,7 @@ if (isset($_POST['bblm_remove_player'])) {
 	if (get_magic_quotes_gpc()) {
 		$_POST['bblm_fdesc'] = stripslashes($_POST['bblm_fdesc']);
 	}
-	$bblm_safe_input['fdesc'] = $wpdb->escape($_POST['bblm_fdesc']);
+	$bblm_safe_input['fdesc'] = esc_sql( $_POST['bblm_fdesc'] );
 	$bblm_player = $_POST['bblm_pid'];
 	$bblm_match = $_POST['bblm_fmatch'];
 	$bblm_team = $_POST['bblm_tid'];
@@ -147,7 +152,7 @@ if (FALSE !== $wpdb->query($playerupdatewpsql)) {
 	<p>
 	<?php
 	if ($sucess) {
-		print("Player has been renamed. Don't forget to <a href=\"".home_url()."/wp-admin/page.php?action=edit&post=".$_POST['bblm_postid']."\" title=\"edit the players description\">edit the players description</a>!");
+		print("Player has been renamed. Don't forget to <a href=\"".home_url()."/wp-admin/post.php?post=".$_POST['bblm_postid']."&action=edit\" title=\"edit the players description\">edit the players description</a>!");
 	}
 	else {
 		print("Something went wrong");
@@ -169,7 +174,7 @@ else if(isset($_POST['bblm_journeyman_add'])) {
 	print("</pre>"); */
 
 $teamsql = "UPDATE `".$wpdb->prefix."team` SET `t_bank` = t_bank-'".$_POST['bblm_cost']."' WHERE `t_id` = ".$_POST['bblm_team'];
-$playersql = "UPDATE `'.$wpdb->prefix.'player` SET `pos_id` = '".$_POST['bblm_position']."' WHERE `p_id` = ".$_POST['bblm_player'];
+$playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_position']." WHERE `p_id` = ".$_POST['bblm_player'];
 
 	if (FALSE !== $wpdb->query($teamsql)) {
 		$sucess = TRUE;
@@ -186,7 +191,7 @@ $playersql = "UPDATE `'.$wpdb->prefix.'player` SET `pos_id` = '".$_POST['bblm_po
 
 		$linksql = "SELECT J.pid FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."bb2wp J WHERE P.p_id = J.tid AND J.prefix = 'p_' AND P.p_id = ".$_POST['bblm_player'];
 	$wppage_id = $wpdb->get_var($linksql);
-		print("Journeyman has been hired. You may wish to <a href=\"".get_bloginfo('wpurl')."/wp-admin/page.php?action=edit&post=".$wppage_id."\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
+		print("Journeyman has been hired. You may wish to <a href=\"".home_url()."/wp-admin/post.php?post=".$wppage_id."&action=edit\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
 	}
 	else {
 		print("Something went wrong");
@@ -514,7 +519,7 @@ else if ("edit" == $_GET['action']) {
 ?>
 <h3>Permanently Add a Journeyman To This Team</h3>
 <?php
-		$playerdetailssql = "SELECT P.p_id, P.p_name, P.p_cost, T.t_name, T.t_bank, T.r_id, P.t_id, P.pos_id FROM ".$wpdb->prefix."player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.p_id = ".$bblm_player;
+		$playerdetailssql = "SELECT P.p_id, P.p_name, P.p_cost, T.t_name, T.t_bank, T.r_id, P.t_id, P.pos_id FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."team T WHERE P.t_id = T.t_id AND P.p_id = ".$bblm_player;
 		$jm = $wpdb->get_row($playerdetailssql);
 		//Check to see if the player is actually a Journeyman
 		if (1 == $jm->pos_id) {
@@ -813,7 +818,7 @@ else {
 ?>
 <form name="bblm_playeroptions" method="post" id="post">
 	<input type="hidden" name="bblm_tid" size="3" value="<?php print($tid); ?>">
-	<p>Below are all the players on this team. Please select one of the options below to continue with your request.</p>
+	<p>Below are all the players on this team. Please select one of the options below.</p>
 
 <?php
   /////////////////////////
@@ -836,7 +841,7 @@ else {
 				print("		   <td>".$p->p_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$p->ID."\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
+				print("/wp-admin/post.php?post=".$p->ID."&action=edit\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
 
 				print("							<td><a href=\"");
 				bloginfo('url');

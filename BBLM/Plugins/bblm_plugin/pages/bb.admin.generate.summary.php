@@ -1,9 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.generate.summary.php
-*	Description: Generates the weekly Warzone summary.
-*/
-
+/**
+ * BBowlLeagueMan Generate Summary
+ *
+ * Generates the weekly summary
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -27,8 +31,8 @@ if(isset($_POST['bblm_sum_create'])) {
 			$_POST['bblm_stitle'] = stripslashes($_POST['bblm_stitle']);
 			$_POST['bblm_soutput'] = stripslashes($_POST['bblm_soutput']);
 		}
-		$bblm_safe_input['stitle'] = $wpdb->escape($_POST['bblm_stitle']);
-		$bblm_safe_input['scontent'] = $wpdb->escape($_POST['bblm_soutput']);
+		$bblm_safe_input['stitle'] = esc_sql( $_POST['bblm_stitle'] );
+		$bblm_safe_input['scontent'] = esc_sql( $_POST['bblm_soutput'] );
 
 		//generate time NOW.
 		$bblm_date_now = date('Y-m-j H:i:59');
@@ -46,7 +50,7 @@ if(isset($_POST['bblm_sum_create'])) {
 		$bblm_page_slug = sanitize_title("s".$_POST['bblm_sseano']."-wk".$_POST['bblm_sweekno']."-".$bblm_safe_input['stitle']);
 
 		//generate GUID
-		$bblm_guid = get_bloginfo('wpurl');
+		$bblm_guid = home_url();
 		$bblm_guid .= "/warzone/";
 		$bblm_guid .= $bblm_page_slug;
 
