@@ -15,9 +15,13 @@ get_header(); ?>
 
 	<?php do_action( 'bblm_template_before_loop' ); ?>
 
-	<div class="entry">
-		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<h2 class="entry-title"><?php echo __( 'Did You Know?', 'bblm'); ?></h2>
+
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			<header class="entry-header">
+				<h2 class="entry-title"><?php echo __( 'Did You Know?', 'bblm'); ?></h2>
+			</header><!-- .entry-header -->
+
+			<div class="entry-content">
 
 	<?php while (have_posts()) : the_post(); ?>
 
@@ -39,18 +43,22 @@ get_header(); ?>
 ?>
 					<?php the_content(); ?>
 					<p><?php edit_post_link( __( 'Edit', 'bblm' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
-				</div>
+				</div><!-- .dykcontainer .dyk -->
 
 	<?php do_action( 'bblm_template_after_content' ); ?>
 
 
 	<?php endwhile;?>
 
+			</div><!-- .entry-content -->
+
 	<?php do_action( 'bblm_template_after_loop' ); ?>
 
-			<p class="postmeta">&nbsp;</p>
-		</div>
-	</div>
+			<footer class="entry-footer">
+				<p class="postmeta">&nbsp;</p>
+			</footer><!-- .entry-footer -->
+
+		</article><!-- .post-ID -->
 
 <?php endif; ?>
 
