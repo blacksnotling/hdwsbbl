@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Settings_Admin {
@@ -181,6 +181,14 @@ class BBLM_Settings_Admin {
             'type' => 'textarea',
             'helper' => __( 'Text entered here appears at the top of the Teams page', 'bblm' ),
           ),
+					array(
+						'uid' => 'archive_owner_text',
+						'label' => __( 'Owners Page Text', 'bblm' ),
+						'section' => 'second_section',
+						'placeholder' => 'Enter a description here',
+						'type' => 'textarea',
+						'helper' => __( 'Text entered here appears at the top of the Owners page', 'bblm' ),
+					),
           array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),

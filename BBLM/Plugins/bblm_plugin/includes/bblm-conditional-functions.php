@@ -7,7 +7,7 @@
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version		1.0
+ * @version		1.0.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -30,6 +30,6 @@ function is_bblm() {
  */
 if ( ! function_exists( 'bblm_post_types' ) ) {
 	function bblm_post_types() {
-		return apply_filters( 'bblm_filter_post_types', array( 'bblm_dyk', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_race' ) );
+		return apply_filters( 'bblm_filter_post_types', array( 'bblm_dyk', 'bblm_owner', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_race' ) );
 	}
 }

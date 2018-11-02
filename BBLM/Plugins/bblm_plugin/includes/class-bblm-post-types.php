@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.0
+ * @version		1.1
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -60,6 +60,34 @@ class BBLM_Post_types {
         'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Did You Know
+		register_post_type( 'bblm_owner',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Owners', 'bblm' ),
+					'singular_name' 		=> __( 'Owner', 'bblm' ),
+					'add_new_item' 			=> __( 'Add New Owner', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Owner', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Owner', 'bblm' ),
+					'view_items' 			=> __( 'View Owners', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Owners', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'owners' ),
+				'supports' 				=> array( 'title'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of owner
 	}
 
   /**
@@ -100,6 +128,7 @@ class BBLM_Post_types {
 	public function include_post_type_handlers() {
 
     include_once( 'post-types/class-bblm-cpt-dyk.php' );
+		include_once( 'post-types/class-bblm-cpt-owner.php' );
 
  }
 
