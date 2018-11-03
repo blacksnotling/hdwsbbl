@@ -54,12 +54,13 @@ class BBLM_Admin_CPT_OWNER {
 
     switch( $column ) {
 
-      /* If displaying the 'preview' column. */
+      /* If displaying the 'teams' column. */
       case 'teams' :
 
         global $wpdb;
-        $teamcontsql = 'SELECT COUNT(t_id) AS CONT FROM '.$wpdb->prefix.'team WHERE ID = '.$post_id;
-        if ( $teamcont = $wpdb->get_var( $teamcontsql ) > 0) {
+        $teamcontsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'team WHERE ID = '.$post_id;
+        $teamcont = $wpdb->get_var( $teamcontsql );
+        if ( $teamcont > 0) {
 
           echo $teamcont;
 
