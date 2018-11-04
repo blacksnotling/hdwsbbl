@@ -450,8 +450,10 @@ Template Name: View Team
 
 
 	//determine debut season
-	$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND C.sea_id = S.sea_id AND C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
-	$sd = $wpdb->get_row($seasondebutsql);
+	if ( $has_played ) {
+		$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND C.sea_id = S.sea_id AND C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
+		$sd = $wpdb->get_row($seasondebutsql);
+	}
 ?>
 
 	<div id="subcontent">
@@ -472,7 +474,9 @@ Template Name: View Team
 ?>
 			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $tid = $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $tid = $ti->ID ) ).'">'.esc_html( get_the_title( $tid = $ti->ID ) ).'</a>'; ?></li>
 			   <li><strong>Stadium:</strong> <a href="<?php print($ti->stadlink); ?>" title="Learn more about <?php print($ti->stad); ?>"><?php print($ti->stad); ?></a></li>
+<?php if ( $has_played ) { ?>
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
+<?php	} ?>
 			   <li><strong>Race:</strong> <a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></li>
 			  </ul>
 <?php
