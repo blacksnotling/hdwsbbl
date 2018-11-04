@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.team.php
-*	Description: This page is used to add a new team to the BBLM.
-*/
+/**
+ * BBowlLeagueMan Add Team
+ *
+ * Page used to add a new team to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -130,12 +135,20 @@ else if(isset($_POST['bblm_race_select'])) {
 		<th scope="row" valign="top"><label for="bblm_tuser">Coach</label></th>
 		<td><select name="bblm_tuser" id="bblm_tuser">
 <?php
-		$usersql = 'SELECT ID, display_name FROM '.$wpdb->users.' order by display_name';
-		if ($users = $wpdb->get_results($usersql)) {
-			foreach ($users as $user) {
-				print("<option value=\"".$user->ID."\">".$user->display_name."</option>\n");
-			}
+		//Grabs a list of 'posts' from the Owners CPT
+		$oposts = get_posts(
+			array(
+				'post_type' => 'bblm_owner',
+				'numberposts' => -1,
+				'orderby' => 'post_title',
+				'order' => 'ASC'
+			)
+		);
+		if( ! $oposts ) return;
+		foreach( $oposts as $o ) {
+			echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
 		}
+
 ?>
 		</select><br />
 		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/user-new.php" title="Add a new user now">Add  new user to the site!</a> - You will have to reload this page after adding a new one.</td>

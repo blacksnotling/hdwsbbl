@@ -95,11 +95,12 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink, H.guid AS TeamLink, H.post_title AS TeamName FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE T.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = H.ID AND Y.tid = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink, H.guid AS TeamLink, H.post_title AS TeamName FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE T.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = H.ID AND Y.tid = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
 			//determine Team Captain
+			$teamcap = 0;
 			$teamcaptainsql = 'SELECT * FROM '.$wpdb->prefix.'team_captain WHERE tcap_status = 1 and t_id = '.$tid;
 			if ($tcap = $wpdb->get_row($teamcaptainsql)) {
 				$teamcap = $tcap->p_id;
@@ -313,7 +314,7 @@ a:hover, a:active {
  </tr>
  <tr>
   <th colspan="4" class="tbl_title">Head Coach:</th>
-  <td><?php print($ti->t_hcoach); ?> (<?php print($ti->display_name); ?>)</td>
+  <td><?php print($ti->t_hcoach); ?> (<?php echo esc_html( get_the_title( $tid = $ti->ID ) ); ?>)</td>
   <th colspan="7" class="tbl_title">Total Value of Team (TV):</th>
   <td class="tbl_value"><?php print(number_format($ti->t_tv)); ?>gp</td>
  </tr>

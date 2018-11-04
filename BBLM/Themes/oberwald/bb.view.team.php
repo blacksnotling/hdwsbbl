@@ -19,7 +19,7 @@ Template Name: View Team
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
@@ -345,6 +345,7 @@ Template Name: View Team
 				$ccfail = 0;
 				$cafail = 0;
 				$safail = 0;
+				$has_cups = 0;
 				$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($champs = $wpdb->get_results($championshipssql)) {
 					$has_cups = 1;
@@ -469,7 +470,7 @@ Template Name: View Team
 <?php
 		}
 ?>
-			   <li><strong>Team Owner:</strong> <?php print($ti->display_name); ?></li>
+			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $tid = $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $tid = $ti->ID ) ).'">'.esc_html( get_the_title( $tid = $ti->ID ) ).'</a>'; ?></li>
 			   <li><strong>Stadium:</strong> <a href="<?php print($ti->stadlink); ?>" title="Learn more about <?php print($ti->stad); ?>"><?php print($ti->stad); ?></a></li>
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
 			   <li><strong>Race:</strong> <a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></li>
