@@ -22,6 +22,20 @@ if(isset($_POST['bblm_team_submit'])) {
 	$options = get_option('bblm_config');
 	$bblm_page_parent = htmlspecialchars($options['page_team'], ENT_QUOTES);
 
+	//Determine if a new Owner was created or an existing one used
+	$bblm_tuser = "";
+	if ( empty( $_POST['bblm_tusernew'] ) ) {
+
+		//If a new coach has not been provided then use the value of the drop down
+		$bblm_tuser = $_POST['bblm_tuser'];
+	}
+	else {
+		//If the NEW field is not blank then add a new Owner post (should be moved into the Owner CPT class at some point)
+		$post_id = wp_insert_post( array( 'post_title'=>$_POST['bblm_tusernew'], 'post_type'=>'bblm_owner', 'post_content'=>'', 'post_status'=>'publish' ) );
+		$bblm_tuser = $post_id;
+	}
+
+
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($_POST['bblm_tname']),
 		'post_content' => wp_filter_kses($_POST['bblm_tdesc']),
@@ -37,7 +51,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$_POST['bblm_tuser'].'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$_POST['bblm_tstad'].'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$_POST['bblm_tstad'].'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -53,6 +67,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		);
 
 		//Check to see if  roster needs generating, if it does then insert an additionl page into the database
+		$roster_added = 0;
 		if ($_POST['bblm_roster']) {
 			$my_post = array(
 				'post_title' => 'Roster',
@@ -132,7 +147,7 @@ else if(isset($_POST['bblm_race_select'])) {
 		This will be displayed on various reports and pages.</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_tuser">Coach</label></th>
+		<th scope="row" valign="top"><label for="bblm_tuser"><?php echo __( 'Owner', 'bblm' ); ?></label></th>
 		<td><select name="bblm_tuser" id="bblm_tuser">
 <?php
 		//Grabs a list of 'posts' from the Owners CPT
@@ -150,8 +165,9 @@ else if(isset($_POST['bblm_race_select'])) {
 		}
 
 ?>
-		</select><br />
-		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/user-new.php" title="Add a new user now">Add  new user to the site!</a> - You will have to reload this page after adding a new one.</td>
+		</select>
+		<label for="bblm_tusernew"><?php echo __( ' OR Add a new one:', 'bblm' ); ?></label>
+		<input type="text" name="bblm_tusernew" id="bblm_tusernew" size="25" value="" maxlength="25" class="large-text"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
