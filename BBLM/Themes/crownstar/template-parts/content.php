@@ -53,6 +53,6 @@
 	</div><!-- .entry-content -->
 
 	<footer class="entry-footer">
-		<?php crownstar_entry_footer(); ?>
+		<p class="postmeta"><?php crownstar_entry_footer(); ?></p>
 	</footer><!-- .entry-footer -->
 </article><!-- #post-<?php the_ID(); ?> -->

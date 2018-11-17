@@ -80,7 +80,7 @@ if ( ! function_exists( 'crownstar_entry_footer' ) ) :
 			sprintf(
 				wp_kses(
 					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'crownstar' ),
+					__( '[Edit] <span class="screen-reader-text">%s</span>', 'crownstar' ),
 					array(
 						'span' => array(
 							'class' => array(),
