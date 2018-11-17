@@ -40,21 +40,37 @@ if ( ! function_exists( 'crownstar_entry_footer' ) ) :
 	 * Prints HTML with meta information for the categories, tags and comments.
 	 */
 	function crownstar_entry_footer() {
+		global $post;
+
 		// Hide category and tag text for pages.
 		if ( 'post' === get_post_type() ) {
 			/* translators: used between list items, there is a space after the comma */
 			$categories_list = get_the_category_list( esc_html__( ', ', 'crownstar' ) );
 			if ( $categories_list ) {
 				/* translators: 1: list of categories. */
-				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'crownstar' ) . '</span>', $categories_list ); // WPCS: XSS OK.
+				printf( '<span class="cat-links">' . esc_html__( 'Filed under %1$s', 'crownstar' ) . '</span>', $categories_list ); // WPCS: XSS OK.
 			}
 
 			/* translators: used between list items, there is a space after the comma */
 			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'crownstar' ) );
 			if ( $tags_list ) {
 				/* translators: 1: list of tags. */
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'crownstar' ) . '</span>', $tags_list ); // WPCS: XSS OK.
+				printf( '<span class="tags-links">' . esc_html__( 'Tagged: %1$s', 'crownstar' ) . '</span>', $tags_list ); // WPCS: XSS OK.
 			}
+
+			//Checks for the BBLM taxonomies, if they exist, AND are set, then they are outputted
+			if ( taxonomy_exists( 'post_teams' ) && taxonomy_exists( 'post_competitions' ) ) {
+				$team_list = get_the_term_list( $post->ID, 'post_teams', '', ', ', '' );
+				if ( $team_list ) {
+					printf( '<span class="team-links">' . esc_html__( 'Discusses: %1$s', 'crownstar' ) . '</span>', $team_list ); // WPCS: XSS OK.
+
+				}
+				$comp_list = get_the_term_list( $post->ID, 'post_competitions', '', ', ', '' );
+				if ( $comp_list ) {
+					printf( '<span class="comp-links">' . esc_html__( 'Mentions: %1$s', 'crownstar' ) . '</span>', $comp_list ); // WPCS: XSS OK.
+				}
+			}
+
 		}
 
 		if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
