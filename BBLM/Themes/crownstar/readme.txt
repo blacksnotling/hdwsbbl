@@ -36,3 +36,5 @@ Yes! It supports the BBLM Plugin for Blood Bowl League management
 
 * Based on Underscores https://underscores.me/, (C) 2012-2017 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 * normalize.css https://necolas.github.io/normalize.css/, (C) 2012-2016 Nicolas Gallagher and Jonathan Neal, [MIT](https://opensource.org/licenses/MIT)
+* Oswald font: Copyright (c) 2011-2012, Vernon Adams (vern@newtypography.co.uk) - SIL Open Font License v1.1
+* Montserrat font: Copyright (c) 2007-2018, Jacques Le Bailly (fonthausen@baronvonfonthausen.com) - SIL Open Font License v1.1
