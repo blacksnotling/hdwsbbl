@@ -46,6 +46,7 @@
 				'container_id' => 'navigation',
 				'menu_id'        => 'navigation',
 			) );
+			get_search_form();
 			?>
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
