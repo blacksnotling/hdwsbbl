@@ -14,9 +14,14 @@
 	</div><!-- #content -->
 
 	<footer id="colophon" class="site-footer">
+
+		<aside id="quaternary" class="footer-widgets" role="complementary">
+			<?php dynamic_sidebar( 'footer-widget-1' ); ?>
+			<?php dynamic_sidebar( 'footer-widget-2' ); ?>
+			<?php dynamic_sidebar( 'footer-widget-3' ); ?>
+		</aside>
+
 		<div class="site-info">
-
-
 				<?php
 				echo esc_html__( 'Sponsored by SlySports', 'crownstar' );
 				?>

@@ -6,13 +6,20 @@
  *
  * @package crownstar
  */
+ ?>
 
+ 			<aside id="tertiary" class="widget-area" role="complementary">
+ 				<?php dynamic_sidebar( 'sidebar-main' ); ?>
+ 			</aside><!-- #secondary -->
+
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+<?php
 if ( ! is_active_sidebar( 'sidebar-1' ) ) {
 	return;
 }
 ?>
-		</main><!-- #main -->
-	</div><!-- #primary -->
 
 <aside id="secondary" class="widget-area">
 	<?php dynamic_sidebar( 'sidebar-1' ); ?>
