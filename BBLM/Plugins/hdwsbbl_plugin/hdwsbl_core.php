@@ -23,3 +23,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 include_once( 'includes/class-hdwsbbl-widgets.php' );			// Loads the Widgets
+include_once( 'includes/hdwsbbl-template-functions.php' );			// Loads the templating functions
