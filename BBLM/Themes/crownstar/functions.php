@@ -162,6 +162,8 @@ function crownstar_scripts() {
 
 	wp_enqueue_script( 'crownstar-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
+	// Load icon font.
+	wp_enqueue_style( 'dashicons' );
 	// Load web fonts.
 	wp_enqueue_style( 'crownstar-graduate', add_query_arg( array( 'family' => 'Graduate', 'subset' => 'latin-ext' ), "//fonts.googleapis.com/css", array(), null ) );
 	wp_enqueue_style( 'crownstar-montserrat', add_query_arg( array( 'family' => 'Montserrat:400,700', 'subset' => 'latin-ext' ), "//fonts.googleapis.com/css", array(), null ) );
@@ -169,6 +171,14 @@ function crownstar_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+	if ( ! function_exists( 'crownstar_get_search_form' ) ):
+		function crownstar_get_search_form( $form ) {
+			//return $untranslated_text;
+			$form = str_replace( 'value="' . esc_attr_x( 'Search', 'submit button' ) . '"', 'value="&#61817;" title="' . esc_attr_x( 'Search', 'submit button' ) . '"', $form );
+			return $form;
+		}
+		add_filter( 'get_search_form', 'crownstar_get_search_form' );
+	endif;
 }
 add_action( 'wp_enqueue_scripts', 'crownstar_scripts' );
 
