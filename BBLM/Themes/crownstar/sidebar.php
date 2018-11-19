@@ -8,7 +8,7 @@
  */
  ?>
 
- 			<aside id="tertiary" class="widget-area" role="complementary">
+ 			<aside id="tertiary" class="widget-area widget-area-middle" role="complementary">
  				<?php dynamic_sidebar( 'sidebar-main' ); ?>
  			</aside><!-- #secondary -->
 
@@ -21,6 +21,6 @@ if ( ! is_active_sidebar( 'sidebar-1' ) ) {
 }
 ?>
 
-<aside id="secondary" class="widget-area">
+<aside id="secondary" class="widget-area  widget-area-right">
 	<?php dynamic_sidebar( 'sidebar-1' ); ?>
 </aside><!-- #secondary -->

@@ -16,9 +16,9 @@
 	<footer id="colophon" class="site-footer">
 
 		<aside id="quaternary" class="footer-widgets" role="complementary">
-			<?php dynamic_sidebar( 'footer-widget-1' ); ?>
-			<?php dynamic_sidebar( 'footer-widget-2' ); ?>
-			<?php dynamic_sidebar( 'footer-widget-3' ); ?>
+			<div class="footer-widget-region"><?php dynamic_sidebar( 'footer-widget-1' ); ?></div>
+			<div class="footer-widget-region"><?php dynamic_sidebar( 'footer-widget-2' ); ?></div>
+			<div class="footer-widget-region"><?php dynamic_sidebar( 'footer-widget-3' ); ?></div>
 		</aside>
 
 		<div class="site-info">
