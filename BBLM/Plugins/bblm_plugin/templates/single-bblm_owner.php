@@ -20,6 +20,7 @@
 
             <h3>Career Performance</h3>
             <table class="bblm_tbl">
+              <thead>
               <tr>
                 <th><?php echo __( 'Teams', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -34,16 +35,20 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
               <tr>
                 <td><?php echo $has_team; ?></td>
                 <?php $own->individual_stat_tbl_part() ?>
               </tr>
+              </tbody>
             </table>
 
             <?php $own->individual_stat_desc(); ?>
 
             <h3>Their Teams</h3>
             <table class="sortable bblm_tbl bblm_sortable">
+              <thead>
               <tr>
                 <th><?php echo __( 'Team', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -58,11 +63,15 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
                 <?php $own->team_stat_tbl_row() ?>
+              </tbody>
             </table>
 
             <h3>Races Used</h3>
             <table class="sortable bblm_tbl bblm_sortable">
+              <thead>
               <tr>
                 <th><?php echo __( 'Race', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -77,11 +86,15 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
                 <?php $own->race_stat_tbl_row() ?>
+              </tbody>
             </table>
 
             <h3>Season Performance</h3>
             <table class="sortable bblm_tbl bblm_sortable">
+              <thead>
               <tr>
                 <th><?php echo __( 'Season', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -96,11 +109,15 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
                 <?php $own->season_stat_tbl_row() ?>
+              </tbody>
             </table>
 
             <h3>Competition Performance</h3>
             <table class="sortable bblm_tbl bblm_sortable">
+              <thead>
               <tr>
                 <th><?php echo __( 'Competition', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -115,11 +132,15 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
                 <?php $own->comp_stat_tbl_row() ?>
+              </tbody>
             </table>
 
             <h3>Championship Cup Performance</h3>
             <table class="sortable bblm_tbl bblm_sortable">
+              <thead>
               <tr>
                 <th><?php echo __( 'Competition', 'bblm'); ?></th>
                 <th class="tbl_stat">P</th>
@@ -134,7 +155,10 @@
                 <th class="tbl_stat">Int</th>
                 <th class="tbl_stat">%</th>
               </tr>
+              </thead>
+              <tbody>
                 <?php $own->cup_stat_tbl_row() ?>
+              </tbody>
             </table>
 
             <h3>Top Players They Coached</h3>

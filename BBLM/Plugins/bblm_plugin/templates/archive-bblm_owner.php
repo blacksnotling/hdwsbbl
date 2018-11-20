@@ -13,6 +13,7 @@
     <?php $own = new BBLM_CPT_Owner; ?>
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
       <table class="sortable bblm_tbl bblm_sortable">
+        <thead>
         <tr>
           <th class="tbl_title"><?php echo __( 'Owner', 'bblm'); ?></th>
           <th><?php echo __( 'Teams', 'bblm'); ?></th>
@@ -29,11 +30,14 @@
           <th class="tbl_stat">Int</th>
           <th class="tbl_stat">%</th>
         </tr>
+      </thead>
+      <tbody>
 
+    <?php $c = true; ?>
 		<?php while (have_posts()) : the_post(); ?>
       <?php do_action( 'bblm_template_before_content' ); ?>
 
-          <tr>
+          <tr<?php echo (($c = !$c)?' class="tbl_alt"':''); ?>>
             <td><a href="<?php the_permalink(); ?>" title="<?php echo __( 'Read more about', 'bblm'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></td>
             <td><?php echo $own->get_number_teams() ?></td>
             <td><?php echo $own->get_number_championships(); ?></td>
@@ -46,7 +50,7 @@
 
     <?php do_action( 'bblm_template_after_content' ); ?>
     <?php endwhile; ?>
-
+          </tbody>
         </table>
 
       <footer class="entry-footer">

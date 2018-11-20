@@ -312,9 +312,10 @@ class BBLM_CPT_Owner {
 
         if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
-          foreach ($gs as $g) {
+					$c = true;
+					foreach ($gs as $g) {
 
-          $output .=  '<tr>
+          $output .=  '<tr'. (($c = !$c)?' class="tbl_alt"':'') .'>
                      <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
                      <td>'. $g->OP .'</td>
                      <td>'. $g->OW .'</td>
@@ -368,9 +369,10 @@ class BBLM_CPT_Owner {
 
          if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
+					 $c = true;
            foreach ($gs as $g) {
 
-           $output .=  '<tr>
+           $output .=  '<tr'. (($c = !$c)?' class="tbl_alt"':'') .'>
                       <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
                       <td>'. $g->OP .'</td>
                       <td>'. $g->OW .'</td>
@@ -424,9 +426,10 @@ class BBLM_CPT_Owner {
 
           if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
+						$c = true;
             foreach ($gs as $g) {
 
-            $output .=  '<tr>
+            $output .=  '<tr'. (($c = !$c)?' class="tbl_alt"':'') .'>
                        <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a> (as ' .esc_html( get_the_title( $g->TID ) ).')</td>
                        <td>'. $g->OP .'</td>
                        <td>'. $g->OW .'</td>
@@ -480,9 +483,10 @@ class BBLM_CPT_Owner {
 
            if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
+						 $c = true;
              foreach ($gs as $g) {
 
-             $output .=  '<tr>
+             $output .=  '<tr'. (($c = !$c)?' class="tbl_alt"':'') .'>
                         <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
                         <td>'. $g->OP .'</td>
                         <td>'. $g->OW .'</td>
@@ -536,9 +540,10 @@ class BBLM_CPT_Owner {
 
            if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
+						 $c = true;
              foreach ($gs as $g) {
 
-             $output .=  '<tr>
+             $output .=  '<tr'. (($c = !$c)?' class="tbl_alt"':'') .'>
                         <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a> (as ' .esc_html( get_the_title( $g->TID ) ).')</td>
                         <td>'. $g->OP .'</td>
                         <td>'. $g->OW .'</td>
