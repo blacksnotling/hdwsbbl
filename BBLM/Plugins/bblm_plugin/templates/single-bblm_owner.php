@@ -162,7 +162,23 @@
             </table>
 
             <h3>Top Players They Coached</h3>
+            <table class="bblm_tbl expandable bblm_expandable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th><?php echo __( 'Player', 'bblm'); ?></th>
+                  <th><?php echo __( 'Position', 'bblm'); ?></th>
+                  <th><?php echo __( 'Team', 'bblm'); ?></th>
+                  <th class="tbl_stat"><?php echo __( 'SSP', 'bblm'); ?></th>
+                </tr>
+              </thead>
+              <tbody>
+            <?php $own->player_stat_tbl_row() ?>
+              </tbody>
+            </table>
+
             <h3>Star Players Hired</h3>
+            <?php $own->star_stat_tbl_row() ?>
 
 <?php     } /* End of if $has_team */
           else {

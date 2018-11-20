@@ -575,6 +575,116 @@ class BBLM_CPT_Owner {
 
        }
 
+			 /**
+			 	* Echos the star players that a team has hired
+       	* Returns formatted unordered list
+        *
+        * @param wordpress $query
+        * @return string
+        */
+        public function star_stat_tbl_row() {
+          global $post;
+          global $wpdb;
+
+          $output = "";
+          $games = $this->get_number_games();
+					//Number of Stars hired
+					$options = get_option('bblm_config');
+					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+
+          //quick check to make sure this owner has played any games
+          if ( $games > 0 ) {
+
+						$starstatsql = 'SELECT J.pid, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'player X, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND J.prefix = "p_" AND J.tid = X.p_id AND M.p_id = X.p_id AND T.ID = '.get_the_ID() . ' AND X.t_id = '. $bblm_star_team;
+						$starstatsql .= ' GROUP BY M.p_id ORDER BY VISITS DESC'; //splitting the line for length reasons!
+
+            if ( $gs = $wpdb->get_results( $starstatsql ) ) {
+
+							$output .= '<ul>';
+
+              foreach ($gs as $g) {
+
+								$output .= '<li><a href="' .get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ) .' ">'. esc_html( get_the_title( $g->pid ) ) .'</a> (x'. $g->VISITS .')</li>';
+
+							}
+
+							$output .= '</ul>';
+
+            }
+						else {
+
+							$output .= '<p>Not hired any Star Players!</p>';
+
+						}
+
+          }
+          else {
+
+            //They have not played any games - save time and output zeros
+						$output .= '<p>Not hired any Star Players!</p>';
+
+          }
+
+          echo __( $output, 'bblm');
+
+        }
+
+				/**
+	       * Echos the top players that an owner has coached
+	       * Returns Player, Position, team, and SPP
+	       *
+	       * @param wordpress $query
+	       * @return string
+	       */
+	       public function player_stat_tbl_row() {
+	         global $post;
+	         global $wpdb;
+
+	         $output = "";
+	         $games = $this->get_number_games();
+					 $options = get_option('bblm_config');
+					 $bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+					 $stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+
+	         //quick check to make sure this owner has played any games
+	         if ( $games > 0 ) {
+
+						 $playerstatsql = 'SELECT J.pid AS PID, X.pid AS TID, R.pos_name, SUM(M.mp_spp) AS VALUE FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp X WHERE X.prefix = "t_" ';
+						 $playerstatsql .= 'AND X.tid = M.t_id AND J.prefix = "p_" AND J.tid = P.p_id AND T.t_id = M.t_id AND P.p_id = M.p_id AND P.pos_id = R.pos_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND ';//splitting the line for length reasons!
+						 $playerstatsql .= 'P.t_id != '.$bblm_star_team.' AND T.ID = '.get_the_ID() . ' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+
+	           if ( $gs = $wpdb->get_results( $playerstatsql ) ) {
+
+							 $num = 1;
+							 $c = true;
+	             foreach ($gs as $g) {
+
+	             $output .=  '<tr class"'. (($c = !$c)?' tbl_alt':'') .''. (($num > 10)?' tb_hide':'') .'">
+							 						<td>'.$num.'</td>
+	                        <td><a href="'. get_post_permalink( $g->PID ). '" title="Learn more about ' .esc_html( get_the_title( $g->PID ) ).' ">' .esc_html( get_the_title( $g->PID ) ).'</a></td>
+	                        <td>'. $g->pos_name .'</td>
+	                        <td><a href="'. get_post_permalink( $g->TID ). '" title="Learn more about ' .esc_html( get_the_title( $g->TID ) ).' ">' .esc_html( get_the_title( $g->TID ) ).'</a></td>
+	                        <td>'. $g->VALUE .'</td>
+	                       </tr>';
+												 $num++;
+	             }
+
+	           }
+
+	         }
+	         else {
+
+	           //They have not played any games - save time and output zeros
+	           $output .= '<td>0</td>
+	           <td colspan="9">Not played any games!</td>
+	           <td>0</td>';
+
+	         }
+
+	         echo __( $output, 'bblm');
+
+	       }
+
 
 }
 
