@@ -183,6 +183,24 @@ function crownstar_scripts() {
 add_action( 'wp_enqueue_scripts', 'crownstar_scripts' );
 
 /**
+ * Check to see if the page displayed is part of the'WarZone
+ */
+function crownstar_is_warzone() {
+
+	if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) {
+
+		return true;
+
+	}
+	else {
+
+		return false;
+
+	}
+
+}
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';
