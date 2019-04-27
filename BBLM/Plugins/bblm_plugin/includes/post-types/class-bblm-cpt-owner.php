@@ -233,7 +233,7 @@ class BBLM_CPT_Owner {
        $output .= " </li>
                     <li>Killed <strong>". $playerkill ."</strong> opposing players</li>
                     <li>Has won <strong>". $numawards ."</strong> Awards</li>
-                    <li>Has a rilvary with <strong>X</strong> (If I can get the SQL working!)</li>
+                    <!-- <li>Has a rilvary with <strong>X</strong> (If I can get the SQL working!)</li> -->
                     </ul>";
      }
 
