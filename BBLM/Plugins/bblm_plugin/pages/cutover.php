@@ -118,6 +118,55 @@ if (isset($_POST['bblm_owner_convert'])) {
 
 /**
  *
+ * updating the teams db table with wpid
+ */
+if (isset($_POST['bblm_team_tbupdate'])) {
+	$result = false;
+
+	//First we grab a list of the current users
+	$teamdeetssql = "SELECT T.t_id, T.t_name, J.pid AS WPID FROM `".$wpdb->prefix."team` T, ".$wpdb->prefix."bb2wp J WHERE J.prefix = 't_' AND J.tid = T.t_id";
+	echo '<p>'.$teamdeetssql.'</p>';
+
+	//We check something was returned
+	if ($teamdeets = $wpdb->get_results($teamdeetssql)) {
+
+		//echo '<ul>';
+		//Then we loop through them
+		foreach ($teamdeets as $tdeet) {
+
+			//We use this value to update the team tables
+			$teamupsql = "UPDATE `".$wpdb->prefix."team` SET `WPID` = '".$tdeet->WPID."' WHERE `".$wpdb->prefix."team`.`t_id` = ".$tdeet->t_id;
+			//echo '<li>' . $teamupsql . '</li>';
+
+			if ( $wpdb->query($teamupsql) ) {
+				$result = true;
+			}
+			else {
+
+				//Updating the team table failed!
+				$result = false;
+
+			}
+
+		}
+		//echo '</ul>';
+
+
+	}
+
+	//Update the DB table to with the new values
+
+	if ( $result ) {
+		print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+	}
+	else {
+		print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+	}
+
+} // END OF Updateing Team Database table
+
+/**
+ *
  * MAIN PAGE CONTENT FOLLOWS
  */
 ?>
@@ -160,7 +209,13 @@ if (isset($_POST['bblm_owner_convert'])) {
 		<li>Change Player 1 (Might be admin or similar) to THE HDWSBBL or something similar and set the visibility to private</li>
 		<li>Clean up the names as required</li>
 		<li>Any teams that need to be deleted? t_show = 0</li>
-		<li>Doubloe check all the teams are assigne dcorrectly-  no orphins etc</li>
+		<li>Doubloe check all the teams are assigned correctly-  no orphins etc</li>
+	</ul>
+
+	<h3>Teams Database Change</h3>
+	<ul>
+		<li>Add a new column to PREFIX_team - WPID Bigint (20)</li>
+		<li><input type="submit" name="bblm_team_tbupdate" value="Update Team Table" title="Update Team Table"/></li>
 	</ul>
 
 </form>
