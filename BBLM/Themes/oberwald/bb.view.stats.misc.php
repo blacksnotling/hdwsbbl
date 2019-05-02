@@ -53,7 +53,7 @@
 
 
 		<ul>
-			<li><strong>Most Expensive Player</strong>: <?php print(number_format($mep->VALUE)); ?>gp (<a href="<?php print($mep->PLAYERLink); ?>" title="Learn more about this player"><?php print($mep->PLAYER); ?></a> - <?php print($mep->pos_name); ?> for <a href="<?php print( get_post_permalink( $mep->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $mep->WPID ) )  ); ?></a>)</li>
+			<li><strong>Most Expensive Player</strong>: <?php print(number_format($mep->VALUE)); ?>gp (<a href="<?php print($mep->PLAYERLink); ?>" title="Learn more about this player"><?php print($mep->PLAYER); ?></a> - <?php print(  esc_html( $mep->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mep->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $mep->WPID ) )  ); ?></a>)</li>
 			<li><strong>Highest Recorded Attendance (Final or Semi-Final)</strong>: <?php print(number_format($bc->VALUE)); ?> fans (<a href="<?php print($bc->MATCHLink); ?>" title="Read the full report of this match"><?php print($bc->MATCHT); ?></a>)</li>
  			<li><strong>Highest Recorded Attendance</strong>: <?php print(number_format($bcn->VALUE)); ?> fans (<a href="<?php print($bcn->MATCHLink); ?>" title="Read the full report of this match"><?php print($bcn->MATCHT); ?></a>)</li>
  			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<a href="<?php print($lc->MATCHLink); ?>" title="Read the full report of this match"><?php print($lc->MATCHT); ?></a>)</li>
@@ -78,9 +78,9 @@
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
-			<li><strong>Most Star Player Points earnt in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print($mxps->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxps->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
-			<li><strong>Most Star Player Points earnt in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print($mxpc->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
-			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print($mxpm->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Star Player Points earnt in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print( esc_html( $mxps->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxps->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
+			<li><strong>Most Star Player Points earnt in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
+			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
 		<h4>Completion Related</h4>
@@ -101,11 +101,11 @@
 ?>
 		<ul>
 			<li><strong>Most Passes completed in a Season (Team)</strong>: <?php print($mxts->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxts->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxts->WPID ) )  ); ?></a> - <a href="<?php print($mxts->guid); ?>" title="Read more on this Season"><?php print($mxts->post_title); ?></a>)</li>
-			<li><strong>Most Passes completed in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print($mxps->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxps->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
+			<li><strong>Most Passes completed in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print( esc_html(  $mxps->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxps->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
 			<li><strong>Most Passes completed in a Competition (Team)</strong>: <?php print($mxtc->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtc->WPID ) )  ); ?></a> - <a href="<?php print($mxtc->guid); ?>" title="Read more on this Competition"><?php print($mxtc->post_title); ?></a>)</li>
-			<li><strong>Most Passes completed in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print($mxpc->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
+			<li><strong>Most Passes completed in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
 			<li><strong>Most Passes completed in a Match (Team)</strong>: <?php print($mxtm->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxtm->MDATE)); ?>)</li>
-			<li><strong>Most Passes completed in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print($mxpm->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Passes completed in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
 		<h4>Interception Related</h4>
@@ -126,11 +126,11 @@
 ?>
 		<ul>
 			<li><strong>Most Interceptions made in a Season (Team)</strong>: <?php print($mxts->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxts->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxts->WPID ) )  ); ?></a> - <a href="<?php print($mxts->guid); ?>" title="Read more on this Season"><?php print($mxts->post_title); ?></a>)</li>
-			<li><strong>Most Interceptions made in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print($mxps->pos_name); ?> for <a href="<?php print(get_post_permalink( $mxps->WPID )); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
+			<li><strong>Most Interceptions made in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<a href="<?php print($mxps->PLAYERLink); ?>" title="See more on this Player"><?php print($mxps->PLAYER); ?></a> - <?php print( esc_html( $mxps->pos_name ) ); ?> for <a href="<?php print(get_post_permalink( $mxps->WPID )); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxps->WPID ) )  ); ?></a> - <a href="<?php print($mxps->guid); ?>" title="Read more on this Season"><?php print($mxps->post_title); ?></a>)</li>
 			<li><strong>Most Interceptions made in a Competition (Team)</strong>: <?php print($mxtc->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtc->WPID ) )  ); ?></a> - <a href="<?php print($mxtc->guid); ?>" title="Read more on this Competition"><?php print($mxtc->post_title); ?></a>)</li>
-			<li><strong>Most Interceptions made in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print($mxpc->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
+			<li><strong>Most Interceptions made in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpc->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpc->WPID ) )  ); ?></a> - <a href="<?php print($mxpc->guid); ?>" title="Read more on this Competition"><?php print($mxpc->post_title); ?></a>)</li></li>
 			<li><strong>Most Interceptions made in a Match (Team)</strong>: <?php print($mxtm->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxtm->MDATE)); ?>)</li>
-			<li><strong>Most Interceptions made in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print($mxpm->pos_name); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Interceptions made in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
 
@@ -215,7 +215,7 @@
 							else {
 								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
 							}
-							print("	<td>".$ts->pos_name."</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ). "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -269,7 +269,7 @@
 							else {
 								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
 							}
-							print("	<td>".$ts->pos_name."</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -323,7 +323,7 @@
 							else {
 								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
 							}
-							print("	<td>".$ts->pos_name."</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;

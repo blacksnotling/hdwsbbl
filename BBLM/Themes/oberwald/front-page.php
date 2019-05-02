@@ -175,7 +175,7 @@
 							else {
 								print("	<tr class=\"tbl_alt\">\n");
 							}
-							print("		<td><a href=\"".$tp->Plink."\" title=\"Read more about ".$tp->Pname."\">".$tp->Pname."</a></td>\n		<td>".$tp->pos_name."</td>\n		<td><a href=\"" . get_post_permalink( $tp->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $tp->WPID ) ) . "</a></td>\n		<td>".$tp->VALUE."</td>\n	</tr>\n	");
+							print("		<td><a href=\"".$tp->Plink."\" title=\"Read more about ".$tp->Pname."\">".$tp->Pname."</a></td>\n		<td>" . esc_html( $tp->pos_name ) . "</td>\n		<td><a href=\"" . get_post_permalink( $tp->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $tp->WPID ) ) . "</a></td>\n		<td>".$tp->VALUE."</td>\n	</tr>\n	");
 							$zebracount++;
 						}
 						print("</table>\n");

@@ -176,7 +176,7 @@ a:hover, a:active {
 <tr>
   <td><?php print($pcount); ?></td>
   <td><?php print("<a href=\"".$pl->guid."\" title=\"View more information about ".$pl->post_title."\">".$pl->post_title."</a>"); if ($teamcap == $pl->p_id) { print(" (C)");} ?></td>
-  <td><?php print($pl->pos_name); ?></td>
+  <td><?php print( esc_html( $pl->pos_name ) ); ?></td>
   <td><?php print($pl->p_ma); ?></td>
   <td><?php print($pl->p_st); ?></td>
   <td><?php print($pl->p_ag); ?></td>

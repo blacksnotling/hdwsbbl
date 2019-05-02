@@ -138,7 +138,7 @@
 			<ul>
 <?php
 				foreach ($killer as $k) {
-					print ("				<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (".$k->pos_name." for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
+					print ("				<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (" . esc_html( $k->pos_name ) . " for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
 				}
 ?>
 			</ul>

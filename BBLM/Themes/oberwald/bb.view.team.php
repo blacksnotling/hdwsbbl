@@ -197,7 +197,7 @@
 							//Assignes the Captain to a link for future use in the Sidebar!
 							$teamcaplink = "<a href=\"".$pd->guid."\" title=\"View more information about ".$pd->post_title."\">".$pd->post_title."</a>";
 						}
-						print(" - ".$pd->pos_name." (".number_format($pd->p_cost)."gp)</li>\n");
+						print(" - " . esc_html( $pd->pos_name ) . " (".number_format($pd->p_cost)."gp)</li>\n");
 
 					$is_first = 0;
 				}

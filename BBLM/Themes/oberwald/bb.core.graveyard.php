@@ -56,7 +56,7 @@
 ?>
 		<div class="gyplayer gyfate<?php print($d->f_id); ?>">
 			<ul>
-				<li><a href="<?php print($d->guid); ?>" title="See more on the career of <?php print($d->post_title); ?>"><?php print($d->post_title); ?></a> (#<?php print($d->p_num); ?> - <?php print($d->pos_name); ?>)</li>
+				<li><a href="<?php print($d->guid); ?>" title="See more on the career of <?php print($d->post_title); ?>"><?php print($d->post_title); ?></a> (#<?php print($d->p_num); ?> - <?php print( esc_html( $d->pos_name ) ); ?>)</li>
 				<li>Died: <?php print(date("d.m.25y", $d->mdate));?></li>
 <?php
 			//If the player has won an eagle award, let everyone know

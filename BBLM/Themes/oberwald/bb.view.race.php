@@ -51,7 +51,7 @@
 							else {
 								print("	<tr class=\"tbl_alt\" id=\"pos-".$pos->pos_id."\">\n");
 							}
-							print("		<td>".$pos->pos_name."</td>\n		<td>0 - ".$pos->pos_limit."</td>\n		<td>".$pos->pos_ma."</td>\n		<td>".$pos->pos_st."</td>\n		<td>".$pos->pos_ag."</td>\n		<td>".$pos->pos_av."</td>\n		<td class=\"tbl_skills\">".$pos->pos_skills."</td>\n		<td>".number_format($pos->pos_cost)."gp</td>\n	</tr>\n");
+							print("		<td>" . esc_html( $pos->pos_name ) . "</td>\n		<td>0 - ".$pos->pos_limit."</td>\n		<td>".$pos->pos_ma."</td>\n		<td>".$pos->pos_st."</td>\n		<td>".$pos->pos_ag."</td>\n		<td>".$pos->pos_av."</td>\n		<td class=\"tbl_skills\">".$pos->pos_skills."</td>\n		<td>".number_format($pos->pos_cost)."gp</td>\n	</tr>\n");
 							$zebracount++;
 						}
 						print("</table>\n");

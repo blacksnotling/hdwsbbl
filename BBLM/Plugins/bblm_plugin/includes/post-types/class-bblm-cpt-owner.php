@@ -662,7 +662,7 @@ class BBLM_CPT_Owner {
 	             $output .=  '<tr class"'. (($c = !$c)?' tbl_alt':'') .''. (($num > 10)?' tb_hide':'') .'">
 							 						<td>'.$num.'</td>
 	                        <td><a href="'. get_post_permalink( $g->PID ). '" title="Learn more about ' .esc_html( get_the_title( $g->PID ) ).' ">' .esc_html( get_the_title( $g->PID ) ).'</a></td>
-	                        <td>'. $g->pos_name .'</td>
+	                        <td>'. esc_html( $g->pos_name ) .'</td>
 	                        <td><a href="'. get_post_permalink( $g->TID ). '" title="Learn more about ' .esc_html( get_the_title( $g->TID ) ).' ">' .esc_html( get_the_title( $g->TID ) ).'</a></td>
 	                        <td>'. $g->VALUE .'</td>
 	                       </tr>';

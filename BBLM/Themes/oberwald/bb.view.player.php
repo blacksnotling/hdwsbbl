@@ -79,7 +79,7 @@ get_header(); ?>
 							<th>Cost</th>
 						</tr>
 						<tr>
-							<td><?php print($pd->pos_name); ?></td>
+							<td><?php print( esc_html( $pd->pos_name ) ); ?></td>
 							<td><?php print($pd->p_ma); ?></td>
 							<td><?php print($pd->p_st); ?></td>
 							<td><?php print($pd->p_ag); ?></td>
@@ -136,7 +136,7 @@ get_header(); ?>
 						<ul>
 <?php
 						foreach ($killer as $k) {
-							print ("							<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (".$k->pos_name." for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
+							print ("							<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (" . esc_html( $k->pos_name ) . " for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
 						}
 ?>
 						</ul>
