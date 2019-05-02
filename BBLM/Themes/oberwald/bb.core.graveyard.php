@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate Graveyard
+ *
+ * Page Template for the Graveyard (All the dead players)
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: GraveYard
-*/
-/*
-*	Filename: bb.core.graveyard.php
-*	Description: .Page template to display the graveyard of fallen players
-*/
+ * Template Name: Graveyard
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -28,13 +33,13 @@ Template Name: GraveYard
 		}
 
 		//Main SQL Query to determine the Dead
-		$deadsql = 'SELECT P.p_id, T.t_name, K.post_title, K.guid, P.p_num, O.pos_name, T.t_guid, UNIX_TIMESTAMP(M.m_date) AS mdate, F.f_id FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (f_id = 1 OR f_id = 6) AND F.p_id = P.p_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = O.pos_id AND M.m_id = F.m_id AND M.c_id = C.c_id AND T.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_show = 1 ORDER BY T.t_name ASC, P.p_num ASC, K.post_title ASC';
+		$deadsql = 'SELECT P.p_id, T.WPID, K.post_title, K.guid, P.p_num, O.pos_name, UNIX_TIMESTAMP(M.m_date) AS mdate, F.f_id FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (f_id = 1 OR f_id = 6) AND F.p_id = P.p_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = O.pos_id AND M.m_id = F.m_id AND M.c_id = C.c_id AND T.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_show = 1 ORDER BY T.t_name ASC, P.p_num ASC, K.post_title ASC';
 		if ($dead = $wpdb->get_results($deadsql)) {
 			$is_first = 1;
 			$last_team = "";
 
 			foreach ($dead as $d) {
-				if ($d->t_name != $last_team) {
+				if ($d->WPID != $last_team) {
 					if (1 != $is_first) {
 						//If the team is not the first, and we are here, we close the div
 						print("	</div><!-- end of .gycontainer -->\n");
@@ -43,8 +48,9 @@ Template Name: GraveYard
 						//This is the first so no longer have it set
 						$is_first = 0;
 					}
-						print("\n	<div class=\"gycontainer\">\n		<h3><a href=\"".$d->t_guid."\" title=\"Read more about ".$d->t_name."\">".$d->t_name."</a></h3>\n");
-						$last_team = $d->t_name;
+						$team_name = esc_html( get_the_title( $d->WPID ) );
+						print("\n	<div class=\"gycontainer\">\n		<h3><a href=\"" . get_post_permalink( $d->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></h3>\n");
+						$last_team = $d->WPID;
 				}//end of if team does not match
 
 ?>

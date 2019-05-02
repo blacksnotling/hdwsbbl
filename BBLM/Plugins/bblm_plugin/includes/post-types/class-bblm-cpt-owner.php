@@ -649,8 +649,8 @@ class BBLM_CPT_Owner {
 	         //quick check to make sure this owner has played any games
 	         if ( $games > 0 ) {
 
-						 $playerstatsql = 'SELECT J.pid AS PID, X.pid AS TID, R.pos_name, SUM(M.mp_spp) AS VALUE FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp X WHERE X.prefix = "t_" ';
-						 $playerstatsql .= 'AND X.tid = M.t_id AND J.prefix = "p_" AND J.tid = P.p_id AND T.t_id = M.t_id AND P.p_id = M.p_id AND P.pos_id = R.pos_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND ';//splitting the line for length reasons!
+						 $playerstatsql = 'SELECT J.pid AS PID, T.WPID AS TID, R.pos_name, SUM(M.mp_spp) AS VALUE FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J WHERE ' ;
+						 $playerstatsql .= 'J.prefix = "p_" AND J.tid = P.p_id AND T.t_id = M.t_id AND P.p_id = M.p_id AND P.pos_id = R.pos_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND ';//splitting the line for length reasons!
 						 $playerstatsql .= 'P.t_id != '.$bblm_star_team.' AND T.ID = '.get_the_ID() . ' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 
 	           if ( $gs = $wpdb->get_results( $playerstatsql ) ) {

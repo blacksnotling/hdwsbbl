@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_Widget_RecentMatchSum extends WP_Widget {
@@ -35,11 +35,11 @@ class BBLM_Widget_RecentMatchSum extends WP_Widget {
       $instance['nummatch'] = 6;
     }
 
-    $matchsql = "SELECT M.m_date, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id AND M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND C.c_show = 1 AND C.type_id = 1 AND M.m_teamB = Q.t_id AND C.c_counts = '1' ORDER BY m_date DESC, m_id DESC LIMIT ".$instance['nummatch'];
+    $matchsql = "SELECT M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id AND M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND C.c_show = 1 AND C.type_id = 1 AND M.m_teamB = Q.t_id AND C.c_counts = '1' ORDER BY m_date DESC, m_id DESC LIMIT ".$instance['nummatch'];
     if ($matches = $wpdb->get_results($matchsql)) {
     	print("<ul>\n");
     	foreach ($matches as $match) {
-    		print("  <li><a href=\"".$match->guid."\" title=\"View the match in detail\">".$match->tA." <strong>".$match->m_teamAtd."</strong> vs <strong>".$match->m_teamBtd."</strong> ".$match->tB."</a></li>");
+    		print("  <li><a href=\"".$match->guid."\" title=\"View the match in detail\">".esc_html( get_the_title( $match->tA ) )." <strong>".$match->m_teamAtd."</strong> vs <strong>".$match->m_teamBtd."</strong> ".esc_html( get_the_title( $match->tB ) )."</a></li>");
     	}
     	print("</ul>\n");
     }

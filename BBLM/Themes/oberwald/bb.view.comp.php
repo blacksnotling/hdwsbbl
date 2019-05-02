@@ -19,7 +19,6 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-		//$compsql = "SELECT P.post_title, C.c_id, S.series_name, Y.sea_name, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'series S, '.$wpdb->prefix.'season Y, '.$wpdb->prefix.'comp_type T, ".$wpdb->posts." P WHERE Y.sea_id = C.sea_id AND C.c_id = J.tid AND C.series_id = S.series_id AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID =".$post->ID;
 		$compsql = 'SELECT P.post_title, C.c_id, C.sea_id, C.series_id, I.post_title AS SERIES, I.guid AS SERIESLink, G.post_title AS SEASON, G.guid AS SEASONLink, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' G, '.$wpdb->prefix.'comp_type T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' I WHERE C.sea_id = Y.tid AND Y.prefix = \'sea_\' AND Y.pid = G.ID AND C.c_id = J.tid AND C.series_id = U.tid AND U.prefix = \'series_\' AND U.pid = I.ID AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID = '.$post->ID;;
 		if ($cd = $wpdb->get_row($compsql)) {
 
@@ -175,7 +174,7 @@
 					//We have something other than a tournament. Begin normal printout
 					//May need to split this in the future, depending on league requirements
 					//$standingssql = 'SELECT P.post_title, P.guid, C.*, D.div_name, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC';
-					$standingssql = 'SELECT T.t_name, T.t_guid, C.*, D.div_name, D.div_id, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC, C.tc_tdfor DESC, C.tc_casfor DESC, T.t_name ASC';
+					$standingssql = 'SELECT T.WPID, C.*, D.div_name, D.div_id, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC, C.tc_tdfor DESC, C.tc_casfor DESC, T.t_name ASC';
 					if ($standings = $wpdb->get_results($standingssql)) {
 						$is_first_div = 1;
 						$zebracount = 1;
@@ -204,7 +203,7 @@
 							else {
 								print("					<tr class=\"tbl_alt\">\n");
 							}
-							print("  <td><a href=\"".$stand->t_guid."\" title=\"View more information about ".$stand->t_name."\">".$stand->t_name."</a></td>\n <td>".$stand->tc_played."</td>\n  <td>".$stand->tc_W."</td>\n  <td>".$stand->tc_D."</td>\n  <td>".$stand->tc_L."</td>\n  <td>".$stand->tc_tdfor."</td>\n  <td>".$stand->tc_tdagst."</td>\n  <td>".$stand->TDD."</td>\n  <td>".$stand->tc_casfor."</td>\n  <td>".$stand->tc_casagst."</td>\n  <td>".$stand->CASD."</td>\n  <td><strong>".$stand->tc_points."</strong></td>\n	</tr>\n");
+							print("  <td><a href=\"" . get_post_permalink( $stand->WPID ) . "\" title=\"View more information about this team\">" . esc_html( get_the_title( $stand->WPID ) ) . "</a></td>\n <td>".$stand->tc_played."</td>\n  <td>".$stand->tc_W."</td>\n  <td>".$stand->tc_D."</td>\n  <td>".$stand->tc_L."</td>\n  <td>".$stand->tc_tdfor."</td>\n  <td>".$stand->tc_tdagst."</td>\n  <td>".$stand->TDD."</td>\n  <td>".$stand->tc_casfor."</td>\n  <td>".$stand->tc_casagst."</td>\n  <td>".$stand->CASD."</td>\n  <td><strong>".$stand->tc_points."</strong></td>\n	</tr>\n");
 
 							//set flag so resulting </table> is printed
 							$is_first_div = 0;
@@ -368,7 +367,7 @@
 				print("<h3>Team Statistics</h3>\n");
 				//$teamstatssql = 'SELECT P.post_title, P.guid, COUNT(*) AS PLAYED, T.tc_W, T.tc_L, T.tc_D, SUM(C.mt_td) AS TD, SUM(C.mt_cas) AS CAS, SUM(C.mt_int) AS MINT, SUM(C.mt_comp) AS COMP FROM '.$wpdb->prefix.'match_team C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team_comp T WHERE C.t_id = T.t_id AND C.m_id = M.m_id AND C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND M.c_id = '.$cd->c_id.' AND T.c_id = '.$cd->c_id.' GROUP BY T.t_id ORDER BY P.post_title ASC LIMIT 0, 30 ';
 				//$teamstatssql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, P.guid FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.c_id = '.$cd->c_id.' GROUP BY T.t_id ORDER BY P.post_title ASC';
-				$teamstatssql = 'SELECT Z.t_name, Z.t_guid, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.c_id = '.$cd->c_id.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
+				$teamstatssql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.c_id = '.$cd->c_id.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
 ?>
@@ -399,7 +398,7 @@
 							print("					<tr class=\"tbl_alt\">\n");
 						}
 ?>
-						<td><a href="<?php print($ps->t_guid); ?>" title="Read more on <?php print($ps->t_name); ?>"><?php print($ps->t_name); ?></a></td>
+						<td><a href="<?php print( get_post_permalink( $ps->WPID ) ); ?>" title="Read more on this team"><?php print( esc_html( get_the_title( $ps->WPID ) ) ); ?></a></td>
 						<td><?php print($ps->TP); ?></td>
 						<td><?php print($ps->TW); ?></td>
 						<td><?php print($ps->TL); ?></td>
@@ -462,7 +461,7 @@
 				//For each of the stats, print the top players list. If none are found, display the relevant error
 				foreach ($playerstatsarray as $tpa) {
 					//Generic SQL Call, populated with the stat we are looking for
-					$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$cd->c_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+					$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$cd->c_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 					print("<h4>".$tpa['title']."</h4>\n");
 					if ($topstats = $wpdb->get_results($statsql)) {
 						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
@@ -489,7 +488,7 @@
 								else {
 									print("	<td><strong>".$zebracount."</strong></td>\n");
 								}
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TEAMLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 								$prevvalue = $ts->VALUE;
 							}
 							$zebracount++;
@@ -504,7 +503,7 @@
 				//==================
 				// -- Top Killer --
 				//==================
-					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$cd->c_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
+					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.WPID FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$cd->c_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
 					print("<h4>Top Killers</h4>\n");
 					if ($topstats = $wpdb->get_results($statsql)) {
 						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
@@ -531,7 +530,7 @@
 								else {
 									print("	<td><strong>".$zebracount."</strong></td>\n");
 								}
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TeamLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 								$prevvalue = $ts->VALUE;
 							}
 							$zebracount++;
@@ -607,7 +606,7 @@
 							<th class="tbl_stat">Value</th>
 						</tr>
 <?php
-					$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, F.post_title AS Tname, F.guid AS Tlink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'bb2wp D, '.$wpdb->posts.' F WHERE R.t_id = D.tid AND D.prefix = \'t_\' AND D.pid = F.ID AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND B.c_id = '.$cd->c_id.' ORDER BY A.a_id ASC';
+					$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T WHERE R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND B.c_id = '.$cd->c_id.' ORDER BY A.a_id ASC';
 					if ($cpawards = $wpdb->get_results($compplayerawardssql)) {
 						$zebracount = 1;
 						foreach ($cpawards as $cpa) {
@@ -617,7 +616,7 @@
 							else {
 								print("						<tr class=\"tbl_alt\">\n");
 							}
-								print("		<td>".$cpa->a_name."</td>\n		<td><a href=\"".$cpa->Plink."\" title=\"Read more about ".$cpa->Pname."\">".$cpa->Pname."</a></td>\n		<td><a href=\"".$cpa->Tlink."\" title=\"Read more about ".$cpa->Tname."\">".$cpa->Tname."</a></td>\n		<td>".$cpa->value."</td>\n	</tr>\n");
+								print("		<td>".$cpa->a_name."</td>\n		<td><a href=\"".$cpa->Plink."\" title=\"Read more about ".$cpa->Pname."\">".$cpa->Pname."</a></td>\n		<td><a href=\"" .  get_post_permalink( $cpa->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $cpa->WPID ) ) . "</a></td>\n		<td>".$cpa->value."</td>\n	</tr>\n");
 							$zebracount++;
 						}
 					}

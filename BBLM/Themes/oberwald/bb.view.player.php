@@ -1,12 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Player
+ *
+ * Page Template to view Players details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Player
-*/
-/*
-*	Filename: bb.view.player.php
-*	Description: Page template to view a players details
-*/
-
+ * Template Name: View Player
+ */
 get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
@@ -14,8 +18,7 @@ get_header(); ?>
 			/*
 			Gather Information for page
 			*/
-			//$playersql = 'SELECT P.*, T.t_name, Y.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position Y WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = Y.pos_id';
-			$playersql = 'SELECT P.*, U.post_title AS TeamName, U.guid AS TeamLink, E.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' U, '.$wpdb->prefix.'position E WHERE P.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = U.ID AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = E.pos_id';
+			$playersql = 'SELECT P.*, T.WPID, E.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position E WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = E.pos_id';
 			//if ($player = $wpdb->get_results($playersql)) {
 			if ($pd = $wpdb->get_row($playersql)) {
 				$pspp = $pd->p_spp;
@@ -111,9 +114,9 @@ get_header(); ?>
 							}
 							else {
 								//It must be a player
-								$killersql = 'SELECT P.post_title AS PLAYER, P.guid AS PLAYERLink, T.t_name AS TEAM, T.t_guid AS TEAMLink FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND F.pf_killer = X.p_id AND X.t_id = T.t_id AND F.p_id = '.$pd->p_id.' LIMIT 1';
+								$killersql = 'SELECT P.post_title AS PLAYER, P.guid AS PLAYERLink, T.WPID FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND F.pf_killer = X.p_id AND X.t_id = T.t_id AND F.p_id = '.$pd->p_id.' LIMIT 1';
 								if ($killer = $wpdb->get_row($killersql)) {
-									print("<a href=\"".$killer->PLAYERLink."\" title=\"Read more about this player\">".$killer->PLAYER."</a> from <a href=\"".$killer->TEAMLink."\" title=\"Read more about this team\">".$killer->TEAM."</a>");
+									print("<a href=\"".$killer->PLAYERLink."\" title=\"Read more about this player\">".$killer->PLAYER."</a> from <a href=\"" . get_post_permalink( $killer->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $killer->WPID ) ) . "</a>");
 								}
 								else {
 									print("an unkown player.</p>\n");
@@ -124,7 +127,7 @@ get_header(); ?>
 					}
 
 					// -- KILLER --
-					$killersql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position X WHERE F.p_id = P.p_id AND P.t_id = T.t_id AND P.pos_id = X.pos_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND F.pf_killer = '.$pd->p_id.' AND F.p_id != '.$pd->p_id.' ORDER BY F.m_id ASC';
+					$killersql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, T.WPID, X.pos_name FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position X WHERE F.p_id = P.p_id AND P.t_id = T.t_id AND P.pos_id = X.pos_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND F.pf_killer = '.$pd->p_id.' AND F.p_id != '.$pd->p_id.' ORDER BY F.m_id ASC';
 					if ($killer = $wpdb->get_results($killersql)) {
 						//If the player has killed people
 ?>
@@ -133,7 +136,7 @@ get_header(); ?>
 						<ul>
 <?php
 						foreach ($killer as $k) {
-							print ("							<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (".$k->pos_name." for <a href=\"".$k->TEAMLink."\" title=\"Read more about ".$k->TEAM."\">".$k->TEAM."</a>)</li>\n");
+							print ("							<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (".$k->pos_name." for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
 						}
 ?>
 						</ul>
@@ -240,7 +243,6 @@ get_header(); ?>
 							</thead>
 							<tbody>
 <?php
-						//$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, T.t_name AS TA, T.t_id AS TAid, R.t_name AS TB, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C WHERE C.c_id = X.c_id AND C.c_counts = 1 AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
 						$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_counts = 1 AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
 						if ($playermatch = $wpdb->get_results($playermatchsql)) {
 						$zebracount = 1;
@@ -474,7 +476,7 @@ get_header(); ?>
 ?>
 			   <li><strong>Status:</strong> <?php print($status); ?></li>
 			   <li><strong>Rank:</strong> <?php print($plevel); ?></li>
-			   <li><strong>Team:</strong> <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a></li>
+			   <li><strong>Team:</strong> <a href="<?php print( get_post_permalink( $pd->WPID ) ); ?>" title="Read more on this team"><?php print( esc_html( get_the_title( $pd->WPID ) ) ); ?></a></li>
 			   <li><strong>Position Number:</strong> #<?php print($pd->p_num); ?></li>
 <?php
 				 $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned

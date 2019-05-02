@@ -8,9 +8,9 @@
  * @category 	Template
  * @package 	BBowlLeagueMan/Templates
  */
-/*
-Template Name: View Team
-*/
+ /*
+  * Template Name: View Team
+  */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -234,7 +234,7 @@ Template Name: View Team
 
 
 		//The next part is displayed regardless of if a team hs plyed  match or not (google code issue 18)
-				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_name AS tA, T.t_guid AS tAlink, Y.t_name AS tB, Y.t_guid AS tBlink, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND C.c_counts = 1 AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
+				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.WPID AS tAid, Y.WPID AS tBid, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND C.c_counts = 1 AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
 
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
 				print("<h3>Upcoming Matches (Fixtures)</h3>\n\n");
@@ -265,18 +265,30 @@ Template Name: View Team
 					print("		 	<td>".date("d.m.y", $fd->fdate)."</td>\n		 	<td>\n");
 					if ($tid == $fd->f_teamA) {
 						if ($bblm_tbd_team == $fd->f_teamB) {
-							print($fd->tB);
+
+							echo __( 'To Be Determined', 'bblm');
+
 						}
 						else {
-							print("<a href=\"".$fd->tBlink."\" title=\"Learn more about ".$fd->tB."\">".$fd->tB."</a>");
+
+							$team_name = esc_html( get_the_title( $fd->tBid ) );
+							$team_link = get_post_permalink( $fd->tBid );
+							print("<a href=\"" . $team_link . "\" title=\"Learn more about " . $team_name . "\">" . $team_name . "</a>");
+
 						}
 					}
 					else if ($tid == $fd->f_teamB) {
 						if ($bblm_tbd_team == $fd->f_teamA) {
-							print($fd->tA);
+
+							echo __( 'To Be Determined', 'bblm');
+
 						}
 						else {
-							print("<a href=\"".$fd->tAlink."\" title=\"Learn more about ".$fd->tA."\">".$fd->tA."</a>");
+
+							$team_name = esc_html( get_the_title( $fd->tAid ) );
+							$team_link = get_post_permalink( $fd->tAid );
+							print("<a href=\"" . $team_link . "\" title=\"Learn more about " . $team_name . "\">" . $team_name . "</a>");
+
 						}
 					}
 					print("</td>\n		 	<td><a href=\"".$fd->CompLink."\" title=\"Read more about ".$fd->Comp."\">".$fd->Comp."</a> (".$fd->div_name.")</td>\n			</tr>\n");
@@ -289,7 +301,10 @@ Template Name: View Team
 ?>
 				<h3>Recent Matches</h3>
 <?php
-				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, P.post_title AS TAname, O.post_title AS TBname, P.guid AS TAlink, O.guid AS TBlink, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp K, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->posts.' P, '.$wpdb->posts.' O, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1 AND C.c_counts = 1 AND N.m_id = M.m_id AND T.t_id = J.tid AND R.t_id = K.tid AND J.prefix = \'t_\' AND K.prefix = \'t_\' AND J.pid = P.ID AND K.pid = O.ID AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
+				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
+				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1 AND C.c_counts = 1';
+				$matchssql .= ' AND N.m_id = M.m_id AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
+
 				if ($matchs = $wpdb->get_results($matchssql)) {
 				$zebracount = 1;
 				$alt = "FALSE";
@@ -315,10 +330,14 @@ Template Name: View Team
 						print("		   <td><a href=\"".$ms->Mlink."\" title=\"View full details of ".$ms->Mtitle."\">".date("d.m.y", $ms->mdate)."</a></td>\n		   <td class=\"tbl_matchop\">");
 
 						if ($tid == $ms->m_teamA) {
-							print("<a href=\"".$ms->TBlink."\" title=\"View more details about ".$ms->TBname."\">".$ms->TBname."</a></td>\n		   <td>".$ms->m_teamAtd."</td>\n		   <td>".$ms->m_teamBtd."</td>\n		   <td>".$ms->m_teamAcas."</td>\n		   <td>".$ms->m_teamBcas."</td>\n");
+							$team_name = esc_html( get_the_title( $ms->tBid ) );
+							$team_link = get_post_permalink( $ms->tBid );
+							print("<a href=\"" . $team_link . "\" title=\"View more details about " . $team_name . "\">" . $team_name . "</a></td>\n		   <td>".$ms->m_teamAtd."</td>\n		   <td>".$ms->m_teamBtd."</td>\n		   <td>".$ms->m_teamAcas."</td>\n		   <td>".$ms->m_teamBcas."</td>\n");
 						}
 						else if ($tid == $ms->m_teamB) {
-							print("<a href=\"".$ms->TAlink."\" title=\"View more details about ".$ms->TAname."\">".$ms->TAname."</a></td>\n		   <td>".$ms->m_teamBtd."</td>\n		   <td>".$ms->m_teamAtd."</td>\n		   <td>".$ms->m_teamBcas."</td>\n		   <td>".$ms->m_teamAcas."</td>\n");
+							$team_name = esc_html( get_the_title( $ms->tAid ) );
+							$team_link = get_post_permalink( $ms->tAid );
+							print("<a href=\"" . $team_link . "\" title=\"View more details about " . $team_name . "\">" . $team_name . "</a></td>\n		   <td>".$ms->m_teamBtd."</td>\n		   <td>".$ms->m_teamAtd."</td>\n		   <td>".$ms->m_teamBcas."</td>\n		   <td>".$ms->m_teamAcas."</td>\n");
 						}
 						print("		   <td>".number_format($ms->mt_winnings)."</td>\n		   <td>".number_format($ms->mt_tv)."</td>\n		   <td>".$ms->mt_result."</td>\n		 </tr>\n");
 						//printing of match comment

@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Match
+ *
+ * Page Template to view a Matches details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Match
-*/
-/*
-*	Filename: bb.view.match.php
-*	Description: .Page template to display the details of a match
-*/
+ * Template Name: View Match
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -20,11 +25,14 @@ Template Name: View Match
 			if ($m = $wpdb->get_row($matchsql)) {
 
 				//TeamA Information
-				$teamAsql = 'SELECT M.*, T.t_name, T.t_guid, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
+				$teamAsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
 				$tA = $wpdb->get_row($teamAsql);
 				//Team B Information
-				$teamBsql = 'SELECT M.*, T.t_name, T.t_guid, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
+				$teamBsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
 				$tB = $wpdb->get_row($teamBsql);
+
+				$teamA = esc_html( get_the_title( $tA->WPID ) );
+				$teamB = esc_html( get_the_title( $tB->WPID ) );
 
 				//Check for custom logo and if found set the var for use later on
 				$options = get_option('bblm_config');
@@ -48,14 +56,14 @@ Template Name: View Match
 				}
 
 ?>
-			<h2><a href="<?php print($tA->t_guid); ?>" title="Read more on <?php print($tA->t_name); ?>"><?php print($tA->t_name); ?></a> vs <a href="<?php print($tB->t_guid); ?>" title="Read more on <?php print($tB->t_name); ?>"><?php print($tB->t_name); ?></a></h2>
+			<h2><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on <?php print( $teamA ); ?>"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on <?php print( $teamB ); ?>"><?php print( $teamB ); ?></a></h2>
 		<!--<p><?php print($post->ID); ?> - <?php print($m->m_id); ?></p>-->
 
 				<table>
 					<tr>
-						<th class="tbl_name"><?php print($tA->t_name);?></th>
+						<th class="tbl_name"><?php print( $teamA );?></th>
 						<th class="tbl_name">VS</th>
-						<th class="tbl_name"><?php print($tB->t_name);?></th>
+						<th class="tbl_name"><?php print( $teamB );?></th>
 					</tr>
 					<tr>
 						<td><strong><?php print($tAimg);?></strong></td>
@@ -120,9 +128,9 @@ Template Name: View Match
 			<h3>Player Actions</h3>
 		<table>
 			<tr>
-				<th><?php print($tA->t_name);?></th>
+				<th><?php print( $teamA );?></th>
 				<th>&nbsp;</th>
-				<th><?php print($tB->t_name);?></th>
+				<th><?php print( $teamB );?></th>
 			</tr>
 			<tr>
 				<td>

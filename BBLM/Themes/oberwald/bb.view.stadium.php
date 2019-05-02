@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Stsdium
+ *
+ * Page Template to view a Stadiums details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Stadium
-*/
-/*
-*	Filename: bb.view.Stadium.php
-*	Description: Page template to view the details of a stadium.
-*/
+ * Template Name: View Stadium
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -18,7 +23,7 @@ Template Name: View Stadium
 				$stad_id = $wpdb->get_var($stadidsql);
 
 				//code for "home" teams
-				$hometeamsql = 'SELECT T.t_name, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.stad_id = '.$stad_id;
+				$hometeamsql = 'SELECT T.WPID FROM '.$wpdb->prefix.'team T WHERE T.t_show = 1 AND T.stad_id = '.$stad_id;
 				print("<h3>Home Teams</h3>\n");
 				if ($hometeam = $wpdb->get_results($hometeamsql)) {
 					//Check to see how many teams are returned
@@ -26,14 +31,14 @@ Template Name: View Stadium
 						//we have more than one team
 						print("<p>At Present, the following teams call this stadium their home.</p>\n<ul>\n");
 						foreach ($hometeam as $ht) {
-							print("	<li><a href=\"".$ht->guid."\" title=\"Read more about ".$ht->t_name."\">".$ht->t_name."</a></li>\n");
+							print("	<li><a href=\"".  get_post_permalink( $ht->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $ht->WPID ) ) . "</a></li>\n");
 						}
 						print("</ul>\n");
 					}
 					else {
 						//only one team is retuned
 						foreach ($hometeam as $ht) {
-							print("<p>At Present, only <a href=\"".$ht->guid."\" title=\"Read more about ".$ht->t_name."\">".$ht->t_name."</a> call this stadium their home.</p>\n");
+							print("<p>At Present, only <a href=\"".  get_post_permalink( $ht->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $ht->WPID ) ) . "</a> call this stadium their home.</p>\n");
 						}
 					}
 				}

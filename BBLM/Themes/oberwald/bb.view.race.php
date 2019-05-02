@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Race
+ *
+ * Page Template to view Race's details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Race
-*/
-/*
-*	Filename: bb.view.race.php
-*	Description: Page template to view the details of a race.
-*/
+ * Template Name: View Race
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -76,11 +81,11 @@ Template Name: View Race
 
 
 					print("<h3>Teams belonging to this Race</h3>\n");
-					$teamsql = 'SELECT T.t_name, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.r_id = '.$race_id.' ORDER by T.t_name ASC';
+					$teamsql = 'SELECT T.WPID FROM '.$wpdb->prefix.'team T WHERE T.t_show = 1 AND T.r_id = '.$race_id.' ORDER by T.t_name ASC';
 					if ($teams = $wpdb->get_results($teamsql)) {
 						print("<ul>\n");
 						foreach ($teams as $td) {
-							print("<li><a href=\"".$td->guid."\" title=\"View more details of this team\">".$td->t_name."</a></li>\n");
+							print("<li><a href=\"" . get_post_permalink( $td->WPID ) . "\" title=\"View more details of this team\">" . esc_html( get_the_title( $td->WPID ) ) . "</a></li>\n");
 						}
 						print("</ul>\n");
 					}

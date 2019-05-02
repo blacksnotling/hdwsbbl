@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Roster
+ *
+ * Page Template to view a Roster
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: Team Roster
-*/
-/*
-*	Filename: bb.view.roster.php
-*	Description: .Page template to display
-*/
+ * Template Name: View Roster
+ */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html <?php language_attributes(); ?>>
@@ -95,9 +100,11 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink, H.guid AS TeamLink, H.post_title AS TeamName FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE T.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = H.ID AND Y.tid = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink, T.WPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.t_id = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
+				$team_name = esc_html( get_the_title( $ti->WPID ) );
+				$team_link = get_post_permalink( $ti->WPID );
 
 			//determine Team Captain
 			$teamcap = 0;
@@ -106,7 +113,7 @@ a:hover, a:active {
 				$teamcap = $tcap->p_id;
 			}
 ?>
-		<h1>Roster for <a href="<?php print($ti->TeamLink); ?>" title="Read more about <?php print($ti->TeamName); ?>"><?php print($ti->TeamName); ?></a></h1>
+		<h1>Roster for <a href="<?php print( $team_link ); ?>" title="Read more about <?php print( $team_name ); ?>"><?php print( $team_name ); ?></a></h1>
 
 <?php
 		}
@@ -270,7 +277,7 @@ a:hover, a:active {
 	}
 ?>
   <th colspan="4" rowspan="2" class="tbl_title">Team Name:</th>
-  <td rowspan="2"><a href="<?php print($ti->TeamLink); ?>" title="Read more about <?php print($ti->TeamName); ?>"><?php print($ti->TeamName); ?></a></td>
+  <td rowspan="2"><a href="<?php print( $team_link ); ?>" title="Read more about <?php print( $team_name ); ?>"><?php print( $team_name ); ?></a></td>
   <th colspan="3" class="tbl_title">Re-Rolls:</th>
   <td><?php print($ti->t_rr); ?></td>
   <th class="tbl_enchance">X</th>
