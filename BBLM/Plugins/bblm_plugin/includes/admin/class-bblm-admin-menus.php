@@ -56,6 +56,10 @@ class BBLM_Admin_Menus {
 			array( $this, 'bblm_main_page_content' )
 		);
 
+		//Create the 'Players Transfers page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-transfers.php' );
+		new BBLM_Player_Transfers();
+
 	}
 
 	/**

@@ -90,6 +90,36 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of owner
+		register_post_type( 'bblm_transfer',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Transfers', 'bblm' ),
+					'singular_name' 		=> __( 'Transfer', 'bblm' ),
+					'add_new_item' 			=> __( 'New Transfer', 'bblm' ),
+					'add_new' 			=> __( 'New Transfer', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Transfer', 'bblm' ),
+					'new_item' 				=> __( 'New Transfer', 'bblm' ),
+					'view_item' 			=> __( 'View Transfer', 'bblm' ),
+					'view_items' 			=> __( 'View Transfers', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Transfers found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Transfers found.', 'bblm' ),
+					'all_items' 			=> __( 'Transfers', 'bblm' ),
+				),
+				'public' 				=> true,
+				'description' 				=> 'true',
+				'show_ui' 				=> false, //hide from the admin side
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'transfers' ),
+				'supports' 				=> array( 'title'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Transfer
 	}
 
   /**
