@@ -64,6 +64,7 @@ print("<p>".$fateinsertsql."</p>");*/
 
 if (FALSE !== $wpdb->query($playerupdatesql)) {
 	$sucess = TRUE;
+	do_action( 'bblm_post_submission' );
 }
 else {
 	$wpdb->print_error();
@@ -143,6 +144,7 @@ $playerupdatebbsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_name` = \''.$_POST
 if (FALSE !== $wpdb->query($playerupdatewpsql)) {
 	if (FALSE !== $wpdb->query($playerupdatebbsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 }
 
@@ -181,6 +183,7 @@ $playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_pos
 	}
 	if (FALSE !== $wpdb->query($playersql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 
 ?>
@@ -215,6 +218,7 @@ else if (isset($_POST['bblm_pimg_update'])) {
 	$updatepimgsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_img` = \''.$_POST['bblm_pimg'].'\' WHERE `p_id` = '.$_POST['bblm_pid'].' LIMIT 1';
 	if (FALSE !== $wpdb->query($updatepimgsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">
@@ -294,6 +298,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">

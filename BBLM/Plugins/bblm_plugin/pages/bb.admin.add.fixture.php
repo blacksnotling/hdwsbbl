@@ -51,6 +51,7 @@ if (isset($_POST['bblm_add_fixture'])) {
 
 	if (FALSE !== $wpdb->query($insertsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	else {
 		$sucess = FALSE;

@@ -293,6 +293,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 			$finished = 1;
 			$sucess = TRUE;
+			do_action( 'bblm_post_submission' );
 		} // end of if WP post was successful
 
 		?>

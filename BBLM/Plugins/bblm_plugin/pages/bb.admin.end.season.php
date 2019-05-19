@@ -1,15 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.end.season.php
-*	Version: 1.1
-*	Description: Page used to Shut down a Season and assign awards.
-*/
-/* -- Change History --
-20080602 - 1.0b - Initial creation of file using end.comp as a template
-20080730 - 1.0 - bump to Version 1 for public release.
-20100308 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
+/**
+ * BBowlLeagueMan End Season
+ *
+ * Page used to end a season and assigna awards
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -124,15 +122,18 @@ if (isset($_POST['bblm_season_close'])) {
 
   if (FALSE !== $wpdb->query($updatecompsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	if (0 < $_POST['bblm_numoftawards']) {
 		if (FALSE !== $wpdb->query($awardteamsql)) {
 			$sucess = TRUE;
+			do_action( 'bblm_post_submission' );
 		}
 	}
 	if (0 < $_POST['bblm_numofpawards']) {
 		if (FALSE !== $wpdb->query($awardplayersql)) {
 			$sucess = TRUE;
+			do_action( 'bblm_post_submission' );
 		}
 	}
 

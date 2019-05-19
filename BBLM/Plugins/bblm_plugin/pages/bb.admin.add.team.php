@@ -98,6 +98,7 @@ if(isset($_POST['bblm_team_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 
 	} //end of if post insertion was successful
 

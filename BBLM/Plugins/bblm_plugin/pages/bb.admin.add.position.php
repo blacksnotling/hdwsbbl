@@ -47,6 +47,7 @@ $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`
 
 	if (FALSE !== $wpdb->query($addsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	else {
 		$wpdb->print_error();

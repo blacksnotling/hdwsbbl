@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.comp.php
-*	Description: Page used to add a new Competition to the League.
-*/
+/**
+ * BBowlLeagueMan Add Competition
+ *
+ * Page used to add a new Competition to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -46,6 +51,8 @@ if(isset($_POST['bblm_comp_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
+
 	} //end of if post insertion was successful
 
 ?>

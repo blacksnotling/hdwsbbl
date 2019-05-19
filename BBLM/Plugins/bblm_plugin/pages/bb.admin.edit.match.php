@@ -33,6 +33,7 @@ if (isset($_POST['bblm_trivia_edit'])) {
 
 	if (FALSE !== $wpdb->query($updatesql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 
 	?>
@@ -216,6 +217,7 @@ $sucess = false;
 
 	if ( ( FALSE !== $wpdb->query($teamAupdatesql) ) && (FALSE !== $wpdb->query($teamBupdatesql) ) ) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 
 	//if it was all a success, them display the message to the user

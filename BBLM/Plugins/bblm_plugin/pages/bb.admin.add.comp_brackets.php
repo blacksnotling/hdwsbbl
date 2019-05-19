@@ -166,6 +166,7 @@ if (isset($_POST['bblm_create_brackets'])) {
 
 			if (FALSE !== $wpdb->query($insertsql)) {
 				$sucess = TRUE;
+				do_action( 'bblm_post_submission' );
 			}
 			else {
 				$wpdb->print_error();

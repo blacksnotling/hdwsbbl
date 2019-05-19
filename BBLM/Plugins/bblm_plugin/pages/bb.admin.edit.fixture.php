@@ -1,9 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.fixture.php
-*	Description: Page used to manage fixtures that have been set up previously.
-*/
-
+/**
+ * BBowlLeagueMan Edit Fixture
+ *
+ * Page used to Edit a Fixture
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -36,6 +40,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		foreach ($fixturesqla as $fs) {
 			if (FALSE !== $wpdb->query($fs)) {
 				$sucess = TRUE;
+				do_action( 'bblm_post_submission' );
 			}
 		}
 

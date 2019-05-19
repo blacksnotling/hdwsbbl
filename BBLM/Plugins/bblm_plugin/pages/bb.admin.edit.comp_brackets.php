@@ -135,6 +135,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 
 	if (FALSE !== $wpdb->query($updatebracketsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 	<div id="updated" class="updated fade">

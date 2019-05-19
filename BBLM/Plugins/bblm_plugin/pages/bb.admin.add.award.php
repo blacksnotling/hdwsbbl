@@ -46,6 +46,7 @@ $addsql = 'INSERT INTO `'.$wpdb->prefix.'awards` (`a_id`, `a_name`, `a_desc`, `a
 
 	if (FALSE !== $wpdb->query($addsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	else {
 		$wpdb->print_error();

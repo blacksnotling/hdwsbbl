@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.series.php
-*	Description: Page used to add a new Championship Cup to the league.
-*/
+/**
+ * BBowlLeagueMan Add Championship Cup
+ *
+ * Page used to add a new Championship Cup to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -40,6 +45,7 @@ if(isset($_POST['bblm_series_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 	} //end of if post insertion was successful
 ?>
 	<div id="updated" class="updated fade">
