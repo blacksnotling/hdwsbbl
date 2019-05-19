@@ -293,7 +293,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 	print("<hr />");*/
 
 	//Generate SQL
-	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
+	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
 	//print("<p>".$pstatupdatesql."</p>");
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
@@ -342,6 +342,7 @@ else if ("edit" == $_GET['action']) {
 			<tr>
 				<th>Name</th>
 				<th>Position</th>
+				<th><label for="bblm_posnum">Num</label></th>
 				<th><label for="bblm_pma">MA</label></th>
 				<th><label for="bblm_pst">ST</label></th>
 				<th><label for="bblm_pag">AG</label></th>
@@ -356,8 +357,9 @@ else if ("edit" == $_GET['action']) {
 			</thead>
 			<tbody>
 			<tr>
-				<td><?php print($p->post_title); ?> (#<?php print($p->p_num); ?>)</td>
+				<td><?php print($p->post_title); ?></td>
 				<td><?php print($p->pos_name); ?></td>
+				<td><input type="text" name="bblm_posnum" size="2" value="<?php print($p->p_num); ?>" id="bblm_posnum" maxlength="2"></td>
 				<td><input type="text" name="bblm_pma" size="2" value="<?php print($p->p_ma); ?>" id="bblm_pma" maxlength="2"></td>
 				<td><input type="text" name="bblm_pst" size="2" value="<?php print($p->p_st); ?>" id="bblm_pst" maxlength="2"></td>
 				<td><input type="text" name="bblm_pag" size="2" value="<?php print($p->p_ag); ?>" id="bblm_pag" maxlength="2"></td>

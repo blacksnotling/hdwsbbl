@@ -123,7 +123,7 @@
             }//end of profit sharing
 
             //Update the player (Team ID, and set FLAG)
-            $playerupdatesql = 'UPDATE '.$wpdb->prefix.'player SET t_id = "' . $bblm_submit_hteamid . '", p_former = "' . $bblm_submit_hteam . '" WHERE p_id = 2052';
+            $playerupdatesql = 'UPDATE '.$wpdb->prefix.'player SET t_id = "' . $bblm_submit_hteamid . '", p_former = "' . $bblm_submit_hteam . '" WHERE p_id = ' . $bblm_submit_player;
             $wpdb->query( $playerupdatesql );
 
             //Update the player WP post (page parent)
@@ -172,7 +172,7 @@
 
             //a transfer was sumitted successfully!
             //echo success, and link to edit player
-            echo '<div id="updated" class="updated fade"><p>' . __( 'Transfer is complete!', 'bblm') . '</p>';
+            echo '<div id="updated" class="updated fade"><p>' . __( 'Transfer is complete! Dont forget to check the player number and', 'bblm') . '</p>';
             edit_post_link( __( 'Update the player description', 'bblm' ), '<p>', '</p>', $playerWP->ID );
             echo '</div>';
 

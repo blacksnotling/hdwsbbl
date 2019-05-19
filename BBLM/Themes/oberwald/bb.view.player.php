@@ -144,8 +144,14 @@ get_header(); ?>
 					}
 
 
-					$statssql = 'SELECT O.guid, O.post_title, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE J.tid = T.t_id AND J.prefix = \'t_\' AND J.pid = O.ID AND P.t_id = T.t_id AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND P.pos_id = Y.pos_id AND M.p_id = '.$pd->p_id.' GROUP BY P.p_id';
+					$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.WPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.mp_counts = 1 AND M.p_id = '.$pd->p_id.' GROUP BY T.t_id ORDER BY T.t_id DESC';
 					if ($stats = $wpdb->get_results($statssql)) {
+						//This player has played at least one game
+
+						//Transfers
+						//Before we display the stats, we check to see if the player has been transfered, and display the transfer history for them
+						$trans = new BBLM_CPT_Transfer;
+						$trans->display_player_transfer_history();
 			?>
 						<h3>Player Statistics</h3>
 						<table>
@@ -162,7 +168,7 @@ get_header(); ?>
 
 			<?php
 						foreach ($stats as $s) {
-							print (" <tr>\n  	<td><a href=\"".$s->guid."\" title=\"Read more about ".$s->post_title."\">".$s->post_title."</a></td>\n  	<td>".$s->GAMES."</td>\n  	<td>".$s->TD."</td>\n  	<td>".$s->CAS."</td>\n  	<td>".$s->COMP."</td>\n  	<td>".$s->MINT."</td>\n  	<td>".$s->MVP."</td>\n  	<td>".$s->SPP."</td>\n </tr>\n");
+							print (" <tr>\n  	<td><a href=\"". get_post_permalink( $s->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $s->WPID ) ) . "</a></td>\n  	<td>".$s->GAMES."</td>\n  	<td>".$s->TD."</td>\n  	<td>".$s->CAS."</td>\n  	<td>".$s->COMP."</td>\n  	<td>".$s->MINT."</td>\n  	<td>".$s->MVP."</td>\n  	<td>".$s->SPP."</td>\n </tr>\n");
 						}
 						print("</table>\n");
 			?>

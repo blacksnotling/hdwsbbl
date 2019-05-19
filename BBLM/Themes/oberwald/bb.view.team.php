@@ -226,6 +226,11 @@
 									print("<p><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></p>");
 				}
 
+				//Transfers
+				//We determine if the team has been involved in any transfers, if they have the function displays them
+				$trans = new BBLM_CPT_Transfer;
+				$trans->display_team_transfer_history();
+
 			}
 			else {
 				print("<div class=\"info\">\n	<p>No players have been found for this team.</p>\n	</div>\n");

@@ -218,6 +218,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<li><input type="submit" name="bblm_team_tbupdate" value="Update Team Table" title="Update Team Table"/></li>
 	</ul>
 
+	<h3>Transfers</h3>
+	<ul>
+		<li>Update the settings page with the archive page description</li>
+	</ul>
+
 </form>
 
 </div>

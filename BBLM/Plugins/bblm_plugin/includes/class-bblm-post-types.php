@@ -161,6 +161,7 @@ class BBLM_Post_types {
 
     include_once( 'post-types/class-bblm-cpt-dyk.php' );
 		include_once( 'post-types/class-bblm-cpt-owner.php' );
+		include_once( 'post-types/class-bblm-cpt-transfer.php' );
 
  }
 

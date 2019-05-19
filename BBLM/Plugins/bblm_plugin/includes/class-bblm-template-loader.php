@@ -99,6 +99,12 @@ class BBLM_Template_Loader {
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 		}
+		elseif ( is_post_type_archive( 'bblm_transfer' ) ) {
+
+				$file = 'archive-bblm_transfer.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+		}
 
 		if ( $file ) {
 			if ( file_exists( $find[1] ) ) {
