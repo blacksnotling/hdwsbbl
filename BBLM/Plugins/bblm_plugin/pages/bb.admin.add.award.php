@@ -81,22 +81,10 @@ $addsql = 'INSERT INTO `'.$wpdb->prefix.'awards` (`a_id`, `a_name`, `a_desc`, `a
     <label for="bblm_aname" class="selectit">Award Name</label>
     <input type="text" name="bblm_aname" size="30" tabindex="1" value="" id="bblm_cname" maxlength="30">
 
-	<fieldset id="postdivrich"><legend>Award Description</legend>
-	<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-	<script type="text/javascript">
-	<!--
-		tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "bblm_adesc",
-		width : "565",
-		height : "200"
-		});
-	-->
-	</script>
+	<fieldset><legend>Award Description</legend>
 
 	<div>
-	  <textarea class='mceEditor' rows='10' cols='40' name='bblm_adesc' tabindex='3' id='bblm_adesc'></textarea>
+	  <textarea rows='10' cols='40' name='bblm_adesc' tabindex='3' id='bblm_adesc'></textarea>
 	</div>
 	</fieldset>
 

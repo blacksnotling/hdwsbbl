@@ -708,22 +708,10 @@ else if ("edit" == $_GET['action']) {
 ?>
 		</select></p>
 
-		<fieldset id="postdivrich"><legend>Description of Death / Whitty Comment</legend>
-		<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-		<script type="text/javascript">
-	<!--
-		tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "bblm_fdesc",
-		width : "600",
-		height : "200"
-		});
-	-->
-	</script>
+		<fieldset><legend>Description of Death / Whitty Comment</legend>
 
 		<div>
-		  <textarea class='mceEditor' rows='10' cols='40' name='bblm_fdesc' tabindex='2' id='bblm_fdesc'></textarea>
+		  <textarea rows='10' cols='40' name='bblm_fdesc' tabindex='2' id='bblm_fdesc'></textarea>
 		</div>
 		</fieldset>
 
