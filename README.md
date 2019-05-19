@@ -15,7 +15,7 @@ The following hooks are available
 They also have three counterparts - they are in the same locations but after the if / while / posts. they use *after* rather than before
 
 ### Other Actions (use with add_action() )
-* **bblm_post_submission** - Executes after the BBLM plugin has submitted something to the database (since 1.7)
+* **bblm_post_submission** - Executes after the BBLM plugin has submitted something to the database (since 1.8)
 
 ### Other Filters (use with add_filter() )
 * **is_bblm** - Apply other items to see if the page in question belongs to the BBLM plugin (for styling and other items) (since 1.7)
