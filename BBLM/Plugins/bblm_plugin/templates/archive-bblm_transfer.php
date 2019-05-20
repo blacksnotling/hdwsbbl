@@ -51,9 +51,13 @@
         echo '<a title="' . __( ' Read more about this player ', 'bblm') . '" href="' . get_post_permalink( $post->bblm_transfer_player ) . '">' . esc_html( get_the_title( $post->bblm_transfer_player ) ) . '</a>';
         echo __( ' from ', 'bblm');
         echo '<a title="' . __( ' Read more about this team ', 'bblm') . '" href="' . get_post_permalink( $post->bblm_transfer_steam ) . '">' . esc_html( get_the_title( $post->bblm_transfer_steam ) ) . '</a>';
-        echo __( ' for ', 'bblm');
+        echo __( ' for <strong>', 'bblm');
         echo number_format( $post->bblm_transfer_cost );
-        echo 'GP</li>';
+        echo '</strong>GP';
+        if ( "" !== $post->post_content ) {
+          echo '<ul><li>' . nl2br( $post->post_content ) . '</li></ul>';
+        }
+        echo '</li>';
 ?>
 
      <?php do_action( 'bblm_template_after_content' ); ?>

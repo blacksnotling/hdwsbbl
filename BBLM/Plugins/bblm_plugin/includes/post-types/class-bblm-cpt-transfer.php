@@ -82,10 +82,13 @@ class BBLM_CPT_Transfer {
           $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>';
           $output .= ' to ';
           $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
-          $output .= ' - ';
+          $output .= ' for <strong>';
           $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
-          $output .= 'GP - ';
+          $output .= '</strong>GP - ';
           $output .= '<a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
+          if ( "" !== $tl->post_content ) {
+            $output .= '<ul><li>' . nl2br( $tl->post_content ) . '</li></ul>';
+          }
           $output .= '</li>';
 
 
@@ -156,9 +159,9 @@ class BBLM_CPT_Transfer {
             $output .= '<li><a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
             $output .= ' hired from ';
             $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>';
-            $output .= ' for ';
+            $output .= ' for <strong>';
             $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
-            $output .= 'GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
+            $output .= '</strong>GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
             $output .= '</li>';
 
           }//end of for each
@@ -180,9 +183,9 @@ class BBLM_CPT_Transfer {
             $output .= '<li><a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
             $output .= ' sold to ';
             $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
-            $output .= ' for ';
+            $output .= ' for <strong>';
             $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
-            $output .= 'GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
+            $output .= '</strong>GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
             $output .= '</li>';
 
           }//end of for each
