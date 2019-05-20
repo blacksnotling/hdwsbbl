@@ -60,7 +60,7 @@
         $bblm_submit_player = (int) $_POST[ 'bblm_transfer_player' ];
         $bblm_submit_cash_main = (int) $_POST[ 'bblm_transfer_cash_main' ];
         $bblm_submit_cash_ten = (int) $_POST[ 'bblm_transfer_cash_ten' ];
-        $bblm_submit_desc = (int) $_POST[ 'bblm_transfer_desc' ];
+        $bblm_submit_desc = wp_strip_all_tags( $_POST[ 'bblm_transfer_desc' ] );
 
         //sanity check to make sure the cost of the player is not more than the team
         if ( $bblm_submit_cost > $bblm_submit_bank ) {
@@ -83,7 +83,7 @@
 
           $post_content = array(
             'post_title' => $transfer_title,
-            'post_content' => wp_strip_all_tags( $bblm_submit_desc ),
+            'post_content' => $bblm_submit_desc,
             'post_type' => 'bblm_transfer',
             'post_status' => 'publish',
             'meta_input'   => array(
