@@ -60,6 +60,7 @@
         $bblm_submit_player = (int) $_POST[ 'bblm_transfer_player' ];
         $bblm_submit_cash_main = (int) $_POST[ 'bblm_transfer_cash_main' ];
         $bblm_submit_cash_ten = (int) $_POST[ 'bblm_transfer_cash_ten' ];
+        $bblm_submit_desc = (int) $_POST[ 'bblm_transfer_desc' ];
 
         //sanity check to make sure the cost of the player is not more than the team
         if ( $bblm_submit_cost > $bblm_submit_bank ) {
@@ -82,7 +83,7 @@
 
           $post_content = array(
             'post_title' => $transfer_title,
-            'post_content' => "",
+            'post_content' => wp_strip_all_tags( $bblm_submit_desc ),
             'post_type' => 'bblm_transfer',
             'post_status' => 'publish',
             'meta_input'   => array(
@@ -467,6 +468,7 @@
 
           <p><label for="bblm_transfer_cost"><?php echo __( 'Would you like to adjust the amount the team will pay? There is ', 'bblm') . number_format( $rteamdetail->t_bank ) . __( 'GP in the Treasury', 'bblm'); ?></label>
             <input type="text" name="bblm_transfer_cost" id="bblm_transfer_cost" size="11" tabindex="1" value="<?php echo esc_html( $playerdetail->p_cost ); ?>" maxlength="10" onChange="BBLM_Transfer_Watch()"> GP <strong><?php echo __( 'DO NOT hit ENTER on your keyboard after changing!!!', 'bblm'); ?></strong></p>
+          <p><textarea name="bblm_transfer_desc" id="bblm_transfer_desc" placeholder="Enter any comments, or details of the trade here (optional)" rows="5" cols="50"></textarea></p>
 
           <input type="hidden" name="bblm_transfer_season" size="10000" value="<?php echo $bblm_transfer_season; ?>">
           <input type="hidden" name="bblm_hiring_team" size="10000" value="<?php echo $rteamdetail->WPID; ?>">

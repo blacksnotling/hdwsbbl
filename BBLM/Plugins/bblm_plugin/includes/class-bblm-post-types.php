@@ -114,7 +114,7 @@ class BBLM_Post_types {
 				'exclude_from_search' 	=> true, //exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'transfers' ),
-				'supports' 				=> array( 'title'),
+				'supports' 				=> array( 'title', 'editor'),
 				'has_archive' 			=> true,
 				'show_in_nav_menus' 	=> true,
 				'show_in_menu' => 'bblm_main_menu',
