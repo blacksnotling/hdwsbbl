@@ -61,6 +61,7 @@
         $bblm_submit_cash_main = (int) $_POST[ 'bblm_transfer_cash_main' ];
         $bblm_submit_cash_ten = (int) $_POST[ 'bblm_transfer_cash_ten' ];
         $bblm_submit_desc = wp_strip_all_tags( $_POST[ 'bblm_transfer_desc' ] );
+        $bblm_submit_num = (int) $_POST[ 'bblm_transfer_num' ];
 
         //sanity check to make sure the cost of the player is not more than the team
         if ( $bblm_submit_cost > $bblm_submit_bank ) {
@@ -124,7 +125,7 @@
             }//end of profit sharing
 
             //Update the player (Team ID, and set FLAG)
-            $playerupdatesql = 'UPDATE '.$wpdb->prefix.'player SET t_id = "' . $bblm_submit_hteamid . '", p_former = "' . $bblm_submit_hteam . '" WHERE p_id = ' . $bblm_submit_player;
+            $playerupdatesql = 'UPDATE '.$wpdb->prefix.'player SET t_id = "' . $bblm_submit_hteamid . '", p_num = "' . $bblm_submit_num . '", p_former = "' . $bblm_submit_hteam . '" WHERE p_id = ' . $bblm_submit_player;
             $wpdb->query( $playerupdatesql );
 
             //Update the player WP post (page parent)
@@ -173,7 +174,7 @@
 
             //a transfer was sumitted successfully!
             //echo success, and link to edit player
-            echo '<div id="updated" class="updated fade"><p>' . __( 'Transfer is complete! Dont forget to check the player number and', 'bblm') . '</p>';
+            echo '<div id="updated" class="updated fade"><p>' . __( 'Transfer is complete!', 'bblm') . '</p>';
             edit_post_link( __( 'Update the player description', 'bblm' ), '<p>', '</p>', $playerWP->ID );
             echo '</div>';
 
@@ -466,6 +467,42 @@
           }
           </script>
 
+<?php
+
+        //Determine if the player position number needs to change
+        $playernum = $playerdetail->p_num;
+        //Looks for active players on the recei team for players with the same number
+        $existingnumsql = 'SELECT * FROM '.$wpdb->prefix.'player WHERE p_num = ' . $playernum . ' AND p_status = 1 AND t_id = ' . $rteamdetail->t_id;
+        $existingnum = $wpdb->get_row( $existingnumsql  );
+        //Checks something has been returned
+        if ( count( $existingnum ) > 0 ) {
+
+          //A clashing player has been found - display the change position box
+          //gather the list of positions that ARE available
+          $steamnumsql = 'SELECT p_num FROM '.$wpdb->prefix.'player WHERE p_status = 1 and t_id = ' . $rteamdetail->t_id . ' ORDER BY p_num ASC';
+          $steamnum = $wpdb->get_results( $steamnumsql);
+          //format them into a smaller array
+          $teamnuminuse = array();
+          foreach ( $steamnum as $tn ) {
+            array_push( $teamnuminuse, $tn->p_num );
+          }
+          //default list of positions
+          $teamnumbers = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+          //compare the arrays and spit out the available numbers
+          $available = array_diff( $teamnumbers, $teamnuminuse );
+?>
+          <p><label for="bblm_transfer_num"><?php echo __( 'The player being transfered has a position number that is already in use on the recieving team. please select a free number:', 'bblm'); ?></label></p>
+          <p><select name="bblm_transfer_num" id="bblm_transfer_num">
+<?php
+          //output the list of available positions
+          foreach ( $available as $a ) {
+            echo '<option value="' . $a . '">' . $a . '</option>';
+          }
+?>
+            </select></p>
+<?php
+        }//end of if there is a pre-existing position
+?>
           <p><label for="bblm_transfer_cost"><?php echo __( 'Would you like to adjust the amount the team will pay? There is ', 'bblm') . number_format( $rteamdetail->t_bank ) . __( 'GP in the Treasury', 'bblm'); ?></label>
             <input type="text" name="bblm_transfer_cost" id="bblm_transfer_cost" size="11" tabindex="1" value="<?php echo esc_html( $playerdetail->p_cost ); ?>" maxlength="10" onChange="BBLM_Transfer_Watch()"> GP <strong><?php echo __( 'DO NOT hit ENTER on your keyboard after changing!!!', 'bblm'); ?></strong></p>
           <p><textarea name="bblm_transfer_desc" id="bblm_transfer_desc" placeholder="Enter any comments, or details of the trade here (optional)" rows="5" cols="50"></textarea></p>
