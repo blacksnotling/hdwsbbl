@@ -54,8 +54,7 @@ Template Name: List Fixtures
 				if ($fixture = $wpdb->get_results($fixturesql)) {
 
 					//grab the ID of the "tbd" team
-					$options = get_option('bblm_config');
-					$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+					$bblm_tbd_team = bblm_get_tbd_team();
 
 					if (1 == $layout) {
 						//Load the default by Competition

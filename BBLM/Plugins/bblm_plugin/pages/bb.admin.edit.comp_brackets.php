@@ -71,8 +71,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 	print("</pre>");
 	print("<hr />");*/
 
-	$options = get_option('bblm_config');
-	$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+	$bblm_tbd_team = bblm_get_tbd_team();
 
 	//Generate text for bracket
 	if (F== $_POST['bblm_game']) {

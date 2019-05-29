@@ -18,8 +18,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 <?php
 
-$options = get_option('bblm_config');
-$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+$bblm_star_team = bblm_get_star_player_team();
 
 
 if(isset($_POST['bblm_race_submit'])) {

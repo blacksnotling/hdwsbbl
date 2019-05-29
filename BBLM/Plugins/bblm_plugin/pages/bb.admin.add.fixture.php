@@ -95,8 +95,7 @@ if (isset($_POST['bblm_comp_select'])) {
 			//generate output into a static string
 
 			//Grab the ID of the 'To Be Determined Team'
-			$options = get_option('bblm_config');
-			$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+			$bblm_tbd_team = bblm_get_tbd_team();
 
 			$teamlist = "";
 			$teamlist .= "<option value=\"".$bblm_tbd_team."\">To be Determined</option>\n";

@@ -197,10 +197,9 @@
           <select name="bblm_transfer_team" id="bblm_transfer_team">
 <?php
           //Determine the Star Player Team (to get the star players)
-          $options = get_option('bblm_config');
-          $bblm_team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
+          $bblm_team_star = bblm_get_star_player_team();
           //Grab the ID of the 'To Be Determined Team'
-    			$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+    			$bblm_tbd_team = bblm_get_tbd_team();
 
           $teamlistsql = 'SELECT WPID, t_id FROM '.$wpdb->prefix.'team WHERE t_id != ' . $bblm_team_star . ' AND t_id != ' . $bblm_tbd_team . ' AND t_active = 1 ORDER BY t_name ASC';
           if ( $teams = $wpdb->get_results( $teamlistsql ) ) {

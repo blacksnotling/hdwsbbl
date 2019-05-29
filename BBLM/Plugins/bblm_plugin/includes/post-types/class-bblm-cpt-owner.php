@@ -168,8 +168,7 @@ class BBLM_CPT_Owner {
      $matchwonsql = 'SELECT SUM(T.tc_W) AS OW FROM '.$wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C WHERE T.t_id = C.t_id AND T.tc_played > 0 AND C.ID = '.get_the_ID(); //splitting the line for length reasons!
      $matchwon = $wpdb->get_var( $matchwonsql );
      //Number of Stars hired
-     $options = get_option('bblm_config');
-     $bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+     $bblm_star_team = bblm_get_star_player_team();
      $starplayerusesql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE M.p_id = P.p_id AND P.t_id = '.$bblm_star_team.' AND M.t_id = T.t_id AND T.ID = '.get_the_ID();
      $starplayeruniqsql = 'SELECT COUNT( DISTINCT(M.p_id) ) AS CONT FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE M.p_id = P.p_id AND P.t_id = '.$bblm_star_team.' AND M.t_id = T.t_id AND T.ID = '.get_the_ID();
      $starplayeruse = $wpdb->get_var( $starplayerusesql );
@@ -589,8 +588,7 @@ class BBLM_CPT_Owner {
           $output = "";
           $games = $this->get_number_games();
 					//Number of Stars hired
-					$options = get_option('bblm_config');
-					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+					$bblm_star_team = bblm_get_star_player_team();
 
           //quick check to make sure this owner has played any games
           if ( $games > 0 ) {
@@ -642,9 +640,8 @@ class BBLM_CPT_Owner {
 
 	         $output = "";
 	         $games = $this->get_number_games();
-					 $options = get_option('bblm_config');
-					 $bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
-					 $stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+					 $bblm_star_team = bblm_get_star_player_team();
+					 $stat_limit = bblm_get_stat_limit();
 
 	         //quick check to make sure this owner has played any games
 	         if ( $games > 0 ) {

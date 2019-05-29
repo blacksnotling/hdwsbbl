@@ -85,8 +85,7 @@ if (isset($_POST['bblm_create_brackets'])) {
 	////////////////////////////
 	while ($games_this_round >= 1) {
 					$div_id = bblm_return_div_id($games_this_round);
-					$options = get_option('bblm_config');
-					$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+					$bblm_tbd_team = bblm_get_tbd_team();
 
 					//we want to loop through this p times for each division (round)
 					$p = 1;

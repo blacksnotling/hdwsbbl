@@ -24,7 +24,7 @@ if(isset($_POST['bblm_star_submit'])) {
 
 	//Determine other need options
 	$bblm_race_star = htmlspecialchars($options['race_star'], ENT_QUOTES);
-	$bblm_team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
+	$bblm_team_star = bblm_get_star_player_team();
 
 	//Determine Star Position
 	$posnumsql = "SELECT pos_id FROM ".$wpdb->prefix."position WHERE r_id = ".$bblm_race_star;

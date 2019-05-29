@@ -174,9 +174,8 @@
 					  ///////////////////////////
 					 // Start of Player Stats //
 					///////////////////////////
-					$options = get_option('bblm_config');
-					$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
-					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+					$stat_limit = bblm_get_stat_limit();
+					$bblm_star_team = bblm_get_star_player_team();
 
 
 

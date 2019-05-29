@@ -205,8 +205,7 @@
 
 				/*		Star Player who have played for this team	*/
 				//grab the ID of the "Star Player team
-				$options = get_option('bblm_config');
-				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+				$bblm_star_team = bblm_get_star_player_team();
 
 				$starplayerssql = 'SELECT P.post_title, P.guid, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player X WHERE P.ID = J.pid AND J.prefix = "p_" AND J.tid = X.p_id AND M.p_id = X.p_id AND X.t_id = '.$bblm_star_team.' AND M.t_id = '.$tid.' GROUP BY M.p_id ORDER BY P.post_title ASC';
 				if ($starplayers = $wpdb->get_results($starplayerssql)) {
@@ -250,8 +249,7 @@
 				$zebracount = 1;
 
 				//grab the ID of the "tbd" team
-				$options = get_option('bblm_config');
-				$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+				$bblm_tbd_team = bblm_get_tbd_team();
 
 
 				foreach ($fixtures as $fd) {

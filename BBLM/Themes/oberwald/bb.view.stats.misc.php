@@ -22,9 +22,8 @@
 				<?php the_content(); ?>
 <?php
 
-		$options = get_option('bblm_config');
-		$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
-		$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+		$stat_limit = bblm_get_stat_limit();
+		$bblm_star_team = bblm_get_star_player_team();
 
 		/*-- Misc -- */
 		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.WPID, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.type_id = 1 AND T.t_id != '.$bblm_star_team.' ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';

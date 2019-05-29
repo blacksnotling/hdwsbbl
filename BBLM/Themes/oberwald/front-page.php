@@ -161,8 +161,7 @@
 				<!-- start of #fragment-6 content -->
 					<h2>Top Players of the Moment</h2>
 <?php
-					$options = get_option('bblm_config');
-					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+					$bblm_star_team = bblm_get_star_player_team();
 
 					$playersql = 'SELECT D.post_title AS Pname, D.guid AS Plink, P.pos_name, T.WPID, A.p_spp AS VALUE FROM '.$wpdb->prefix.'player A, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' D, '.$wpdb->prefix.'position P, '.$wpdb->prefix.'team T WHERE A.p_id = S.tid AND S.prefix = \'p_\' AND S.pid = D.ID AND A.pos_id = P.pos_id AND A.t_id = T.t_id AND T.type_id = 1 AND A.p_status = 1 AND T.t_active = 1 AND A.p_spp > 1 AND T.t_id != '.$bblm_star_team.' ORDER BY A.p_spp DESC LIMIT 6';
 					if ($player = $wpdb->get_results($playersql)) {

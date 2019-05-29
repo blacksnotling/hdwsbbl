@@ -305,8 +305,7 @@
 				$zebracount = 1;
 
 				//grab the ID of the "tbd" team
-				$options = get_option('bblm_config');
-				$bblm_tbd_team = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+				$bblm_tbd_team = bblm_get_tbd_team();
 
 				//print("  <table>\n		 <tr>\n		   <th>Date</th>\n		   <th>Match</th>\n		   </tr>\n");
 
@@ -429,9 +428,8 @@
 				///////////
 				print("<h3>Player Statistics</h3>\n");
 
-				$options = get_option('bblm_config');
-				$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
-				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+				$stat_limit = bblm_get_stat_limit();
+				$bblm_star_team = bblm_get_star_player_team();
 
 					  ///////////////////////////
 					 // Start of Player Stats //
