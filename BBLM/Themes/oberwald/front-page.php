@@ -10,7 +10,7 @@
 
 ?>
 
-		<h2>Welcome to the HDWSBBL</h2>
+		<h2>Welcome to the <?php echo bblm_get_league_name(); ?></h2>
 
 		<div id="main-tabs">
 			<div id="fragments">

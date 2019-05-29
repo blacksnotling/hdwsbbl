@@ -1,14 +1,3 @@
-<?php
-if ( $options = get_option('bblm_config') ) {
-  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-  if ( strlen($bblm_league_name) < 1) {
-	   $bblm_league_name = "league";
-   }
- }
-else {
-  $bblm_league_name = "league";
-}
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
@@ -129,16 +118,6 @@ $(document).ready(function(){
 	</div>
 	<div id="navcontainer">
     <?php wp_nav_menu( array( 'theme_location' => 'primary', 'container_id' => 'navigation' ) ); ?>
-<!--		<ul id="navigation">
-			<li><a href="<?php echo home_url(); ?>/news/" title="Visit the News Section">News</a></li>
-			<li><a href="<?php echo home_url(); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
-			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the <?php print ($bblm_league_name); ?>">Teams</a></li>
-			<li><a href="<?php echo home_url(); ?>/competitions/" title="View the gruling competitions">Competitions</a></li>
-			<li><a href="<?php echo home_url(); ?>/matches/" title="All the results">Results</a></li>
-			<li><a href="<?php echo home_url(); ?>/stats/" title="All the Statistics">Stats</a></li>
-			<li><a href="<?php echo home_url(); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
-			<li><a href="<?php echo home_url(); ?>/about/" title="About the <?php print ($bblm_league_name); ?>">About</a></li>
-		</ul> -->
 	</div>
 
 	<div id="pagecontent">

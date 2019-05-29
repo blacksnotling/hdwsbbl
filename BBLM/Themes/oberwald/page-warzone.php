@@ -6,21 +6,12 @@ Template Name: Warzone Front Page
 *	Filename: page.warzone
 *	Description: The Template for the front page of the Warzone section
 */
-if ( $options = get_option('bblm_config') ) {
-  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-  if ( strlen($bblm_league_name) < 1) {
-	   $bblm_league_name = "league";
-   }
- }
-else {
-  $bblm_league_name = "league";
-}
 ?>
 <?php get_header(); ?>
 	<?php query_posts('category_name=warzone'); ?>
 	<?php if (have_posts()) : ?>
 
-		<h2>The <?php print($bblm_league_name); ?>:WarZone</h2>
+		<h2>The <?php echo bblm_get_league_name(); ?>:WarZone</h2>
 
 		<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">

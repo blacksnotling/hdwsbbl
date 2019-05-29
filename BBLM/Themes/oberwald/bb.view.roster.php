@@ -333,7 +333,7 @@ a:hover, a:active {
 		</div> <!-- End of #maincontent -->
 	</div> <!-- End of #pagecontent -->
 	<div id="footer">
-				<p>Unique content is &copy; <a href="<?php echo home_url(); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
+				<p>Unique content is &copy; <a href="<?php echo home_url(); ?>" title="Visit the homepage of the <?php echo bblm_get_league_name(); ?>"><?php echo bblm_get_league_name(); ?></a> 2006 - present.</p>
 				<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
 				<?php wp_footer(); ?>
 	</div> <!-- End of #footer -->

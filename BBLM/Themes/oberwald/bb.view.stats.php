@@ -12,17 +12,6 @@
  * Template Name: View Stats
  */
 ?>
-<?php
-if ( $options = get_option('bblm_config') ) {
-  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-  if ( strlen($bblm_league_name) < 1) {
-	   $bblm_league_name = "league";
-   }
- }
-else {
-  $bblm_league_name = "league";
-}
-?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
@@ -63,7 +52,7 @@ else {
 
 				<h3>Overall Statistics</h3>
 
-				<p>Since the <strong><?php echo $bblm_league_name; ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
+				<p>Since the <strong><?php echo bblm_get_league_name(); ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
 				<ul>
 					<li>Score <strong><?php print($tottd); ?></strong> Touchdowns (average <strong><?php print(round($tottd/$matchnum,1)); ?></strong> per match);</li>
 					<li>Make <strong><?php print($totcomp); ?></strong> successful Completions (average <strong><?php print(round($totcomp/$matchnum,1)); ?></strong> per match);</li>
@@ -73,7 +62,7 @@ else {
 					<li>Earn a total of <strong><?php print($sppnum); ?></strong> Star Player Points.</li>
 				</ul>
 
-				<h3><?php echo $bblm_league_name; ?> Cup Winners</h3>
+				<h3><?php echo bblm_get_league_name(); ?> Cup Winners</h3>
 <?php
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.type_id = 1 GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
