@@ -32,7 +32,7 @@ if (isset($_POST['bblm_position_add'])) {
 	//think about a for each
 	if (get_magic_quotes_gpc()) {
 		$_POST['bblm_pname'] = stripslashes($_POST['bblm_pname']);
-		$_POST['bblm_pskills'] = stripslashes($_POST['pskills']);
+		$_POST['bblm_pskills'] = stripslashes($_POST['bblm_pskills']);
 	}
 	$bblm_safe_input['pname'] = esc_sql( $_POST['bblm_pname'] );
 	$bblm_safe_input['pskills'] = esc_sql( $_POST['bblm_pskills'] );
@@ -47,6 +47,7 @@ $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`
 
 	if (FALSE !== $wpdb->query($addsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	else {
 		$wpdb->print_error();
@@ -82,7 +83,7 @@ if(isset($_POST['bblm_position_select'])) {
 	print_r($_POST);
 	print("</pre>"); */
 
-$racesql = "SELECT r_name FROM '.$wpdb->prefix.'race WHERE r_id = ".$_POST['bblm_rname'];
+$racesql = "SELECT r_name FROM ".$wpdb->prefix."race WHERE r_id = ".$_POST['bblm_rname'];
 if ($result = $wpdb->get_results($racesql)) {
 	foreach ($result as $res) {
 		$race_name = $res->r_name;
@@ -115,7 +116,7 @@ if ($result = $wpdb->get_results($racesql)) {
 		  <label for="bblm_pav" class="selectit">AV: </label>
 		  <input type="text" name="bblm_pav" size="3" maxlength="2" tabindex="7" value="4" id="bblm_pav">
 
-		  <label for="bblm_pskills" class="selectit">Skills: </label><textarea name="pskills" cols="100" rows="3" tabindex="8">none</textarea>
+		  <label for="bblm_pskills" class="selectit">Skills: </label><textarea name="bblm_pskills" cols="100" rows="3" tabindex="8">none</textarea>
 
 		  <label for="bblm_pcost" class="selectit">Cost: </label>
 		  <input type="text" name="bblm_pcost" size="7" maxlength="6" tabindex="9" value="50000" id="bblm_pcost">

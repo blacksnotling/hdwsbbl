@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.race.php
-*	Description: Page used to add a new race to the League.
-*/
+/**
+ * BBowlLeagueMan Add Race
+ *
+ * Page used to add a new race to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 
@@ -13,8 +18,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 <?php
 
-$options = get_option('bblm_config');
-$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+$bblm_star_team = bblm_get_star_player_team();
 
 
 if(isset($_POST['bblm_race_submit'])) {
@@ -45,6 +49,7 @@ if(isset($_POST['bblm_race_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 
 		//Now we populate the race2star table in the database
 		$p = 1;

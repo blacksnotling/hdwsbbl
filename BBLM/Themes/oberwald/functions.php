@@ -244,12 +244,12 @@ function oberwald_breadcrumb() {
 
 	if ( is_404() ) {
 
-		echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Page not found ';
+		echo '<a href="' . home_url() . '" title="Back to the front of the ' . bblm_get_league_name() . '">' . bblm_get_league_name() . '</a> &raquo; Page not found ';
 
 	} //end of is_404
 	else {
 
-	echo '<a href="' . home_url() . '" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; ';
+	echo '<a href="' . home_url() . '" title="Back to the front of the ' . bblm_get_league_name() . '">' . bblm_get_league_name() . '</a> &raquo; ';
 
 	    // If there is a parent, display the link.
 	    $parent_title = get_the_title( $post->post_parent );
@@ -262,7 +262,7 @@ function oberwald_breadcrumb() {
 				echo the_title();
 			}
 			elseif ( is_page( 'Warzone' ) ) {
-				echo 'HDWSBBL:WarZone';
+				echo bblm_get_league_name() . ':WarZone';
 			}
 			else {
 				echo 'Archive';
@@ -401,7 +401,7 @@ add_filter('login_headerurl', 'bblm_wp_login_url');
 
 
 function bblm_wp_login_title() {
-		return 'Powered by the HDWSBBL';
+		return 'Powered by the ' . bblm_get_league_name();
 }
 
 add_filter('login_headertitle', 'bblm_wp_login_title');

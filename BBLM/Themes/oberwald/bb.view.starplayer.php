@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Star Player
+ *
+ * Page Template to view Star Players details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: View Star Player
-*/
-/*
-*	Filename: bb.view.starplayer.php
-*	Description: .Page to display a Star Player.
-*/
+ * Template Name: View Star Player
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -91,7 +96,7 @@ Template Name: View Star Player
 <?php
 
 			//Breakdown by team
-			$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.t_name AS post_title, T.t_guid AS guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.mp_counts = 1 AND M.p_id = '.$pd->p_id.' GROUP BY T.t_id ORDER BY GAMES DESC, T.t_name ASC';
+			$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.WPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.mp_counts = 1 AND M.p_id = '.$pd->p_id.' GROUP BY T.t_id ORDER BY GAMES DESC, T.t_name ASC';
 			if ($stats = $wpdb->get_results($statssql)) {
 				$zebracount = 1;
 ?>
@@ -116,14 +121,15 @@ Template Name: View Star Player
 					else {
 						print("				<tr class=\"tbl_alt\">\n");
 					}
-					print ("					<td><a href=\"".$s->guid."\" title=\"Read more about ".$s->post_title."\">".$s->post_title."</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
+					$team_name = esc_html( get_the_title( $s->WPID ) );
+					print ("					<td><a href=\"" . get_post_permalink( $s->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
 					$zebracount++;
 				}
 				print("			</table>\n");
 			}
 
 			// -- KILLER --
-			$killersql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, T.t_name AS TEAM, T.t_guid AS TEAMLink, X.pos_name FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position X WHERE F.p_id = P.p_id AND P.t_id = T.t_id AND P.pos_id = X.pos_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND F.pf_killer = '.$pd->p_id.' AND F.p_id != '.$pd->p_id.' ORDER BY F.m_id ASC';
+			$killersql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, T.WPID, X.pos_name FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position X WHERE F.p_id = P.p_id AND P.t_id = T.t_id AND P.pos_id = X.pos_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND F.pf_killer = '.$pd->p_id.' AND F.p_id != '.$pd->p_id.' ORDER BY F.m_id ASC';
 			if ($killer = $wpdb->get_results($killersql)) {
 				//If the player has killed people
 ?>
@@ -132,7 +138,7 @@ Template Name: View Star Player
 			<ul>
 <?php
 				foreach ($killer as $k) {
-					print ("				<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (".$k->pos_name." for <a href=\"".$k->TEAMLink."\" title=\"Read more about ".$k->TEAM."\">".$k->TEAM."</a>)</li>\n");
+					print ("				<li><a href=\"".$k->PLAYERLink."\" title=\"Read more about ".$k->PLAYER."\">".$k->PLAYER."</a> (" . esc_html( $k->pos_name ) . " for <a href=\"" . get_post_permalink( $k->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $k->WPID ) ) . "</a>)</li>\n");
 				}
 ?>
 			</ul>

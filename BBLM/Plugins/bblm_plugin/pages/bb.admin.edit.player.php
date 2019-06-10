@@ -64,6 +64,7 @@ print("<p>".$fateinsertsql."</p>");*/
 
 if (FALSE !== $wpdb->query($playerupdatesql)) {
 	$sucess = TRUE;
+	do_action( 'bblm_post_submission' );
 }
 else {
 	$wpdb->print_error();
@@ -143,6 +144,7 @@ $playerupdatebbsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_name` = \''.$_POST
 if (FALSE !== $wpdb->query($playerupdatewpsql)) {
 	if (FALSE !== $wpdb->query($playerupdatebbsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 }
 
@@ -181,6 +183,7 @@ $playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_pos
 	}
 	if (FALSE !== $wpdb->query($playersql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 
 ?>
@@ -215,6 +218,7 @@ else if (isset($_POST['bblm_pimg_update'])) {
 	$updatepimgsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_img` = \''.$_POST['bblm_pimg'].'\' WHERE `p_id` = '.$_POST['bblm_pid'].' LIMIT 1';
 	if (FALSE !== $wpdb->query($updatepimgsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">
@@ -289,11 +293,12 @@ else if (isset($_POST['bblm_stat_update'])) {
 	print("<hr />");*/
 
 	//Generate SQL
-	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
+	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
 	//print("<p>".$pstatupdatesql."</p>");
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">
@@ -337,6 +342,7 @@ else if ("edit" == $_GET['action']) {
 			<tr>
 				<th>Name</th>
 				<th>Position</th>
+				<th><label for="bblm_posnum">Num</label></th>
 				<th><label for="bblm_pma">MA</label></th>
 				<th><label for="bblm_pst">ST</label></th>
 				<th><label for="bblm_pag">AG</label></th>
@@ -351,8 +357,9 @@ else if ("edit" == $_GET['action']) {
 			</thead>
 			<tbody>
 			<tr>
-				<td><?php print($p->post_title); ?> (#<?php print($p->p_num); ?>)</td>
+				<td><?php print($p->post_title); ?></td>
 				<td><?php print($p->pos_name); ?></td>
+				<td><input type="text" name="bblm_posnum" size="2" value="<?php print($p->p_num); ?>" id="bblm_posnum" maxlength="2"></td>
 				<td><input type="text" name="bblm_pma" size="2" value="<?php print($p->p_ma); ?>" id="bblm_pma" maxlength="2"></td>
 				<td><input type="text" name="bblm_pst" size="2" value="<?php print($p->p_st); ?>" id="bblm_pst" maxlength="2"></td>
 				<td><input type="text" name="bblm_pag" size="2" value="<?php print($p->p_ag); ?>" id="bblm_pag" maxlength="2"></td>
@@ -701,22 +708,10 @@ else if ("edit" == $_GET['action']) {
 ?>
 		</select></p>
 
-		<fieldset id="postdivrich"><legend>Description of Death / Whitty Comment</legend>
-		<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-		<script type="text/javascript">
-	<!--
-		tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "bblm_fdesc",
-		width : "600",
-		height : "200"
-		});
-	-->
-	</script>
+		<fieldset><legend>Description of Death / Whitty Comment</legend>
 
 		<div>
-		  <textarea class='mceEditor' rows='10' cols='40' name='bblm_fdesc' tabindex='2' id='bblm_fdesc'></textarea>
+		  <textarea rows='10' cols='40' name='bblm_fdesc' tabindex='2' id='bblm_fdesc'></textarea>
 		</div>
 		</fieldset>
 

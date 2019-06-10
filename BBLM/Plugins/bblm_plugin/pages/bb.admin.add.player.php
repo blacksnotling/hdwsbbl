@@ -162,6 +162,7 @@ if (isset($_POST['bblm_team_add'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 
 	}
 

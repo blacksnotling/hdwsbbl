@@ -1,22 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate View Stats
+ *
+ * Page Template to view the main Statistics page
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: Statistics
-*/
-/*
-*	Filename: bb.view.stats.php
-*	Description: .Page template to display statistics
-*/
-?>
-<?php
-if ( $options = get_option('bblm_config') ) {
-  $bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
-  if ( strlen($bblm_league_name) < 1) {
-	   $bblm_league_name = "league";
-   }
- }
-else {
-  $bblm_league_name = "league";
-}
+ * Template Name: View Stats
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -58,7 +52,7 @@ else {
 
 				<h3>Overall Statistics</h3>
 
-				<p>Since the <strong><?php echo $bblm_league_name; ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
+				<p>Since the <strong><?php echo bblm_get_league_name(); ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
 				<ul>
 					<li>Score <strong><?php print($tottd); ?></strong> Touchdowns (average <strong><?php print(round($tottd/$matchnum,1)); ?></strong> per match);</li>
 					<li>Make <strong><?php print($totcomp); ?></strong> successful Completions (average <strong><?php print(round($totcomp/$matchnum,1)); ?></strong> per match);</li>
@@ -68,7 +62,7 @@ else {
 					<li>Earn a total of <strong><?php print($sppnum); ?></strong> Star Player Points.</li>
 				</ul>
 
-				<h3><?php echo $bblm_league_name; ?> Cup Winners</h3>
+				<h3><?php echo bblm_get_league_name(); ?> Cup Winners</h3>
 <?php
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.type_id = 1 GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
@@ -198,14 +192,13 @@ else {
 
 				<h3>Statistics Breakdown by Players</h3>
 <?php
-				$options = get_option('bblm_config');
-				$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
-				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+        $stat_limit = bblm_get_stat_limit();
+				$bblm_star_team = bblm_get_star_player_team();
 
 				  ////////////////////////
 				 // Active Top Players //
 				////////////////////////
-				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (Active)</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
@@ -232,7 +225,7 @@ else {
 							else {
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
-							print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TEAMLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -246,7 +239,7 @@ else {
 				  //////////////////////////
 				 // All time Top Players //
 				//////////////////////////
-				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
@@ -280,7 +273,7 @@ else {
 							else {
 								print($ts->post_title);
 							}
-							print("</a></td>\n	<td>".$ts->pos_name."</td>\n	<td><a href=\"".$ts->TEAMLink."\" title=\"Read more on this team\">".$ts->TEAM."</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("</a></td>\n	<td>" . esc_html( $ts->pos_name ). "</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;

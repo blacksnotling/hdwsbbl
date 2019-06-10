@@ -317,8 +317,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 				}
 			}
 		}
-		$options = get_option('bblm_config');
-		$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+		$bblm_star_team = bblm_get_star_player_team();
 
 		$sumoutput .= "<h3>Player Statistics for the ".$lsname." (Week ".$_POST['bblm_sweekno'].")</h3>\n";
 		//modified Copy and Paste from view.comp

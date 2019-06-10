@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.stadium.php
-*	Description: This page is used to add a new Stadium to the BBLM.
-*/
+/**
+ * BBowlLeagueMan Add Stadium
+ *
+ * Page used to add a new Stadium to the league
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -40,6 +45,7 @@ if(isset($_POST['bblm_stadium_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 	} //end of if post insertion was successful
 
 ?>

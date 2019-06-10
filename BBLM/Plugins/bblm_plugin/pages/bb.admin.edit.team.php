@@ -32,6 +32,7 @@ if (isset($_POST['bblm_tcap_update'])) {
 	$insertcapsql = 'INSERT INTO `'.$wpdb->prefix.'team_captain` (`tcap_id`, `t_id`, `p_id`, `tcap_status`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$_POST['bblm_tcap'].'\', \'1\')';
 	if (FALSE !== $wpdb->query($insertcapsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">
@@ -68,6 +69,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($tinfoupdatesql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 		<div id="updated" class="updated fade">

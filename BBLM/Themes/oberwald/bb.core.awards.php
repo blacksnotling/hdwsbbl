@@ -1,11 +1,16 @@
 <?php
+/**
+ * BBowlLeagueMan Teamplate List Awards
+ *
+ * Page Template to List all awards and winners
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
 /*
-Template Name: List Awards
-*/
-/*
-*	Filename: bb.core.awards.php
-*	Description: .Page template to display
-*/
+ * Template Name: list Awards
+ */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -74,7 +79,7 @@ Template Name: List Awards
 						}
 
 						//2. Awards to Players in a season
-						$compteamawardssql = 'SELECT P.post_title, P.guid, B.aps_value AS value, Y.post_title AS Sea, Y.guid AS SeaLink, F.post_title AS Team, F.guid AS TeamLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y, '.$wpdb->prefix.'bb2wp D, '.$wpdb->posts.' F, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = D.tid AND D.prefix = \'t_\' AND D.pid = F.ID AND B.sea_id = T.tid AND T.prefix = \'sea_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
+						$compteamawardssql = 'SELECT P.post_title, P.guid, B.aps_value AS value, Y.post_title AS Sea, Y.guid AS SeaLink, F.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y, '.$wpdb->prefix.'team F, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = F.t_id AND B.sea_id = T.tid AND T.prefix = \'sea_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
 						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
 							$aoutput .= "					<h4>Player recipients during a Season</h4>\n					<table>\n						<tr>\n							<th class=\"tbl_name\">Player</th>\n							<th class=\"tbl_name\">Season</th>\n							<th class=\"tbl_name\">Team</th>\n							<th class=\"tbl_stat\">Value</th>\n						</tr>\n";
 							$zebracount = 1;
@@ -85,7 +90,7 @@ Template Name: List Awards
 								else {
 									$aoutput .= "						<tr class=\"tbl_alt\">\n";
 								}
-								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->SeaLink."\" title=\"Read more about ".$cta->Sea."\">".$cta->Sea."</a></td>\n							<td><a href=\"".$cta->TeamLink."\" title=\"Read more about ".$cta->Team."\">".$cta->Team."</a></td>\n						<td>";
+								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->SeaLink."\" title=\"Read more about ".$cta->Sea."\">".$cta->Sea."</a></td>\n							<td><a href=\"".  get_post_permalink( $cta->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cta->WPID ) ) . "</a></td>\n						<td>";
 								if (0 < $cta->value) {
 									$aoutput .= $cta->value;
 								}
@@ -124,7 +129,7 @@ Template Name: List Awards
 						}
 
 						//4. Awards to Players in a competition
-						$compteamawardssql = 'SELECT P.post_title, P.guid, B.apc_value AS value, Y.post_title AS Comp, Y.guid AS CompLink, F.post_title AS Team, F.guid AS TeamLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y, '.$wpdb->prefix.'bb2wp D, '.$wpdb->posts.' F, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = D.tid AND D.prefix = \'t_\' AND D.pid = F.ID AND B.c_id = T.tid AND T.prefix = \'c_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.c_id DESC';
+						$compteamawardssql = 'SELECT P.post_title, P.guid, B.apc_value AS value, Y.post_title AS Comp, Y.guid AS CompLink, D.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y, '.$wpdb->prefix.'team D, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = D.t_id AND B.c_id = T.tid AND T.prefix = \'c_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.c_id DESC';
 						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
 							$aoutput .= "					<h4>Player recipients during a Competition</h4>\n					<table>\n						<tr>\n							<th class=\"tbl_name\">Player</th>\n							<th class=\"tbl_name\">Competition</th>\n							<th class=\"tbl_name\">Team</th>\n							<th class=\"tbl_stat\">Value</th>\n						</tr>\n";
 							$zebracount = 1;
@@ -135,7 +140,7 @@ Template Name: List Awards
 								else {
 									$aoutput .= "						<tr class=\"tbl_alt\">\n";
 								}
-								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->CompLink."\" title=\"Read more about ".$cta->Comp."\">".$cta->Comp."</a></td>\n							<td><a href=\"".$cta->TeamLink."\" title=\"Read more about ".$cta->Team."\">".$cta->Team."</a></td>\n						<td>";
+								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->CompLink."\" title=\"Read more about ".$cta->Comp."\">".$cta->Comp."</a></td>\n							<td><a href=\"".  get_post_permalink( $cta->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cta->WPID ) ) . "</a></td>\n						<td>";
 								if (0 < $cta->value) {
 									$aoutput .= $cta->value;
 								}

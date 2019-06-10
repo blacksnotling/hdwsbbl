@@ -1,6 +1,6 @@
 <div id="footer">
 			<div id="footertext">
-				<p>Unique content is &copy; HDWSBBL 2006 - present.</p>
+				<p>Unique content is &copy; <?php echo bblm_get_league_name(); ?> 2006 - present.</p>
 				<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
 				<p><a href="<?php bloginfo('rss2_url'); ?>">Entries (RSS)</a> and <a href="<?php bloginfo('comments_rss2_url'); ?>">Comments (RSS)</a>.</p>
 			</div>

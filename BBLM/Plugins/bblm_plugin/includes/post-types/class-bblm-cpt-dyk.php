@@ -14,10 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.1
  */
 
-class BBLM_DYK {
+class BBLM_CPT_DYK {
 
 	/**
 	 * Constructor
@@ -44,4 +44,4 @@ class BBLM_DYK {
 
 }
 
-new BBLM_DYK();
+new BBLM_CPT_DYK();

@@ -1,11 +1,16 @@
 <?php
-/*
-Template Name: Star Players Team View
-*/
-/*
-*	Filename: page-star-players.php
-*	Description: .Page to display the Star Players of the league. This replace the view team for this page.
-*/
+/**
+ * BBowlLeagueMan Teamplate View Star PlayerTeam
+ *
+ * Page Template to view the Star Player Team. This replace the view team for this page.
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
+ /*
+  * Template Name: View Star Player Team
+  */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -18,8 +23,7 @@ Template Name: Star Players Team View
 					<?php the_content(); ?>
 				</div>
 <?php
-		$options = get_option('bblm_config');
-		$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+		$bblm_star_team = bblm_get_star_player_team();
 
 		$stargmespldsql = 'SELECT COUNT(DISTINCT M.m_id) AS VALUE FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P WHERE P.p_id = M.P_id AND P.t_id = '.$bblm_star_team;
 		if ($matchnum = $wpdb->get_var($stargmespldsql)) {

@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.season.php
-*	Description: Page used to start a new season.
-*/
+/**
+ * BBowlLeagueMan Start Season
+ *
+ * Page used to start a new Season
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -43,6 +48,7 @@ if(isset($_POST['bblm_season_submit'])) {
 
 		$success = 1;
 		$addattempt = 1;
+		do_action( 'bblm_post_submission' );
 	}
 ?>
 	<div id="updated" class="updated fade">

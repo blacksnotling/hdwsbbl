@@ -1,15 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.edit.comp_team.php
-*	Version: 1.1
-*	Description: Page used to manage teams assigned to a league.
-*/
-/* -- Change History --
-20080311 - 1.0b - Initial creation of file.
-20080730 - 1.0 - bump to Version 1 for public release.
-20100308 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
+/**
+ * BBowlLeagueMan Manage teams in a competition
+ *
+ * Page used to Manage the teams assigned to a competition
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 
 //Check the file is not being accessed directly
@@ -39,6 +37,7 @@ $addsql = 'INSERT INTO `'.$wpdb->prefix.'team_comp` (`tc_id`, `t_id`, `c_id`, `d
 
 	if (FALSE !== $wpdb->query($addsql)) {
 		$sucess = TRUE;
+		do_action( 'bblm_post_submission' );
 	}
 	else {
 		$wpdb->print_error();

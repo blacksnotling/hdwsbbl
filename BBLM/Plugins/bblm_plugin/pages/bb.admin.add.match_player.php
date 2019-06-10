@@ -1,8 +1,13 @@
 <?php
-/*
-*	Filename: bb.admin.add.match_player.php
-*	Description: This page records player actions for a game and captures any increases and permanent injuries.
-*/
+/**
+ * BBowlLeagueMan Add Player match record
+ *
+ * Page used to add a ecord of a players performance during a match
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
@@ -191,6 +196,7 @@ $updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHER
 //Regardless of if the comp counts, we add the player records to the match_player table
 if (FALSE !== $wpdb->query($playermatchsql)) {
 	$sucess = TRUE;
+	do_action( 'bblm_post_submission' );
 }
 //then if the comp counts, reset the injured players to active and then update the partivipating players.
 if ($compcounts)  {
@@ -210,6 +216,7 @@ else {
 	if (FALSE !== $wpdb->query($updatematchsql)) {
 		$sucess = TRUE;
 		$finished = 1;
+		do_action( 'bblm_post_submission' );
 	}
 }
 
@@ -508,8 +515,7 @@ $playersql = 'SELECT P.p_id, P.t_id, P.p_spp, X.post_title AS p_name, P.p_num, T
 		//Once the teams have been outputted - now come the Star Players
 
 		//Determine the Star Player Team (to get the star players)
-		$options = get_option('bblm_config');
-		$bblm_team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
+		$bblm_team_star = bblm_get_star_player_team();
 
 		$starssql = 'SELECT P.post_name, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'posts P, '.$wpdb->prefix.'bb2wp J WHERE J.prefix = \'p_\' AND J.pid = P.ID AND J.tid = X.p_id AND X.t_id = '.$bblm_team_star.' order by P.post_name ASC';
 		if ($stars = $wpdb->get_results($starssql)) {
