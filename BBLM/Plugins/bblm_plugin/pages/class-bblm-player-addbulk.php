@@ -43,7 +43,7 @@
 ?>
   <div class="wrap">
 
-    <h1 class="wp-heading-inline"><?php echo __( 'Add Player in Bulk', 'bblm'); ?></h1>
+    <h1 class="wp-heading-inline"><?php echo __( 'Add Players in Bulk', 'bblm'); ?></h1>
 <?php
         if ( ( isset( $_POST[ 'bblm_addbulk_teamselect' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_addbulk_team_nonce' ], basename(__FILE__) ) ) ) {
 
@@ -100,7 +100,7 @@
           $teamdetail = $wpdb->get_row( $teamdetailssql );
 
           //Obtain a list of positions available for the tams race
-          $racepositionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE r_id = ' . $teamdetail->r_id .' AND pos_status = 1 ORDER BY pos_id ASC';
+          $racepositionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE r_id = ' . $teamdetail->r_id . ' AND pos_status = 1 ORDER BY pos_id ASC';
           $raceposition = $wpdb->get_results( $racepositionsql );
 
           //Determine current number of players on the team
@@ -108,6 +108,7 @@
           $teamplayercount = $wpdb->get_row( $teamplayercountsql );
 
           $posfree = array();
+          $teamnumbers = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
 
           if ( 0 == $teamplayercount->NUM ) {
 
@@ -147,15 +148,37 @@
 
               }
 
+              //gather the list of positions that ARE available
+              $steamnumsql = 'SELECT p_num FROM '.$wpdb->prefix.'player WHERE p_status = 1 and t_id = ' . $teamdetail->t_id . ' ORDER BY p_num ASC';
+              $steamnum = $wpdb->get_results( $steamnumsql);
+              //format them into a smaller array
+              $teamnuminuse = array();
+              foreach ( $steamnum as $tn ) {
+                array_push( $teamnuminuse, $tn->p_num );
+              }
+              //default list of positions
+              //compare the arrays and spit out the available numbers
+              $teamnumbers = array_diff( $teamnumbers, $teamnuminuse );
+
             } //end of foreach
 
           } // end of if team has players
 
-          echo '<p><pre>';
-          print_r($posfree);
-          echo '</pre><p>';
+          //Get a list of the positions availible for this team (taking into account what is used already)
+          $positionfreesql = 'SELECT * FROM '.$wpdb->prefix.'position P WHERE r_id = ' . $teamdetail->r_id . ' AND pos_status = 1 AND (';
+          //generate the sql for the positions that are eligable
+          $is_first = 1;
+          foreach ( $posfree as $pf ) {
+            if ( 1 !== $is_first ) {
+              $positionfreesql .= ' OR';
+            }
+            $positionfreesql .= ' P.pos_id = ' . $pf;
+            $is_first = 0;
+          }
 
+          $positionfreesql .= ') AND P.pos_cost <= ' . $teamdetail->t_bank . ' ORDER BY pos_name ASC';
 
+          $positionfree = $wpdb->get_results( $positionfreesql );
 ?>
           <h2 class="title"><?php echo __( 'Step 2: Provide details of the players you wish to add', 'bblm'); ?></h2>
           <p><?php echo __( 'Please add a player name and select a position. If a name is not added then the player will NOT be added!', 'bblm'); ?></p>
@@ -163,12 +186,17 @@
             <li> - <strong><?php echo __( 'Team', 'bblm'); ?></strong>: <?php echo esc_html( get_the_title( $teamdetail->WPID ) ); ?></li>
             <li> - <strong><?php echo __( 'Availible Cash', 'bblm'); ?></strong>: <?php echo number_format( $teamdetail->t_bank ); ?>GP</li>
             <li> - <?php echo __( 'Only positions that are vacent will be displayed below', 'bblm'); ?></li>
+            <li> - <?php echo __( 'Leave the player name <strong>blank</strong> if you <strong>DON\'T</strong> want to add them', 'bblm'); ?></li>
           </ul>
 
-          <table>
+          <p>DISPLAY CURRENT POSITIONS IN USE HERE</p>
+
+          <form id="addbulk_player_detail" method="post" action="">
+
+          <table class="widefat">
             <thead>
               <tr>
-                <th><?php echo __( 'Position #', 'bblm'); ?></th>
+                <th><?php echo __( 'Player #', 'bblm'); ?></th>
                 <th><?php echo __( 'Player Name', 'bblm'); ?></th>
                 <th><?php echo __( 'Position', 'bblm'); ?></th>
               </tr>
@@ -182,9 +210,23 @@
           while($i <= $bblm_limit) {
 ?>
             <tr>
-              <td>X</td>
-              <td>Hello!</td>
-              <td>Hello!</td>
+              <td><select name="bblm_addbulk_num<?php echo $i; ?>" id="bblm_addbulk_num<?php echo $i; ?>">
+    <?php
+              //output the list of available positions
+              foreach ( $teamnumbers as $a ) {
+                echo '<option value="' . $a . '">' . $a . '</option>';
+              }
+    ?>
+                </select></td>
+              <td><input type="text" name="bblm_addbulk_name<?php echo $i; ?>" size="60" value="" id="bblm_addbulk_name<?php echo $i; ?>" placeholder="Player Name - leave blank to skip"/></td>
+              <td><td><select name="bblm_addbulk_pos<?php echo $i; ?>" id="bblm_addbulk_pos<?php echo $i; ?>">
+    <?php
+              //output the list of available positions
+              foreach ( $positionfree as $pf ) {
+                echo '<option value="' . $pf->pos_id . '">' . esc_html( $pf->pos_name ) . ' - ' . number_format( $pf->pos_cost ) . 'GP</option>';
+              }
+    ?>
+                </select></td></td>
             </tr>
 <?php
             $i++;
@@ -193,6 +235,11 @@
 ?>
             </tbody>
           </table>
+          <?php wp_nonce_field( basename( __FILE__ ), 'bblm_addbulk_player_nonce' ); ?>
+          <input type="hidden" name="bblm_addbulk_team" size="10000" value="<?php echo $bblm_addbulk_team; ?>">
+          <input type="hidden" name="bblm_addbulk_numplayers" size="10000" value="<?php echo $bblm_limit; ?>">
+          <p>Submit</p>
+          </form>
 <?php
 
 
