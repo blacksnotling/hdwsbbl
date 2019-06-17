@@ -97,7 +97,7 @@ get_header(); ?>
 <?php
 					if (0 == $pd->p_status) {
 						//If the player is inactive, see if they were killed.
-						$fatesql = 'SELECT pf_killer, f_id, pf_desc FROM `'.$wpdb->prefix.'player_fate` WHERE (f_id = 1 OR f_id = 6) AND p_id = '.$pd->p_id.' LIMIT 1';
+						$fatesql = 'SELECT pf_killer, f_id, pf_desc FROM `'.$wpdb->prefix.'player_fate` WHERE ( f_id = 1 OR f_id = 6 OR f_id = 7 ) AND p_id = '.$pd->p_id.' LIMIT 1';
 						if ($fate = $wpdb->get_row($fatesql)) {
 							print("						<h3>Obituary</h3>\n							<p>This player is Dead! They were killed by ");
 							if ("0" == $fate->pf_killer) {
