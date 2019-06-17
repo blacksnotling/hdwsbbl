@@ -60,9 +60,9 @@ if(isset($_POST['bblm_star_submit'])) {
 		//Now we populate the race2star table in the database
 		$p = 1;
 		$race2starsqla = array();
-		while ($p <= $_POST[bblm_numofraces]){
+		while ($p <= $_POST['bblm_numofraces']){
 			//if  "on" result for a field then generate SQL
-			if (on == $_POST[bblm_plyd.$p]) {
+			if (on == $_POST['bblm_plyd'.$p]) {
 
 				$insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\''.$_POST[bblm_raceid.$p].'\', \''.$bblm_player_id.'\')';
 				$race2starsqla[$p] = $insertstarracesql;
@@ -130,7 +130,7 @@ if(isset($_POST['bblm_star_submit'])) {
 			$p = 1;
 			print("				<td>\n");
 			foreach ($names as $name) {
-				print("				<input type=\"checkbox\" name=\"bblm_plyd".$name->r_id."\"/> ".$name->r_name." <input type=\"hidden\" name=\"bblm_raceid".$p."\" id=\"bblm_raceid".$p."\" value=\"".$name->r_id."\"><br/>\n");
+				print("				<input type=\"checkbox\" name=\"bblm_plyd".$p."\"/> ".$name->r_name." <input type=\"hidden\" name=\"bblm_raceid".$p."\" id=\"bblm_raceid".$p."\" value=\"".$name->r_id."\"><br/>\n");
 				$p++;
 			}
 			print("</td>\n");
