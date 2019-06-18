@@ -79,9 +79,9 @@ class BBLM_CPT_Transfer {
 
           //display the team they went from-> to, the value, and the season
           $output .= '<li>From ';
-          $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>';
+          $output .= bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] );
           $output .= ' to ';
-          $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
+          $output .= bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] );
           $output .= ' for <strong>';
           $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
           $output .= '</strong>GP - ';
@@ -156,9 +156,9 @@ class BBLM_CPT_Transfer {
             $meta = get_post_meta( $tth->ID );
 
             //display the Player, the team they dealed with, the cosr, and the season
-            $output .= '<li><a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
+            $output .= '<li>' . bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] );
             $output .= ' hired from ';
-            $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>';
+            $output .= bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] );
             $output .= ' for <strong>';
             $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
             $output .= '</strong>GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
@@ -180,9 +180,9 @@ class BBLM_CPT_Transfer {
             $meta = get_post_meta( $tts->ID );
 
             //display the Player, the team they dealed with, the cosr, and the season
-            $output .= '<li><a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
+            $output .= '<li>' . bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] );
             $output .= ' sold to ';
-            $output .= '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
+            $output .= bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] );
             $output .= ' for <strong>';
             $output .= number_format( $meta[ 'bblm_transfer_cost' ][0] );
             $output .= '</strong>GP - <a title="Read more about this Season" href="' . get_post_permalink( $meta[ 'bblm_transfer_season' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_season' ][0] ) ) . '</a>';
@@ -201,7 +201,7 @@ class BBLM_CPT_Transfer {
     }// end of display_team_transfer_history
 
 		/**
-		 * Outputs the recird for largest transfer
+		 * Outputs the record for largest transfer
 		 *
 		 * @return output
 		 */
@@ -221,14 +221,14 @@ class BBLM_CPT_Transfer {
 			foreach ( $record as $r ) {
 				$meta = get_post_meta( $r->ID );
 
-        $output .=  '<a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
+        $output .= bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] );
 				$output .=	' for ';
 				$output .=  number_format( $meta[ 'bblm_transfer_cost' ][0] );
 				$output .=  'GP (';
 				$output .=	'hired by ';
-				$output .=  '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
+				$output .= bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] );
 				$output .=	' from ';
-        $output .=  '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>)';
+        $output .= bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] );
 
 
 			}
@@ -236,6 +236,45 @@ class BBLM_CPT_Transfer {
 			echo __( $output, 'bblm');
 
 		} //end of display_player_transfer_record()
+
+		/**
+		 * Outputs a list of recent transfers
+		 *
+		 * @return output
+		 */
+		public function display_recent_transfer_list( $Limit ) {
+
+			$output = "";
+
+			$args = array(
+				'post_type'  => 'bblm_transfer',
+				'numberposts' => $Limit,
+				'order'			=> 'DESC',
+			);
+			if ( $recenttransfers = get_posts( $args ) ) {
+
+				$output .= '<ul>';
+
+				foreach ( $recenttransfers as $rt ) {
+					$meta = get_post_meta( $rt->ID );
+
+					$output .= '<li>';
+					$output .= bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] );
+        	$output .= ' hires ';
+        	$output .= bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] );
+        	$output .= ' from ';
+        	$output .= bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] );
+        	$output .= '</li>';
+
+				}//end of foreach
+
+				$output .= '</ul>';
+
+			}
+
+			echo __( $output, 'bblm');
+
+		} //end of display_recent_transfer_list
 
 } //end of Class
 
