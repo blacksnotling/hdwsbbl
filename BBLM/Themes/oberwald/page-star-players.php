@@ -41,7 +41,7 @@
 					$totmvp = $ms->MVP;
 				}
 			}
-			$killsnumsql = 'SELECT COUNT(*) AS KILLS FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P WHERE (F.f_id = 1 or F.f_id = 6) AND F.pf_killer = P.p_id AND P.t_id = '.$bblm_star_team;
+			$killsnumsql = 'SELECT COUNT(*) AS KILLS FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.pf_killer = P.p_id AND P.t_id = '.$bblm_star_team;
 			$killnum = $wpdb->get_var($killsnumsql);
 
 ?>

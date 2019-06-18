@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Owner {
@@ -162,7 +162,7 @@ class BBLM_CPT_Owner {
      $playernumsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND T.ID = '.get_the_ID();
      $playernum = $wpdb->get_var( $playernumsql );
      //Number of dead players!
-     $playerdeadsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate F WHERE F.p_id = P.p_id AND ( F.f_id = 1 OR F.f_id = 6 ) AND P.t_id = T.t_id AND T.ID = '.get_the_ID();
+     $playerdeadsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate F WHERE F.p_id = P.p_id AND ( F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7 ) AND P.t_id = T.t_id AND T.ID = '.get_the_ID();
      $playerdead = $wpdb->get_var( $playerdeadsql );
      //Number of Matches Won
      $matchwonsql = 'SELECT SUM(T.tc_W) AS OW FROM '.$wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C WHERE T.t_id = C.t_id AND T.tc_played > 0 AND C.ID = '.get_the_ID(); //splitting the line for length reasons!
@@ -174,7 +174,7 @@ class BBLM_CPT_Owner {
      $starplayeruse = $wpdb->get_var( $starplayerusesql );
      $starplayeruniq = $wpdb->get_var( $starplayeruniqsql );
      //Number of Kills
-     $playerkillsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate F WHERE F.pf_killer = P.p_id AND ( F.f_id = 1 OR F.f_id = 6 ) AND P.t_id = T.t_id AND T.ID = '.get_the_ID();
+     $playerkillsql = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate F WHERE F.pf_killer = P.p_id AND ( F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7 ) AND P.t_id = T.t_id AND T.ID = '.get_the_ID();
      $playerkill = $wpdb->get_var( $playerkillsql );
      //Number of awards
      $asql1 = 'SELECT COUNT(*) AS CONT FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P WHERE A.p_id = P.p_id AND P.t_id = T.t_id AND T.ID = '.get_the_ID();

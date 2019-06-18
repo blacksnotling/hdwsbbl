@@ -108,6 +108,9 @@ else {
 		else if (6 == $bblm_fate) {
 			print("Do not worry, they will be back!");
 		}
+		else if (7 == $bblm_fate) {
+			print("Do not worry, they will be back (but very smelly)!");
+		}
 		else {
 			print("Player has been Removed from the team. Farewell.");
 		}

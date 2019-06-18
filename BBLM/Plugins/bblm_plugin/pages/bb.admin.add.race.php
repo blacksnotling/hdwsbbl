@@ -103,7 +103,7 @@ if(isset($_POST['bblm_race_submit'])) {
 				<td><p><textarea rows="10" cols="50" name="bblm_rdesc" id="bblm_rdesc" class="large-text"></textarea></p></td>
 			</tr>
 			<tr valign="top">
-				<th scope="row"><label for="bblm_plyd">Star Players availible:</label></th>
+				<th scope="row"><label for="bblm_plyd">Star Players available:</label></th>
 <?php
 		$namesql = 'SELECT X.p_id, P.post_title FROM `'.$wpdb->prefix.'player` X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE J.prefix = "p_" AND J.pid = P.ID AND J.tid = X.p_id AND  X.t_id = '.$bblm_star_team.' order by p_name ASC';
 		if ($names = $wpdb->get_results($namesql)) {

@@ -53,7 +53,7 @@
 		$racelist = $wpdb->get_results($racelistsql);
 
 		$is_first = 1;
-		echo '<p>Availible to hire for the following Races:';
+		echo '<p>' . __( 'Available to hire for the following Races:', 'bblm');
 		foreach ($racelist as $rl) {
 			if (! $is_first) {
 				echo ',';
