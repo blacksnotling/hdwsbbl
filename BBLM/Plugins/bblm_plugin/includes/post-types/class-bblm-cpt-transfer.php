@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_CPT_Transfer {
@@ -199,6 +199,43 @@ class BBLM_CPT_Transfer {
       echo __( $output, 'bblm');
 
     }// end of display_team_transfer_history
+
+		/**
+		 * Outputs the recird for largest transfer
+		 *
+		 * @return output
+		 */
+		public function display_player_transfer_record() {
+
+			$output = "";
+
+			$args = array(
+				'post_type'  => 'bblm_transfer',
+				'numberposts' => 1,
+				'order'			=> 'DESC',
+				'meta_key'	=> 'bblm_transfer_cost',
+				'orderby'   => 'meta_value_num',
+			);
+
+			$record = get_posts( $args );
+			foreach ( $record as $r ) {
+				$meta = get_post_meta( $r->ID );
+
+        $output .=  '<a title="Read more about this player" href="' . get_post_permalink( $meta[ 'bblm_transfer_player' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_player' ][0] ) ) . '</a>';
+				$output .=	' for ';
+				$output .=  number_format( $meta[ 'bblm_transfer_cost' ][0] );
+				$output .=  'GP (';
+				$output .=	'hired by ';
+				$output .=  '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_hteam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_hteam' ][0] ) ) . '</a>';
+				$output .=	' from ';
+        $output .=  '<a title="Read more about this team" href="' . get_post_permalink( $meta[ 'bblm_transfer_steam' ][0] ) . '">' . esc_html( get_the_title( $meta[ 'bblm_transfer_steam' ][0] ) ) . '</a>)';
+
+
+			}
+
+			echo __( $output, 'bblm');
+
+		} //end of display_player_transfer_record()
 
 } //end of Class
 

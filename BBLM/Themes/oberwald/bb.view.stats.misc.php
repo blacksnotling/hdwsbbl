@@ -48,6 +48,7 @@
 		$matchrec = $wpdb->get_var($matchrecsql);
 		$playernumsql = 'SELECT COUNT(*) AS playernum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_id = T.t_id AND T.t_show = 1 AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID';
 		$playernum = $wpdb->get_var($playernumsql);
+		$trans = new BBLM_CPT_Transfer;
 ?>
 
 
@@ -58,6 +59,7 @@
  			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<a href="<?php print($lc->MATCHLink); ?>" title="Read the full report of this match"><?php print($lc->MATCHT); ?></a>)</li>
 			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $htv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $htv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
 			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $ltv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $ltv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
+			<li><strong>Largest Recorded Transfer</strong>: <?php $trans->display_player_transfer_record(); ?> </li>
 			<li><strong>Team with most players</strong>: <a href="<?php print( get_post_permalink( $tmp->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $tmp->WPID ) )  ); ?></a> (<?php print($tmp->VALUE); ?>)</li>
 			<li><strong>Average Career length of a Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
 		</ul>
