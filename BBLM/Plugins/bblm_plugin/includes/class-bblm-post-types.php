@@ -143,7 +143,7 @@ class BBLM_Post_types {
 				'exclude_from_search' 	=> true, //exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'stadiums' ),
-				'supports' 				=> array( 'title', 'editor', 'author'),
+				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),
 				'has_archive' 			=> true,
 				'show_in_nav_menus' 	=> true,
 				'show_in_menu' => 'bblm_main_menu',
@@ -192,6 +192,7 @@ class BBLM_Post_types {
     include_once( 'post-types/class-bblm-cpt-dyk.php' );
 		include_once( 'post-types/class-bblm-cpt-owner.php' );
 		include_once( 'post-types/class-bblm-cpt-transfer.php' );
+		include_once( 'post-types/class-bblm-cpt-stadium.php' );
 
  }
 

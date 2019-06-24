@@ -1,43 +1,38 @@
-<?php
-/*
-Template Name: Stadium Listing
-*/
-/*
-*	Filename: bb.core.stadium.php
-*	Description: Page template to list the Stadiums in the league
-*/
-?>
 <?php get_header(); ?>
+  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
+    <?php do_action( 'bblm_template_before_loop' ); ?>
+
+		<header class="page-header entry-header">
+
+      <h2 class="entry-title"><?php echo __( 'Stadiums', 'bblm'); ?></h2>
+      <div class="archive-description"><?php echo bblm_echo_archive_desc( 'stadium' ) ?></div>
+
+    </header><!-- .page-header -->
+
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+			<ul>
+
 		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+			<?php do_action( 'bblm_template_before_content' ); ?>
 
-					<?php the_content(); ?>
-<?php
-				$stadiumsql = "SELECT P.post_title, P.guid FROM ".$wpdb->prefix."stadium R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_' ORDER BY P.post_title ASC";
-				if ($stadiums = $wpdb->get_results($stadiumsql)) {
-					print("<ul>\n");
-					foreach ($stadiums as $stad) {
-						print("	<li><a href=\"".$stad->guid."\" title=\"View more informaton about ".$stad->post_title."\">".$stad->post_title."</a></li>\n");
-					}
-					print("</ul>\n");
-				}
-				else {
-					print("	<div id=\"info\">\n	<p>There are no Stadiums currently set-up!</p>\n	</div>\n");
-}
+			<li><a href="<?php the_permalink(); ?>" title="<?php echo __( 'Read more about', 'bblm'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></li>
 
+		<?php do_action( 'bblm_template_after_content' ); ?>
+    <?php endwhile; ?>
 
-?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+			</ul>
 
-			</div>
-		</div>
+      <footer class="entry-footer">
+        <p class="postmeta">&nbsp;</p>
+      </footer><!-- .entry-footer -->
 
+    </article><!-- .post-ID -->
 
-		<?php endwhile;?>
-	<?php endif; ?>
+		<?php do_action( 'bblm_template_after_loop' ); ?>
+		<?php endif; ?>
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+	<?php do_action( 'bblm_template_after_posts' ); ?>
+	<?php get_sidebar(); ?>
+	<?php get_footer(); ?>

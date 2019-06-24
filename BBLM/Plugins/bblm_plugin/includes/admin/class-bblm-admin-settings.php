@@ -134,7 +134,7 @@ class BBLM_Settings_Admin {
             'helper' => __( 'The number of players and teams to display on the "top X" lists', 'bblm' ),
         	),
           array(
-            'uid' => 'archive_stad_text',
+            'uid' => 'archive_stadium_text',
             'label' => __( 'Stadium Page Text', 'bblm' ),
             'section' => 'second_section',
             'placeholder' => 'Enter a description here',
@@ -196,14 +196,6 @@ class BBLM_Settings_Admin {
 						'placeholder' => 'Enter a description here',
 						'type' => 'textarea',
 						'helper' => __( 'Text entered here appears at the top of the Transfers page', 'bblm' ),
-					),
-					array(
-						'uid' => 'stadium_transfer_text',
-						'label' => __( 'Stadiums Page Text', 'bblm' ),
-						'section' => 'second_section',
-						'placeholder' => 'Enter a description here',
-						'type' => 'textarea',
-						'helper' => __( 'Text entered here appears at the top of the Stadiums page', 'bblm' ),
 					),
           array(
         		'uid' => 'site_dir',
