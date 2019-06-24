@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Settings_Admin {
@@ -197,6 +197,14 @@ class BBLM_Settings_Admin {
 						'type' => 'textarea',
 						'helper' => __( 'Text entered here appears at the top of the Transfers page', 'bblm' ),
 					),
+					array(
+						'uid' => 'stadium_transfer_text',
+						'label' => __( 'Stadiums Page Text', 'bblm' ),
+						'section' => 'second_section',
+						'placeholder' => 'Enter a description here',
+						'type' => 'textarea',
+						'helper' => __( 'Text entered here appears at the top of the Stadiums page', 'bblm' ),
+					),
           array(
         		'uid' => 'site_dir',
         		'label' => __( 'Site Directory', 'bblm' ),
@@ -252,14 +260,6 @@ class BBLM_Settings_Admin {
         		'type' => 'number',
             'placeholder' => '',
             'helper' => __( 'The Wordpress Page ID "results" Page.', 'bblm' ),
-        	),
-          array(
-        		'uid' => 'page_stadium',
-        		'label' => __( 'Page # - Stadiums', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Stadiums" Page.', 'bblm' ),
         	),
           array(
         		'uid' => 'page_stats',
