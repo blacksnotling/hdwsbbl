@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.2
+ * @version   1.0
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
