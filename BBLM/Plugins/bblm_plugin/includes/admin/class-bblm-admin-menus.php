@@ -60,6 +60,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-transfers.php' );
 		new BBLM_Player_Transfers();
 
+		//Create the 'Players Transfers page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-addbulk.php' );
+		new BBLM_Player_AddBulk();
+
 	}
 
 	/**

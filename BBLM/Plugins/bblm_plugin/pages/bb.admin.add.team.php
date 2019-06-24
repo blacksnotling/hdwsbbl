@@ -113,6 +113,9 @@ if(isset($_POST['bblm_team_submit'])) {
 			print(" A roster has also been added. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the new Teams roster\">View Roster</a>");
 		}
 		print("</p>\n<p>You can now <a href=\"".site_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$team_id."\" title=\"Add some players to this team\">add players to this team</a> or <a href=\"".site_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.team.php\" title=\"Add another new team\">add another new team</a>.</p>");
+		print("<p>>You can also <a href=\"");
+		bloginfo('url');
+		print("wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Players in Bulk to this team</a></p>\n");
 	}
 	else {
 		print("Something went wrong! Please try again.");

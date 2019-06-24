@@ -313,7 +313,7 @@ else {
 
 				print("							<td><a href=\"");
 				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Stats\">Edit Purchases</a></td>\n");
+				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Purchases\">Edit Purchases</a></td>\n");
 
 				//we now check to see how players are on this team
 				$tplayerssql = 'SELECT COUNT(*) FROM '.$wpdb->prefix.'player WHERE t_id = '.$t->t_id;
@@ -328,7 +328,12 @@ else {
 					print("							<td>-</td>\n");
 				}
 
-				if ($t->t_active) {
+				if ( ( $t->t_active ) && ( 0 == $tplayers ) ) {
+					print("							<td><a href=\"");
+					bloginfo('url');
+					print("wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Bulk Players</a></td>\n");
+				}
+				else if ( $t->t_active ) {
 					print("							<td><a href=\"");
 					bloginfo('url');
 					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$t->t_id."\" title=\"Add a new payer to the team\">Add Player</a></td>\n");
