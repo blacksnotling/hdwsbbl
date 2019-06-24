@@ -125,6 +125,12 @@
                 do_action( 'bblm_post_submission' );
 
               }//end of submittion
+              else {
+
+                //something went wrong with the submission
+                $submissionresult = 2;
+
+              }
 
             }
 
@@ -150,7 +156,7 @@
             echo '<div id="updated" class="updated fade"><p>' . __( 'Player(s) have been added!', 'bblm') . '</p></div>';
 
           }
-          else {
+          else if ( "2" == $submissionresult ) {
 
             //Something went wrong with the submission, inform the user
             echo '<div id="updated" class="updated fade"><p>' . __( 'An error has occured! Please try again.', 'bblm') . '</p></div>';
