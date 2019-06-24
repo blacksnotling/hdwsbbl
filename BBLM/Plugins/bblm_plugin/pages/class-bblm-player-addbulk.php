@@ -48,11 +48,7 @@
         $submissionresult = 0;
 
         if ( ( isset( $_POST[ 'bblm_addbulk_addplayer' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_addbulk_player_nonce' ], basename(__FILE__) ) ) ) {
-          //Final submit to Database
-
-          echo '<p><pre>';
-          print_r($_POST);
-          echo '</pre></p>';
+          //This starts the final submit to Database
 
           //Determine how many players were potentially added
           $maxadded = (int) $_POST[ 'bblm_addbulk_numplayers' ];
@@ -61,26 +57,79 @@
 
           while($i <= $maxadded) {
 
-            $name = wp_strip_all_tags( $_POST[ 'bblm_addbulk_name'.$i ] );
+            $name = sanitize_text_field( $_POST[ 'bblm_addbulk_name'.$i ] );
             $position = (int) $_POST[ 'bblm_addbulk_pos'.$i ];
             $num = (int) $_POST[ 'bblm_addbulk_num'.$i ];
 
             if ( strlen( $name ) > 0) {
 
               //The Player name submitted was not blank
-
               //Now we largly follow the script from add player
-              //Get team information (name, ID, Slug)
-              //Get Position Details
-              //Map position details to temp vars
 
-              echo '<p>Form '.$i.' is a player called '.$name.' - Position '.$position.' playing as number '.$num.'</p>';
+              //Get team information (name, ID, Slug)
+              $teamdeetsql = 'SELECT * FROM '.$wpdb->prefix.'team WHERE t_id = ' . $addbulk_team;
+              $teamdeet = $wpdb->get_row( $teamdeetsql );
+
+              //Get Position Details
+              $racedeetsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_id = ' . $position;
+              $racedeet = $wpdb->get_row( $racedeetsql );
+
+              //Map position details to temp vars
+              $position_name = esc_html( $racedeet->pos_name );
+              $position_ma = $racedeet->pos_ma;
+              $position_st = $racedeet->pos_st;
+              $position_ag = $racedeet->pos_ag;
+              $position_av = $racedeet->pos_av;
+              $position_skills = $racedeet->pos_skills;
+              $position_cost = $racedeet->pos_cost;
+
+              //Generate Page content
+              $bblm_page_content = '&quot;' . $name . '&quot; is a ' . $position_name . ' for ' . esc_html( get_the_title( $teamdeet->WPID ) ) . ' playing as number ' . $num;
+
+              $bblm_page_slug = sanitize_title($name);
+
+              //generate GUID
+              $bblm_guid = '';
+              $bblm_guid = $bblm_guid."/";
+              $bblm_guid .= $bblm_page_slug;
+
+              $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\')';
+
+              $teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$position_cost.'\'';
+            	$teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost.'\' ';
+              $teamupdatesql .= ' WHERE `t_id` = '.$addbulk_team.' LIMIT 1';
+
+              $my_post = array(
+                'post_title' => wp_filter_nohtml_kses( $name ),
+                'post_content' => $bblm_page_content,
+                'post_type' => 'page',
+                'post_status' => 'publish',
+                'comment_status' => 'closed',
+                'ping_status' => 'closed',
+                'post_parent' => $teamdeet->WPID
+              );
+
+              if ($bblm_submission = wp_insert_post( $my_post )) {
+
+                add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.player.php');
+
+                //Insert into the Player table
+                $wpdb->query($playersql);
+
+                $bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$wpdb->insert_id.'\', \''.$bblm_submission.'\', \'p_\')';
+                $wpdb->query($bblmmappingsql);
+
+                $wpdb->query($teamupdatesql);
+
+                $submissionresult = 1;
+                do_action( 'bblm_post_submission' );
+
+              }//end of submittion
 
             }
 
             $i++;
           }
-
 
         } //End of Final Submit
 
@@ -91,6 +140,22 @@
         }
         else {
           //No team has been selected so disply the initial page
+
+          //but first we check the if there was a submission and if it was successful
+
+          if ( $submissionresult ) {
+
+            //a transfer was sumitted successfully!
+            //echo success, and link to edit player
+            echo '<div id="updated" class="updated fade"><p>' . __( 'Player(s) have been added!', 'bblm') . '</p></div>';
+
+          }
+          else {
+
+            //Something went wrong with the submission, inform the user
+            echo '<div id="updated" class="updated fade"><p>' . __( 'An error has occured! Please try again.', 'bblm') . '</p></div>';
+
+          }
 ?>
     <h2 class="title"><?php echo __( 'Step 1: Select the Team you wish to add players to', 'bblm'); ?></h2>
 
@@ -248,21 +313,27 @@
 
               $free = 0;
               $hired = 0;
+              $limit = (int) $tpt->pos_limit;
 
               $playercountsql = 'SELECT COUNT(*) AS COUNT FROM '.$wpdb->prefix.'player WHERE pos_id = ' . $tpt->pos_id . ' and t_id = ' . $teamdetail->t_id . ' AND p_status = 1 GROUP BY pos_id';
               if ( $playercount = $wpdb->get_row( $playercountsql ) ) {
                 if ( $playercount->COUNT > 0 ) {
 
                   $hired = (int)$playercount->COUNT;
-                  $free = (int) $tpt->pos_limit - $hired;
+                  $free = $limit - $hired;
 
                 }
+
+              }
+              else {
+
+                $free = $limit;
 
               }
 
               echo '<tr>';
               echo '<td>' . $tpt->pos_name . '</td>';
-              echo '<td>' . (int) $tpt->pos_limit . '</td>';
+              echo '<td>' . $limit . '</td>';
               echo '<td>' . $hired . '</td>';
               echo '<td>' . $free . '</td>';
               echo '</tr>';
