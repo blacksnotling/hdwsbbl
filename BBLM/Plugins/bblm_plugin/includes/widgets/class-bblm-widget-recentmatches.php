@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0.1
+ * @version   1.1
  */
 
 class BBLM_Widget_RecentMatchSum extends WP_Widget {

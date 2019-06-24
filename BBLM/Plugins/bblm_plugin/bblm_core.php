@@ -3,11 +3,11 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: A BloodBowl League Manager
-Version: 1.7
+Version: 1.8.1
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
-Tested up to: 4.9.8
+Tested up to: 5.2.8
 
 Text Domain: bblm
 
@@ -90,14 +90,14 @@ if ( ! class_exists( 'BBowlLeagueMan' ) ) :
  * Main BBowlLeagueMan Class
  *
  * @class BBowlLeagueMan
- * @version	1.7
+ * @version	1.8
  */
 final class BBowlLeagueMan {
 
 	/**
 	 * @var string
 	 */
-	public $version = '1.7';
+	public $version = '1.8';
 
 	/**
 	 * @var BBowlLeagueMan The single instance of the class
