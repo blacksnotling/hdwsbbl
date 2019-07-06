@@ -31,8 +31,22 @@ if(isset($_POST['bblm_team_submit'])) {
 	}
 	else {
 		//If the NEW field is not blank then add a new Owner post (should be moved into the Owner CPT class at some point)
-		$post_id = wp_insert_post( array( 'post_title'=>$_POST['bblm_tusernew'], 'post_type'=>'bblm_owner', 'post_content'=>'', 'post_status'=>'publish' ) );
+		$post_id = wp_insert_post( array( 'post_title'=>sanitize_text_field( $_POST[ 'bblm_tusernew' ] ), 'post_type'=>'bblm_owner', 'post_content'=>'', 'post_status'=>'publish' ) );
 		$bblm_tuser = $post_id;
+	}
+
+	//Determine if a new Stadium was created or an existing one used
+	$bblm_tstad = "";
+	if ( empty( $_POST['bblm_tstadnew'] ) ) {
+
+		//If a new coach has not been provided then use the value of the drop down
+		$bblm_tstad = $_POST[ 'bblm_tstad' ];
+	}
+	else {
+		//If the NEW field is not blank then add a new Owner post (should be moved into the Owner CPT class at some point)
+		$post_id = wp_insert_post( array( 'post_title'=>sanitize_text_field( $_POST[ 'bblm_tstadnew' ] ), 'post_type'=>'bblm_stadium', 'post_content'=>'', 'post_status'=>'publish' ) );
+		$bblm_tstad = $post_id;
+		add_post_meta( $bblm_tstad, 'stadium_featured', 'No' );
 	}
 
 
@@ -51,7 +65,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$_POST['bblm_tstad'].'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -116,6 +130,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		print("<p>You can also <a href=\"");
 		echo site_url();
 		print("/wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Players in Bulk to this team</a></p>\n");
+		echo '<p>If you added a new Stadium, <a href="' . site_url() . '/wp-admin/post.php?post=' . $bblm_tstad . '&action=edit">then add a description to the stadium.</a>';
 	}
 	else {
 		print("Something went wrong! Please try again.");
@@ -171,14 +186,14 @@ else if(isset($_POST['bblm_race_select'])) {
 ?>
 		</select>
 		<label for="bblm_tusernew"><?php echo __( ' OR Add a new one:', 'bblm' ); ?></label>
-		<input type="text" name="bblm_tusernew" id="bblm_tusernew" size="25" value="" maxlength="25" class="large-text"/></td>
+		<input type="text" name="bblm_tusernew" id="bblm_tusernew" size="25" value="" maxlength="25" class="large-text" placeholder="New Owner - leave this message (I.E blank) to ignore"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
 		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="25" class="large-text"/></td>
 	</tr>
 	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_tstad">Home Stadium</label></th>
+		<th scope="row" valign="top"><label for="bblm_tstad"><?php echo __( 'Home Stadium', 'bblm' ); ?></label></th>
 		<td><select name="bblm_tstad" id="bblm_tstad">
 			<?php
 					//Grabs a list of 'posts' from the Stadiums CPT
@@ -195,8 +210,9 @@ else if(isset($_POST['bblm_race_select'])) {
 						echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
 					}
 
-			?></select><br />
-		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_stadium" title="Add a new Stadium now">Add  new Stadium to the site!</a> - You will have to reload this page after adding a new one.</td>
+			?></select>
+			<label for="bblm_tstadnew"><?php echo __( ' OR Add a new one:', 'bblm' ); ?></label>
+			<input type="text" name="bblm_tstadnew" id="bblm_tstadnew" size="25" value="" maxlength="25" class="large-text" placeholder="New Stadium - leave this message (I.E blank) to ignore"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_roster">Generate Roster?</label></th>
