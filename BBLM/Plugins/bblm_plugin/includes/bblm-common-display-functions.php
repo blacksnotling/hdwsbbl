@@ -29,7 +29,7 @@ function bblm_get_team_name( $ID ) {
 }// end of bblm_get_team_name
 
 /**
- * Returns the link oto a team, properly escaped and formatted
+ * Returns the link of a team, properly escaped and formatted
  * Takes in the ID of the Wordpress Page
  */
 function bblm_get_team_link( $ID ) {
@@ -71,3 +71,32 @@ function bblm_get_player_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_player_link
+
+/**
+ * Returns the name of a Stadium, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_stadium_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_stadium_name
+
+/**
+ * Returns the link of a Stadsium, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_stadium_link( $ID ) {
+
+  $stadium_name = bblm_get_team_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $stadium_name . '" href="' . get_post_permalink( $ID ) . '">' . $stadium_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_stadium_link

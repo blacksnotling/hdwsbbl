@@ -22,7 +22,7 @@
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Assign teams (to a Competition).</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.comp_brackets.php" title="Set up Tourney Brackets">Set up tournament Brackets.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_brackets.php" title="Edit Tourney Brackets">Edit tournament Brackets.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.stadium.php" title="Add a Stadium">Add a Stadium.</a></li>
+  <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_stadium" title="Add a Stadium">Add a Stadium.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.award.php" title="Create an Award">Create an Award.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.end.comp.php" title="Close a competition">Close a comptition.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.end.season.php" title="Close a competition">Close a Season.</a></li>

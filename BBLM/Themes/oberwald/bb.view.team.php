@@ -19,7 +19,8 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, T.stad_id FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		//stad //stadLink
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
@@ -495,7 +496,7 @@
 		}
 ?>
 			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $tid = $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $tid = $ti->ID ) ).'">'.esc_html( get_the_title( $tid = $ti->ID ) ).'</a>'; ?></li>
-			   <li><strong>Stadium:</strong> <a href="<?php print($ti->stadlink); ?>" title="Learn more about <?php print($ti->stad); ?>"><?php print($ti->stad); ?></a></li>
+			   <li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $ti->stad_id ); ?></li>
 <?php if ( $has_played ) { ?>
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
 <?php	} ?>

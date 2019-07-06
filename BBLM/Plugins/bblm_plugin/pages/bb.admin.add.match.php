@@ -395,11 +395,17 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 								<td colspan="3">
 									<select name="mstad" id="mstad">
 										<?php
-										$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-										if ($stadiums = $wpdb->get_results($stadsql)) {
-											foreach ($stadiums as $stad) {
-												print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
-											}
+										$oposts = get_posts(
+											array(
+												'post_type' => 'bblm_stadium',
+												'numberposts' => -1,
+												'orderby' => 'post_title',
+												'order' => 'ASC'
+											)
+										);
+										if( ! $oposts ) return;
+										foreach( $oposts as $o ) {
+											echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
 										}
 										?>
 									</select>
@@ -481,12 +487,17 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 								<td>Location:</td>
 								<td colspan="3"><select name="mstad" id="mstad">
 									<?php
-									$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-
-									if ($stadiums = $wpdb->get_results($stadsql)) {
-										foreach ($stadiums as $stad) {
-											print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
-										}
+									$oposts = get_posts(
+										array(
+											'post_type' => 'bblm_stadium',
+											'numberposts' => -1,
+											'orderby' => 'post_title',
+											'order' => 'ASC'
+										)
+									);
+									if( ! $oposts ) return;
+									foreach( $oposts as $o ) {
+										echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
 									}
 									?>
 								</select></td>
