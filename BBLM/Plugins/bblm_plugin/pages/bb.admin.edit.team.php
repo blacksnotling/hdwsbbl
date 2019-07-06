@@ -150,15 +150,22 @@ function UpdateTv() {
 				<th scope="row" valign="top"><label for="bblm_tstad">Home Stadium</label></th>
 				<td><select name="bblm_tstad" id="bblm_tstad">
 <?php
-		$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-		if ($stadiums = $wpdb->get_results($stadsql)) {
-			foreach ($stadiums as $stad) {
-				print("<option value=\"".$stad->stad_id."\"");
-				if ($stad->stad_id == $t->stad_id) {
-					print(" selected=\"selected\"");
-				}
-				print(">".$stad->stad_name."</option>\n");
+		//Grabs a list of 'posts' from the Stadiums CPT
+		$oposts = get_posts(
+			array(
+				'post_type' => 'bblm_stadium',
+				'numberposts' => -1,
+				'orderby' => 'post_title',
+				'order' => 'ASC'
+			)
+		);
+		if( ! $oposts ) return;
+		foreach( $oposts as $o ) {
+			echo '<option value="' . $o->ID . '"';
+			if ( $o->ID == $t->stad_id ) {
+				echo ' selected="selected"';
 			}
+			echo '>' . esc_html( $o->post_title ) . '</option>';
 		}
 ?>
 				</select></td>

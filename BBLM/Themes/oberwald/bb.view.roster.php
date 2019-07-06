@@ -100,7 +100,7 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink, T.WPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.t_id = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, T.stad_id, T.WPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.t_id = J.tid AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 				$team_name = esc_html( get_the_title( $ti->WPID ) );
@@ -317,7 +317,8 @@ a:hover, a:active {
   <td class="tbl_value"><?php print(number_format($ti->t_apoc*50000)); ?>gp</td>
  </tr>
  <tr>
-  <td height="24" colspan="8">&nbsp;</td>
+	<th colspan="3" class="tbl_title">Stadium:</th>
+	<td height="24" colspan="5"><?php echo bblm_get_stadium_link( $ti->stad_id ); ?></td>
  </tr>
  <tr>
   <th colspan="4" class="tbl_title">Head Coach:</th>
