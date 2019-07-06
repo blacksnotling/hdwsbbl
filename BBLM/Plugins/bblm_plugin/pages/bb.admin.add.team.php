@@ -113,9 +113,9 @@ if(isset($_POST['bblm_team_submit'])) {
 			print(" A roster has also been added. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the new Teams roster\">View Roster</a>");
 		}
 		print("</p>\n<p>You can now <a href=\"".site_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$team_id."\" title=\"Add some players to this team\">add players to this team</a> or <a href=\"".site_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.team.php\" title=\"Add another new team\">add another new team</a>.</p>");
-		print("<p>>You can also <a href=\"");
-		bloginfo('url');
-		print("wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Players in Bulk to this team</a></p>\n");
+		print("<p>You can also <a href=\"");
+		echo site_url();
+		print("/wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Players in Bulk to this team</a></p>\n");
 	}
 	else {
 		print("Something went wrong! Please try again.");
@@ -180,16 +180,23 @@ else if(isset($_POST['bblm_race_select'])) {
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tstad">Home Stadium</label></th>
 		<td><select name="bblm_tstad" id="bblm_tstad">
-<?php
-		$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-		if ($stadiums = $wpdb->get_results($stadsql)) {
-			foreach ($stadiums as $stad) {
-				print("<option value=\"".$stad->stad_id."\">".$stad->stad_name."</option>\n");
-			}
-		}
-?>
-		</select><br />
-		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.stadium.php" title="Add a new Stadium now">Add  new Stadium to the site!</a> - You will have to reload this page after adding a new one.</td>
+			<?php
+					//Grabs a list of 'posts' from the Stadiums CPT
+					$oposts = get_posts(
+						array(
+							'post_type' => 'bblm_stadium',
+							'numberposts' => -1,
+							'orderby' => 'post_title',
+							'order' => 'ASC'
+						)
+					);
+					if( ! $oposts ) return;
+					foreach( $oposts as $o ) {
+						echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
+					}
+
+			?></select><br />
+		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_stadium" title="Add a new Stadium now">Add  new Stadium to the site!</a> - You will have to reload this page after adding a new one.</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_roster">Generate Roster?</label></th>
