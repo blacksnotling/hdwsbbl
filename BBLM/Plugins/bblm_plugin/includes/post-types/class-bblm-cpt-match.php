@@ -74,6 +74,12 @@ class BBLM_CPT_Match {
 		 echo '</table>';
 
 	 }
+	 else {
+		 //No matches have been played at this stadium
+		 echo '<p>' . __( 'No matches have been played at this stadium.', 'bblm' ) . '<p>';
+
+
+	 }
 
  } //end of display_match_by_stadium
 
