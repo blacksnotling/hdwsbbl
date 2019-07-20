@@ -119,7 +119,7 @@
 					print("</table>\n");
 				}
 
-				$compseasonsql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.sea_id = '.$sd->sea_id.' ORDER BY C.c_id ASC';
+				$compseasonsql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_show = 1 AND C.type_id = 1 AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.sea_id = '.$sd->sea_id.' ORDER BY C.c_id ASC';
 				if ($compseason = $wpdb->get_results($compseasonsql)) {
 					print("<h3>Competitions this season</h3>\n	<ul>\n");
 					foreach ($compseason as $cs) {

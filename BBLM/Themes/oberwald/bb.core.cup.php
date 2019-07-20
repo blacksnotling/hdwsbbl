@@ -16,7 +16,7 @@ Template Name: List Cups
 
 					<?php the_content(); ?>
 <?php
-			$seriessql = 'SELECT P.post_title, P.guid, COUNT(*) AS scount FROM '.$wpdb->prefix.'series S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.series_id = S.series_id AND S.series_id = J.tid AND J.prefix = \'series_\' AND J.pid = P.ID AND S.series_show = 1 GROUP BY S.series_id ORDER BY S.series_id ASC';
+			$seriessql = 'SELECT P.post_title, P.guid, COUNT(*) AS scount FROM '.$wpdb->prefix.'series S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE C.c_show = 1 AND C.type_id = 1 AND C.series_id = S.series_id AND S.series_id = J.tid AND J.prefix = \'series_\' AND J.pid = P.ID AND S.series_show = 1 GROUP BY S.series_id ORDER BY S.series_id ASC';
 			if ($cups = $wpdb->get_results($seriessql)) {
 				$zebracount = 1;
 				print("<table>\n	<tr>\n		<th>Cup Title</th>\n		<th>Competitions</th>\n	</tr>");

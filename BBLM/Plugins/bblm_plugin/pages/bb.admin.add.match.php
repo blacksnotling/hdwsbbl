@@ -222,59 +222,54 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 			$wpdb->query($bblmmappingsql);
 
 
-			//Only update team details if comp counts towards stats
-			if (FALSE !== $comp['counts']) {
+			$teamAupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_ff` = \''.$teamA['ff'].'\', `t_bank` = \''.$teamA['bank'].'\', `t_tv` = \''.$teamA['tv'].'\' WHERE `t_id` = \''.$teamA['id'].'\' LIMIT 1';
+			$wpdb->query($teamAupdatesql);
 
-				$teamAupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_ff` = \''.$teamA['ff'].'\', `t_bank` = \''.$teamA['bank'].'\', `t_tv` = \''.$teamA['tv'].'\' WHERE `t_id` = \''.$teamA['id'].'\' LIMIT 1';
-				$wpdb->query($teamAupdatesql);
+			$teamBupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_ff` = \''.$teamB['ff'].'\', `t_bank` = \''.$teamB['bank'].'\', `t_tv` = \''.$teamB['tv'].'\' WHERE `t_id` = \''.$teamB['id'].'\' LIMIT 1';
+			$wpdb->query($teamBupdatesql);
 
-				$teamBupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_ff` = \''.$teamB['ff'].'\', `t_bank` = \''.$teamB['bank'].'\', `t_tv` = \''.$teamB['tv'].'\' WHERE `t_id` = \''.$teamB['id'].'\' LIMIT 1';
-				$wpdb->query($teamBupdatesql);
+			//work out points values
+			$tApointsinc = $comp['p'.$bblm_safe_input['tAres']];
+			$tBpointsinc = $comp['p'.$bblm_safe_input['tBres']];
 
-				//work out points values
-				$tApointsinc = $comp['p'.$bblm_safe_input['tAres']];
-				$tBpointsinc = $comp['p'.$bblm_safe_input['tBres']];
+			if ($comp['round']) {
+				//work out existing points:
+				$tApointsnow = (($tAcomp['win']*$comp['pW'])+($tAcomp['lose']*$comp['pL'])+($tAcomp['draw']*$comp['pD']));
+				$tBpointsnow = (($tBcomp['win']*$comp['pW'])+($tBcomp['lose']*$comp['pL'])+($tBcomp['draw']*$comp['pD']));
 
+				$tApointsinc = (($tApointsnow+$comp['p'.$bblm_safe_input['tAres']])/($tAcomp['played']+1));
+				$tBpointsinc = (($tBpointsnow+$comp['p'.$bblm_safe_input['tBres']])/($tBcomp['played']+1));
+			}
+
+			//Generate the team_comp update queries
+			if (13 == $bblm_safe_input['mdiv']) {
+				//This is a cross Divisional game. As a result, the original home divisions need to be used rather then the generic "Cross Divisions table"
 				if ($comp['round']) {
-					//work out existing points:
-					$tApointsnow = (($tAcomp['win']*$comp['pW'])+($tAcomp['lose']*$comp['pL'])+($tAcomp['draw']*$comp['pD']));
-					$tBpointsnow = (($tBcomp['win']*$comp['pW'])+($tBcomp['lose']*$comp['pL'])+($tBcomp['draw']*$comp['pD']));
-
-					$tApointsinc = (($tApointsnow+$comp['p'.$bblm_safe_input['tAres']])/($tAcomp['played']+1));
-					$tBpointsinc = (($tBpointsnow+$comp['p'.$bblm_safe_input['tBres']])/($tBcomp['played']+1));
-				}
-
-				//Generate the team_comp update queries
-				if (13 == $bblm_safe_input['mdiv']) {
-					//This is a cross Divisional game. As a result, the original home divisions need to be used rather then the generic "Cross Divisions table"
-					if ($comp['round']) {
-						//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
-						$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
-						$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
-					}
-					else {
-						$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
-						$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
-					}
+					//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
+					$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
+					$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
 				}
 				else {
-					//This is not a cross divisional game. the div passed through the form is fine
-					if ($comp['round']) {
-						//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
-						$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-						$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-					}
-					else {
-						$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-						$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-					}
+					$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
+					$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
 				}
+			}
+			else {
+				//This is not a cross divisional game. the div passed through the form is fine
+				if ($comp['round']) {
+					//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
+					$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+					$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+				}
+				else {
+					$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+					$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+				}
+			}
 
-				//Run the team_comp update queries
-				$wpdb->query($tAcompsql);
-				$wpdb->query($tBcompsql);
-
-			} //end of if (FALSE !== $comp['counts'])
+			//Run the team_comp update queries
+			$wpdb->query($tAcompsql);
+			$wpdb->query($tBcompsql);
 
 			//  If this was entered from a Fixture then we need to mark that fixture as complete //
 			if ($_POST['bblm_fid']) {
@@ -301,7 +296,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 			<p>
 				<?php
 				if ($sucess) {
-					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or Enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
+					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
 				}
 				else {
 					print("Something went wrong! Please try again.");
