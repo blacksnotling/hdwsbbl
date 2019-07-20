@@ -165,7 +165,7 @@ function UpdateTv() {
 			if ( $o->ID == $t->stad_id ) {
 				echo ' selected="selected"';
 			}
-			echo '>' . esc_html( $o->post_title ) . '</option>';
+			echo '>' . bblm_get_stadium_name( $o->ID ) . '</option>';
 		}
 ?>
 				</select></td>

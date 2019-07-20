@@ -180,7 +180,7 @@ else if(isset($_POST['bblm_race_select'])) {
 		);
 		if( ! $oposts ) return;
 		foreach( $oposts as $o ) {
-			echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
+			echo '<option value="' . $o->ID . '">' . bblm_get_owner_name( $o->ID ) . '</option>';
 		}
 
 ?>
@@ -207,7 +207,7 @@ else if(isset($_POST['bblm_race_select'])) {
 					);
 					if( ! $oposts ) return;
 					foreach( $oposts as $o ) {
-						echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
+						echo '<option value="' . $o->ID . '">' . bblm_get_stadium_name( $o->ID ) . '</option>';
 					}
 
 			?></select>

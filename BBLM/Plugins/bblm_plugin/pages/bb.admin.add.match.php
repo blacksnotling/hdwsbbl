@@ -400,7 +400,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 										);
 										if( ! $oposts ) return;
 										foreach( $oposts as $o ) {
-											echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
+											echo '<option value="' . $o->ID . '">' . bblm_get_stadium_name( $o->ID ) . '</option>';
 										}
 										?>
 									</select>
@@ -492,7 +492,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 									);
 									if( ! $oposts ) return;
 									foreach( $oposts as $o ) {
-										echo '<option value="' . $o->ID . '">' . esc_html( $o->post_title ) . '</option>';
+										echo '<option value="' . $o->ID . '">' . bblm_get_stadium_name( $o->ID ) . '</option>';
 									}
 									?>
 								</select></td>
