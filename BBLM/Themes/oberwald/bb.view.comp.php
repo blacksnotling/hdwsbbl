@@ -501,43 +501,8 @@
 				//==================
 				// -- Top Killer --
 				//==================
-					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.WPID FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$cd->c_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
-					print("<h4>Top Killers</h4>\n");
-					if ($topstats = $wpdb->get_results($statsql)) {
-						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
-						$zebracount = 1;
-						$prevvalue = 0;
-
-						foreach ($topstats as $ts) {
-							if (($zebracount % 2) && (10 < $zebracount)) {
-								print("	<tr class=\"tb_hide\">\n");
-							}
-							else if (($zebracount % 2) && (10 >= $zebracount)) {
-								print("	<tr>\n");
-							}
-							else if (10 < $zebracount) {
-								print("	<tr class=\"tbl_alt tb_hide\">\n");
-							}
-							else {
-								print("	<tr class=\"tbl_alt\">\n");
-							}
-							if ($ts->VALUE > 0) {
-								if ($prevvalue == $ts->VALUE) {
-									print("	<td>-</td>\n");
-								}
-								else {
-									print("	<td><strong>".$zebracount."</strong></td>\n");
-								}
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
-								$prevvalue = $ts->VALUE;
-							}
-							$zebracount++;
-						}
-						print("</table>\n");
-					}
-					else {
-						print("	<div class=\"info\">\n		<p>Nobody has killed anybody else!</p>\n	</div>\n");
-					}
+				$bblm_stats = new BBLM_Stat;
+				$bblm_stats->display_top_killers_by_comp( $cd->c_id );
 
 					  /////////////////////////
 					 // End of Player Stats //
