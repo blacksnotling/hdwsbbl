@@ -176,7 +176,7 @@
 				  /////////////////////////
 				 // Best Passing Players //
 				/////////////////////////
-				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_comp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_comp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Best Passing Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -211,12 +211,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $ts->p_status && $period_alltime) {
-								print("	<td><strong><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></strong></td>\n");
+								print("	<td><strong>" . bblm_get_player_link( $ts->PID ) . "</strong></td>\n");
 							}
 							else {
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
+								print("	<td>" . bblm_get_player_link( $ts->PID ) . "</td>\n");
 							}
-							print("	<td>" . esc_html( $ts->pos_name ). "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ). "</td>\n	<td>" . bblm_get_team_link( $ts->WPID ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -230,7 +230,7 @@
 				  //////////////////////////////
 				 // Top Interceptors Players //
 				//////////////////////////////
-				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_int) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_int) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Intercepting Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -265,12 +265,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $ts->p_status && $period_alltime) {
-								print("	<td><strong><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></strong></td>\n");
+								print("	<td><strong>" . bblm_get_player_link( $ts->PID ) . "</strong></td>\n");
 							}
 							else {
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
+								print("	<td>" . bblm_get_player_link( $ts->PID ) . "</td>\n");
 							}
-							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td>" . bblm_get_team_link( $ts->WPID ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -284,7 +284,7 @@
 				  //////////////////
 				 // MVPs Players //
 				//////////////////
-				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_mvp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_mvp > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_mvp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_mvp > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Most Valued Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -319,12 +319,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $ts->p_status && $period_alltime) {
-								print("	<td><strong><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></strong></td>\n");
+								print("	<td><strong>" . bblm_get_player_link( $ts->PID ) . "</strong></td>\n");
 							}
 							else {
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
+								print("	<td>" . bblm_get_player_link( $ts->PID ) . "</td>\n");
 							}
-							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td>" . bblm_get_team_link( $ts->WPID ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;

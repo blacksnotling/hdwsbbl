@@ -93,8 +93,6 @@
               $bblm_guid = $bblm_guid."/";
               $bblm_guid .= $bblm_page_slug;
 
-              $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\')';
-
               $teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$position_cost.'\'';
             	$teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost.'\' ';
               $teamupdatesql .= ' WHERE `t_id` = '.$addbulk_team.' LIMIT 1';
@@ -112,6 +110,8 @@
               if ($bblm_submission = wp_insert_post( $my_post )) {
 
                 add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.player.php');
+
+                $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
 
                 //Insert into the Player table
                 $wpdb->query($playersql);

@@ -129,9 +129,6 @@ if (isset($_POST['bblm_team_add'])) {
 	Start of SQL Generation
 	*/
 
-
-	$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\')';
-
 	$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$bblm_poscost.'\'';
 
 	if (0 == $freebooter) {
@@ -150,6 +147,8 @@ if (isset($_POST['bblm_team_add'])) {
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.player.php');
+
+		$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
 
 		//Insert into the Player table
 		$wpdb->query($playersql);
