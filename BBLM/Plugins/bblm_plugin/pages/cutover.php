@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Makes the DB changes required to conver v1.X to 2.0
+ * Makes the DB changes required to convert v1.X to the latest version
  *
  * @author 		Blacksnotling
  * @category 	Cutover
  * @package 	BBowlLeagueMan/Cutover
- * @version   1.0
+ * @version   1.2
  */
  ?>
  <div class="wrap">
@@ -250,6 +250,55 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 	  } // end of if (isset($_POST['bblm_stadium_match'])) {
 
+			/**
+			 *
+			 * updating the players db table with wpid
+			 */
+			if (isset($_POST['bblm_player_tbupdate'])) {
+				$result = false;
+
+				//First we grab a list of the current users
+				$playerdeetssql = "SELECT T.p_id, T.p_name, J.pid AS WPID FROM `".$wpdb->prefix."player` T, ".$wpdb->prefix."bb2wp J WHERE J.prefix = 'p_' AND J.tid = T.p_id";
+				//echo '<p>'.$playerdeetssql.'</p>';
+
+				//We check something was returned
+				if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+					//echo '<ul>';
+					//Then we loop through them
+					foreach ($playerdeets as $pdeet) {
+
+						//We use this value to update the team tables
+						$playerupsql = "UPDATE `".$wpdb->prefix."player` SET `WPID` = '".$pdeet->WPID."' WHERE `".$wpdb->prefix."player`.`p_id` = ".$pdeet->p_id;
+						//echo '<li>' . $playerupsql . '</li>';
+
+						if ( $wpdb->query($playerupsql) ) {
+							$result = true;
+						}
+						else {
+
+							//Updating the team table failed!
+							$result = false;
+
+						}
+
+					}
+					//echo '</ul>';
+
+
+				}
+
+				//Update the DB table to with the new values
+
+				if ( $result ) {
+					print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+				}
+				else {
+					print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+				}
+
+			} // END OF Updateing Team Database table
+
 /**
  *
  * MAIN PAGE CONTENT FOLLOWS
@@ -317,7 +366,13 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<li><input type="submit" name="bblm_stadium_teams" value="Update Stadium in Teams" title="Update Stadium in Teams"/></li>
 		<li><input type="submit" name="bblm_stadium_match" value="Update Stadium in Matches" title="Update Stadium in Matches"/></li>
 		<li>Set the HDWSBBL World Stadium to be featured</li>
+		<li>Remove old templates from theme Directory</li>
 	  </ul>
+		<h3>Players Database Change</h3>
+		<ul>
+			<li>Add a new column to PREFIX_player - WPID Bigint (30)</li>
+			<li><input type="submit" name="bblm_player_tbupdate" value="Update Player Table" title="Update Player Table"/></li>
+		</ul>
 
 </form>
 
