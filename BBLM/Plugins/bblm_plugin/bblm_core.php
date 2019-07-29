@@ -241,6 +241,7 @@ final class BBowlLeagueMan {
 	public function frontend_includes() {
 
 		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
+		include_once( 'includes/class-bblm-stats.php' );							// Class for displaying Statistics
 
 	}
 
