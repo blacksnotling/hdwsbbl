@@ -167,118 +167,17 @@
 				</tbody>
 				</table>
 <?php
-					print("<h3>Player Statistics for this Championship Cup</h3>\n");
+					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';
 					  ///////////////////////////
 					 // Start of Player Stats //
 					///////////////////////////
 					$stat_limit = bblm_get_stat_limit();
-					$bblm_star_team = bblm_get_star_player_team();
 
+					$bblm_stats = new BBLM_Stat;
 
+					$bblm_stats->display_top_players_table( $cupid, 'bblm_cup', $stat_limit );
+					$bblm_stats->display_top_killers_table( $cupid, 'bblm_cup', $stat_limit );
 
-					//Generates an array containing all the Stats that are going to be checked
-					$playerstatsarray = array();
-					$playerstatsarray[0]['item'] = "mp_spp";
-					$playerstatsarray[0]['title'] = "Best Players";
-					$playerstatsarray[0]['error'] = "The Best Player list is not available at the moment";
-					$playerstatsarray[1]['item'] = "mp_td";
-					$playerstatsarray[1]['title'] = "Top Scorers";
-					$playerstatsarray[1]['error'] = "The Touch Downs have been made yet!";
-					$playerstatsarray[2]['item'] = "mp_cas";
-					$playerstatsarray[2]['title'] = "Most Vicious";
-					$playerstatsarray[2]['error'] = "No casualties have been caused yet";
-					$playerstatsarray[3]['item'] = "mp_comp";
-					$playerstatsarray[3]['title'] = "Top Passers";
-					$playerstatsarray[3]['error'] = "No Completions have been recorded yet";
-					$playerstatsarray[4]['item'] = "mp_int";
-					$playerstatsarray[4]['title'] = "Top Interceptors";
-					$playerstatsarray[4]['error'] = "No Inteceptions have been recorded yet";
-					$playerstatsarray[5]['item'] = "mp_mvp";
-					$playerstatsarray[5]['title'] = "Most Valuable Players (MVP)";
-					$playerstatsarray[5]['error'] = "The Most Valuable Players list is not available at the moment";
-
-					//For each of the stats, print the top players list. If none are found, display the relevant error
-					foreach ($playerstatsarray as $tpa) {
-						//Generic SQL Call, populated with the stat we are looking for
-						$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-
-						print("<h4>".$tpa['title']."</h4>\n");
-						if ($topstats = $wpdb->get_results($statsql)) {
-							print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
-							$zebracount = 1;
-							$prevvalue = 0;
-
-							foreach ($topstats as $ts) {
-								if (($zebracount % 2) && (10 < $zebracount)) {
-									print("	<tr class=\"tb_hide\">\n");
-								}
-								else if (($zebracount % 2) && (10 >= $zebracount)) {
-									print("	<tr>\n");
-								}
-								else if (10 < $zebracount) {
-									print("	<tr class=\"tbl_alt tb_hide\">\n");
-								}
-								else {
-									print("	<tr class=\"tbl_alt\">\n");
-								}
-								if ($ts->VALUE > 0) {
-									if ($prevvalue == $ts->VALUE) {
-										print("	<td>-</td>\n");
-									}
-									else {
-										print("	<td><strong>".$zebracount."</strong></td>\n");
-									}
-									print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
-									$prevvalue = $ts->VALUE;
-								}
-								$zebracount++;
-						}
-							print("</table>\n");
-						}
-						else {
-							print("	<div class=\"info\">\n		<p>".$tpa[ 'error' ]."</p>\n	</div>\n");
-						}
-					}
-				//==================
-				// -- Top Killer --
-				//==================
-					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.WPID FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_show = 1 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
-					print("<h4>Top Killers</h4>\n");
-					if ($topstats = $wpdb->get_results($statsql)) {
-						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");
-						$zebracount = 1;
-						$prevvalue = 0;
-
-						foreach ($topstats as $ts) {
-							if (($zebracount % 2) && (10 < $zebracount)) {
-								print("	<tr class=\"tb_hide\">\n");
-							}
-							else if (($zebracount % 2) && (10 >= $zebracount)) {
-								print("	<tr>\n");
-							}
-							else if (10 < $zebracount) {
-								print("	<tr class=\"tbl_alt tb_hide\">\n");
-							}
-							else {
-								print("	<tr class=\"tbl_alt\">\n");
-							}
-							if ($ts->VALUE > 0) {
-								if ($prevvalue == $ts->VALUE) {
-									print("	<td>-</td>\n");
-								}
-								else {
-									print("	<td><strong>".$zebracount."</strong></td>\n");
-								}
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n	<td>" . esc_html( $ts->pos_name ). "</td>\n	<td><a href=\"".  get_post_permalink( $ts->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
-								$prevvalue = $ts->VALUE;
-							}
-							$zebracount++;
-						}
-						print("</table>\n");
-					}
-					else {
-						print("	<div class=\"info\">\n		<p>Nobody has killed anybody else!</p>\n	</div>\n");
-					}
 					  /////////////////////////
 					 // End of Player Stats //
 					/////////////////////////
