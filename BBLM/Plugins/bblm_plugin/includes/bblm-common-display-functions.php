@@ -129,32 +129,3 @@ function bblm_get_owner_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_owner_link
-
-/**
- * Returns the name of a player, properly escaped and formatted
- * Takes in the ID of the Wordpress Page
- */
-function bblm_get_player_name( $ID ) {
-
-  $output = "";
-
-  $output .= esc_html( get_the_title( $ID ) );
-
-  return $output;
-
-}// end of bblm_get_player_name
-
-/**
- * Returns the link of a player, properly escaped and formatted
- * Takes in the ID of the Wordpress Page
- */
-function bblm_get_player_link( $ID ) {
-
-  $player_name = bblm_get_team_name( $ID );
-  $output = "";
-
-  $output .= '<a title="Read more about ' . $player_name . '" href="' . get_post_permalink( $ID ) . '">' . $player_name . '</a>';
-
-  return __( $output, 'bblm');
-
-}// end of bblm_get_player_link
