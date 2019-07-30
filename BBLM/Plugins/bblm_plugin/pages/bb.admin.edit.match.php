@@ -349,15 +349,22 @@ function BBLM_UpdateGate() {
 					<td colspan="3">
 						<select name="mstad" id="mstad">
 							<?php
-							$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-							if ($stadiums = $wpdb->get_results($stadsql)) {
-								foreach ($stadiums as $stad) {
-									echo '<option value="'.$stad->stad_id.'"';
-									if ( $stad->stad_id == $m->stad_id ) {
-										echo ' selected="selected"';
-									}
-									echo '>'.$stad->stad_name.'</option>';
+							//Grabs a list of 'posts' from the Stadiums CPT
+							$oposts = get_posts(
+								array(
+									'post_type' => 'bblm_stadium',
+									'numberposts' => -1,
+									'orderby' => 'post_title',
+									'order' => 'ASC'
+								)
+							);
+							if( ! $oposts ) return;
+							foreach( $oposts as $o ) {
+								echo '<option value="' . $o->ID . '"';
+								if ( $o->ID == $m->stad_id ) {
+									echo ' selected="selected"';
 								}
+								echo '>' . bblm_get_stadium_name( $o->ID ) . '</option>';
 							}
 							?>
 						</select>

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Settings_Admin {
@@ -134,7 +134,7 @@ class BBLM_Settings_Admin {
             'helper' => __( 'The number of players and teams to display on the "top X" lists', 'bblm' ),
         	),
           array(
-            'uid' => 'archive_stad_text',
+            'uid' => 'archive_stadium_text',
             'label' => __( 'Stadium Page Text', 'bblm' ),
             'section' => 'second_section',
             'placeholder' => 'Enter a description here',
@@ -252,14 +252,6 @@ class BBLM_Settings_Admin {
         		'type' => 'number',
             'placeholder' => '',
             'helper' => __( 'The Wordpress Page ID "results" Page.', 'bblm' ),
-        	),
-          array(
-        		'uid' => 'page_stadium',
-        		'label' => __( 'Page # - Stadiums', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Stadiums" Page.', 'bblm' ),
         	),
           array(
         		'uid' => 'page_stats',

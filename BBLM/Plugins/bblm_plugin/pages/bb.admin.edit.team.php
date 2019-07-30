@@ -150,15 +150,22 @@ function UpdateTv() {
 				<th scope="row" valign="top"><label for="bblm_tstad">Home Stadium</label></th>
 				<td><select name="bblm_tstad" id="bblm_tstad">
 <?php
-		$stadsql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
-		if ($stadiums = $wpdb->get_results($stadsql)) {
-			foreach ($stadiums as $stad) {
-				print("<option value=\"".$stad->stad_id."\"");
-				if ($stad->stad_id == $t->stad_id) {
-					print(" selected=\"selected\"");
-				}
-				print(">".$stad->stad_name."</option>\n");
+		//Grabs a list of 'posts' from the Stadiums CPT
+		$oposts = get_posts(
+			array(
+				'post_type' => 'bblm_stadium',
+				'numberposts' => -1,
+				'orderby' => 'post_title',
+				'order' => 'ASC'
+			)
+		);
+		if( ! $oposts ) return;
+		foreach( $oposts as $o ) {
+			echo '<option value="' . $o->ID . '"';
+			if ( $o->ID == $t->stad_id ) {
+				echo ' selected="selected"';
 			}
+			echo '>' . bblm_get_stadium_name( $o->ID ) . '</option>';
 		}
 ?>
 				</select></td>
@@ -313,7 +320,7 @@ else {
 
 				print("							<td><a href=\"");
 				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Stats\">Edit Purchases</a></td>\n");
+				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Purchases\">Edit Purchases</a></td>\n");
 
 				//we now check to see how players are on this team
 				$tplayerssql = 'SELECT COUNT(*) FROM '.$wpdb->prefix.'player WHERE t_id = '.$t->t_id;
@@ -328,7 +335,12 @@ else {
 					print("							<td>-</td>\n");
 				}
 
-				if ($t->t_active) {
+				if ( ( $t->t_active ) && ( 0 == $tplayers ) ) {
+					print("							<td><a href=\"");
+					bloginfo('url');
+					print("wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Bulk Players</a></td>\n");
+				}
+				else if ( $t->t_active ) {
 					print("							<td><a href=\"");
 					bloginfo('url');
 					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$t->t_id."\" title=\"Add a new payer to the team\">Add Player</a></td>\n");

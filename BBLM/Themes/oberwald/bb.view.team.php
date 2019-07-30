@@ -19,7 +19,8 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, T.stad_id FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		//stad //stadLink
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
@@ -45,14 +46,11 @@
 			//Set default value to flag if the team has played a game or not
 			$has_played = 1;
 
-			$overallsql = "SELECT SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_counts = 1 AND C.c_id = T.c_id AND T.tc_played > 0 AND T.t_id = ".$tid;
+			$overallsql = "SELECT SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT, C.c_counts FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_id = T.c_id AND T.tc_played > 0 AND T.t_id = ".$tid ." GROUP BY C.c_counts ORDER BY C.c_counts DESC";
 
-			if ($oh = $wpdb->get_row($overallsql)) {
-				if (NULL == $oh->OP) {
-					$has_played = 0;
-					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut!. Stay tuned to see how this team develops.</p>\n	</div>\n");
-				}
-				else {
+			if ($ohs = $wpdb->get_results($overallsql)) {
+
+				if ( !empty( $ohs ) ) { //Need something better - IE a result has been returned
 ?>
 				<h3>Career Statistics for <?php the_title(); ?></h3>
 				<table>
@@ -70,8 +68,20 @@
 						<th class="tbl_stat">INT</th>
 						<th class="tbl_stat">%</th>
 					</tr>
+<?php
+ 			foreach ($ohs as $oh) {
+?>
 					<tr>
-						<td><?php the_title(); ?></td>
+						<td>
+<?php
+				if ( 1 == $oh->c_counts ) {
+					echo 'League Record';
+				}
+				else {
+					echo 'Exhibition Record';
+				}
+?>
+						</td>
 						<td><?php print($oh->OP); ?></td>
 						<td><?php print($oh->OW); ?></td>
 						<td><?php print($oh->OL); ?></td>
@@ -84,6 +94,9 @@
 						<td><?php print($oh->OINT); ?></td>
 						<td><?php if ($oh->OP > 0) {print(number_format(($oh->OW/$oh->OP)*100)); } else {print("N/A"); } ?></td>
 					</tr>
+<?php
+ 				}
+?>
 				</table>
 
 				<h4>Key</h4>
@@ -129,8 +142,7 @@
 				<h3>Performance by Competition</h3>
 
 <?php
-			//$matchhsql = "SELECT P.guid, T.*, C.c_name FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = 'c_' AND J.pid = P.ID AND tc_played > 0 AND C.c_counts = 1 AND T.t_id =".$tid." GROUP BY C.c_id";
-			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 
 			if ($matchh = $wpdb->get_results($matchhsql)) {
 				$zebracount = 1;
@@ -238,7 +250,7 @@
 
 
 		//The next part is displayed regardless of if a team hs plyed  match or not (google code issue 18)
-				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.WPID AS tAid, Y.WPID AS tBid, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND C.c_counts = 1 AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
+				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.WPID AS tAid, Y.WPID AS tBid, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
 
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
 				print("<h3>Upcoming Matches (Fixtures)</h3>\n\n");
@@ -305,7 +317,7 @@
 				<h3>Recent Matches</h3>
 <?php
 				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
-				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1 AND C.c_counts = 1';
+				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1';
 				$matchssql .= ' AND N.m_id = M.m_id AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
 
 				if ($matchs = $wpdb->get_results($matchssql)) {
@@ -440,6 +452,10 @@
 
 				}//end of count stats
 			}//end of if plyed a match
+			else {
+				$has_played = 0;
+				print("	<div class=\"info\">\n		<p>This Team has not yet made their debut!. Stay tuned to see how this team develops.</p>\n	</div>\n");
+			}
 
 
 ?>
@@ -494,8 +510,8 @@
 <?php
 		}
 ?>
-			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $tid = $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $tid = $ti->ID ) ).'">'.esc_html( get_the_title( $tid = $ti->ID ) ).'</a>'; ?></li>
-			   <li><strong>Stadium:</strong> <a href="<?php print($ti->stadlink); ?>" title="Learn more about <?php print($ti->stad); ?>"><?php print($ti->stad); ?></a></li>
+			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $ti->ID ) ).'">'.esc_html( get_the_title( $ti->ID ) ).'</a>'; ?></li>
+			   <li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $ti->stad_id ); ?></li>
 <?php if ( $has_played ) { ?>
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
 <?php	} ?>
@@ -528,7 +544,7 @@
 
 			<li><h2>Currently Participating in</h2>
 <?php
-			$currentcompssql = 'SELECT O.post_title, O.guid from '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.c_active = 1 AND T.t_id = M.t_id AND T.t_id = '.$tid.' GROUP BY C.c_id LIMIT 0, 30 ';
+			$currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
 			if ($currentcomp = $wpdb->get_results($currentcompssql)) {
 				print("				<ul>\n");
 				foreach ($currentcomp as $curc) {

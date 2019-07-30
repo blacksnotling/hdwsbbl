@@ -154,7 +154,7 @@ if(isset($_POST['bblm_comp_submit'])) {
 				<th scope="row"><label for="bblm_counts">Does the competition count?</label></th>
 				<td><select name="bblm_counts" id="bblm_counts">
 					<option value="1">Yes - Games played in this competition count towards statistics</option>
-					<option value="0">No - This competition is purley for fun!</option>
+					<option value="0">No - This competition is for exhibition / friendly games</option>
 				</select></td>
 			</tr>
 			<tr valign="top">

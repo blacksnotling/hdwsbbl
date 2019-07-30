@@ -67,6 +67,7 @@
 			        . ' JOIN '.$wpdb->prefix.'player X ON J.tid = X.p_id'
 			        . ' LEFT JOIN '.$wpdb->prefix.'match_player M ON X.p_id = M.p_id'
 			        . ' WHERE J.prefix = "p_"'
+							. ' AND M.mp_counts = "1"'
 			        . ' AND X.t_id = '.$bblm_star_team
 			        . ' GROUP BY X.p_id';
 

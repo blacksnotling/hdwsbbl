@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: A BloodBowl League Manager
-Version: 1.8.1
+Version: 1.9
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -31,7 +31,6 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Manage Comps', 
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Assign teams (comp)', 'Assign teams (comp)', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_team.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Set-up Brackets (comp)', 'Set-up Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp_brackets.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Edit Brackets (comp)', 'Edit Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_brackets.php');
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Stadium', 'Add Stadium', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.stadium.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.award.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Competition', 'Close Comp', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.comp.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season', 'Close Sea', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.season.php');
@@ -220,6 +219,7 @@ final class BBowlLeagueMan {
 	private function includes() {
 
 		include_once( 'includes/bblm-common-functions.php' );
+		include_once( 'includes/bblm-common-display-functions.php' );
 
 		if ( is_admin() ) {
 			include_once( 'includes/admin/class-bblm-admin.php' );
@@ -241,6 +241,7 @@ final class BBowlLeagueMan {
 	public function frontend_includes() {
 
 		include_once( 'includes/class-bblm-template-loader.php' );		// Template Loader
+		include_once( 'includes/class-bblm-stats.php' );							// Class for displaying Statistics
 
 	}
 

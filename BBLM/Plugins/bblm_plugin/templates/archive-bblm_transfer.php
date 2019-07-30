@@ -46,11 +46,11 @@
 
         //Output the transfer itself
         echo '<li>';
-        echo '<a title="' . __( ' Read more about this team ', 'bblm') . '" href="' . get_post_permalink( $post->bblm_transfer_hteam ) . '">' . esc_html( get_the_title( $post->bblm_transfer_hteam ) ) . '</a>';
+        echo bblm_get_team_link( $post->bblm_transfer_hteam );
         echo __( ' hires ', 'bblm');
-        echo '<a title="' . __( ' Read more about this player ', 'bblm') . '" href="' . get_post_permalink( $post->bblm_transfer_player ) . '">' . esc_html( get_the_title( $post->bblm_transfer_player ) ) . '</a>';
+        echo bblm_get_player_link( $post->bblm_transfer_player );
         echo __( ' from ', 'bblm');
-        echo '<a title="' . __( ' Read more about this team ', 'bblm') . '" href="' . get_post_permalink( $post->bblm_transfer_steam ) . '">' . esc_html( get_the_title( $post->bblm_transfer_steam ) ) . '</a>';
+        echo bblm_get_team_link( $post->bblm_transfer_steam );
         echo __( ' for <strong>', 'bblm');
         echo number_format( $post->bblm_transfer_cost );
         echo '</strong>GP';

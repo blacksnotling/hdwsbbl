@@ -144,7 +144,8 @@ get_header(); ?>
 					}
 
 
-					$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.WPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.mp_counts = 1 AND M.p_id = '.$pd->p_id.' GROUP BY T.t_id ORDER BY T.t_id DESC';
+					//$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.WPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.mp_counts = 1 AND M.p_id = '.$pd->p_id.' GROUP BY T.t_id ORDER BY T.t_id DESC';
+					$statssql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, T.WPID, M.mp_counts FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.p_id = '.$pd->p_id.' GROUP BY M.mp_counts, T.t_id ORDER BY M.mp_counts DESC, T.t_id DESC';
 					if ($stats = $wpdb->get_results($statssql)) {
 						//This player has played at least one game
 
@@ -156,7 +157,7 @@ get_header(); ?>
 						<h3>Player Statistics</h3>
 						<table>
  							<tr>
- 								<th class="tbl_title">Playing for</th>
+ 								<th class="tbl_title"><?php echo __( 'Performance', 'bblm' ); ?></th>
  								<th class="tbl_stat">P</th>
  								<th class="tbl_stat">TD</th>
  								<th class="tbl_stat">CAS</th>
@@ -168,7 +169,14 @@ get_header(); ?>
 
 			<?php
 						foreach ($stats as $s) {
-							print (" <tr>\n  	<td><a href=\"". get_post_permalink( $s->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $s->WPID ) ) . "</a></td>\n  	<td>".$s->GAMES."</td>\n  	<td>".$s->TD."</td>\n  	<td>".$s->CAS."</td>\n  	<td>".$s->COMP."</td>\n  	<td>".$s->MINT."</td>\n  	<td>".$s->MVP."</td>\n  	<td>".$s->SPP."</td>\n </tr>\n");
+							if ( $s->mp_counts ) {
+								print (" <tr>\n  	<td><a href=\"". get_post_permalink( $s->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $s->WPID ) ) . "</a></td>\n");
+							}
+							else {
+								print (" <tr>\n  	<td>Exhibition Record</td>\n");
+							}
+
+							print ("   	<td>".$s->GAMES."</td>\n  	<td>".$s->TD."</td>\n  	<td>".$s->CAS."</td>\n  	<td>".$s->COMP."</td>\n  	<td>".$s->MINT."</td>\n  	<td>".$s->MVP."</td>\n  	<td>".$s->SPP."</td>\n </tr>\n");
 						}
 						print("</table>\n");
 			?>
@@ -185,7 +193,7 @@ get_header(); ?>
 								<th class="tbl_stat">SPP</th>
 							</tr>
 <?php
-					$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.c_id = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+					$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.c_id = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND C.c_show = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 					if ($playercomp = $wpdb->get_results($playercompsql)) {
 						$zebracount = 1;
 						foreach ($playercomp as $pc) {
@@ -249,7 +257,7 @@ get_header(); ?>
 							</thead>
 							<tbody>
 <?php
-						$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_counts = 1 AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
+						$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
 						if ($playermatch = $wpdb->get_results($playermatchsql)) {
 						$zebracount = 1;
 							foreach ($playermatch as $pm) {
@@ -441,7 +449,6 @@ get_header(); ?>
 	$rd = $wpdb->get_row($racesql);
 
 	//determine debut season
-	//$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND C.sea_id = S.sea_id AND C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = P.t_id AND P.p_id = '.$pd->p_id.' ORDER BY M.m_date ASC LIMIT 1';
 	$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND P.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
 	$sd = $wpdb->get_row($seasondebutsql);
 
@@ -529,7 +536,7 @@ get_header(); ?>
 			<li><h2>Currently Participating in</h2>
 <?php
 			//current competitions
-			$currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE P.t_id = M.t_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.c_active = 1 AND T.t_id = M.t_id AND P.p_id = '.$pd->p_id.' GROUP BY C.c_id LIMIT 0, 30 ';
+			$currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE P.t_id = M.t_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.c_active = 1 AND T.t_id = M.t_id AND P.p_id = '.$pd->p_id.' GROUP BY C.c_id LIMIT 0, 30 ';
 				if ($currentcomps = $wpdb->get_results($currentcompssql)) {
 					print("			  <ul>\n");
 						foreach ($currentcomps as $curc) {

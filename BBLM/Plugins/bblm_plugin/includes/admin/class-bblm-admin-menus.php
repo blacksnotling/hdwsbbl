@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.1
+ * @version   1.2
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -59,6 +59,10 @@ class BBLM_Admin_Menus {
 		//Create the 'Players Transfers page'
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-transfers.php' );
 		new BBLM_Player_Transfers();
+
+		//Create the 'Players Transfers page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-addbulk.php' );
+		new BBLM_Player_AddBulk();
 
 	}
 

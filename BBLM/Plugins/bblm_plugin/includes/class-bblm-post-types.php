@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.1
+ * @version		1.2
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -120,6 +120,36 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Transfer
+		register_post_type( 'bblm_stadium',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Stadiums', 'bblm' ),
+					'singular_name' 		=> __( 'Stadium', 'bblm' ),
+					'add_new_item' 			=> __( 'Add New Stadium', 'bblm' ),
+					'add_new' 			=> __( 'New Stadium', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Stadium', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Stadium', 'bblm' ),
+					'view_items' 			=> __( 'View Stadiums', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Stadiums', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'stadiums' ),
+				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-store',
+			)
+		); //end of bblm_stadium
 	}
 
   /**
@@ -162,6 +192,8 @@ class BBLM_Post_types {
     include_once( 'post-types/class-bblm-cpt-dyk.php' );
 		include_once( 'post-types/class-bblm-cpt-owner.php' );
 		include_once( 'post-types/class-bblm-cpt-transfer.php' );
+		include_once( 'post-types/class-bblm-cpt-stadium.php' );
+		include_once( 'post-types/class-bblm-cpt-match.php' );
 
  }
 

@@ -380,9 +380,6 @@
 
 		$compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, F.post_title AS Sea, F.guid AS SeaLink FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' F, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND C.sea_id = S.tid AND S.prefix = \'sea_\' AND S.pid = F.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
 		$comp = $wpdb->get_row($compsql);
-
-		$stadsql = 'Select B.post_title AS Stad, B.guid AS StadLink FROM '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE V.pid = B.ID AND V.prefix = \'stad_\' AND V.tid = '.$m->stad_id.' LIMIT 1';
-		$stad = $wpdb->get_row($stadsql);
 ?>
 
 	<div id="subcontent">
@@ -403,7 +400,7 @@
 				</strong> <?php print($comp->div_name);?></li>
 				<li><strong>Season:</strong> <a href="<?php print($comp->SeaLink); ?>" title="View more about this Season"><?php print($comp->Sea);?></a></li>
 				<li><strong>Attendance:</strong> <?php print(number_format($m->m_gate));?></li>
-				<li><strong>Stadium:</strong> <a href="<?php print($stad->StadLink); ?>" title="View more about this Stadium"><?php print($stad->Stad);?></a></li>
+				<li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $m->stad_id ); ?></li>
 			  </ul>
 			 </li>
 <?php

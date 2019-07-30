@@ -102,7 +102,7 @@
 				  //////////////////////////
 				 // Most VIcious Players //
 				//////////////////////////
-				$statsql = 'SELECT Y.post_title, T.WPID, Y.guid, SUM(M.mp_cas) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_cas > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_cas) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_cas > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Most Vicious Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -137,12 +137,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $ts->p_status && $period_alltime) {
-								print("	<td><strong><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></strong></td>\n");
+								print("	<td><strong>" . bblm_get_player_link( $ts->PID ) . "</strong></td>\n");
 							}
 							else {
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
+								print("	<td>" . bblm_get_player_link( $ts->PID ) . "</td>\n");
 							}
-							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td>" . bblm_get_team_link( $ts->WPID ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -210,7 +210,7 @@
 				  /////////////////////////
 				 // Top Killing Players //
 				/////////////////////////
-				$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.WPID, P.p_status, T.t_active FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, T.WPID, P.p_status, T.t_active FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Most Deadly Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -245,12 +245,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $ts->p_status && $period_alltime) {
-								print("	<td><strong><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></strong></td>\n");
+								print("	<td><strong>" . bblm_get_player_link( $ts->PID ) . "</strong></td>\n");
 							}
 							else {
-								print("	<td><a href=\"".$ts->guid."\" title=\"View more details on ".$ts->post_title."\">".$ts->post_title."</a></td>\n");
+								print("	<td>" . bblm_get_player_link( $ts->PID ) . "</td>\n");
 							}
-							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"Read more on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . esc_html( $ts->pos_name ) . "</td>\n	<td>" . bblm_get_team_link( $ts->WPID ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;
@@ -264,7 +264,7 @@
 				  ///////////////////////
 				 // Top Killing Teams //
 				///////////////////////
-				$statsql = 'SELECT COUNT(*) AS VALUE , T.WPID, T.t_active, R.r_name FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_if = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
+				$statsql = 'SELECT COUNT(*) AS VALUE , T.WPID, T.t_active, R.r_name FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
 				print("<h4>Most Deadly Teams");
 				if (0 == $period_alltime) {
 					print(" (Active)");

@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Makes the DB changes required to conver v1.X to 2.0
+ * Makes the DB changes required to convert v1.X to the latest version
  *
  * @author 		Blacksnotling
  * @category 	Cutover
  * @package 	BBowlLeagueMan/Cutover
- * @version   1.0
+ * @version   1.2
  */
  ?>
  <div class="wrap">
@@ -166,6 +166,140 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 } // END OF Updateing Team Database table
 
 /**
+	  *
+	  * UPDATING MAIN POST TABLE FOR THE STADIUM CPT
+	  */
+	if (isset($_POST['bblm_stadium_stadcpt'])) {
+
+	  $stadpostsql = "SELECT P.ID, R.stad_id, P.post_title FROM ".$wpdb->prefix."stadium R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_' ORDER BY P.ID ASC";
+	    if ($stadposts = $wpdb->get_results($stadpostsql)) {
+	      //echo '<ul>';
+	      foreach ($stadposts as $stad) {
+	        $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_stadium' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+	        //print("<li>".$stadupdatesql."</li>");
+	        if ( $wpdb->query($stadupdatesql) ) {
+	          $result = true;
+	        }
+	        else {
+	          $result = false;
+	        }
+
+	      } //end of foreach
+	      //echo '</ul>';
+	      if ( $result ) {
+	        print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Stadiums! <strong>Now you can delete the stadiums page!</strong></p></div>\n");
+	      }
+	    }//end of if sql was successful
+	} //end of if (isset($_POST['bblm_stadium_stadcpt']))
+
+	/**
+	 *
+	 * UPDATING TEAMS TABLE FOR THE NEW STADIUM IDs
+	 */
+	if (isset($_POST['bblm_stadium_teams'])) {
+
+	  $teampostsql = "SELECT T.t_id, T.stad_id, P.ID FROM ".$wpdb->prefix."team T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_'";
+	    if ($teamposts = $wpdb->get_results($teampostsql)) {
+	      //echo '<ul>';
+	      foreach ($teamposts as $stad) {
+	        $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_team`.`t_id` = $stad->t_id;";
+	        //print("<li>".$stad->t_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
+	        //print("<li>".$stadupdatesql."</li>");
+	        if ( $wpdb->query($stadupdatesql) ) {
+	          $result = true;
+	        }
+	        else {
+	          $result = false;
+	        }
+
+	      } //end of foreach
+	      //echo '</ul>';
+	      if ( $result ) {
+	        print("<div id=\"updated\" class=\"updated fade\"><p>Teams table updated with the new Stadiums!</p></div>\n");
+	      }
+	    }//end of if sql was successful
+
+	} // end of if (isset($_POST['bblm_stadium_teams'])) {
+
+	  /**
+	   *
+	   * UPDATING Matches TABLE FOR THE NEW STADIUM IDs
+	   */
+	  if (isset($_POST['bblm_stadium_match'])) {
+
+	    $matchpostsql = "SELECT M.m_id, M.stad_id, P.ID FROM ".$wpdb->prefix."match M, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE M.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_'";
+	      if ($matchposts = $wpdb->get_results($matchpostsql)) {
+	        //echo '<ul>';
+	        foreach ($matchposts as $stad) {
+	          $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_match`.`m_id` = ".$stad->m_id.";";
+	          //print("<li>".$stad->m_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
+	          //print("<li>".$stadupdatesql."</li>");
+	          if ( $wpdb->query($stadupdatesql) ) {
+	            $result = true;
+	          }
+	          else {
+	            $result = false;
+	          }
+
+	        } //end of foreach
+	        //echo '</ul>';
+	        if ( $result ) {
+	          print("<div id=\"updated\" class=\"updated fade\"><p>Matches table updated with the new Stadiums!</p></div>\n");
+	        }
+	      }//end of if sql was successful
+
+	  } // end of if (isset($_POST['bblm_stadium_match'])) {
+
+			/**
+			 *
+			 * updating the players db table with wpid
+			 */
+			if (isset($_POST['bblm_player_tbupdate'])) {
+				$result = false;
+
+				//First we grab a list of the current users
+				$playerdeetssql = "SELECT T.p_id, T.p_name, J.pid AS WPID FROM `".$wpdb->prefix."player` T, ".$wpdb->prefix."bb2wp J WHERE J.prefix = 'p_' AND J.tid = T.p_id";
+				//echo '<p>'.$playerdeetssql.'</p>';
+
+				//We check something was returned
+				if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+					//echo '<ul>';
+					//Then we loop through them
+					foreach ($playerdeets as $pdeet) {
+
+						//We use this value to update the team tables
+						$playerupsql = "UPDATE `".$wpdb->prefix."player` SET `WPID` = '".$pdeet->WPID."' WHERE `".$wpdb->prefix."player`.`p_id` = ".$pdeet->p_id;
+						//echo '<li>' . $playerupsql . '</li>';
+
+						if ( $wpdb->query($playerupsql) ) {
+							$result = true;
+						}
+						else {
+
+							//Updating the team table failed!
+							$result = false;
+
+						}
+
+					}
+					//echo '</ul>';
+
+
+				}
+
+				//Update the DB table to with the new values
+
+				if ( $result ) {
+					print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+				}
+				else {
+					print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+				}
+
+			} // END OF Updateing Team Database table
+
+/**
  *
  * MAIN PAGE CONTENT FOLLOWS
  */
@@ -222,6 +356,25 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 	<ul>
 		<li>Update the settings page with the archive page description</li>
 	</ul>
+
+	<h2>1.8 -> 1.9</h2>
+	<ul>
+		<li>Change the stad_id column to BIGINT(20)</li>
+		<li>Update the settings page with the archive page description</li>
+		<li><input type="submit" name="bblm_stadium_stadcpt" value="Convert Stadium Post Types" title="Convert the Stadium Post Types"/></li>
+		<li>Now you can delete the Stadiums Page! and <strong>Update the other content widget</strong></li>
+		<li><input type="submit" name="bblm_stadium_teams" value="Update Stadium in Teams" title="Update Stadium in Teams"/></li>
+		<li><input type="submit" name="bblm_stadium_match" value="Update Stadium in Matches" title="Update Stadium in Matches"/></li>
+		<li>Set the HDWSBBL World Stadium to be featured</li>
+		<li>Remove old templates from theme Directory</li>
+	  </ul>
+		<h3>Players Database Change</h3>
+		<ul>
+			<li>Add a new column to PREFIX_player - WPID Bigint (30)</li>
+			<li><input type="submit" name="bblm_player_tbupdate" value="Update Player Table" title="Update Player Table"/></li>
+			<li>Add an index to the WPID column in the *_team table</li>
+			<li>Add an index to the WPID column in the *_player table</li>
+		</ul>
 
 </form>
 
