@@ -372,6 +372,8 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<ul>
 			<li>Add a new column to PREFIX_player - WPID Bigint (30)</li>
 			<li><input type="submit" name="bblm_player_tbupdate" value="Update Player Table" title="Update Player Table"/></li>
+			<li>Add an index to the WPID column in the *_team table</li>
+			<li>Add an index to the WPID column in the *_player table</li>
 		</ul>
 
 </form>
