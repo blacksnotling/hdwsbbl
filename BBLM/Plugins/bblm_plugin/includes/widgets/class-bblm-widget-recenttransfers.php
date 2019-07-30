@@ -45,7 +45,7 @@ class BBLM_Widget_RecentTransfers extends WP_Widget {
   // The Widget output on the admin screen
   public function form( $instance ) {
 
-    echo '<p>'.__( 'Displays a summary fo recent transfers (suitible for the sidebar)', 'bblm' ).'</p>';
+    echo '<p>'.__( 'Displays a summary of recent transfers (suitible for the sidebar)', 'bblm' ).'</p>';
     //if no data has been provided then this populates some default values
     $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Recent Transfers', 'bblm' );
     $numshow = ! empty( $instance['numshow'] ) ? $instance['numshow'] : "6";
@@ -61,7 +61,7 @@ class BBLM_Widget_RecentTransfers extends WP_Widget {
     </p>
 
     <p>
-      <label for="<?php echo esc_attr( $this->get_field_id( 'numshow' ) ); ?>"><?php esc_attr_e( 'Number of matches to show:', 'bblm' ); ?></label>
+      <label for="<?php echo esc_attr( $this->get_field_id( 'numshow' ) ); ?>"><?php esc_attr_e( 'Number of transfers to show:', 'bblm' ); ?></label>
       <input
         class="widefat"
         id="<?php echo esc_attr( $this->get_field_id( 'numshow' ) ); ?>"
