@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     }
    /**
-    * Displays the list of top performing players
+    * Displays the list of top performing players for ALL Stats
     *
     * Takes in the BBLM ID of the competition
     *
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       foreach ( $playerstatsarray as $tpa ) {
 
         $statsql = '';
-        $statsql .= 'SELECT P.WPID AS PID, T.WPID, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name ';
+        $statsql .= 'SELECT P.WPID AS PID, T.WPID, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name, P.p_status ';
 
         switch ( $coverage ) {
 
@@ -90,46 +90,9 @@ if ( ! defined( 'ABSPATH' ) ) {
         echo '<h4>' . __( $tpa[ 'title' ], 'bblm' ) . '</h4>';
 
         if ( $topstats = $wpdb->get_results( $statsql ) ) {
-  ?>
-          <table class="expandable bblm_expandable bblm_table bblm_stats">
-            <tr>
-              <th class="tbl_stat bblm_tbl_stat">#</th>
-              <th class="tbl_name bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
-              <th><?php echo __( 'Position', 'bblm' ); ?></th>
-              <th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-              <th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
-            </tr>
-  <?php
-          $zebracount = 1;
-          $prevvalue = 0;
 
-          foreach ( $topstats as $ts ) {
-            if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-              echo '<tr class="tb_hide bblm_tbl_hide">';
-            }
-            else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-              echo '<tr>';
-            }
-            else if ( 10 < $zebracount ) {
-              echo '<tr class="tb_hide bblm_tbl_hide tbl_alt bblm_tbl_alt">';
-            }
-            else {
-              echo '<tr class="tbl_alt bblm_tbl_alt">';
-            }
-            if ( $ts->VALUE > 0 ) {
-              if ( $prevvalue == $ts->VALUE ) {
-                echo '<td>-</td>';
-              }
-              else {
-                echo '<td><strong>' . $zebracount . '</strong></td>';
-              }
+          $this->display_player_table( $topstats );
 
-              echo '<td>' . bblm_get_player_link( $ts->PID ) . '</td> <td>' . esc_html( $ts->pos_name ) . '</td> <td>' . bblm_get_team_link( $ts->WPID ) . '</td> <td>' . $ts->VALUE . '</td> </tr>';
-              $prevvalue = $ts->VALUE;
-            }
-            $zebracount++;
-          }
-          echo '</table>';
         }
         else {
   ?>
@@ -159,7 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       global $wpdb;
 
       $statsql = '';
-      $statsql .= 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, T.WPID';
+      $statsql .= 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, P.p_status, T.WPID';
 
       switch ( $coverage ) {
 
@@ -190,46 +153,9 @@ if ( ! defined( 'ABSPATH' ) ) {
       echo '<h4>' . __( 'Top Killers', 'bblm' ) . '</h4>';
 
       if ( $topstats = $wpdb->get_results( $statsql ) ) {
-?>
-        <table class="expandable bblm_expandable bblm_table bblm_stats">
-          <tr>
-            <th class="tbl_stat bblm_tbl_stat">#</th>
-            <th class="tbl_name bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
-            <th><?php echo __( 'Position', 'bblm' ); ?></th>
-            <th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-            <th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
-          </tr>
-<?php
-        $zebracount = 1;
-        $prevvalue = 0;
 
-        foreach ( $topstats as $ts ) {
-          if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-            echo '<tr class="tb_hide bblm_tbl_hide">';
-          }
-          else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-            echo '<tr>';
-          }
-          else if ( 10 < $zebracount ) {
-            echo '<tr class="tb_hide bblm_tbl_hide tbl_alt bblm_tbl_alt">';
-          }
-          else {
-            echo '<tr class="tbl_alt bblm_tbl_alt">';
-          }
-          if ( $ts->VALUE > 0 ) {
-            if ( $prevvalue == $ts->VALUE ) {
-              echo '<td>-</td>';
-            }
-            else {
-              echo '<td><strong>' . $zebracount . '</strong></td>';
-            }
+        $this->display_player_table( $topstats );
 
-            echo '<td>' . bblm_get_player_link( $ts->PID ) . '</td> <td>' . esc_html( $ts->pos_name ) . '</td> <td>' . bblm_get_team_link( $ts->WPID ) . '</td> <td>' . $ts->VALUE . '</td> </tr>';
-            $prevvalue = $ts->VALUE;
-          }
-          $zebracount++;
-        }
-        echo '</table>';
       }
       else {
 ?>
@@ -241,5 +167,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     } //display_top_killers_table
 
+   /**
+    * Performs the actual actual output of top player tables for each entry
+    *
+    * @param array $args The result of the HTML array
+    * @return html
+    */
+    public function display_player_table( $args ) {
+?>
+      <table class="expandable bblm_expandable bblm_table bblm_stats">
+        <tr>
+          <th class="tbl_stat bblm_tbl_stat">#</th>
+          <th class="tbl_name bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
+          <th><?php echo __( 'Position', 'bblm' ); ?></th>
+          <th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+          <th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
+        </tr>
+<?php
+      $zebracount = 1;
+      $prevvalue = 0;
+
+      foreach ( $args as $ts ) {
+      if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
+        echo '<tr class="tb_hide bblm_tbl_hide">';
+      }
+      else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
+        echo '<tr>';
+      }
+      else if ( 10 < $zebracount ) {
+        echo '<tr class="tb_hide bblm_tbl_hide tbl_alt bblm_tbl_alt">';
+      }
+      else {
+        echo '<tr class="tbl_alt bblm_tbl_alt">';
+      }
+      if ( $ts->VALUE > 0 ) {
+        if ( $prevvalue == $ts->VALUE ) {
+          echo '<td>-</td>';
+        }
+        else {
+          echo '<td><strong>' . $zebracount . '</strong></td>';
+        }
+
+        echo '<td>' . bblm_get_player_link( $ts->PID ) . '</td> <td>' . esc_html( $ts->pos_name ) . '</td> <td>' . bblm_get_team_link( $ts->WPID ) . '</td> <td>' . $ts->VALUE . '</td> </tr>';
+        $prevvalue = $ts->VALUE;
+      }
+      $zebracount++;
+    }
+    echo '</table>';
+
+  } // end of display_player_table()
 
  }//end of class
