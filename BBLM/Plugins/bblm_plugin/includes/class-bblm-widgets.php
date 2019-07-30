@@ -21,3 +21,5 @@ include_once( 'widgets/class-bblm-widget-dyk.php' );
 include_once( 'widgets/class-bblm-widget-recentmatches.php' );
 include_once( 'widgets/class-bblm-widget-listcomps.php' );
 include_once( 'widgets/class-bblm-widget-recenttransfers.php' );
+include_once( 'widgets/class-bblm-widget-recentplayers.php' );
+include_once( 'widgets/class-bblm-widget-recentdepartures.php' );
