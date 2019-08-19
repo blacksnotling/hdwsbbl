@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.2
+ * @version		1.3
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -140,7 +140,7 @@ class BBLM_Post_types {
 				'show_ui' 				=> true,
 				'map_meta_cap' 			=> true,
 				'publicly_queryable' 	=> true,
-				'exclude_from_search' 	=> true, //exclude from search
+				'exclude_from_search' 	=> false, //exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'stadiums' ),
 				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),
@@ -150,6 +150,36 @@ class BBLM_Post_types {
 				'menu_icon' 			=> 'dashicons-store',
 			)
 		); //end of bblm_stadium
+		register_post_type( 'bblm_cup',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Championship Cups', 'bblm' ),
+					'singular_name' 		=> __( 'Championship', 'bblm' ),
+					'add_new_item' 			=> __( 'Add New Champsionship Cup', 'bblm' ),
+					'add_new' 			=> __( 'New Championship', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Championship', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Championship Cup', 'bblm' ),
+					'view_items' 			=> __( 'View Championship Cup', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Championship Cups', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'cups' ),
+				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-shield',
+			)
+		); //end of bblm_cup
 	}
 
   /**
