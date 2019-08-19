@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * StadiumsCPT admin functions
+ * Stadiums CPT admin functions
  *
  * Defines the admin functions related to the Stadiums CPT (edit screens, custom messages, post saving etc)
  * For the Meta-Boxes, see the meta-boxes directory
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_Admin_CPT_STADIUM {
@@ -23,7 +23,7 @@ class BBLM_Admin_CPT_STADIUM {
   * Constructor
  	*/
   public function __construct() {
-		
+
     add_action( 'pre_get_posts', array( $this, 'manage_archives' ) );
 
  	}
