@@ -59,6 +59,7 @@ class BBLM_Meta_CUP {
     <select name="cup_type_ddown" id="cup_type_ddown">
       <option value="Major"<?php if ("Major" == $type) { print(" selected=\"selected\""); } ?>>Major</option>
       <option value="Minor"<?php if ("Minor" == $type) { print(" selected=\"selected\""); } ?>>Minor</option>
+			<option value="Series"<?php if ("Series" == $type) { print(" selected=\"selected\""); } ?>>Series</option>
     </select>
 
 <?php
