@@ -224,6 +224,7 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-transfer.php' );
 		include_once( 'post-types/class-bblm-cpt-stadium.php' );
 		include_once( 'post-types/class-bblm-cpt-match.php' );
+		include_once( 'post-types/class-bblm-cpt-cup.php' );
 
  }
 
