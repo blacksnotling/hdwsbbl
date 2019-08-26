@@ -19,7 +19,7 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
-		$compsql = 'SELECT P.post_title, C.c_id, C.sea_id, C.series_id, I.post_title AS SERIES, I.guid AS SERIESLink, G.post_title AS SEASON, G.guid AS SEASONLink, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' G, '.$wpdb->prefix.'comp_type T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' I WHERE C.sea_id = Y.tid AND Y.prefix = \'sea_\' AND Y.pid = G.ID AND C.c_id = J.tid AND C.series_id = U.tid AND U.prefix = \'series_\' AND U.pid = I.ID AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID = '.$post->ID;;
+		$compsql = 'SELECT P.post_title, C.c_id, C.sea_id, C.series_id AS SERIES, G.post_title AS SEASON, G.guid AS SEASONLink, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' G, '.$wpdb->prefix.'comp_type T, '.$wpdb->posts.' P WHERE C.sea_id = Y.tid AND Y.prefix = \'sea_\' AND Y.pid = G.ID AND C.c_id = J.tid AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID = '.$post->ID;;
 		if ($cd = $wpdb->get_row($compsql)) {
 
 			$today = date("U");
@@ -550,7 +550,7 @@
 		$comptseasql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.type_id = 1 AND C.sea_id = '.$cd->sea_id.' AND C.c_id != '.$cd->c_id;
 
 		//comps for this cup
-		$comptcupsql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.series_id = '.$cd->series_id.' AND C.c_id != '.$cd->c_id;
+		$comptcupsql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.series_id = '.$cd->SERIES.' AND C.c_id != '.$cd->c_id;
 ?>
 
 	<div id="subcontent">
@@ -560,7 +560,7 @@
 			   <li><strong>Status:</strong> <?php print($cstatus) ?></li>
 			   <li><strong>Duration:</strong> <?php print($cduration) ?></li>
 			   <li><strong>Format:</strong> <?php print($cd->ct_name) ?></li>
-			   <li><strong>Cup:</strong> <a href="<?php print($cd->SERIESLink) ?>" title="Read more about this Cup"><?php print($cd->SERIES) ?></a></li>
+			   <li><strong>Cup:</strong> <?php bblm_get_cup_link( $cd->SERIES ); ?></li>
 			   <li><strong>Season:</strong> <a href="<?php print($cd->SEASONLink) ?>" title="Read more about this Season"><?php print($cd->SEASON) ?></a></li>
 			   <li><strong>Number of teams:</strong> <?php print($tno) ?></li>
 			  </ul>
