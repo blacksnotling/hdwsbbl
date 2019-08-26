@@ -560,7 +560,7 @@
 			   <li><strong>Status:</strong> <?php print($cstatus) ?></li>
 			   <li><strong>Duration:</strong> <?php print($cduration) ?></li>
 			   <li><strong>Format:</strong> <?php print($cd->ct_name) ?></li>
-			   <li><strong>Cup:</strong> <?php bblm_get_cup_link( $cd->SERIES ); ?></li>
+			   <li><strong>Cup:</strong> <?php echo bblm_get_cup_link( $cd->SERIES ); ?></li>
 			   <li><strong>Season:</strong> <a href="<?php print($cd->SEASONLink) ?>" title="Read more about this Season"><?php print($cd->SEASON) ?></a></li>
 			   <li><strong>Number of teams:</strong> <?php print($tno) ?></li>
 			  </ul>
