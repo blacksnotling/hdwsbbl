@@ -88,7 +88,7 @@ if ( "edit" == $_GET['action'] ) {
 		 // Editing Comp //
 		//////////////////
 		$cid = $_GET['id'];
-		$compsql = 'SELECT C.*, S.sea_name, D.series_name, T.ct_name, P.post_title FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'series D, '.$wpdb->prefix.'comp_type T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = "c_" AND J.pid = P.ID AND C.ct_id = T.ct_id AND C.series_id = D.series_id AND C.sea_id = S.sea_id AND C.c_id ='.$cid;
+		$compsql = 'SELECT C.*, S.sea_name, C.series_id, T.ct_name, P.post_title FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'comp_type T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = "c_" AND J.pid = P.ID AND C.ct_id = T.ct_id AND C.sea_id = S.sea_id AND C.c_id ='.$cid;
 		if ($cc = $wpdb->get_row($compsql)) {
 
 ?>
@@ -103,7 +103,7 @@ if ( "edit" == $_GET['action'] ) {
 				<li><strong>Status</strong>: <strong><?php if ($cc->c_active) {print("Active");} else { print("Complete"); } ?></strong></li>
 				<li><strong>Season</strong>: <?php print($cc->sea_name); ?></li>
 				<li><strong>Type</strong>: <?php print($cc->ct_name); ?></li>
-				<li><strong>Cup</strong>:<?php print($cc->series_name); ?></li>
+				<li><strong>Cup</strong>:<?php echo bblm_get_cup_name( $cc->series_id ) ?></li>
 			</ul>
 		</div></div></div>
 

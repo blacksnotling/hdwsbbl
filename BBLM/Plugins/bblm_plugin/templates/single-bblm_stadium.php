@@ -18,7 +18,7 @@
 
 					<?php $stad->display_home_teams(); ?>
 
-					<div class="details staddet bblm_stadium_description">
+					<div class="details bblm_details bblm_stadium_description">
 						<?php the_content(); ?>
 					</div>
 
@@ -28,7 +28,7 @@
 				</div><!-- .entry-content -->
 
 			<footer class="entry-footer">
-				<p class="postmeta">&nbsp;</p>
+				<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
 			</footer><!-- .entry-footer -->
 
 		</article><!-- .post-ID -->

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.0
+ * @version		1.1
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -216,5 +216,87 @@ if ( ! defined( 'ABSPATH' ) ) {
     echo '</table>';
 
   } // end of display_player_table()
+
+   /**
+    * Outputs the detailed statistics break down of championship cups, competitions, etc
+    *
+    *
+    * @param wordpress $query
+    * @return html
+    */
+    public function display_stats_breakdown() {
+      global $post;
+      global $wpdb;
+
+      $post_type = get_post_type(); //Determine the CPT that is calling this function
+
+      $itemid = get_the_ID(); //The ID of the Page being displayed
+
+      if ( $post_type == "bblm_cup" ) {
+
+        //Load the Class(es) we need
+        $cup = new BBLM_CPT_Cup;
+
+        $matchnum = $cup->get_number_games();
+
+        //The queries to generate the stats
+        $matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.series_id = ' . $itemid;
+        //Counts the Dead. Note: THis does not check for c_counts = 1 as the cups page will show all matches within the cup
+        $deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.series_id = ' . $itemid;
+        $compnumsql = 'SELECT COUNT(*) AS ccount FROM '.$wpdb->prefix.'comp WHERE series_id = '.$itemid;
+        $playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.c_id = M.c_id AND M.m_id = P.m_id AND C.c_show = 1 AND C.series_id = '.$itemid.' GROUP BY C.series_id';
+        $teamnumsql = 'SELECT COUNT(DISTINCT P.t_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team_comp P WHERE P.c_id = C.c_id AND C.c_show = 1 AND C.series_id = '.$itemid.' GROUP BY C.series_id';
+
+        $biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+        $biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+
+      } //end of ( $post_type == "bblm_cup" )
+
+      //Run the queries
+      if ( $matchstats = $wpdb->get_results( $matchstatssql ) ) {
+
+        foreach ( $matchstats as $ms ) {
+          $tottd = $ms->TD;
+          $totcas = $ms->CAS;
+          $totcomp = $ms->COMP;
+          $totint = $ms->MINT;
+        }
+        $deathnum = $wpdb->get_var( $deathnumsql );
+        $compnum = $wpdb->get_var( $compnumsql );
+        $playernum = $wpdb->get_var( $playermnumsql );
+        $teamnum = $wpdb->get_var( $teamnumsql );
+
+        //Output the Statistics breakdown
+?>
+        <h3><?php echo __( 'Overall Statistics and information', 'bblm' ); ?></h3>
+<?php
+        $output = '<p><strong>' . $playernum . '</strong> Players in <strong>' . $teamnum . '</strong> Teams have played <strong>' . $matchnum . '</strong> Matches in <strong>' . $compnum . '</strong> Competitions for this Championship Cup. To date they have managed to:</p>';
+        $output .= '<ul>';
+        $output .= '<li>Score <strong>' . $tottd . '</strong> Touchdowns (average <strong>' . round( $tottd / $matchnum, 1 ) . '</strong> per match);</li>';
+        $output .= '<li>Make <strong>' . $totcomp . '</strong> successful Completions (average <strong>' . round( $totcomp / $matchnum, 1 ) . '</strong> per match);</li>';
+        $output .= '<li>Cause <strong>' . $totcas . '</strong> Casualties (average <strong>' . round( $totcas / $matchnum, 1 ) . '</strong> per match);</li>';
+        $output .= '<li>Catch <strong>' . $totint . '</strong> Interceptions (average <strong>' . round( $totint / $matchnum, 1 ) . '</strong> per match).</li>';
+        $output .= '<li>Kill <strong>' . $deathnum . '</strong> players (average <strong>' . round( $deathnum / $matchnum, 1 ) . '</strong> per match).</li>';
+        $output .= '</ul>';
+
+        $output .= '<ul>';
+        if ( $bcn = $wpdb->get_row( $biggestattendcenonfinalsql ) ) {
+          $output .= '<li>The Highest recorded attendance (not a Final or Semi-Final) is <strong>' . number_format( $bcn->VALUE ) . ' fans</strong> in the match between <strong>' . $bcn->MATCHT . '</strong> on ' . date( "d.m.25y", $bcn->MDATE ) . '</li>';
+        }
+        if ( $bc = $wpdb->get_row($biggestattendcesql ) ) {
+          $output .= '<li>The Highest recorded attendance (Final or Semi-Final) is <strong>' . number_format( $bc->VALUE ) . ' fans</strong> in the match between <strong>' . $bc->MATCHT . '</strong> on ' . date( "d.m.25y" , $bc->MDATE ) . '</li>';
+        }
+        $output .= '</ul>';
+
+        echo __( $output, 'bblm' );
+
+      }
+      else {
+
+        echo '<p>' . __( 'No Matches have been played', 'bblm' ) . '</p>';
+
+      }
+
+    }//end of display_stats_breakdown()
 
  }//end of class

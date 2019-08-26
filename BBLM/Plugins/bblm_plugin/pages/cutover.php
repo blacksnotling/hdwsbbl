@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Cutover
  * @package 	BBowlLeagueMan/Cutover
- * @version   1.2
+ * @version   1.3
  */
  ?>
  <div class="wrap">
@@ -299,6 +299,63 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 			} // END OF Updateing Team Database table
 
+ /*
+	* START OF Championship Cups conversion to CPT
+	*/
+
+	if (isset($_POST['bblm_cup_cupcpt'])) {
+
+	  $cuppostsql = "SELECT P.ID, R.series_id, P.post_title, R.series_type FROM ".$wpdb->prefix."series R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.series_id = J.tid AND P.ID = J.pid and J.prefix = 'series_' ORDER BY P.ID ASC";
+	    if ($stadposts = $wpdb->get_results($cuppostsql)) {
+	//      echo '<ul>';
+	      foreach ($stadposts as $stad) {
+	        $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_cup' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+	//        print("<li>".$stadupdatesql."</li>");
+	//        print("<li>Meta -> '".$stad->ID."', 'cup_type', '".$stad->series_type."'</li>");
+	        if ( $wpdb->query($stadupdatesql) ) {
+	          $result = true;
+	          add_post_meta( $stad->ID, 'cup_type', $stad->series_type, true );
+	        }
+	        else {
+	          $result = false;
+	        }
+
+	      } //end of foreach
+	//      echo '</ul>';
+	      if ( $result ) {
+	        print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Championships Page! <strong>Now you can delete the Championship Cups page!</strong></p></div>\n");
+	      }
+	    }//end of if sql was successful
+	} //end of if (isset($_POST['bblm_cup_cupcpt']))
+
+	/*
+	 * START OF Championship Cups Update in Competitions
+	 */
+
+	 if (isset($_POST['bblm_cup_cupincomp'])) {
+
+		 $cuppostsql = "SELECT C.c_id, C.series_id, P.ID, P.post_title FROM ".$wpdb->prefix."comp C, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P WHERE P.ID = J.pid AND C.series_id = J.tid AND J.prefix = 'series_'";
+		 if ($cuppost = $wpdb->get_results($cuppostsql)) {
+			 //echo '<ul>';
+			 foreach ($cuppost as $cup) {
+				 $compcupupdate = "UPDATE ".$wpdb->prefix."comp SET `series_id` = '".$cup->ID."' WHERE `c_id` = ".$cup->c_id.";";
+				 //print("<li>".$compcupupdate."</li>");
+				 if ( $wpdb->query($compcupupdate) ) {
+					 $result = true;
+				 }
+				 else {
+					 $result = false;
+				 }
+			 }
+
+      //echo '</ul>';
+			if ( $result ) {
+				print("<div id=\"updated\" class=\"updated fade\"><p>Competitions have been updated with new Championship Cup Numbers!</strong></p></div>\n");
+			}
+		 }//end of if sql successful
+
+	 } //end of if (isset($_POST['bblm_cup_cupincomp'])) {
+
 /**
  *
  * MAIN PAGE CONTENT FOLLOWS
@@ -374,6 +431,17 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_player_tbupdate" value="Update Player Table" title="Update Player Table"/></li>
 			<li>Add an index to the WPID column in the *_team table</li>
 			<li>Add an index to the WPID column in the *_player table</li>
+		</ul>
+
+		<h2>1.8 -> 1.9</h2>
+		<h3>Championship Cups</h3>
+		<ul>
+			<li>First take a copy of the text at the top of the Championships page</li>
+			<li><input type="submit" name="bblm_cup_cupcpt" value="Convert Championship Post Types" title="Convert the Championship Post Types"/></li>
+			<li>Now you can delete the Championship Cups Page!</li>
+			<li>Update the Menus to include the new Cups Page</li>
+			<li>Also delete the BBBL sevens cup.... (sorry A)</li>
+			<li><input type="submit" name="bblm_cup_cupincomp" value="Update championship cup references" title="Update championship cup references"/></li>
 		</ul>
 
 </form>
