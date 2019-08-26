@@ -170,7 +170,7 @@ class BBLM_Post_types {
 				'show_ui' 				=> true,
 				'map_meta_cap' 			=> true,
 				'publicly_queryable' 	=> true,
-				'exclude_from_search' 	=> false, //exclude from search
+				'exclude_from_search' 	=> false, //don't exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'cups' ),
 				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),
@@ -225,6 +225,9 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-stadium.php' );
 		include_once( 'post-types/class-bblm-cpt-match.php' );
 		include_once( 'post-types/class-bblm-cpt-cup.php' );
+		include_once( 'post-types/class-bblm-cpt-comp.php' );
+		include_once( 'post-types/class-bblm-cpt-award.php' );
+		include_once( 'post-types/class-bblm-cpt-team.php' );
 
  }
 

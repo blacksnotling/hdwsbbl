@@ -158,3 +158,12 @@ function bblm_get_cup_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_cup_link
+
+/**
+ * Outputs the edit linl, formatted for the bllm plugin
+ */
+function bblm_display_page_edit_link() {
+
+  edit_post_link( __( 'Edit', 'bblm' ), ' <strong>[</strong> ', ' <strong>]</strong> ');
+
+}// end of bblm_display_page_edit_link()
