@@ -51,7 +51,7 @@ class BBLM_CPT_Cup {
   * @param wordpress $query
   * @return none
   */
-  public function get_cup_summary() {
+  public function get_cup_listing() {
 ?>
     <table class="bblm_tbl">
       <thead>
@@ -102,7 +102,7 @@ class BBLM_CPT_Cup {
     </table>
 <?php
 
-  } //end of get_cup_summary()
+} //end of get_cup_listing()
 
  /**
   * Returns the number of games played for this championship cup

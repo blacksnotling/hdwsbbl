@@ -14,9 +14,7 @@
 
 			<?php do_action( 'bblm_template_before_content' ); ?>
 
-			<?php $cup = new BBLM_CPT_Cup; ?>
-			<?php echo $cup->get_cup_summary() ?>
-
+			<?php bblm_template_display_cup_listing(); ?>
 
 			<?php do_action( 'bblm_template_after_content' ); ?>
 

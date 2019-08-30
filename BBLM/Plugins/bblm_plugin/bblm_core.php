@@ -219,6 +219,7 @@ final class BBowlLeagueMan {
 
 		include_once( 'includes/bblm-common-functions.php' );
 		include_once( 'includes/bblm-common-display-functions.php' );
+		include_once( 'includes/bblm-common-template-functions.php' );
 
 		if ( is_admin() ) {
 			include_once( 'includes/admin/class-bblm-admin.php' );
