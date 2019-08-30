@@ -180,6 +180,36 @@ class BBLM_Post_types {
 				'menu_icon' 			=> 'dashicons-shield',
 			)
 		); //end of bblm_cup
+		register_post_type( 'bblm_season',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Seasons', 'bblm' ),
+					'singular_name' 		=> __( 'Season', 'bblm' ),
+					'add_new_item' 			=> __( 'Start a New Season', 'bblm' ),
+					'add_new' 			=> __( 'New Season', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Season', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Season', 'bblm' ),
+					'view_items' 			=> __( 'View Seasons', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Seasons', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'season' ),
+				'supports' 				=> array( 'title', 'editor', 'author' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-calendar',
+			)
+		); //end of bblm_season
 	}
 
   /**
