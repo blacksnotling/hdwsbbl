@@ -258,6 +258,7 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-comp.php' );
 		include_once( 'post-types/class-bblm-cpt-award.php' );
 		include_once( 'post-types/class-bblm-cpt-team.php' );
+		include_once( 'post-types/class-bblm-cpt-season.php' );
 
  }
 
