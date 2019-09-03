@@ -17,21 +17,21 @@ Template Name: List Competitions
 					<?php the_content(); ?>
 				<?php
 
-				$compsql = 'SELECT P.post_title, P.guid, L.post_title AS SEAname, L.guid AS SEAlink, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE K.tid = C.sea_id AND K.prefix = \'sea_\' AND K.pid = L.ID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
+				$compsql = 'SELECT P.post_title, P.guid, C.sea_id, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
 				if ($comps = $wpdb->get_results($compsql)) {
 					$is_first = 1;
-					$current_sea = "";
+					$current_sea = 0;
 
-					foreach ($comps as $c) {
-						if ($c->SEAname !== $current_sea) {
-							$current_sea = $c->SEAname;
-							if (1 !== $is_first) {
+					foreach ( $comps as $c ) {
+						if ( $c->sea_id !== $current_sea ) {
+							$current_sea = $c->sea_id;
+							if ( 1 !== $is_first ) {
 								print("				</ul>\n");
 							}
 							$is_first = 1;
 						}
-						if ($is_first) {
-							print("				<h3><a href=\"".$c->SEAlink."\" title=\"View more about this Season\">".$c->SEAname."</a></h3>\n				<ul>\n");
+						if ( $is_first ) {
+							echo '<h3>' . bblm_get_season_link( $c->sea_id ) . '</h3>';
 							$is_first = 0;
 						}
 						print("					<li");
