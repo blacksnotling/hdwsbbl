@@ -14,8 +14,8 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 ?>
 <div class="wrap">
-	<h2>End a Season</h2>
-	<p>Use the following page to close down a Season once it has been completed. You will get the chance to asign any Awards.</p>
+	<h2>Assign End of Season Awards</h2>
+	<p>Use the following page Assign the end of Season awards to teams and players. If you wish to close a season then navigate to the Seasons menu and add an end date!</p>
 
 <?php
 
@@ -230,9 +230,6 @@ else if (isset($_POST['bblm_season_select'])) {
 		 // Player Awards //
 		/////////////////
 
-		//before we generate the list of awards, we need to grab the players into an array
-		//$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND T.t_show = 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
-		//$playersql = 'SELECT DISTINCT(P.p_id), P.p_name, T.t_name, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC, P.p_num ASC';
 		$playersql = 'SELECT DISTINCT(P.p_id), P.p_name, T.t_name, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE C.sea_id = S.sea_id AND A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND S.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC, P.p_num ASC';
 		//initialise vars
 		$are_players = 1;
@@ -297,7 +294,7 @@ else {
 ?>
 	<form name="bblm_endseason" method="post" id="post">
 
-	<p>Please slelect the Season you wish to close.</p>
+	<p>Below is a list of Seasons. Select the one you wish to assign awards to!</p>
 
     	  <label for="bblm_cid" class="selectit">Season</label>
 		  <select name="bblm_cid" id="bblm_cid">
