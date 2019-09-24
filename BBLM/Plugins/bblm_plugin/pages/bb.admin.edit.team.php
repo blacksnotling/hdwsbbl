@@ -338,7 +338,7 @@ else {
 				if ( ( $t->t_active ) && ( 0 == $tplayers ) ) {
 					print("							<td><a href=\"");
 					bloginfo('url');
-					print("wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Bulk Players</a></td>\n");
+					print("/wp-admin/admin.php?page=bblm_player_addbulk\" title=\"Add a new payer to the team\">Add Bulk Players</a></td>\n");
 				}
 				else if ( $t->t_active ) {
 					print("							<td><a href=\"");
