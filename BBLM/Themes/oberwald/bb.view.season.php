@@ -37,7 +37,7 @@
 				$matchnum = $wpdb->get_var($matchnumsql);
 				$compnumsql = 'SELECT COUNT(*) AS compnum FROM '.$wpdb->prefix.'comp M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_counts = 1 AND M.c_show = 1 AND M.type_id = 1 AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.sea_id = '.$sd->sea_id;
 				$compnum = $wpdb->get_var($compnumsql);
-				$cupnumsql = 'SELECT COUNT(*) AS cupnum FROM '.$wpdb->prefix.'series M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE C.series_id = M.series_id AND M.series_id = J.tid AND J.prefix = \'series_\' AND J.pid = P.ID AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.sea_id = '.$sd->sea_id;
+				$cupnumsql = 'SELECT COUNT(DISTINCT(C.series_id)) AS cupnum FROM '.$wpdb->prefix.'comp C WHERE C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.sea_id = '. $sd->sea_id;
 				$cupnum = $wpdb->get_var($cupnumsql);
 				$playernumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'season S, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE S.sea_id = C.sea_id AND C.c_id = M.c_id AND M.m_id = P.m_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND S.sea_id = '.$sd->sea_id.' GROUP BY S.sea_id';
 				$playernum = $wpdb->get_var($playernumsql);

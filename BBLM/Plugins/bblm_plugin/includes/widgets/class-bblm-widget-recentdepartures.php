@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_Widget_RecentDepartures extends WP_Widget {
@@ -39,7 +39,7 @@ class BBLM_Widget_RecentDepartures extends WP_Widget {
     $playersql = 'SELECT T.WPID, P.WPID AS PID, F.*, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate X, '.$wpdb->prefix.'fate F, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND F.f_id = X.f_id AND X.p_id = P.p_id AND P.t_id = T.t_ID AND F.f_id != 5 ORDER BY X.m_id DESC LIMIT ' . $instance['numshow'];
     if ( $player = $wpdb->get_results( $playersql ) ) {
 
-      echo '</ul>';
+      echo '<ul>';
 
       foreach ( $player as $p ) {
 

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.2
+ * @version   1.3
  */
 
  class BBLM_Admin_Post_Types {
@@ -33,6 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     include_once( 'post-types/class-bblm-admin-cpt-dyk.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-owner.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-stadium.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-cup.php' );
 
  }
 
@@ -43,6 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		include_once( 'post-types/meta-boxes/class-bblm-meta-dyk.php' );
 		include_once( 'post-types/meta-boxes/class-bblm-meta-stadium.php' );
+		include_once( 'post-types/meta-boxes/class-bblm-meta-cup.php' );
 
 	}
 
