@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.1
+ * @version   1.0
  */
 
 /**
@@ -121,40 +121,11 @@ function bblm_get_owner_name( $ID ) {
  */
 function bblm_get_owner_link( $ID ) {
 
-  $owner_name = bblm_get_team_name( $ID );
+  $stadium_name = bblm_get_team_name( $ID );
   $output = "";
 
-  $output .= '<a title="Read more about ' . $owner_name . '" href="' . get_post_permalink( $ID ) . '">' . $owner_name . '</a>';
+  $output .= '<a title="Read more about ' . $stadium_name . '" href="' . get_post_permalink( $ID ) . '">' . $stadium_name . '</a>';
 
   return __( $output, 'bblm');
 
 }// end of bblm_get_owner_link
-
-/**
- * Returns the name of a Championship Cup, properly escaped and formatted
- * Takes in the ID of the Wordpress Page
- */
-function bblm_get_cup_name( $ID ) {
-
-  $output = "";
-
-  $output .= esc_html( get_the_title( $ID ) );
-
-  return $output;
-
-}// end of bblm_get_cup_name
-
-/**
- * Returns the link of a Championship Cup, properly escaped and formatted
- * Takes in the ID of the Wordpress Page
- */
-function bblm_get_cup_link( $ID ) {
-
-  $cup_name = bblm_get_cup_name( $ID );
-  $output = "";
-
-  $output .= '<a title="Read more about ' . $cup_name . '" href="' . get_post_permalink( $ID ) . '">' . $cup_name . '</a>';
-
-  return __( $output, 'bblm');
-
-}// end of bblm_get_cup_link

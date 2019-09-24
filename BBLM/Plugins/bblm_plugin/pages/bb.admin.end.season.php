@@ -302,6 +302,7 @@ else {
     	  <label for="bblm_cid" class="selectit">Season</label>
 		  <select name="bblm_cid" id="bblm_cid">
 		<?php
+		//$compsql = 'SELECT C.c_id, C.c_name, T.series_name, S.sea_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'series T, '.$wpdb->prefix.'season S WHERE S.sea_id = C.sea_id AND T.series_id = C.series_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1';
 		$seasonsql = 'SELECT sea_name, sea_id FROM '.$wpdb->prefix.'season WHERE sea_active = 1';
 		if ($seasons = $wpdb->get_results($seasonsql)) {
 			foreach ($seasons as $sea) {

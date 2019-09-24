@@ -1,0 +1,286 @@
+<?php
+/**
+ * BBowlLeagueMan Teamplate View Cup
+ *
+ * Page Template to view a Championship Cup details
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
+/*
+ * Template Name: View Cup
+ */
+?>
+<?php get_header(); ?>
+	<?php if (have_posts()) : ?>
+		<?php while (have_posts()) : the_post(); ?>
+			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+				<div class="details cup">
+					<?php the_content(); ?>
+				</div>
+
+<?php
+				//Grab the series ID for use in the database
+				$seriesidsql = 'SELECT J.tid FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE J.prefix = \'series_\' AND J.pid = P.ID AND  P.ID = '.$post->ID;
+				$cupid = $wpdb->get_var($seriesidsql);
+
+				//Determine if any mayches have taken place in this series.
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'series S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.series_id = S.series_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND S.series_id = '.$cupid;
+				$matchnum = $wpdb->get_var($matchnumsql);
+
+				//From this point, we only go further if any matches have been played
+				if (0 < $matchnum) {
+
+					$matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'series S WHERE C.series_id = S.series_id AND M.c_id = C.c_id AND S.series_id = '.$cupid;
+					if ($matchstats = $wpdb->get_results($matchstatssql)) {
+						foreach ($matchstats as $ms) {
+							$tottd = $ms->TD;
+							$totcas = $ms->CAS;
+							$totcomp = $ms->COMP;
+							$totint = $ms->MINT;
+						}
+					}
+					//Counts the Dead. NOTE: THis does not check for c_counts = 1 as the cups page will show all matches within the cup
+					$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.series_id = '.$cupid;
+					$deathnum = $wpdb->get_var($deathnumsql);
+					$compnumsql = 'SELECT COUNT(*) AS ccount FROM '.$wpdb->prefix.'comp WHERE series_id = '.$cupid;
+					$compnum = $wpdb->get_var($compnumsql);
+					$playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.c_id = M.c_id AND M.m_id = P.m_id AND C.c_show = 1 AND C.series_id = '.$cupid.' GROUP BY C.series_id';
+					$playernum = $wpdb->get_var($playermnumsql);
+					$teamnumsql = 'SELECT COUNT(DISTINCT P.t_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team_comp P WHERE P.c_id = C.c_id AND C.c_show = 1 AND C.series_id = '.$cupid.' GROUP BY C.series_id';
+					$teamnum = $wpdb->get_var($teamnumsql);
+?>
+				<h3>Overall Statistics and information</h3>
+				<p><strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for this Championship Cup. To date they have managed to:</p>
+				<ul>
+					<li>Score <strong><?php print($tottd); ?></strong> Touchdowns (average <strong><?php print(round($tottd/$matchnum,1)); ?></strong> per match);</li>
+					<li>Make <strong><?php print($totcomp); ?></strong> successful Completions (average <strong><?php print(round($totcomp/$matchnum,1)); ?></strong> per match);</li>
+					<li>Cause <strong><?php print($totcas); ?></strong> Casualties (average <strong><?php print(round($totcas/$matchnum,1)); ?></strong> per match);</li>
+					<li>Catch <strong><?php print($totint); ?></strong> Interceptions (average <strong><?php print(round($totint/$matchnum,1)); ?></strong> per match).</li>
+					<li>Kill <strong><?php print($deathnum); ?></strong> players (average <strong><?php print(round($deathnum/$matchnum,1)); ?></strong> per match).</li>
+				</ul>
+<?php
+					$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND C.series_id = '.$cupid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+					$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.series_id = '.$cupid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+?>
+					<ul>
+<?php
+					if ($bcn = $wpdb->get_row($biggestattendcenonfinalsql)) {
+?>
+						<li>The Highest recorded attendance (not a Final or Semi-Final) is <strong><?php print(number_format($bcn->VALUE)); ?> fans</strong> in the match between <strong><?php print($bcn->MATCHT); ?></strong> on <?php print(date("d.m.25y", $bcn->MDATE)); ?></li>
+<?php
+					}
+					if ($bc = $wpdb->get_row($biggestattendcesql)) {
+?>
+						<li>The Highest recorded attendance (Final or Semi-Final) is <strong><?php print(number_format($bc->VALUE)); ?> fans</strong> in the match between <strong><?php print($bc->MATCHT); ?></strong> on <?php print(date("d.m.25y", $bc->MDATE)); ?></li>
+<?php
+					}
+?>
+					</ul>
+<?php
+					$has_completed = 0;
+					$winnerssql = 'SELECT T.WPID, COUNT(*) as wins FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'series S WHERE C.c_id = A.c_id AND A.t_id = T.t_id AND C.series_id = S.series_id AND A.a_id = 1 AND S.series_id = '.$cupid.' GROUP BY A.t_id ORDER BY wins DESC';
+					if ($winners = $wpdb->get_results($winnerssql)) {
+						print("<h3>Winners of this Championship Cup</h3>\n");
+						$has_completed = 1;
+						$zebracount = 1;
+						print("<table>\n	<tr>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Wins</th>\n	</tr>");
+						foreach ($winners as $wi) {
+							if ($zebracount % 2) {
+								print("	<tr>\n");
+							}
+							else {
+								print("	<tr class=\"tbl_alt\">\n");
+							}
+							print("		<td><a href=\"".  get_post_permalink( $wi->WPID ) ."\" title=\"View more information on this team\">" . esc_html( get_the_title( $wi->WPID ) ) . "</a></td>\n		<td>".$wi->wins."</td>\n	</tr>");
+							$zebracount++;
+						}
+						print("</table>\n");
+					}
+
+					print("<h3>Competitions for this Championship Cup</h3>\n");
+					$complistingsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_tdfor) AS TD, SUM(T.tc_casfor) AS CAS, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'series S WHERE C.series_id = S.series_id AND T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_show = 1 AND S.series_id = '.$cupid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+					if ($compl = $wpdb->get_results($complistingsql)) {
+						$zebracount = 1;
+						print("	<table class=\"sortable\">\n	<thead>\n		<tr>\n			<th class=\"tbl_title\">Competition</th>\n			<th class=\"tbl_stat\">Games</th>\n			<th class=\"tbl_stat\">TD</th>\n			<th class=\"tbl_stat\">CAS</th>\n			<th class=\"tbl_stat\">COMP</th>\n			<th class=\"tbl_stat\">INT</th>\n		</tr>\n	</thead>\n	<tbody>\n");
+						foreach ($compl as $cl) {
+							if ($zebracount % 2) {
+								print("		<tr>\n");
+							}
+							else {
+								print("		<tr class=\"tbl_alt\">\n");
+							}
+							print("			<td><a href=\"".$cl->guid."\" title=\"View more info about ".$cl->post_title."\">".$cl->post_title."</a></td>\n			<td>".($cl->PLD/2)."</td>\n			<td>".$cl->TD."</td>\n			<td>".$cl->CAS."</td>\n			<td>".$cl->COMP."</td>\n			<td>".$cl->cINT."</td>\n		</tr>\n");
+
+							$zebracount++;
+						}
+						print("	</tbody>\n	</table>\n");
+					}
+
+					print("<h3>Team Statistics for this Championship Cup</h3>\n");
+?>
+				<table class="sortable">
+					<thead>
+					<tr>
+						<th class="tbl_name">Team</th>
+						<th class="tbl_stat">P</th>
+						<th class="tbl_stat">W</th>
+						<th class="tbl_stat">L</th>
+						<th class="tbl_stat">D</th>
+						<th class="tbl_stat">TF</th>
+						<th class="tbl_stat">TA</th>
+						<th class="tbl_stat">CF</th>
+						<th class="tbl_stat">CA</th>
+						<th class="tbl_stat">COMP</th>
+						<th class="tbl_stat">INT</th>
+						<th class="tbl_stat">Win%</th>
+					</tr>
+					</thead>
+					<tbody>
+<?php
+					$teamistingsql = 'SELECT SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, Z.WPID FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND C.c_id = T.c_id AND Z.t_show = 1 AND T.tc_played > 0 AND C.series_id = '.$cupid.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
+					if ($teamstats = $wpdb->get_results($teamistingsql)) {
+						$zebracount = 1;
+						foreach ($teamstats as $tst) {
+							if ($zebracount % 2) {
+								print("					<tr>\n");
+							}
+							else {
+								print("					<tr class=\"tbl_alt\">\n");
+							}
+							print("						<td><a href=\"".  get_post_permalink( $tst->WPID ) ."\" title=\"Read more on this team\">" . esc_html( get_the_title( $tst->WPID ) ) . "</a></td>\n						<td>".$tst->TP."</td>\n						<td>".$tst->TW."</td>\n						<td>".$tst->TL."</td>\n						<td>".$tst->TD."</td>\n						<td>".$tst->TDF."</td>\n						<td>".$tst->TDA."</td>\n						<td>".$tst->TCF."</td>\n						<td>".$tst->TCA."</td>\n						<td>".$tst->TC."</td>\n						<td>".$tst->TI."</td>\n						");
+							if ($tst->TP > 0) {
+								print("<td>".number_format((($tst->TW/$tst->TP)*100))."%</td>\n");
+							}
+							else {
+								print("<td>N/A</td>\n");
+							}
+							print("					</tr>\n");
+							$zebracount++;
+						}
+					}
+?>
+				</tbody>
+				</table>
+<?php
+					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';
+					  ///////////////////////////
+					 // Start of Player Stats //
+					///////////////////////////
+					$stat_limit = bblm_get_stat_limit();
+
+					$bblm_stats = new BBLM_Stat;
+
+					$bblm_stats->display_top_players_table( $cupid, 'bblm_cup', $stat_limit );
+					$bblm_stats->display_top_killers_table( $cupid, 'bblm_cup', $stat_limit );
+
+					  /////////////////////////
+					 // End of Player Stats //
+					/////////////////////////
+
+					//If this cup had any winners determined, then one must have completed and therefore have awards
+					if ($has_completed) {
+?>
+					<h3 id="awardsfull">Awards</h3>
+					<h4>Main Awards</h4>
+					<table>
+						<tr>
+							<th class="tbl_name">Award</th>
+							<th class="tbl_name">Team</th>
+							<th class="tbl_name">Competition</th>
+						</tr>
+<?php
+					$compmajorawardssql = 'SELECT A.a_name, T.WPID, H.post_title AS CompName, H.guid AS CompLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = H.ID AND A.a_id = B.a_id AND a_cup = 1 AND B.t_id = T.t_id AND B.c_id = C.c_id AND C.series_id = '.$cupid.' ORDER BY A.a_id ASC, C.c_id DESC';
+					if ($cmawards = $wpdb->get_results($compmajorawardssql)) {
+						$zebracount = 1;
+						foreach ($cmawards as $cma) {
+							if ($zebracount % 2) {
+								print("						<tr>\n");
+							}
+							else {
+								print("						<tr class=\"tbl_alt\">\n");
+							}
+								print("		<td>".$cma->a_name."</td>\n		<td><a href=\"".  get_post_permalink( $cma->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cma->WPID ) ) . "</a></td>\n		<td><a href=\"".$cma->CompLink."\" title=\"Read more about ".$cma->CompName."\">".$cma->CompName."</a></td>\n	</tr>\n");
+							$zebracount++;
+						}
+					}
+?>
+					</table>
+
+					<h4>Awards assigned to Teams</h4>
+					<table>
+						<tr>
+							<th class="tbl_name">Award</th>
+							<th class="tbl_name">Team</th>
+							<th class="tbl_name">Competition</th>
+							<th class="tbl_stat">Value</th>
+						</tr>
+<?php
+					$compteamawardssql = 'SELECT A.a_name, T.WPID, B.atc_value AS value, U.post_title AS Comp, U.guid AS CompLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' U, '.$wpdb->prefix.'team T WHERE Y.tid = C.c_id AND Y.prefix = \'c_\' AND Y.pid = U.ID AND C.c_id = B.c_id AND A.a_id = B.a_id AND a_cup = 0 AND B.t_id = T.t_id AND C.series_id = '.$cupid.' ORDER BY A.a_id ASC, C.c_id DESC';
+					if ($ctawards = $wpdb->get_results($compteamawardssql)) {
+						$zebracount = 1;
+						foreach ($ctawards as $cta) {
+							if ($zebracount % 2) {
+								print("						<tr>\n");
+							}
+							else {
+								print("						<tr class=\"tbl_alt\">\n");
+							}
+								print("		<td>".$cta->a_name."</td>\n		<td><a href=\"".  get_post_permalink( $cta->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cta->WPID ) ) . "</a></td>\n		<td><a href=\"".$cta->CompLink."\" title=\"View more on this Competition\">".$cta->Comp."</a></td>\n		<td>".$cta->value."</td>\n	</tr>\n");
+							$zebracount++;
+						}
+					}
+?>
+					</table>
+					<h4>Awards assigned to Players</h4>
+					<table>
+						<tr>
+							<th class="tbl_name">Award</th>
+							<th class="tbl_name">Player</th>
+							<th class="tbl_name">Team</th>
+							<th class="tbl_name">Competition</th>
+							<th class="tbl_stat">Value</th>
+						</tr>
+<?php
+					$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, T.WPID, U.post_title AS Comp, U.guid AS CompLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' U, '.$wpdb->prefix.'comp C WHERE Y.tid = C.c_id AND Y.prefix = \'c_\' AND Y.pid = U.ID AND C.c_id = B.c_id AND R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND C.series_id = '.$cupid.' ORDER BY A.a_id ASC, C.c_id DESC';
+					if ($cpawards = $wpdb->get_results($compplayerawardssql)) {
+						$zebracount = 1;
+						foreach ($cpawards as $cpa) {
+							if ($zebracount % 2) {
+								print("						<tr>\n");
+							}
+							else {
+								print("						<tr class=\"tbl_alt\">\n");
+							}
+								print("		<td>".$cpa->a_name."</td>\n		<td><a href=\"".$cpa->Plink."\" title=\"Read more about ".$cpa->Pname."\">".$cpa->Pname."</a></td>\n		<td><a href=\"".  get_post_permalink( $cpa->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cpa->WPID ) ) . "</a></td>\n		<td><a href=\"".$cpa->CompLink."\" title=\"View more on this Competition\">".$cpa->Comp."</a></td>\n		<td>".$cpa->value."</td>\n	</tr>\n");
+							$zebracount++;
+						}
+					}
+?>
+					</table>
+<?php
+					}//end of if $has_completed
+
+				}//end of if matches
+				else {
+					print("	<div class=\"info\">\n		<p>No Competitions or matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
+				}
+
+
+?>
+
+				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
+			</div>
+		</div>
+
+
+		<?php endwhile;?>
+	<?php endif; ?>
+
+<?php get_sidebar(); ?>
+<?php get_footer(); ?>

@@ -15,20 +15,20 @@
       <table class="sortable bblm_tbl bblm_sortable">
         <thead>
         <tr>
-          <th class="tbl_title bblm_tbl_title"><?php echo __( 'Owner', 'bblm'); ?></th>
+          <th class="tbl_title"><?php echo __( 'Owner', 'bblm'); ?></th>
           <th><?php echo __( 'Teams', 'bblm'); ?></th>
           <th><?php echo __( 'Championships', 'bblm'); ?></th>
-          <th class="tbl_stat bblm_tbl_stat">P</th>
-          <th class="tbl_stat bblm_tbl_stat">W</th>
-          <th class="tbl_stat bblm_tbl_stat">L</th>
-          <th class="tbl_stat bblm_tbl_stat">D</th>
-          <th class="tbl_stat bblm_tbl_stat">Tf</th>
-          <th class="tbl_stat bblm_tbl_stat">Ta</th>
-          <th class="tbl_stat bblm_tbl_stat">Cf</th>
-          <th class="tbl_stat bblm_tbl_stat">Ca</th>
-          <th class="tbl_stat bblm_tbl_stat">Comp</th>
-          <th class="tbl_stat bblm_tbl_stat">Int</th>
-          <th class="tbl_stat bblm_tbl_stat">%</th>
+          <th class="tbl_stat">P</th>
+          <th class="tbl_stat">W</th>
+          <th class="tbl_stat">L</th>
+          <th class="tbl_stat">D</th>
+          <th class="tbl_stat">Tf</th>
+          <th class="tbl_stat">Ta</th>
+          <th class="tbl_stat">Cf</th>
+          <th class="tbl_stat">Ca</th>
+          <th class="tbl_stat">Comp</th>
+          <th class="tbl_stat">Int</th>
+          <th class="tbl_stat">%</th>
         </tr>
       </thead>
       <tbody>

@@ -26,7 +26,8 @@
 				$matchnum = $wpdb->get_var($matchnumsql);
 				$compnumsql = 'SELECT COUNT(*) AS compnum FROM '.$wpdb->prefix.'comp M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_counts = 1 AND M.c_show = 1 AND M.type_id = 1 AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID';
 				$compnum = $wpdb->get_var($compnumsql);
-				$cupnum = wp_count_posts( 'bblm_cup')->publish; //Determine number of 'Published' Championship Cups
+				$cupnumsql = 'SELECT COUNT(*) AS cupnum FROM '.$wpdb->prefix.'series M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.series_id = J.tid AND M.series_show = 1 AND J.prefix = \'series_\' AND J.pid = P.ID';
+				$cupnum = $wpdb->get_var($cupnumsql);
 				$playernumsql = 'SELECT COUNT(*) AS playernum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_id = T.t_id AND T.t_show = 1 AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID';
 				$playernum = $wpdb->get_var($playernumsql);
 				$teamnumsql = 'SELECT COUNT(*) AS teamnum FROM '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_show = 1 AND M.type_id = 1 AND M.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID';

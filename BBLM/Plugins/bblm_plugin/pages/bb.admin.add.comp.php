@@ -83,22 +83,16 @@ if(isset($_POST['bblm_comp_submit'])) {
 			<tr valign="top">
 				<th scope="row"><label for="bblm_cseries">Championship</label></th>
 				<td><select name="bblm_cseries" id="bblm_cseries">
-					<?php
-							//Grabs a list of 'posts' from the bblm_cup CPT
-							$oposts = get_posts(
-								array(
-									'post_type' => 'bblm_cup',
-									'numberposts' => -1,
-									'orderby' => 'post_title',
-									'order' => 'ASC'
-								)
-							);
-							if( ! $oposts ) return;
-							foreach( $oposts as $o ) {
-								echo '<option value="' . $o->ID . '">' . bblm_get_cup_name( $o->ID ) . '</option>';
-							}
+		<?php
+		$seriessql = 'SELECT series_id, series_name FROM '.$wpdb->prefix.'series order by series_name';
 
-					?></td>
+		if ($seriess = $wpdb->get_results($seriessql)) {
+			foreach ($seriess as $cup) {
+				print("					<option value=\"$cup->series_id\">".$cup->series_name."</option>\n");
+			}
+		}
+		?>
+		</select></td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_cseason">Season</label></th>
