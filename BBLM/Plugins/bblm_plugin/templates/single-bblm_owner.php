@@ -92,7 +92,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'eason Performance', 'bblm'); ?>S</h3>
+            <h3><?php echo __( 'Season Performance', 'bblm'); ?>S</h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
