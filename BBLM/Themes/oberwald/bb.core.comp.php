@@ -18,8 +18,8 @@ Template Name: List Competitions
 				<?php
 
 				//$compsql = 'SELECT P.post_title, P.guid, L.post_title AS SEAname, L.guid AS SEAlink, M.post_title AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' M WHERE C.series_id = N.tid AND N.prefix = \'series_\' AND N.pid = M.ID AND K.tid = C.sea_id AND K.prefix = \'sea_\' AND K.pid = L.ID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_counts = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
-				//$compsql = 'SELECT P.post_title, P.guid, L.post_title AS SEAname, L.guid AS SEAlink, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE K.tid = C.sea_id AND K.prefix = \'sea_\' AND K.pid = L.ID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
-				$compsql = 'SELECT P.post_title, P.guid, C.sea_id, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
+				$compsql = 'SELECT P.post_title, P.guid, L.post_title AS SEAname, L.guid AS SEAlink, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE K.tid = C.sea_id AND K.prefix = \'sea_\' AND K.pid = L.ID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
+				//$compsql = 'SELECT P.post_title, P.guid, C.sea_id, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
 				if ($comps = $wpdb->get_results($compsql)) {
 					$is_first = 1;
 					$current_sea = 0;
