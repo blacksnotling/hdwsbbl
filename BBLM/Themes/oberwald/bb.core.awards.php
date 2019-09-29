@@ -54,7 +54,6 @@
 							4. Awards to Players in a competition
 						*/
 						//1. Awards to teams in a season
-						//$compteamawardssql = 'SELECT P.post_title, P.guid, B.ats_value AS value, Y.post_title AS Sea, Y.guid AS SeaLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y WHERE B.sea_id = T.tid AND T.prefix = \'sea_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
 						$compteamawardssql = 'SELECT T.WPID, B.ats_value AS value, B.sea_id FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'team T WHERE A.a_id = B.a_id AND a_cup = 0 AND B.t_id = T.t_id AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
 						if ( $ctawards = $wpdb->get_results( $compteamawardssql ) ) {
 							$aoutput .= '<h4>Team recipients during a Season</h4>';
