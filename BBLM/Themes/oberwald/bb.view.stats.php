@@ -31,8 +31,8 @@
 				$playernum = $wpdb->get_var($playernumsql);
 				$teamnumsql = 'SELECT COUNT(*) AS teamnum FROM '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_show = 1 AND M.type_id = 1 AND M.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID';
 				$teamnum = $wpdb->get_var($teamnumsql);
-				$seanumsql = 'SELECT COUNT(*) AS seanum FROM '.$wpdb->prefix.'season M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID';
-				$seanum = $wpdb->get_var($seanumsql);
+				$countseanum = wp_count_posts( 'bblm_season' );
+				$seanum = $countseanum->publish;
 				$sppnumsql = 'SELECT SUM(M.p_spp) AS sppnum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND M.p_spp > 0';
 				$sppnum = $wpdb->get_var($sppnumsql);
 				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1';
