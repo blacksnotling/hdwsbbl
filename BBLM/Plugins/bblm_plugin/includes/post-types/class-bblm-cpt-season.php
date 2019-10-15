@@ -38,7 +38,7 @@ class BBLM_CPT_Season {
 	    if( is_post_type_archive( 'bblm_season' ) && !is_admin() && $query->is_main_query() ) {
 	        $query->set( 'posts_per_page', -1 );
           $query->set( 'orderby', 'title' );
-          $query->set( 'order', 'asc' );
+          $query->set( 'order', 'desc' );
           $query->set( 'post_status', 'publish' );
 	    }
 

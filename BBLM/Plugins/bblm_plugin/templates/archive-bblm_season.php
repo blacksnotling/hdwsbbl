@@ -1,47 +1,44 @@
-<?php
-/*
-Template Name: List Seasons
-*/
-/*
-*	Filename: bb.core.season.php
-*	Description: Page template to list the Stadiums in the league
-*/
-?>
 <?php get_header(); ?>
+  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+    <?php do_action( 'bblm_template_before_loop' ); ?>
 
-					<?php the_content(); ?>
+		<header class="page-header entry-header">
+
+      <h2 class="entry-title"><?php echo __( 'Seasons', 'bblm'); ?></h2>
+      <div class="archive-description"><?php echo bblm_echo_archive_desc( 'season' ) ?></div>
+
+    </header><!-- .page-header -->
+
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			<ul>
+
+				<?php while (have_posts()) : the_post(); ?>
+					<?php do_action( 'bblm_template_before_content' ); ?>
 <?php
-				$seasonsql = 'SELECT S.sea_active, P.guid, P.post_title FROM '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID ORDER BY sea_active DESC, sea_sdate DESC';
-				if ($seasons = $wpdb->get_results($seasonsql)) {
-					print("	<ul>\n");
-					foreach ($seasons as $s) {
-						print("<li");
-						if ($s->sea_active) {
-							print(" class=\"active\"");
+						if ( BBLM_CPT_Season::is_season_active( get_the_ID() ) ) {
+							echo '<li class="active bblm_season_active">';
 						}
-						print("><a href=\"".$s->guid."\" title=\"View more informaton about ".$s->post_title."\">".$s->post_title."</a></li>\n");
-					}
-					print("</ul>\n");
-				}
-				else {
-					print("<p>There are no Seasons currently set-up!</p>\n");
-}
-
-
+						else {
+							echo '<li>';
+						}
 ?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					  <a href="<?php the_permalink(); ?>" title="<?php echo __( 'Read more about', 'bblm'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></li>
 
-			</div>
-		</div>
+					<?php do_action( 'bblm_template_after_content' ); ?>
+				<?php endwhile; ?>
 
+			</ul>
 
-		<?php endwhile;?>
+			<footer class="entry-footer">
+				<p class="postmeta">&nbsp;</p>
+			</footer><!-- .entry-footer -->
+
+		</article><!-- .post-ID -->
+
+	<?php do_action( 'bblm_template_after_loop' ); ?>
 	<?php endif; ?>
 
+<?php do_action( 'bblm_template_after_posts' ); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
