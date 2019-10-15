@@ -70,6 +70,41 @@ class BBLM_CPT_Season {
 
      } //end of is_season_active()
 
+	/**
+	 * Returns the WOrdPress ID of the active Season
+	 *
+	 * @return int the WordPress ID of the current Season
+	 */
+	 public static function get_current_season() {
+
+		 $current_date = DateTime::createFromFormat( 'Y-m-d', time() );
+
+     $seasons = array(  'post_type' => 'bblm_season',
+         'posts_per_page' => -1,
+         'meta_key' => 'season_fdate',
+         'orderby' => 'meta_value_num',
+         'order' => 'ASC',
+         'meta_query' => array(
+             array(
+                 'key' => 'season_fdate',
+                 'value' => $current_date,
+                 'compare' => '>=',
+             )
+         ),
+     );
+     if ( $latest_season = get_posts( $seasons ) ) {
+       foreach ( $latest_season as $ls ) {
+
+         $sea_id = $ls->ID;
+
+       }
+
+     }
+
+		 return $sea_id;
+
+	 } //end of get_current_season()
+
 
 } //end of class
 
