@@ -41,7 +41,7 @@
 					$bblm_comp->display_comp_list_with_stats();
 
 					echo '<h3>' . __( 'Team Statistics for this Championship Cup', 'bblm' ) . '</h3>';
-					$bblm_team->display_comp_list_with_stats();
+					$bblm_team->display_team_list_with_stats();
 
 					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';
 					$stat_limit = bblm_get_stat_limit();

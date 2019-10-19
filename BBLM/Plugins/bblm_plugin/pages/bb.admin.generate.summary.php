@@ -110,8 +110,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	$sumoutput .= "	<li><strong>Duration</strong>: ".date('jS M 25y',strtotime($_POST['bblm_sdatef']))." - ".date('jS M 25y',strtotime($_POST['bblm_sdatet']))."</li>\n";
 	$sumoutput .= "	<li><strong>Competition(s)</strong>: ";
 
-	//$sumcompsql = 'SELECT DISTINCT M.c_id, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J WHERE M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY P.post_title ASC';
-	$sumcompsql = 'SELECT DISTINCT M.c_id, P.post_title AS Comp, P.guid AS CompLink, L.post_title AS Sea, L.guid AS SeaLink, C.sea_id FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE M.c_id = C.c_id AND C.sea_id = K.tid AND K.prefix = \'sea_\' AND K.pid = L.ID AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY P.post_title ASC';
+	$sumcompsql = 'SELECT DISTINCT M.c_id, P.post_title AS Comp, P.guid AS CompLink, C.sea_id AS Sea FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY P.post_title ASC';
 	if ($sumcomp = $wpdb->get_results($sumcompsql,ARRAY_A)) {
 		$is_followon = 0;
 		foreach ($sumcomp as $sc) {
@@ -127,7 +126,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	}
 
 	$sumoutput .= "</li>\n";
-	$sumoutput .= "	<li><strong>Season</strong>: <a href=\"".$sc['SeaLink']."\" title=\"View more on this Season\">".$sc['Sea']."</a></li>\n";
+	$sumoutput .= "	<li><strong>Season</strong>: " . bblm_get_season_link( $sc['Sea'] ) . "</li>\n";
 	$sumoutput .= "</ul>\n\n";
 	$sumoutput .= "[Your Text goes here]\n\n";
 
@@ -309,7 +308,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 		foreach ($sumcomp as $sc) {
 			if ($is_seasonstat) {
 				$sea_id = $sc['sea_id'];
-				$lsname = $sc['Sea'];
+				$lsname = bblm_get_season_name( $sc['Sea'] );
 			}
 			else {
 				if ($sc['c_id'] == $_POST['bblm_sftbl']) {

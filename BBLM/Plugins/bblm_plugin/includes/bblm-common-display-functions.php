@@ -158,3 +158,32 @@ function bblm_get_cup_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_cup_link
+
+/**
+ * Returns the name of a Season, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_season_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_season_name
+
+/**
+ * Returns the link of a Season, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_season_link( $ID ) {
+
+  $season_name = bblm_get_season_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $season_name . '" href="' . get_post_permalink( $ID ) . '">' . $season_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_season_link

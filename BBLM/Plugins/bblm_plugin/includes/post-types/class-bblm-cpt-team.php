@@ -50,7 +50,7 @@ class BBLM_CPT_Team {
   * @param wordpress $query
   * @return string $output
   */
-  public function display_comp_list_with_stats() {
+  public function display_team_list_with_stats() {
 		global $wpdb;
 		global $post;
 
@@ -63,6 +63,12 @@ class BBLM_CPT_Team {
 			$teamistingsql = 'SELECT SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, Z.WPID FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND C.c_id = T.c_id AND Z.t_show = 1 AND T.tc_played > 0 AND C.series_id = '.$itemid.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 
 		} //end of if ( $post_type == "bblm_cup" )
+		else if ( $post_type == "bblm_season" ) {
+
+				$teamistingsql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id anD Z.t_show = 1 AND C.c_id = T.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.sea_id = ' . $itemid . ' GROUP BY T.t_id ORDER BY Z.t_name ASC';
+
+		} //end of else if ( $post_type == "bblm_season" ) {
+
 
 		if ($teamstats = $wpdb->get_results($teamistingsql)) {
 			$zebracount = 1;
@@ -128,7 +134,7 @@ class BBLM_CPT_Team {
 
 		}
 
-  } //end of display_comp_list_with_stats()
+  } //end of display_team_list_with_stats()
 
 
 } //end of class

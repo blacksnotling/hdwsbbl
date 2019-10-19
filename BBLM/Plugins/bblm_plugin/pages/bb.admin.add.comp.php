@@ -103,16 +103,22 @@ if(isset($_POST['bblm_comp_submit'])) {
 			<tr valign="top">
 				<th scope="row"><label for="bblm_cseason">Season</label></th>
 				<td><select name="bblm_cseason" id="bblm_cseason">
-		<?php
-		$seasonsql = 'SELECT sea_id, sea_name FROM '.$wpdb->prefix.'season WHERE sea_active = 1 order by sea_name';
+					<?php
+							//Grabs a list of 'posts' from the bblm_cup CPT
+							$oposts = get_posts(
+								array(
+									'post_type' => 'bblm_season',
+									'numberposts' => -1,
+									'orderby' => 'post_title',
+									'order' => 'DESC'
+								)
+							);
+							if( ! $oposts ) return;
+							foreach( $oposts as $o ) {
+								echo '<option value="' . $o->ID . '">' . bblm_get_season_name( $o->ID ) . '</option>';
+							}
 
-		if ($seasons = $wpdb->get_results($seasonsql)) {
-			foreach ($seasons as $sea) {
-				print("					<option value=\"$sea->sea_id\">".$sea->sea_name."</option>\n");
-			}
-		}
-		?>
-		</select></td>
+					?></td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_ctype">Format</label></th>

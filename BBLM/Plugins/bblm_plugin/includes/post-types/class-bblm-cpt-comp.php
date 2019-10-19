@@ -81,6 +81,11 @@ class BBLM_CPT_Comp {
 			$complistingsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_tdfor) AS TD, SUM(T.tc_casfor) AS CAS, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_show = 1 AND C.series_id = '.$itemid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 
 		} //end of if ( $post_type == "bblm_cup" )
+		else if ( $post_type == "bblm_season" ) {
+
+			$complistingsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_tdfor) AS TD, SUM(T.tc_casfor) AS CAS, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_show = 1 AND C.sea_id = '.$itemid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+
+		} //end of else if ( $post_type == "bblm_season" ) {
 
 		if ( $compl = $wpdb->get_results( $complistingsql ) ) {
 			$zebracount = 1;

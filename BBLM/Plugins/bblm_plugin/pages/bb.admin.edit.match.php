@@ -268,7 +268,7 @@ $sucess = false;
 		else if ("comment" == $_GET['item']) {
 			//Editing match Comments
 			$match_id = $_GET['id'];
-			$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.c_id, M.m_teamA, M.m_teamB, D.div_name, C.c_name, T.t_name AS TA, V.t_name AS TB, R.mt_comment AS TAcomm, S.mt_comment AS TBcomm FROM '.$wpdb->prefix.'season X, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team V, '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match_team S, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE X.sea_id = C.sea_id AND M.c_id = C.c_id AND M.div_id = D.div_id AND M.m_id = R.m_id AND M.m_id = S.m_id AND M.m_teamA = R.t_id AND M.m_teamB = S.t_id AND M.m_teamA = T.t_id AND M.m_teamB = V.t_id AND M.m_id = '.$match_id;
+			$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.c_id, M.m_teamA, M.m_teamB, D.div_name, C.c_name, T.t_name AS TA, V.t_name AS TB, R.mt_comment AS TAcomm, S.mt_comment AS TBcomm FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team V, '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match_team S, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.c_id = C.c_id AND M.div_id = D.div_id AND M.m_id = R.m_id AND M.m_id = S.m_id AND M.m_teamA = R.t_id AND M.m_teamB = S.t_id AND M.m_teamA = T.t_id AND M.m_teamB = V.t_id AND M.m_id = '.$match_id;
 			if ($m = $wpdb->get_row($matchsql)) {
 				print("<h3>Edit Coaches Comments</h3>");
 				print("<p>You are editing the Match Comments for <strong>".$m->TA." vs ".$m->TB."</strong> (".$m->c_name.", ".$m->div_name."):</p>\n");
@@ -413,7 +413,7 @@ function BBLM_UpdateGate() {
 	<p>Below is a list of matches that have taken place in the League. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
 
 <?php
-		$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, S.sea_name, C.c_name, Z.guid AS cguid, D.div_name, P.ID, M.m_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND C.sea_id = S.sea_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
+				$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.c_name, Z.guid AS cguid, D.div_name, P.ID, M.m_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY C.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
 		if ($match = $wpdb->get_results($matchsql)) {
 			$zebracount = 1;
 

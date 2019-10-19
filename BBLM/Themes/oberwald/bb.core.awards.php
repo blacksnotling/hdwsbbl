@@ -54,53 +54,79 @@
 							4. Awards to Players in a competition
 						*/
 						//1. Awards to teams in a season
-						$compteamawardssql = 'SELECT P.post_title, P.guid, B.ats_value AS value, Y.post_title AS Sea, Y.guid AS SeaLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y WHERE B.sea_id = T.tid AND T.prefix = \'sea_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
-						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
-							$aoutput .= "					<h4>Team recipients during a Season</h4>\n					<table>\n						<tr>\n							<th class=\"tbl_name\">Team</th>\n							<th class=\"tbl_name\">Season</th>\n							<th class=\"tbl_stat\">Value</th>\n						</tr>\n";
+						$compteamawardssql = 'SELECT T.WPID, B.ats_value AS value, B.sea_id FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'team T WHERE A.a_id = B.a_id AND a_cup = 0 AND B.t_id = T.t_id AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
+						if ( $ctawards = $wpdb->get_results( $compteamawardssql ) ) {
+							$aoutput .= '<h4>Team recipients during a Season</h4>';
+							$aoutput .= '<table class="bblm_table">
+													<thead>
+														<tr>
+															<th class="tbl_name bblm_tbl_name">' . __( "Team", "bblm" ) . '</th>
+															<th class="tbl_name bblm_tbl_name">' . __( "Season", "bblm" ) . '</th>
+															<th class="tbl_stat bblm_tbl_stat">' . __( "Value", "bblm" ) . '</th>
+														</tr>
+													</thead>
+													<tbody>';
 							$zebracount = 1;
-							foreach ($ctawards as $cta) {
-								if ($zebracount % 2) {
-									$aoutput .= "						<tr>\n";
+							foreach ( $ctawards as $cta ) {
+								if ( $zebracount % 2 ) {
+									$aoutput .= '<tr>';
 								}
 								else {
-									$aoutput .= "						<tr class=\"tbl_alt\">\n";
+									$aoutput .= '<tr class="tbl_alt bblm_tbl_alt">';
 								}
-								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->SeaLink."\" title=\"Read more about ".$cta->Sea."\">".$cta->Sea."</a></td>\n						<td>";
-								if (0 < $cta->value) {
+								$aoutput .= '<td>' . bblm_get_season_link( $cta->WPID ) . '</td>
+														 <td>' . bblm_get_season_link( $cta->sea_id ) . '</td>
+														 <td>';
+								if ( 0 < $cta->value ) {
 									$aoutput .= $cta->value;
 								}
 								else {
 									$aoutput .= "n/a";
 								}
-								$aoutput .= "</td>\n						</tr>\n";
+								$aoutput .= '</td>
+														</tr>';
 								$zebracount++;
 							}
-							$aoutput .= "</table>";
+							$aoutput .= '</tbldy>
+													</table>';
 						}
 
 						//2. Awards to Players in a season
-						$compteamawardssql = 'SELECT P.post_title, P.guid, B.aps_value AS value, Y.post_title AS Sea, Y.guid AS SeaLink, F.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp T, '.$wpdb->posts.' Y, '.$wpdb->prefix.'team F, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = F.t_id AND B.sea_id = T.tid AND T.prefix = \'sea_\' AND T.pid = Y.ID AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
-						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
-							$aoutput .= "					<h4>Player recipients during a Season</h4>\n					<table>\n						<tr>\n							<th class=\"tbl_name\">Player</th>\n							<th class=\"tbl_name\">Season</th>\n							<th class=\"tbl_name\">Team</th>\n							<th class=\"tbl_stat\">Value</th>\n						</tr>\n";
+						$compteamawardssql = 'SELECT P.WPID, B.aps_value AS value, B.sea_id FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'player P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.p_id = P.p_id AND A.a_id = '.$aw->a_id.' ORDER BY B.sea_id DESC';
+						if ( $ctawards = $wpdb->get_results( $compteamawardssql ) ) {
+							$aoutput .= '<h4>Player recipients during a Season</h4>';
+							$aoutput .= '<table class="bblm_table">
+													<thead>
+														<tr>
+															<th class="tbl_name bblm_tbl_name">' . __( "Team", "bblm" ) . '</th>
+															<th class="tbl_name bblm_tbl_name">' . __( "Season", "bblm" ) . '</th>
+															<th class="tbl_stat bblm_tbl_stat">' . __( "Value", "bblm" ) . '</th>
+														</tr>
+													</thead>
+													<tbody>';
 							$zebracount = 1;
-							foreach ($ctawards as $cta) {
-								if ($zebracount % 2) {
-									$aoutput .= "						<tr>\n";
+							foreach ( $ctawards as $cta ) {
+								if ( $zebracount % 2 ) {
+									$aoutput .= '<tr>';
 								}
 								else {
-									$aoutput .= "						<tr class=\"tbl_alt\">\n";
+									$aoutput .= '<tr class="tbl_alt bblm_tbl_alt">';
 								}
-								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td><a href=\"".$cta->SeaLink."\" title=\"Read more about ".$cta->Sea."\">".$cta->Sea."</a></td>\n							<td><a href=\"".  get_post_permalink( $cta->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cta->WPID ) ) . "</a></td>\n						<td>";
-								if (0 < $cta->value) {
+								$aoutput .= '<td>' . bblm_get_season_link( $cta->WPID ) . '</td>
+														 <td>' . bblm_get_season_link( $cta->sea_id ) . '</td>
+														 <td>';
+								if ( 0 < $cta->value ) {
 									$aoutput .= $cta->value;
 								}
 								else {
 									$aoutput .= "n/a";
 								}
-								$aoutput .= "</td>\n						</tr>\n";
+								$aoutput .= '</td>
+														</tr>';
 								$zebracount++;
 							}
-							$aoutput .= "</table>";
+							$aoutput .= '</tbldy>
+													</table>';
 						}
 
 						//3. Awards to teams in a competition

@@ -222,7 +222,7 @@ get_header(); ?>
 								<th class="tbl_stat">SPP</th>
 							</tr>
 <?php
-					$playerseasql = 'SELECT S.post_title, S.guid, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'season X, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' S WHERE C.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = S.ID AND C.c_counts = 1 AND C.c_show = 1 AND X.sea_id = C.sea_id AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND C.c_show = 1 AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 					if ($playersea = $wpdb->get_results($playerseasql)) {
 					$zebracount = 1;
 						foreach ($playersea as $pc) {
@@ -232,7 +232,7 @@ get_header(); ?>
 							else {
 								print("		<tr class=\"tbl_alt\">\n");
 							}
-							print("			<td><a href=\"".$pc->guid."\" title=\"View more information about this Season\">".$pc->post_title."</a></td>\n		<td>".$pc->GAMES."</td>\n		<td>".$pc->TD."</td>\n		<td>".$pc->CAS."</td>\n			<td>".$pc->MINT."</td>\n		<td>".$pc->COMP."</td>\n			<td>".$pc->MVP."</td>\n		<td>".$pc->SPP."</td>\n	</tr>\n");
+							print("			<td>" . bblm_get_season_link( $pc->sea_id ) . "</td>\n		<td>".$pc->GAMES."</td>\n		<td>".$pc->TD."</td>\n		<td>".$pc->CAS."</td>\n			<td>".$pc->MINT."</td>\n		<td>".$pc->COMP."</td>\n			<td>".$pc->MVP."</td>\n		<td>".$pc->SPP."</td>\n	</tr>\n");
 							$zebracount++;
 						}
 					}
@@ -374,7 +374,7 @@ get_header(); ?>
 							$ccfail = 1;
 						}
 
-						$seasonsql = 'SELECT A.a_name, P.post_title, P.guid, B.aps_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'season C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND B.sea_id = C.sea_id AND C.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
+						$seasonsql = 'SELECT A.a_name, B.sea_id, B.aps_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B WHERE A.a_id = B.a_id AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($sawards = $wpdb->get_results($seasonsql)) {
 							$zebracount = 1;
 							print("<h4>Awards from Seasons</h4>\n");
@@ -386,7 +386,7 @@ get_header(); ?>
 								else {
 									print("		<tr class=\"tbl_alt\">\n");
 								}
-								print("		<td>".$sa->a_name."</td>\n		<td><a href=\"".$sa->guid."\" title=\"View full details about ".$sa->post_title."\">".$sa->post_title."</a></td>\n		<td>".$sa->aps_value."</td>\n	</tr>\n");
+								print("		<td>".$sa->a_name."</td>\n		<td>" . bblm_get_season_link( $sa->sea_id ) . "</td>\n		<td>".$sa->aps_value."</td>\n	</tr>\n");
 								$zebracount++;
 							}
 							print("</table>\n");
@@ -449,7 +449,7 @@ get_header(); ?>
 	$rd = $wpdb->get_row($racesql);
 
 	//determine debut season
-	$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND P.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
+	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
 	$sd = $wpdb->get_row($seasondebutsql);
 
 	//grab list of other players on the team
@@ -503,7 +503,7 @@ get_header(); ?>
 
 			if ($has_played) {
 ?>
-			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
+			   <li><strong>Debut:</strong> <?php echo bblm_get_season_link( $sd->sea_id ); ?></li>
 <?php
 			}
 ?>
@@ -521,7 +521,7 @@ get_header(); ?>
 					print("		<li><strong>".$ca->a_name."</strong> - <a href=\"".$ca->guid."\" title=\"View full details about ".$ca->post_title."\">".$ca->post_title."</a></li>\n");
 				}
 				foreach ($sawards as $sa) {
-					print("		<li><strong>".$sa->a_name."</strong> - <a href=\"".$sa->guid."\" title=\"View full details about ".$sa->post_title."\">".$sa->post_title."</a></li>\n");
+					print("		<li><strong>".$sa->a_name."</strong> - " . bblm_get_season_link( $sa->sea_id ) . "</li>\n");
 				}
 				print("</ul>\n");
 			}

@@ -31,8 +31,8 @@
 				$playernum = $wpdb->get_var($playernumsql);
 				$teamnumsql = 'SELECT COUNT(*) AS teamnum FROM '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_show = 1 AND M.type_id = 1 AND M.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID';
 				$teamnum = $wpdb->get_var($teamnumsql);
-				$seanumsql = 'SELECT COUNT(*) AS seanum FROM '.$wpdb->prefix.'season M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID';
-				$seanum = $wpdb->get_var($seanumsql);
+				$countseanum = wp_count_posts( 'bblm_season' );
+				$seanum = $countseanum->publish;
 				$sppnumsql = 'SELECT SUM(M.p_spp) AS sppnum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND M.p_spp > 0';
 				$sppnum = $wpdb->get_var($sppnumsql);
 				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1';
@@ -85,21 +85,35 @@
 
 				<h3>Statistics Breakdown by Season</h3>
 <?php
-				$seasonsql = 'SELECT O.post_title, O.guid, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.sea_id = S.sea_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY S.sea_name ORDER BY S.sea_id DESC';
-				if ($seasonstats = $wpdb->get_results($seasonsql)) {
-					print("<table class=\"sortable\">\n	<thead>\n	<tr>\n		<th class=\"tbl_name\">Season</th>\n		<th class=\"tbl_stat\">Games</th>\n		<th class=\"tbl_stat\">TD</th>\n		<th class=\"tbl_stat\">CAS</th>\n		<th class=\"tbl_stat\">COMP</th>\n		<th class=\"tbl_stat\">INT</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
+?>
+					<table class="sortable bblm_table bblm_sortable">
+						<thead>
+							<tr>
+								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Season', 'bblm' ); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Games', 'bblm' ); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+<?php
 					$zebracount = 1;
-					foreach ($seasonstats as $ss) {
-						if ($zebracount % 2) {
-							print("		<tr>\n");
+					foreach ( $seasonstats as $ss ) {
+						if ( $zebracount % 2 ) {
+							echo '<tr>';
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							echo '<tr class="tbl_alt bblm_tbl_alt">';
 						}
-						print("		<td><a href=\"".$ss->guid."\" title=\"Read more about ".$ss->post_title."\">".$ss->post_title."</a></td>\n		<td>".$ss->NUMMAT."</td>\n		<td>".$ss->TD."</td>\n		<td>".$ss->CAS."</td>\n		<td>".$ss->COMP."</td>\n		<td>".$ss->MINT."</td>\n	</tr>\n");
+						echo '<td>' . bblm_get_season_link( $ss->sea_id ) . '</td><td>' . $ss->NUMMAT . '</td><td>' . $ss->TD . '</td><td>' . $ss->CAS . '</td><td>' . $ss->COMP . '</td><td>' . $ss->MINT . '</td></tr>';
 						$zebracount++;
 					}
-					print("</tbody>\n</table>\n");
+					echo '</tbody>';
+					echo '</table>';
 
 				}
 ?>
