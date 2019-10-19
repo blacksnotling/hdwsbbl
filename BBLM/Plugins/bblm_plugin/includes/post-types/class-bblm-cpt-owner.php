@@ -420,8 +420,8 @@ class BBLM_CPT_Owner {
         //quick check to make sure this owner has played any games
         if ( $games > 0 ) {
 
-          $gamestatsql = 'SELECT J.pid, Z.pid AS TID, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
-          $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp Z WHERE Z.prefix = "t_" AND Z.tid = T.t_id AND J.prefix = "sea_" AND J.tid = X.sea_id AND T.t_id = C.t_id AND X.c_id = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.sea_id ORDER BY X.sea_id ASC'; //splitting the line for length reasons!
+          $gamestatsql = 'SELECT X.sea_id, C.WPID, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
+          $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X WHERE T.t_id = C.t_id AND X.c_id = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.sea_id ORDER BY X.sea_id ASC'; //splitting the line for length reasons!
 
           if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
@@ -429,7 +429,7 @@ class BBLM_CPT_Owner {
             foreach ($gs as $g) {
 
             $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
-                       <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a> (as ' .esc_html( get_the_title( $g->TID ) ).')</td>
+                       <td>'. bblm_get_season_link( $g->sea_id ) .' (as ' . bblm_get_team_name( $g->WPID ).')</td>
                        <td>'. $g->OP .'</td>
                        <td>'. $g->OW .'</td>
                        <td>'. $g->OL .'</td>
