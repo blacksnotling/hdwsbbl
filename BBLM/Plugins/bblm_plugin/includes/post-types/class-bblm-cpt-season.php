@@ -83,7 +83,7 @@ class BBLM_CPT_Season {
          'posts_per_page' => -1,
          'meta_key' => 'season_fdate',
          'orderby' => 'meta_value_num',
-         'order' => 'ASC',
+         'order' => 'DESC',
          'meta_query' => array(
              array(
                  'key' => 'season_fdate',

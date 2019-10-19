@@ -15,7 +15,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 <div class="wrap">
 	<h2>Assign End of Season Awards</h2>
-	<p>Use the following page Assign the end of Season awards to teams and players. If you wish to close a season then navigate to the Seasons menu and add an end date!</p>
+	<p>Use the following page to assign the end of Season awards to teams and players. <strong>If you wish to close a season then navigate to the Seasons menu and add an end date!</strong></p>
 
 <?php
 
@@ -29,11 +29,8 @@ if (isset($_POST['bblm_season_close'])) {
 	print("</pre>");
 	print("<hr />"); */
 
-	$bblm_safe_input['edate'] = $_POST['bblm_edate'] ." 00:00:01";
-    $bblm_safe_input['cid'] = $_POST['bblm_cid'];
 
-    //start to build SQL Strings
-    $updatecompsql = 'UPDATE `'.$wpdb->prefix.'season` SET `sea_active` = \'0\', `sea_fdate` = \''.$bblm_safe_input['edate'].'\'  WHERE `sea_id` = '.$bblm_safe_input['cid'].' LIMIT 1';
+    $bblm_safe_input['cid'] = $_POST['bblm_cid'];
 
 	// Loop for team assignments //
 
@@ -143,7 +140,7 @@ if (isset($_POST['bblm_season_close'])) {
 	<p>
 	<?php
 	if ($sucess) {
-		print("Season has been closed down and awards assigned. thanks.");
+		print("Seasonal awards have been assigned.");
 	}
 	else {
 		print("Something went wrong");
@@ -162,17 +159,10 @@ if (isset($_POST['bblm_season_close'])) {
 /////////////////////////////////
 
 else if (isset($_POST['bblm_season_select'])) {
-/*	print("<pre>");
-	print_r($_POST);
-	print("</pre>");
-	print("<hr />");*/
 ?>
 
 	<form name="bblm_endseason" method="post" id="post">
 		<p>Please enter the date that this Season ended:</p>
-
-		<label for="bblm_edate" class="selectit">End Date:</label>
-		<input type="text" name="bblm_edate" size="11" tabindex="1" value="<?php print(date('Y-m-d')); ?>" maxlength="10">
 
 		<input type="hidden" name="bblm_cid" size="3" value="<?php print($_POST['bblm_cid']); ?>">
 
@@ -184,14 +174,14 @@ else if (isset($_POST['bblm_season_select'])) {
 
 		//before we generate the list of awards, we need to grab the teams into an array
 		//$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND T.t_show = 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
-		$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp A, '.$wpdb->prefix.'season S WHERE A.sea_id = S.sea_id AND A.c_id = C.c_id AND C.t_id = T.t_id AND T.t_show = 1 AND A.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC LIMIT 0, 30 ';
+		$teamsql = 'SELECT DISTINCT(C.t_id), T.WPID, T.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp A WHERE A.c_id = C.c_id AND C.t_id = T.t_id AND T.t_show = 1 AND A.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC';
 		//initialise vars
 		$are_teams = 1;
-		if ($teams = $wpdb->get_results($teamsql)) {
+		if ($teams = $wpdb->get_results( $teamsql )) {
 			//we have some teams so build the repeated input
 			$teamlisting = "			<option value=\"0\">Not Applicable</option>\n";
 			foreach ($teams as $t) {
-				$teamlisting .= "			<option value=\"".$t->t_id."\">".$t->t_name."</option>\n";
+				$teamlisting .= "			<option value=\"".$t->t_id."\">". bblm_get_team_name( $t->WPID ) ."</option>\n";
 			}
 		}
 		else {
@@ -230,7 +220,7 @@ else if (isset($_POST['bblm_season_select'])) {
 		 // Player Awards //
 		/////////////////
 
-		$playersql = 'SELECT DISTINCT(P.p_id), P.p_name, T.t_name, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE C.sea_id = S.sea_id AND A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND S.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC, P.p_num ASC';
+		$playersql = 'SELECT DISTINCT(P.p_id), P.WPID AS PID, T.WPID, T.t_id, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC, P.p_num ASC';
 		//initialise vars
 		$are_players = 1;
 		$last_team = "";
@@ -238,11 +228,11 @@ else if (isset($_POST['bblm_season_select'])) {
 			//we have some teams so build the repeated input
 			$playerlisting = "			<option value=\"0\">Not Applicable</option>\n";
 			foreach ($players as $pd) {
-				if ($last_team !== $pd->t_name) {
-					$playerlisting .= "			<option value=\"0\">".$pd->t_name."</option>\n";
-					$last_team = $pd->t_name;
+				if ($last_team !== $pd->WPID) {
+					$playerlisting .= "			<option value=\"0\">". bblm_get_team_name( $pd->WPID ) ."</option>\n";
+					$last_team = $pd->WPID;
 				}
-				$playerlisting .= "			<option value=\"".$pd->p_id."\"> -- #".$pd->p_num." - ".$pd->p_name."</option>\n";
+				$playerlisting .= "			<option value=\"".$pd->p_id."\"> -- #".$pd->p_num." - ". bblm_get_player_name( $pd->PID ) ."</option>\n";
 			}
 		}
 		else {
@@ -278,7 +268,7 @@ else if (isset($_POST['bblm_season_select'])) {
 ?>
 
 		<p class="submit">
-		<input type="submit" name="bblm_season_close" tabindex="4" value="Assign Awards and finish" title="Assign Awards and finish"/>
+		<input type="submit" name="bblm_season_close" tabindex="4" value="Assign Awards" title="Assign Awards"/>
 		</p>
 	</form>
 
@@ -294,21 +284,18 @@ else {
 ?>
 	<form name="bblm_endseason" method="post" id="post">
 
-	<p>Below is a list of Seasons. Select the one you wish to assign awards to!</p>
+	<p>Below is a list of Seasons. Select the one you wish to assign awards to</p>
 
     	  <label for="bblm_cid" class="selectit">Season</label>
 		  <select name="bblm_cid" id="bblm_cid">
-		<?php
-		$seasonsql = 'SELECT sea_name, sea_id FROM '.$wpdb->prefix.'season WHERE sea_active = 1';
-		if ($seasons = $wpdb->get_results($seasonsql)) {
-			foreach ($seasons as $sea) {
-				print("<option value=\"".$sea->sea_id."\">".$sea->sea_name."</option>\n");
-			}
-		}
-		?>
-	</select>
+<?php
+		if ( $sea = BBLM_CPT_Season::get_current_season() ) {
 
-	<p>By Continuing, the Season will be closed down.</p>
+			echo '<option value="' . $sea . '">' . bblm_get_season_name( $sea ) . '</option>';
+
+		}
+?>
+	</select>
 
 	<p class="submit">
 	<input type="submit" name="bblm_season_select" tabindex="4" value="Select above Season" title="Select above Season"/>
