@@ -85,7 +85,7 @@
 
 				<h3>Statistics Breakdown by Season</h3>
 <?php
-				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
 ?>
 					<table class="sortable bblm_table bblm_sortable">
