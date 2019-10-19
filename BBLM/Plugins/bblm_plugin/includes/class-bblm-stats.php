@@ -304,7 +304,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 
 				}
-        $output .= '<strong>' . $playernum . '</strong> Players in <strong>' . $teamnum . '</strong> Teams have played <strong>' . $matchnum . '</strong> Matches in <strong>' . $compnum . '</strong> Competitions for this Championship Cup. To date they have managed to:</p>';
+        $output .= '<strong>' . $playernum . '</strong> Players in <strong>' . $teamnum . '</strong> Teams have played <strong>' . $matchnum . '</strong> Matches in <strong>' . $compnum . '</strong> Competitions for ';
+				if ( $post_type == "bblm_cup" ) {
+					$output .= 'this Championship Cup. ';
+				}
+				else if ( $post_type == "bblm_season" ) {
+					$output .= '<strong>' . $cupnum . '</strong> Championship Cups. ';
+				}
+				$output .= 'To date they have managed to:</p>';
         $output .= '<ul>';
         $output .= '<li>Score <strong>' . $tottd . '</strong> Touchdowns (average <strong>' . round( $tottd / $matchnum, 1 ) . '</strong> per match);</li>';
         $output .= '<li>Make <strong>' . $totcomp . '</strong> successful Completions (average <strong>' . round( $totcomp / $matchnum, 1 ) . '</strong> per match);</li>';
