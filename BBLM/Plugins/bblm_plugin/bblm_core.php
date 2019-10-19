@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: A BloodBowl League Manager
-Version: 1.9
+Version: 1.10
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
