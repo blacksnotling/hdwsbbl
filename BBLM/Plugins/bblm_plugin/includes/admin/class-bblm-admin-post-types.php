@@ -32,7 +32,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     include_once( 'post-types/class-bblm-admin-cpt-dyk.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-owner.php' );
-		include_once( 'post-types/class-bblm-admin-cpt-stadium.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-stadium.php' );include_once( 'post-types/class-bblm-admin-cpt-cup.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-season.php' );
 
  }
 
@@ -43,6 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		include_once( 'post-types/meta-boxes/class-bblm-meta-dyk.php' );
 		include_once( 'post-types/meta-boxes/class-bblm-meta-stadium.php' );
+		include_once( 'post-types/meta-boxes/class-bblm-meta-cup.php' );
+		include_once( 'post-types/meta-boxes/class-bblm-meta-season.php' );
 
 	}
 

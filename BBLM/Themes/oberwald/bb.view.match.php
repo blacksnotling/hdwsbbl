@@ -378,7 +378,7 @@
 		//scorers
 		$topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 10';
 
-		$compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, F.post_title AS Sea, F.guid AS SeaLink FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' F, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND C.sea_id = S.tid AND S.prefix = \'sea_\' AND S.pid = F.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
+		$compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
 		$comp = $wpdb->get_row($compsql);
 ?>
 
@@ -398,7 +398,7 @@
 		}
 ?>
 				</strong> <?php print($comp->div_name);?></li>
-				<li><strong>Season:</strong> <a href="<?php print($comp->SeaLink); ?>" title="View more about this Season"><?php print($comp->Sea);?></a></li>
+				<li><strong>Season:</strong> <?php echo bblm_get_season_link( $comp->sea_id ); ?></li>
 				<li><strong>Attendance:</strong> <?php print(number_format($m->m_gate));?></li>
 				<li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $m->stad_id ); ?></li>
 			  </ul>

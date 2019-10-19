@@ -30,7 +30,7 @@ Template Name: List Resuts
 				</form>
 
 <?php
-				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, S.sea_name, Z.post_title AS c_name, Z.guid AS cguid, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND C.sea_id = S.sea_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\'  AND C.type_id = 1 AND C.c_show = 1 AND J.pid = P.ID ORDER BY ';
+				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, Z.post_title AS c_name, Z.guid AS cguid, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\'  AND C.type_id = 1 AND C.c_show = 1 AND J.pid = P.ID ORDER BY ';
 				$layout = "";
 				//determine the required Layout
 				if (isset($_POST['bblm_flayout'])) {
@@ -38,7 +38,7 @@ Template Name: List Resuts
 					switch ($flay) {
 						case ("bycomp" == $flay):
 					    	$layout .= 1;
-					    	$matchsql .= 'S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
+					    	$matchsql .= 'C.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
 						    break;
 						case ("bydate" == $flay):
 					    	$layout .= 0;
@@ -46,14 +46,14 @@ Template Name: List Resuts
 						    break;
 						default:
 					    	$layout .= 1;
-					    	$matchsql .= 'S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
+					    	$matchsql .= 'C.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
 						    break;
 					}
 				}
 				else {
 					//form not submitted so load in default values
 					$layout .= 1;
-					$matchsql .= 'S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
+					$matchsql .= 'C.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
 				}
 
 
@@ -71,9 +71,9 @@ Template Name: List Resuts
 						$current_sea = "";
 						$zebracount = 1;
 
-						foreach ($match as $m) {
-							if ($m->sea_name !== $current_sea) {
-								$current_sea = $m->sea_name;
+						foreach ( $match as $m ) {
+							if ( $m->sea_id !== $current_sea ) {
+								$current_sea = $m->sea_id;
 								$current_comp = $m->c_name;
 								$current_div = $m->div_name;
 								if (1 !== $is_first_sea) {
@@ -99,7 +99,7 @@ Template Name: List Resuts
 								$is_first_div = 1;
 							}
 							if ($is_first_sea) {
-								print("<h3>".$m->sea_name."</h3>\n <h4><a href=\"".$m->cguid."\" title=\"View more details about the ".$m->c_name."\">".$m->c_name."</a></h4>\n <h5>".$m->div_name."</h5>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   <th class=\"tbl_matchresult\">Result</th>\n		   <th class=\"tbl_matchdgate\">Gate</th>\n		 </tr>\n");
+								echo '<h3>' . bblm_get_season_name( $m->sea_id ) . '</h3><h4><a href="' . $m->cguid . '" title="View more details about the ' . $m->c_name . '">' . $m->c_name .'</a></h4><h5>' . $m->div_name . '</h5><table class = "bblm_table"><tr><th class="tbl_matchdate bblm_tbl_matchdate">Date</th><th class="tbl_matchname bblm_tbl_matchname">Match</th><th class="tbl_matchresult bblm_tbl_matchresult">Result</th><th class="tbl_matchdgate bblm_tbl_matchdgate">Gate</th></tr>';
 								$is_first_sea = 0;
 								$is_first_comp = 0;
 								$is_first_div = 0;
@@ -151,13 +151,13 @@ Template Name: List Resuts
 								print("					<tr class=\"tbl_alt\"  id=\"F".$m->m_id."\">\n");
 							}
 ?>
-						<td><?php print(date("d.m.y", $m->mdate)); ?></td>
-						<td><a href="<?php print($m->guid); ?>" title="View more details of the match"><?php print($m->post_title); ?></a></td>
-						<td><?php print($m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")"); ?></td>
-						<td><?php print(number_format($m->m_gate)); ?></td>
-						<td><a href="<?php print($m->cguid); ?>" title="View more about this competition"><?php print($m->c_name); ?></a></td>
-						<td><?php print($m->div_name); ?></td>
-						<td><?php print($m->sea_name); ?></td>
+						<td><?php echo date( "d.m.y", $m->mdate ); ?></td>
+						<td><a href="<?php echo $m->guid; ?>" title="View more details of the match"><?php echo $m->post_title; ?></a></td>
+						<td><?php echo $m->m_teamAtd . ' - ' . $m->m_teamBtd . ' (' . $m->m_teamAcas . ' - ' . $m->m_teamBcas . ')'; ?></td>
+						<td><?php echo number_format( $m->m_gate ); ?></td>
+						<td><a href="<?php echo $m->cguid; ?>" title="View more about this competition"><?php echo $m->c_name; ?></a></td>
+						<td><?php echo $m->div_name; ?></td>
+						<td><?php echo bblm_get_season_name( $m->sea_id ); ?></td>
 					</tr>
 <?php
 							$zebracount++;

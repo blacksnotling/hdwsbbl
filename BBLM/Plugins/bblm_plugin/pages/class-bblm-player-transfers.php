@@ -9,7 +9,7 @@
   	 * @author 		Blacksnotling
   	 * @category 	Admin
   	 * @package 	BBowlLeagueMan/Admin
-  	 * @version   1.0
+  	 * @version   1.1
   	 */
 
   	class BBLM_Player_Transfers {
@@ -167,8 +167,8 @@
 
         /*First we check to see that a Season is active (Transfers can only
         happen during the season) */
-        $activeseasonsql = 'SELECT P.ID from '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.sea_id = J.tid AND J.prefix = "sea_" AND J.pid = P.ID AND S.sea_active = 1';
-        if ( $sea = $wpdb->get_row( $activeseasonsql ) ) {
+        if ( $sea = BBLM_CPT_Season::get_current_season() ) {
+
 
           if ( $submissionresult ) {
 
@@ -210,7 +210,7 @@
         ?>
           </select>
         </p>
-                  <input type="hidden" name="bblm_transfer_season" size="10000" value="<?php echo $sea->ID; ?>">
+                  <input type="hidden" name="bblm_transfer_season" size="10000" value="<?php echo $sea; ?>">
 <?php
           wp_nonce_field( basename( __FILE__ ), 'bblm_transfer_team_nonce' );
 ?>

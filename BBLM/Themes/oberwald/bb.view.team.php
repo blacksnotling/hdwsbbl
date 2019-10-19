@@ -111,31 +111,60 @@
 
 				<h3>Performance by Season</h3>
 <?php
-			$seasonsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'season S WHERE T.c_id = C.c_id AND C.sea_id = S.sea_id AND J.tid = C.sea_id AND J.prefix = \'sea_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY S.sea_id DESC';
-			if ($seah = $wpdb->get_results($seasonsql)) {
+			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND tc_played > 0 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
 				$zebracount = 1;
-				print("	<table class=\"sortable\">\n	<thead>\n		<tr>\n			<th class=\"tbl_title\">Season</th>\n			<th class=\"tbl_stat\">P</th>\n			<th class=\"tbl_stat\">W</th>\n			<th class=\"tbl_stat\">L</th>\n			<th class=\"tbl_stat\">D</th>\n			<th class=\"tbl_stat\">TF</th>\n			<th class=\"tbl_stat\">TA</th>\n			<th class=\"tbl_stat\">CF</th>\n			<th class=\"tbl_stat\">CA</th>\n			<th class=\"tbl_stat\">COMP</th>\n			<th class=\"tbl_stat\">INT</th>\n			<th class=\"tbl_stat\">%</th>\n		</tr>\n	</thead>\n	<tbody>\n");
-
-				foreach ($seah as $sh) {
-					if ($zebracount % 2) {
-						print("		<tr>\n");
+?>
+				<table class="bblm_table bblm_sortable sortable">
+					<thead>
+						<tr>
+							<th class="tbl_title bblm_tbl_title"><?php echo __( 'Season', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'P', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'W', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'L', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'D', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TF', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TA', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CF', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CA', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm'); ?></th>
+							<th class="tbl_stat bblm_tbl_stat"><?php echo __( '%', 'bblm'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+<?php
+				foreach ( $seah as $sh ) {
+					if ( $zebracount % 2 ) {
+						echo '<tr>';
 					}
 					else {
-						print("		<tr class=\"tbl_alt\">\n");
+						echo '<tr class="tbl_alt bblm_tbl_alt">';
 					}
-					print("			<td><a href=\"".$sh->guid."\" title=\"View more info about ".$sh->post_title."\">".$sh->post_title."</a></td>\n			<td>".$sh->PLD."</td>\n			<td>".$sh->win."</td>\n			<td>".$sh->lose."</td>\n			<td>".$sh->draw."</td>\n			<td>".$sh->TDf."</td>\n			<td>".$sh->TDa."</td>\n			<td>".$sh->CASf."</td>\n			<td>".$sh->CASa."</td>\n			<td>".$sh->COMP."</td>\n			<td>".$sh->cINT."</td>\n			");
-					if ($sh->PLD >0) {
-						print("<td>".number_format(($sh->win/$sh->PLD)*100)."</td>\n");
+					echo '<td>' . bblm_get_season_link( $sh->sea_id ) . '</td>';
+					echo '<td>' . $sh->PLD . '</td>';
+					echo '<td>' . $sh->win . '</td>';
+					echo '<td>' . $sh->lose . '</td>';
+					echo '<td>' . $sh->draw . '</td>';
+					echo '<td>' . $sh->TDf . '</td>';
+					echo '<td>' . $sh->TDa . '</td>';
+					echo '<td>' . $sh->CASf . '</td>';
+					echo '<td>' . $sh->CASa . '</td>';
+					echo '<td>' . $sh->COMP . '</td>';
+					echo '<td>' . $sh->cINT . '</td>';
+
+					if ( $sh->PLD >0 ) {
+						echo '<td>' . number_format( ( $sh->win / $sh->PLD ) * 100 ) . '</td>';
 					}
 					else {
-						print("<td>N/A</td>\n");
+						echo '<td>' . __( 'N/A' , 'bblm' ) . '</td>';
 					}
-					print("		</tr>\n");
-
+					echo '</tr>';
 
 					$zebracount++;
 				}
-				print("	</tbody>\n	</table>\n");
+				echo '</tbody>';
+				echo '</table>';
 			}
 
 ?>
@@ -402,22 +431,36 @@
 					$ccfail = 1;
 				}
 
-				$seasonsql = 'SELECT A.a_name, P.post_title, P.guid, B.ats_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'season C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND B.sea_id = C.sea_id AND C.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
-				if ($sawards = $wpdb->get_results($seasonsql)) {
+				$seasonsql = 'SELECT A.a_name, B.sea_id AS season, B.ats_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B WHERE A.a_id = B.a_id AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
+				if ( $sawards = $wpdb->get_results( $seasonsql ) ) {
 					$zebracount = 1;
-					print("<h4>Awards from Seasons</h4>\n");
-					print("<table>\n	<tr>\n		<th class=\"tbl_name\">Award</th>\n		<th class=\"tbl_name\">Competition</th>\n		<th class=\"tbl_stat\">Value</th>\n	</tr>\n");
-					foreach ($sawards as $sa) {
+?>
+					<h4><?php echo __( 'Awards from Seasons', 'bblm'); ?></h4>
+					<table class="bblm_table">
+						<thead>
+							<tr>
+								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Award', 'bblm'); ?></th>
+								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Competition', 'bblm'); ?></th>
+								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm'); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+<?php
+					foreach ( $sawards as $sa ) {
 						if ($zebracount % 2) {
-							print("		<tr>\n");
+							echo '<tr>';
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							echo '<tr class="tbl_alt bblm_tbl_alt">';
 						}
-						print("		<td>".$sa->a_name."</td>\n		<td><a href=\"".$sa->guid."\" title=\"View full details about ".$sa->post_title."\">".$sa->post_title."</a></td>\n		<td>".$sa->ats_value."</td>\n	</tr>\n");
+						echo '<td>' . $sa->a_name . '</td>';
+						echo '<td>' . bblm_get_season_link( $sa->season ) . '</td>';
+						echo '<td>' . $sa->ats_value . '</td>';
+						echo '</tr>';
 						$zebracount++;
 					}
-					print("</table>\n");
+					echo '</tbody>';
+					echo '</table>';
 				}
 				else {
 					$safail = 1;
@@ -489,8 +532,8 @@
 
 	//determine debut season
 	if ( $has_played ) {
-		$seasondebutsql = 'SELECT O.guid, O.post_title FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = O.ID AND C.sea_id = S.sea_id AND C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
-		$sd = $wpdb->get_row($seasondebutsql);
+		$seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
+		$sd = $wpdb->get_row( $seasondebutsql );
 	}
 ?>
 
@@ -513,7 +556,7 @@
 			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $ti->ID ) ).'">'.esc_html( get_the_title( $ti->ID ) ).'</a>'; ?></li>
 			   <li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $ti->stad_id ); ?></li>
 <?php if ( $has_played ) { ?>
-			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
+			   <li><strong>Debut:</strong> <?php echo bblm_get_season_link( $sd->season ); ?></li>
 <?php	} ?>
 			   <li><strong>Race:</strong> <a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></li>
 			  </ul>

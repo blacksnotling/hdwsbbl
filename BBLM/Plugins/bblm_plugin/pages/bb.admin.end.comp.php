@@ -308,10 +308,10 @@ else {
     	  <label for="bblm_cid" class="selectit">Competition</label>
 		  <select name="bblm_cid" id="bblm_cid">
 		<?php
-		$compsql = 'SELECT C.c_id, C.c_name, T.series_name, S.sea_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'series T, '.$wpdb->prefix.'season S WHERE S.sea_id = C.sea_id AND T.series_id = C.series_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1';
+		$compsql = 'SELECT C.c_id, C.c_name, C.series_id, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1';
 		if ($comps = $wpdb->get_results($compsql)) {
 			foreach ($comps as $comp) {
-				print("<option value=\"".$comp->c_id."\">".$comp->c_name." - ".$comp->sea_name." - ".$comp->series_name."</option>\n");
+				print("<option value=\"".$comp->c_id."\">".$comp->c_name." - ".bblm_get_season_name( $comp->sea_id )." - ". bblm_get_cup_name( $comp->series_id ) ."</option>\n");
 			}
 		}
 		?>
