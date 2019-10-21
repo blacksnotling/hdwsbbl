@@ -28,8 +28,7 @@ function bblm_display_page_edit_link() {
 */
 function bblm_template_display_cup_listing() {
 
-	$cup = new BBLM_CPT_Cup;
-  echo $cup->get_cup_listing();
+	BBLM_CPT_Cup::get_cup_listing();
 
 } //end of bblm_template_display_cup_listing
 

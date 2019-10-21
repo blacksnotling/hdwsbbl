@@ -230,7 +230,7 @@ final class BBowlLeagueMan {
 		include_once( 'includes/class-bblm-post-types.php' );		// Registers post types
 		include_once( 'includes/class-bblm-widgets.php' );			// Loads the Widgets
 		include_once( 'includes/bblm-conditional-functions.php' );		// loads the conditional functions for templating
-		include_once( 'includes/bblm-common-display-functions.php' );
+		include_once( 'includes/bblm-common-template-functions.php' );
 
 	}
 

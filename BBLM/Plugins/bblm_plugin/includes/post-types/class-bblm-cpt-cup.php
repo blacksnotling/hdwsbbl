@@ -51,7 +51,7 @@ class BBLM_CPT_Cup {
   * @param wordpress $query
   * @return none
   */
-  public function get_cup_listing() {
+  public static function get_cup_listing() {
 ?>
     <table class="bblm_tbl">
       <thead>
