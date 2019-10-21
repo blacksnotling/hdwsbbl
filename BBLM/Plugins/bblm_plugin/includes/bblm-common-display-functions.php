@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.0
+ * @version   1.1
  */
 
 /**
@@ -121,10 +121,10 @@ function bblm_get_owner_name( $ID ) {
  */
 function bblm_get_owner_link( $ID ) {
 
-  $stadium_name = bblm_get_team_name( $ID );
+  $owner_name = bblm_get_team_name( $ID );
   $output = "";
 
-  $output .= '<a title="Read more about ' . $stadium_name . '" href="' . get_post_permalink( $ID ) . '">' . $stadium_name . '</a>';
+  $output .= '<a title="Read more about ' . $owner_name . '" href="' . get_post_permalink( $ID ) . '">' . $owner_name . '</a>';
 
   return __( $output, 'bblm');
 

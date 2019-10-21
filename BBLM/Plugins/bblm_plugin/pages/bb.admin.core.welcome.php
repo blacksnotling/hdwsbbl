@@ -17,7 +17,7 @@
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_settings" title="View the options page">Manage your Leagues options.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_dyk" title="Manage DYK">Manage your &quot;Did You Know?&quot; facts</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_cup" title="Add a new series / cup">Add a new Championship Cup.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_season" title="Start a new Season">Start a new Season.</a></li>
+  <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_season" title="Start a new Season">Start a new season.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.comp.php" title="Add a new Competition">Add a new Competition.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Assign teams (to a Competition).</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.comp_brackets.php" title="Set up Tourney Brackets">Set up tournament Brackets.</a></li>
