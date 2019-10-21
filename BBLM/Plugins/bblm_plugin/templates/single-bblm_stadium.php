@@ -18,7 +18,7 @@
 
 					<?php $stad->display_home_teams(); ?>
 
-					<div class="details staddet bblm_stadium_description">
+					<div class="details bblm_details bblm_stadium_description">
 						<?php the_content(); ?>
 					</div>
 

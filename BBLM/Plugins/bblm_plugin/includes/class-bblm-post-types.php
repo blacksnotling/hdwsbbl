@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.2
+ * @version		1.3
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -140,7 +140,7 @@ class BBLM_Post_types {
 				'show_ui' 				=> true,
 				'map_meta_cap' 			=> true,
 				'publicly_queryable' 	=> true,
-				'exclude_from_search' 	=> true, //exclude from search
+				'exclude_from_search' 	=> false, //exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'stadiums' ),
 				'supports' 				=> array( 'title', 'editor', 'author', 'thumbnail' ),

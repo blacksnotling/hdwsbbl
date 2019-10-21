@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_Widget_RecentPlayers extends WP_Widget {
@@ -38,7 +38,7 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
     $playersql = 'SELECT T.WPID, P.WPID AS PID, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND P.t_id = T.t_ID ORDER BY P.WPID DESC LIMIT ' . $instance['numshow'];
     if ( $player = $wpdb->get_results( $playersql ) ) {
 
-      echo '</ul>';
+      echo '<ul>';
 
       foreach ( $player as $p ) {
 

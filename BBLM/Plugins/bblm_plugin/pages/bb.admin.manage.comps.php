@@ -103,7 +103,7 @@ if ( "edit" == $_GET['action'] ) {
 				<li><strong>Status</strong>: <strong><?php if ($cc->c_active) {print("Active");} else { print("Complete"); } ?></strong></li>
 				<li><strong>Season</strong>: <?php echo bblm_get_season_name( $cc->sea_id ); ?></li>
 				<li><strong>Type</strong>: <?php print($cc->ct_name); ?></li>
-				<li><strong>Cup</strong>:<?php print($cc->series_name); ?></li>
+				<li><strong>Cup</strong>:<?php echo bblm_get_cup_name( $cc->series_id ) ?></li>
 			</ul>
 		</div></div></div>
 

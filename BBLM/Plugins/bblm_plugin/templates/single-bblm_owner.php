@@ -18,22 +18,22 @@
                 $has_played = $own->get_number_games();
           if ( ( $has_team > 0 ) && ( $has_played > 0 ) ) { ?>
 
-            <h3>Career Performance</h3>
+            <h3><?php echo __( 'Career Performance', 'bblm'); ?></h3>
             <table class="bblm_tbl">
               <thead>
               <tr>
                 <th><?php echo __( 'Teams', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -46,22 +46,22 @@
 
             <?php $own->individual_stat_desc(); ?>
 
-            <h3>Their Teams</h3>
+            <h3><?php echo __( 'Their Teams', 'bblm'); ?></h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
                 <th><?php echo __( 'Team', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -69,22 +69,22 @@
               </tbody>
             </table>
 
-            <h3>Races Used</h3>
+            <h3><?php echo __( 'Races Used', 'bblm'); ?></h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
                 <th><?php echo __( 'Race', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -92,22 +92,22 @@
               </tbody>
             </table>
 
-            <h3>Season Performance</h3>
+            <h3><?php echo __( 'Season Performance', 'bblm'); ?>S</h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
                 <th><?php echo __( 'Season', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -115,22 +115,22 @@
               </tbody>
             </table>
 
-            <h3>Competition Performance</h3>
+            <h3><?php echo __( 'Competition Performance', 'bblm'); ?></h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
                 <th><?php echo __( 'Competition', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -138,22 +138,22 @@
               </tbody>
             </table>
 
-            <h3>Championship Cup Performance</h3>
+            <h3><?php echo __( 'Championship Cup Performance', 'bblm'); ?></h3>
             <table class="sortable bblm_tbl bblm_sortable">
               <thead>
               <tr>
                 <th><?php echo __( 'Competition', 'bblm'); ?></th>
-                <th class="tbl_stat">P</th>
-                <th class="tbl_stat">W</th>
-                <th class="tbl_stat">L</th>
-                <th class="tbl_stat">D</th>
-                <th class="tbl_stat">Tf</th>
-                <th class="tbl_stat">Ta</th>
-                <th class="tbl_stat">Cf</th>
-                <th class="tbl_stat">Ca</th>
-                <th class="tbl_stat">Comp</th>
-                <th class="tbl_stat">Int</th>
-                <th class="tbl_stat">%</th>
+                <th class="tbl_stat bblm_tbl_stat">P</th>
+                <th class="tbl_stat bblm_tbl_stat">W</th>
+                <th class="tbl_stat bblm_tbl_stat">L</th>
+                <th class="tbl_stat bblm_tbl_stat">D</th>
+                <th class="tbl_stat bblm_tbl_stat">Tf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ta</th>
+                <th class="tbl_stat bblm_tbl_stat">Cf</th>
+                <th class="tbl_stat bblm_tbl_stat">Ca</th>
+                <th class="tbl_stat bblm_tbl_stat">Comp</th>
+                <th class="tbl_stat bblm_tbl_stat">Int</th>
+                <th class="tbl_stat bblm_tbl_stat">%</th>
               </tr>
               </thead>
               <tbody>
@@ -161,7 +161,7 @@
               </tbody>
             </table>
 
-            <h3>Top Players They Coached</h3>
+            <h3><?php echo __( 'Top Players They Coached', 'bblm'); ?></h3>
             <table class="bblm_tbl expandable bblm_expandable">
               <thead>
                 <tr>
@@ -169,7 +169,7 @@
                   <th><?php echo __( 'Player', 'bblm'); ?></th>
                   <th><?php echo __( 'Position', 'bblm'); ?></th>
                   <th><?php echo __( 'Team', 'bblm'); ?></th>
-                  <th class="tbl_stat"><?php echo __( 'SSP', 'bblm'); ?></th>
+                  <th class="tbl_stat bblm_tbl_stat"><?php echo __( 'SSP', 'bblm'); ?></th>
                 </tr>
               </thead>
               <tbody>
@@ -177,7 +177,7 @@
               </tbody>
             </table>
 
-            <h3>Star Players Hired</h3>
+            <h3><?php echo __( 'Star Players Hired', 'bblm'); ?></h3>
             <?php $own->star_stat_tbl_row() ?>
 
 <?php     } /* End of if $has_team */

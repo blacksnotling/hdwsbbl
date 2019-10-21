@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.0
+ * @version		1.1
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling

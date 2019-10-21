@@ -27,23 +27,7 @@ get_header(); ?>
 
 		<?php do_action( 'bblm_template_before_content' ); ?>
 
-<?php
-				$type = get_post_meta( get_the_ID(), 'dyk_type', true );
-?>
-
-				<div class="dykcontainer dyk<?php echo strtolower( $type ); ?>" id="dyk<?php echo the_ID(); ?>">
-					<h3 class="dykheader"><?php echo bblm_get_league_name(); ?> - <?php if( "Trivia" == $type ) { print("Did You Know"); } else { print("Fact"); } ?></h3>
-<?php
-
-				if ( ( strlen( get_the_title() ) !== 0 ) && ( "none" !== strtolower( get_the_title() ) ) ) {
-?>
-					<h4><?php the_title(); ?></h4>
-<?php
-				}
-?>
-					<?php the_content(); ?>
-					<p><?php edit_post_link( __( 'Edit', 'bblm' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
-				</div><!-- .dykcontainer .dyk -->
+		<?php bblm_template_display_single_dyk(); ?>
 
 	<?php do_action( 'bblm_template_after_content' ); ?>
 
