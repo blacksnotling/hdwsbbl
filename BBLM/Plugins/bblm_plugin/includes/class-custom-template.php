@@ -125,8 +125,23 @@ class Codelight_PageTemplates
     }
 } //end of class Codelight_PageTemplates
 
-/*$pageTemplates = new Codelight_PageTemplates();
-$pageTemplates->addTemplate(
-	BBLM_TEMPLATE_PATH . 'goodtobebad-template2.php',
-	'Good to Be Bad'
-);*/
+$pageTemplates = new Codelight_PageTemplates();
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.core.graveyard.php', 'BBLM Graveyard' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.php', 'BBLM Statistics - Main Page' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.cas.php', 'BBLM Statistics - Casualities' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.misc.php', 'BBLM Statistics -Misc' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.td.php', 'BBLM Statistics - Touchdowns' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_comp.php', 'BBLM Competition Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_comp.php', 'BBLM Competition Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_award.php', 'BBLM Awards Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.core.fixtures.php', 'BBLM Fixtures' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_match.php', 'BBLM Match Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_match.php', 'BBLM Match Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_race.php', 'BBLM Race Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_race.php', 'BBLM Race Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_team.php', 'BBLM Team Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_team.php', 'BBLM Team Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_player.php', 'BBLM Player Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_roster.php', 'BBLM Roster Details' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_starplayers.php', 'BBLM Star Players Archive' );
+$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_starplayers.php', 'BBLM Star Players Details' );

@@ -470,6 +470,148 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				       }//end of if sql was successful
 
 				   } // end of if (isset($_POST['bblm_season_awardplayer'])) {
+					if ( isset( $_POST[ 'bblm_template_updatemeta' ] ) ) {
+
+						$templatemetasql = 'SELECT * FROM `'.$wpdb->prefix.'postmeta` WHERE meta_key = "_wp_page_template" ORDER BY `hdbb_postmeta`.`meta_value` ASC';
+						if ( $templatemeta = $wpdb->get_results( $templatemetasql ) ) {
+							echo '<ul>';
+							foreach ( $templatemeta as $tm ) {
+
+								if ( "bb.core.comp.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_comp.php";
+									echo '<li><strong>' . $tm->meta_id . ' / ' . $tm->post_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.graveyard.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.core.graveyard.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.stats.cas.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.cas.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.stats.misc.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.misc.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.stats.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.stats.td.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.td.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.awards.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_award.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.fixtures.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/bb.core.fixtures.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.matches.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_match.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.races.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_race.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.core.teams.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_team.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.comp.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_comp.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.match.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_match.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.player.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_player.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.roster.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_roster.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.race.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_race.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.team.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_team.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else if ( "bb.view.starplayer.php" == $tm->meta_value ) {
+
+									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_starplayers.php";
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
+									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
+
+								}
+								else {
+									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $tm->meta_value . '</li>';
+								}
+
+							}
+							echo '</ul>';
+						}
+					} //end of if ( isset( $_POST[ 'bblm_template_updatemeta' ] ) ) {
+
 
 /**
  *
@@ -548,7 +690,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>Add an index to the WPID column in the *_player table</li>
 		</ul>
 
-		<h2>1.8 -> 1.9</h2>
+		<h2>1.8 -> 1.10</h2>
 		<h3>Championship Cups</h3>
 		<ul>
 			<li>First take a copy of the text at the top of the Championships page</li>
@@ -568,6 +710,14 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_season_comp" value="Update Seasons in Competitions" title="Update Seasons in Competitions"/></li>
 			<li><input type="submit" name="bblm_season_awardteam" value="Update Seasons in Team Awards" title="Update Seasons in Team Awards"/></li>
 			<li><input type="submit" name="bblm_season_awardplayer" value="Update Seasons in Player Awards" title="Update Seasons in Player Awards"/></li>
+		</ul>
+
+		<h2>1.10 -> 1.11</h2>
+		<h3>Templates</h3>
+		<ul>
+			<li><input type="submit" name="bblm_template_updatemeta" value="Update Template Meta" title="Update Template Meta"/></li>
+			<li>Set the Star Player page to use the archive-bblm_starplayer template</li>
+			<li>Move the old templates out of the theme root</li>
 		</ul>
 
 </form>
