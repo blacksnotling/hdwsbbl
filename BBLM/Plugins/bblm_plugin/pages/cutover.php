@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Cutover
  * @package 	BBowlLeagueMan/Cutover
- * @version   1.3
+ * @version   1.4
  */
  ?>
  <div class="wrap">
@@ -479,126 +479,126 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 								if ( "bb.core.comp.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_comp.php";
+									$newpath = BBLM_TEMPLATE_PATH . "archive-bblm_comp.php";
 									echo '<li><strong>' . $tm->meta_id . ' / ' . $tm->post_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.graveyard.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.core.graveyard.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.core.graveyard.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.stats.cas.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.cas.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.view.stats.cas.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.stats.misc.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.misc.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.view.stats.misc.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.stats.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.view.stats.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.stats.td.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.view.stats.td.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.view.stats.td.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.awards.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_award.php";
+									$newpath = BBLM_TEMPLATE_PATH . "archive-bblm_award.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.fixtures.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/bb.core.fixtures.php";
+									$newpath = BBLM_TEMPLATE_PATH . "bb.core.fixtures.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.matches.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_match.php";
+									$newpath = BBLM_TEMPLATE_PATH . "archive-bblm_match.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.races.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_race.php";
+									$newpath = BBLM_TEMPLATE_PATH . "archive-bblm_race.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.core.teams.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/archive-bblm_team.php";
+									$newpath = BBLM_TEMPLATE_PATH . "archive-bblm_team.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.comp.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_comp.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_comp.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.match.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_match.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_match.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.player.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_player.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_player.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.roster.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_roster.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_roster.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.race.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_race.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_race.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.team.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_team.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_team.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
 								}
 								else if ( "bb.view.starplayer.php" == $tm->meta_value ) {
 
-									$newpath = BBLM_TEMPLATE_PATH . "/single-bblm_starplayers.php";
+									$newpath = BBLM_TEMPLATE_PATH . "single-bblm_starplayers.php";
 									echo '<li><strong>' . $tm->meta_id . '</strong> - <strong>Was:</strong> ' . $tm->meta_value . ' - <strong>Becomes:</strong> ' . $newpath . '</li>';
 									update_post_meta( $tm->post_id, "_wp_page_template", $newpath );
 
