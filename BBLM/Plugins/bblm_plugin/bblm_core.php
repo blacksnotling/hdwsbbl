@@ -231,6 +231,7 @@ final class BBowlLeagueMan {
 		include_once( 'includes/class-bblm-widgets.php' );			// Loads the Widgets
 		include_once( 'includes/bblm-conditional-functions.php' );		// loads the conditional functions for templating
 		include_once( 'includes/bblm-common-template-functions.php' );
+		include_once( 'includes/class-custom-template.php' );					// Class for static (non CPT) templates
 
 	}
 
