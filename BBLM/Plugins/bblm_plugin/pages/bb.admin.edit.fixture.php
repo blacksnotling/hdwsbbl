@@ -116,7 +116,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		print("<input type=\"hidden\" name=\"bblm_fdiv\" size=\"2\" value=\"".$_POST['bblm_fdiv']."\">\n");
 	}
 	else {
-		print("<div class=\"info\">\n	<p>There are currently no fixtures scheduled.</p>\n	</div>");
+		print("<div class=\"bblm_info\">\n	<p>There are currently no fixtures scheduled.</p>\n	</div>");
 	}
 ?>
 	<p class="submit">

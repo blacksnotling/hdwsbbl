@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Award {
@@ -67,11 +67,11 @@ class BBLM_CPT_Award {
 		if ( $winners = $wpdb->get_results( $winnerssql ) ) {
 			$zebracount = 1;
 ?>
-			<table class="bblm_tbl">
+			<table class="bblm_table">
 				<thead>
 					<tr>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( '# Wins', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( '# Wins', 'bblm' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,7 +83,7 @@ class BBLM_CPT_Award {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . bblm_get_team_link( $wi->WPID ) . '</td>';
 				echo '<td>' . $wi->wins . '</td>';
@@ -130,11 +130,11 @@ class BBLM_CPT_Award {
 	 if ( $winners = $wpdb->get_results( $winnerssql ) ) {
 		 $zebracount = 1;
 ?>
- 			<table class="bblm_tbl">
+ 			<table class="bblm_table">
  				<thead>
  					<tr>
- 						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
- 						<th class="tbl_stat bblm_tbl_stat"><?php echo __( '# Wins', 'bblm' ); ?></th>
+ 						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+ 						<th class="bblm_tbl_stat"><?php echo __( '# Wins', 'bblm' ); ?></th>
  					</tr>
  				</thead>
  				<tbody>
@@ -146,7 +146,7 @@ class BBLM_CPT_Award {
  					echo '<tr>';
  				}
  				else {
- 					echo '<tr class="tbl_alt bblm_tbl_alt">';
+ 					echo '<tr class="bblm_tbl_alt">';
  				}
  				echo '<td>' . bblm_get_team_link( $wi->WPID ) . '</td>';
  				echo '<td>' . $wi->wins . '</td>';
@@ -205,12 +205,12 @@ class BBLM_CPT_Award {
 
 ?>
 			<h4><?php echo __( 'Main Awards', 'bblm' ); ?></h4>
-			<table class="bblm_tbl">
+			<table class="bblm_table">
 				<thead>
 					<tr>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
 					</tr>
 	      </thead>
 	      <tbody>
@@ -220,7 +220,7 @@ class BBLM_CPT_Award {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cma->a_name . '</td>';
 				echo '<td>' . bblm_get_team_link( $cma->WPID ) . '</td>';
@@ -237,15 +237,15 @@ class BBLM_CPT_Award {
 
 ?>
 			<h4><?php echo __( 'Awards assigned to Teams', 'bblm' ); ?></h4>
-			<table class="bblm_tbl">
+			<table class="bblm_table">
 				<thead>
 					<tr>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
 						<?php if ( $post_type == "bblm_cup" ) { ?>
-							<th class="tbl_name bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
+							<th class="bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
 							<?php } ?>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -255,7 +255,7 @@ class BBLM_CPT_Award {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cta->a_name . '</td>';
 				echo '<td>' . bblm_get_team_link( $cta->WPID ) . '</td>';
@@ -276,16 +276,16 @@ class BBLM_CPT_Award {
 
 ?>
 			<h4><?php echo __( 'Awards assigned to Players', 'bblm' ); ?></h4>
-			<table class="bblm_tbl">
+			<table class="bblm_table">
 				<thead>
 					<tr>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
-						<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
 						<?php if ( $post_type == "bblm_cup" ) { ?>
-							<th class="tbl_name bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
+							<th class="bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
 						<?php } ?>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -295,7 +295,7 @@ class BBLM_CPT_Award {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cpa->a_name . '</td>';
 				echo '<td>' . bblm_get_player_link( $cpa->PID ) . '</td>';

@@ -19,7 +19,7 @@
 		<div class="entry">
 			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 				<h2 class="entry-title"><?php the_title(); ?></h2>
-				<div class="details">
+				<div class="bblm_details">
 					<?php the_content(); ?>
 				</div>
 <?php
@@ -75,7 +75,7 @@
 				//If any Star Players are found
 ?>
 				<h3>The Stars</h3>
-				<table class="sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
 							<th>Star</th>
@@ -96,7 +96,7 @@
 						print("						<tr>\n");
 					}
 					else {
-						print("						<tr class=\"tbl_alt\">\n");
+						print("						<tr class=\"bblm_tbl_alt\">\n");
 					}
 ?>
 							<td><a href="<?php echo $spl->guid; ?>" title="Learn more about <?php echo $spl->post_title; ?>"><?php echo $spl->post_title; ?></a></td>
@@ -122,7 +122,7 @@
 		}//End if a Star has played
 		else {
 			//No games have been played with a Star Player
-			print("				<div class=\"info\">\n					<p>No Star Players have been hired by any teams, yet...</p>\n				</div>\n");
+			print("				<div class=\"bblm_info\">\n					<p>No Star Players have been hired by any teams, yet...</p>\n				</div>\n");
 		}
 ?>
 

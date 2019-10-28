@@ -78,14 +78,14 @@
 	<?php
 					$matchsql = 'SELECT M.m_gate, M.m_teamAtd, M.m_teamBtd, P.guid, P.post_title, L.guid AS Clink, L.post_title AS Cname FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'comp C WHERE C.c_id = K.tid AND K.prefix = \'c_\' AND K.pid = L.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY M.m_date DESC LIMIT 6';
 					if ($matches = $wpdb->get_results($matchsql)) {
-						print("<table>\n	<tr>\n		<th>Match</th>\n		<th>Score</th>\n		<th>Competition</th>\n		<th>Gate</th>\n	</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Match</th>\n		<th>Score</th>\n		<th>Competition</th>\n		<th>Gate</th>\n	</tr>\n");
 						$zebracount = 1;
 						foreach ($matches as $match) {
 							if ($zebracount % 2) {
 								print("	<tr>\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\">\n");
+								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("		<td><a href=\"".$match->guid."\" title=\"View the match in detail\">".$match->post_title."</a></td>\n		<td>".$match->m_teamAtd." - ".$match->m_teamBtd."</td>\n		<td><a href=\"".$match->Clink."\" title=\"Read more about the ".$match->Cname."\">".$match->Cname."</a></td>\n		<td>".number_format($match->m_gate)."</td>\n	</tr>\n");
 							$zebracount++;
@@ -105,14 +105,14 @@
 	<?php
 					$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS fdate, T.t_id AS TA, M.t_id AS TB, V.post_title AS TAname, O.post_title AS TBname, V.guid AS TAlink, O.guid AS TBlink, L.guid AS Clink, L.post_title AS Cname  FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' O, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'comp C WHERE C.c_id = K.tid AND K.prefix = \'c_\' AND K.pid = L.ID AND F.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND C.c_show = 1 AND T.t_id = F.f_teamA AND M.t_id = F.f_teamB AND T.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND M.t_id = N.tid AND N.prefix = \'t_\' AND N.pid = O.ID AND F.f_complete = 0 ORDER BY F.f_date ASC LIMIT 6';
 					if ($fixtures = $wpdb->get_results($fixturesql)) {
-						print("<table>\n	<tr>\n		<th>Match</th>\n		<th>Competition</th>\n		<th>Date</th>\n	</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Match</th>\n		<th>Competition</th>\n		<th>Date</th>\n	</tr>\n");
 						$zebracount = 1;
 						foreach ($fixtures as $fix) {
 							if ($zebracount % 2) {
 								print("	<tr>\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\">\n");
+								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("		<td>".$fix->TAname." vs ".$fix->TBname."</td>\n		<td><a href=\"".$fix->Clink."\" title=\"Read more about the ".$fix->Cname."\">".$fix->Cname."</a></td>\n		<td>".date("d.m.y", $fix->fdate)."</td>\n	</tr>\n");
 							$zebracount++;
@@ -120,7 +120,7 @@
 						print("</table>\n");
 					}
 					else {
-						print("	<div class=\"info\">\n		<p>There are currenty no fixtures lined up in the near future,</p>\n	</div>\n");
+						print("	<div class=\"bblm_info\">\n		<p>There are currenty no fixtures lined up in the near future,</p>\n	</div>\n");
 					}
 	?>
 
@@ -135,14 +135,14 @@
 					$topteamsql = 'SELECT E.guid, E.post_title, Q.t_tv, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Q, '.$wpdb->prefix.'bb2wp W, '.$wpdb->posts.' E WHERE Q.t_id = T.t_id AND Q.t_id = W.tid AND W.prefix = \'t_\' AND W.pid = E.ID AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND C.c_id = T.c_id AND T.tc_played > 0 AND Q.t_active = 1 GROUP BY T.t_id ORDER BY Q.t_tv DESC LIMIT 6';
 //Teams by win%										$topteamsql = 'SELECT E.guid, E.post_title, Q.t_tv, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT, SUM(T.tc_W/T.tc_played) / SUM(T.tc_played)*100 AS WINP FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Q, '.$wpdb->prefix.'bb2wp W, '.$wpdb->posts.' E WHERE Q.t_id = T.t_id AND Q.t_id = W.tid AND W.prefix = \'t_\' AND W.pid = E.ID AND C.c_counts = 1 AND C.c_show = 1 AND C.c_id = T.c_id AND T.tc_played > 0 AND Q.t_active = 1 GROUP BY T.t_id ORDER BY WINP DESC, Q.t_tv DESC LIMIT 6';
 					if ($topteam = $wpdb->get_results($topteamsql)) {
-						print("<table>\n	<tr>\n		<th>Team</th>\n		<th class=\"tbl_stat\">P</th>\n		<th class=\"tbl_stat\">W</th>\n		<th class=\"tbl_stat\">L</th>\n		<th class=\"tbl_stat\">D</th>\n		<th class=\"tbl_stat\">TF</th>\n		<th class=\"tbl_stat\">TA</th>\n		<th class=\"tbl_stat\">CF</th>\n		<th class=\"tbl_stat\">CA</th>\n		<th class=\"tbl_stat\">COMP</th>\n		<th class=\"tbl_stat\">INT</th>\n		<th>Value</th>\n		</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Team</th>\n		<th class=\"bblm_tbl_stat\">P</th>\n		<th class=\"bblm_tbl_stat\">W</th>\n		<th class=\"bblm_tbl_stat\">L</th>\n		<th class=\"bblm_tbl_stat\">D</th>\n		<th class=\"bblm_tbl_stat\">TF</th>\n		<th class=\"bblm_tbl_stat\">TA</th>\n		<th class=\"bblm_tbl_stat\">CF</th>\n		<th class=\"bblm_tbl_stat\">CA</th>\n		<th class=\"bblm_tbl_stat\">COMP</th>\n		<th class=\"bblm_tbl_stat\">INT</th>\n		<th>Value</th>\n		</tr>\n");
 						$zebracount = 1;
 						foreach ($topteam as $tt) {
 							if ($zebracount % 2) {
 								print("	<tr>\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\">\n");
+								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("		<td><a href=\"".$tt->guid."\" title=\"Read more about ".$tt->post_title."\">".$tt->post_title."</a></td>\n		<td>".$tt->OP."</td>\n		<td>".$tt->OW."</td>\n		<td>".$tt->OL."</td>\n		<td>".$tt->OD."</td>\n		<td>".$tt->OTF."</td>\n		<td>".$tt->OTA."</td>\n		<td>".$tt->OCASF."</td>\n		<td>".$tt->OCASA."</td>\n		<td>".$tt->OC."</td>\n		<td>".$tt->OINT."</td>\n		<td>".number_format($tt->t_tv)."</td>\n	</tr>\n	");
 							$zebracount++;
@@ -165,14 +165,14 @@
 
 					$playersql = 'SELECT D.post_title AS Pname, D.guid AS Plink, P.pos_name, T.WPID, A.p_spp AS VALUE FROM '.$wpdb->prefix.'player A, '.$wpdb->prefix.'bb2wp S, '.$wpdb->posts.' D, '.$wpdb->prefix.'position P, '.$wpdb->prefix.'team T WHERE A.p_id = S.tid AND S.prefix = \'p_\' AND S.pid = D.ID AND A.pos_id = P.pos_id AND A.t_id = T.t_id AND T.type_id = 1 AND A.p_status = 1 AND T.t_active = 1 AND A.p_spp > 1 AND T.t_id != '.$bblm_star_team.' ORDER BY A.p_spp DESC LIMIT 6';
 					if ($player = $wpdb->get_results($playersql)) {
-						print("<table>\n	<tr>\n		<th>Player</th>\n		<th>Position</th>\n		<th>Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Player</th>\n		<th>Position</th>\n		<th>Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 						$zebracount = 1;
 						foreach ($player as $tp) {
 							if ($zebracount % 2) {
 								print("	<tr>\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\">\n");
+								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("		<td><a href=\"".$tp->Plink."\" title=\"Read more about ".$tp->Pname."\">".$tp->Pname."</a></td>\n		<td>" . esc_html( $tp->pos_name ) . "</td>\n		<td><a href=\"" . get_post_permalink( $tp->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $tp->WPID ) ) . "</a></td>\n		<td>".$tp->VALUE."</td>\n	</tr>\n	");
 							$zebracount++;

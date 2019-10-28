@@ -72,7 +72,7 @@ table th.tbl_enchance, table th.tbl_title {
 .tbl_name {
 	width:200px;
 }
-.tbl_value {
+.bblm_tbl_value {
 	width:50px;
 	text-align:right;
 }
@@ -120,22 +120,22 @@ a:hover, a:active {
 ?>
 <table border="0">
  <tr>
-  <th class="tbl_stat">No.</th>
-  <th class="tbl_name">Player Name</th>
-  <th class="tbl_pos">Position</th>
-  <th class="tbl_stat">MA</th>
-  <th class="tbl_stat">ST</th>
-  <th class="tbl_stat">AG</th>
-  <th class="tbl_stat">AV</th>
-  <th class="tbl_skills">Skills / Injuries</th>
-  <th class="tbl_stat">INJ</th>
-  <th class="tbl_stat">COMP</th>
-  <th class="tbl_stat">TD</th>
-  <th class="tbl_stat">INT</th>
-  <th class="tbl_stat">CAS</th>
-  <th class="tbl_stat">MVP</th>
-  <th class="tbl_stat">SPP</th>
-  <th class="tbl_value">Value</th>
+  <th class="bblm_tbl_stat">No.</th>
+  <th class="bblm_tbl_name">Player Name</th>
+  <th class="bblm_tbl_pos">Position</th>
+  <th class="bblm_tbl_stat">MA</th>
+  <th class="bblm_tbl_stat">ST</th>
+  <th class="bblm_tbl_stat">AG</th>
+  <th class="bblm_tbl_stat">AV</th>
+  <th class="bblm_tbl_skills">Skills / Injuries</th>
+  <th class="bblm_tbl_stat">INJ</th>
+  <th class="bblm_tbl_stat">COMP</th>
+  <th class="bblm_tbl_stat">TD</th>
+  <th class="bblm_tbl_stat">INT</th>
+  <th class="bblm_tbl_stat">CAS</th>
+  <th class="bblm_tbl_stat">MVP</th>
+  <th class="bblm_tbl_stat">SPP</th>
+  <th class="bblm_tbl_value">Value</th>
  </tr>
 <?php
 		$playersql = 'SELECT K.post_title, K.guid, L.pos_name, P.* FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position L WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = L.pos_id AND P.p_status = 1 AND P.t_id = '.$tid.' ORDER BY P.p_num ASC';
@@ -153,7 +153,7 @@ a:hover, a:active {
   <td>&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
-  <td class="tbl_skills">&nbsp;</td>
+  <td class="bblm_tbl_skills">&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
@@ -181,7 +181,7 @@ a:hover, a:active {
   <td><?php print($pl->p_st); ?></td>
   <td><?php print($pl->p_ag); ?></td>
   <td><?php print($pl->p_av); ?></td>
-  <td class="tbl_skills"><?php print($pl->p_skills); ?>
+  <td class="bblm_tbl_skills"><?php print($pl->p_skills); ?>
 <?php
 	if ("none" !== $pl->p_injuries) {
 		print(", <em>".$pl->p_injuries."</em>");
@@ -227,7 +227,7 @@ a:hover, a:active {
 	}
 ?>
   <td><?php echo $pd->PSPP; ?></td>
-  <td class="tbl_value"><?php print(number_format($pl->p_cost_ng)); ?>gp</td>
+  <td class="bblm_tbl_value"><?php print(number_format($pl->p_cost_ng)); ?>gp</td>
  </tr>
 <?php
 				}
@@ -245,7 +245,7 @@ a:hover, a:active {
   <td>&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
-  <td class="tbl_skills">&nbsp;</td>
+  <td class="bblm_tbl_skills">&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
@@ -267,64 +267,64 @@ a:hover, a:active {
 	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
 	if (file_exists($filename)) {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
+  <td colspan="3" rowspan="7" class="bblm_tbl_logo"><img src="<?php print(home_url()); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
 <?php
 	}
 	else {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
+  <td colspan="3" rowspan="7" class="bblm_tbl_logo"><img src="<?php print(home_url()); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
 <?php
 	}
 ?>
-  <th colspan="4" rowspan="2" class="tbl_title">Team Name:</th>
+  <th colspan="4" rowspan="2" class="bblm_tbl_title">Team Name:</th>
   <td rowspan="2"><a href="<?php print( $team_link ); ?>" title="Read more about <?php print( $team_name ); ?>"><?php print( $team_name ); ?></a></td>
-  <th colspan="3" class="tbl_title">Re-Rolls:</th>
+  <th colspan="3" class="bblm_tbl_title">Re-Rolls:</th>
   <td><?php print($ti->t_rr); ?></td>
-  <th class="tbl_enchance">X</th>
-  <th class="tbl_enchance" colspan="2"><?php print(number_format($ti->r_rrcost)); ?>gp</th>
-  <td class="tbl_value"><?php print(number_format($ti->t_rr*$ti->r_rrcost)); ?>gp</td>
+  <th class="bblm_tbl_enchance">X</th>
+  <th class="bblm_tbl_enchance" colspan="2"><?php print(number_format($ti->r_rrcost)); ?>gp</th>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_rr*$ti->r_rrcost)); ?>gp</td>
  </tr>
  <tr>
-  <th colspan="3" class="tbl_title">Fan Factor:</th>
+  <th colspan="3" class="bblm_tbl_title">Fan Factor:</th>
   <td><?php print($ti->t_ff); ?></td>
-  <th class="tbl_enchance">X</th>
+  <th class="bblm_tbl_enchance">X</th>
   <td colspan="2">10,000gp</td>
-  <td class="tbl_value"><?php print(number_format($ti->t_ff*10000)); ?>gp</td>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_ff*10000)); ?>gp</td>
  </tr>
  <tr>
-  <th colspan="4" rowspan="2" class="tbl_title">Race:</th>
+  <th colspan="4" rowspan="2" class="bblm_tbl_title">Race:</th>
   <td rowspan="2"><a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></td>
-  <th colspan="3" class="tbl_title">Assistant Coaches:</th>
+  <th colspan="3" class="bblm_tbl_title">Assistant Coaches:</th>
   <td><?php print($ti->t_ac); ?></td>
-  <th class="tbl_enchance">X</th>
+  <th class="bblm_tbl_enchance">X</th>
   <td colspan="2">10,000gp</td>
-  <td class="tbl_value"><?php print(number_format($ti->t_ac*10000)); ?>gp</td>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_ac*10000)); ?>gp</td>
  </tr>
  <tr>
-  <th colspan="3" class="tbl_title">Cheerleaders:</th>
+  <th colspan="3" class="bblm_tbl_title">Cheerleaders:</th>
   <td><?php print($ti->t_cl); ?></td>
-  <th class="tbl_enchance">X</th>
+  <th class="bblm_tbl_enchance">X</th>
   <td colspan="2">10,000gp</td>
-  <td class="tbl_value"><?php print(number_format($ti->t_cl*10000)); ?>gp</td>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_cl*10000)); ?>gp</td>
  </tr>
  <tr>
-  <th colspan="4" rowspan="2" class="tbl_title">Treasury:</th>
+  <th colspan="4" rowspan="2" class="bblm_tbl_title">Treasury:</th>
   <td rowspan="2"><?php print(number_format($ti->t_bank)); ?>gp</td>
-  <th colspan="3" class="tbl_title">Apothecary:</th>
+  <th colspan="3" class="bblm_tbl_title">Apothecary:</th>
   <td><?php print($ti->t_apoc); ?></td>
-  <th class="tbl_enchance">X</th>
+  <th class="bblm_tbl_enchance">X</th>
   <td colspan="2">50,000gp</td>
-  <td class="tbl_value"><?php print(number_format($ti->t_apoc*50000)); ?>gp</td>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_apoc*50000)); ?>gp</td>
  </tr>
  <tr>
-	<th colspan="3" class="tbl_title">Stadium:</th>
+	<th colspan="3" class="bblm_tbl_title">Stadium:</th>
 	<td height="24" colspan="5"><?php echo bblm_get_stadium_link( $ti->stad_id ); ?></td>
  </tr>
  <tr>
-  <th colspan="4" class="tbl_title">Head Coach:</th>
+  <th colspan="4" class="bblm_tbl_title">Head Coach:</th>
   <td><?php print($ti->t_hcoach); ?> (<?php echo esc_html( get_the_title( $tid = $ti->ID ) ); ?>)</td>
-  <th colspan="7" class="tbl_title">Total Value of Team (TV):</th>
-  <td class="tbl_value"><?php print(number_format($ti->t_tv)); ?>gp</td>
+  <th colspan="7" class="bblm_tbl_title">Total Value of Team (TV):</th>
+  <td class="bblm_tbl_value"><?php print(number_format($ti->t_tv)); ?>gp</td>
  </tr>
 </table>
 

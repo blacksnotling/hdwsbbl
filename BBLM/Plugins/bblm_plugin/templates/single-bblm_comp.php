@@ -25,24 +25,24 @@
 			$today = date("U");
 
 			if (($cd->c_active) && ($cd->sdate > $today)) {
-				print("	<div class=\"info\">\n		<p>This Competition is <strong>Upcoming</strong>. It is due to start on ".date("jS M Y", $cd->sdate).".</p>\n	</div>\n");
+				print("	<div class=\"bblm_info\">\n		<p>This Competition is <strong>Upcoming</strong>. It is due to start on ".date("jS M Y", $cd->sdate).".</p>\n	</div>\n");
 				$cstatus = "Upcoming";
 				$cduration = "TBC";
 			}
 			else if ($cd->c_active) {
-				print("	<div class=\"info\">\n		<p>This Competition is currently <strong>active</strong>. Stay tuned for further updates.</p>\n	</div>\n");
+				print("	<div class=\"bblm_info\">\n		<p>This Competition is currently <strong>active</strong>. Stay tuned for further updates.</p>\n	</div>\n");
 				$cstatus = "Active";
 				$cduration = date("d.m.Y", $cd->sdate)." - Present";
 			}
 			else {
 				$winnersql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.c_id = '.$cd->c_id.' LIMIT 1';
 				$cw = $wpdb->get_row($winnersql);
-				print("	<div class=\"info\">\n		<p>This Competition is now <strong>complete</strong>. The winners were <a href=\"".$cw->guid."\" title=\"View more on the winners\">".$cw->post_title."</a>.(<a href=\"#awardsfull\" title=\"See the rest of the awards assigned in this competition\">See more Awards</a>)</p>\n	</div>\n");
+				print("	<div class=\"bblm_info\">\n		<p>This Competition is now <strong>complete</strong>. The winners were <a href=\"".$cw->guid."\" title=\"View more on the winners\">".$cw->post_title."</a>.(<a href=\"#awardsfull\" title=\"See the rest of the awards assigned in this competition\">See more Awards</a>)</p>\n	</div>\n");
 				$cstatus = "Complete";
 				$cduration = date("d.m.Y", $cd->sdate)." - ".date("d.m.Y", $cd->edate);
 			}
 ?>
-				<div class="details comp">
+				<div class="bblm_details bblm_comp_description">
 					<?php the_content(); ?>
 				</div>
 
@@ -64,7 +64,7 @@
 					$numgames = count($brackets);
 					if (7 == $numgames) {
 ?>
-				<table>
+				<table class="bblm_table">
 					<tr>
 						<th><?php print($brackets[0][1]); ?></th>
 						<th><?php print($brackets[4][1]); ?></th>
@@ -90,7 +90,7 @@
 					} //end of if 7 games
 					else if (3 == $numgames) {
 ?>
-				<table>
+				<table class="bblm_table">
 					<tr>
 						<th><?php print($brackets[0][1]); ?></th>
 						<th><?php print($brackets[2][1]); ?></th>
@@ -107,7 +107,7 @@
 					} //end of else if 3 games
 										else if (15 == $numgames) {
 					?>
-<!--									<table>
+<!--									<table class="bblm_table">
 										<tr>
 											<th><?php print($brackets[0][1]); ?></th>
 											<th><?php print($brackets[2][1]); ?></th>
@@ -121,7 +121,7 @@
 										</tr>
 									</table>-->
 
-				<table>
+				<table class="bblm_table">
 					<tr>
 						<th><?php print($brackets[0][1]); ?></th>
 						<th><?php print($brackets[8][1]); ?></th>
@@ -194,14 +194,14 @@
 									print("<h3>** Old World Confrence (OWC) **</h3>");
 								}
 								//end cross division hard code
-								print("<h4>".$stand->div_name."</h4>\n<table>\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
+								print("<h4>".$stand->div_name."</h4>\n<table class=\"bblm_table\">\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
 							}
 							$lastdiv = $stand->div_name;
 							if ($zebracount % 2) {
 								print("					<tr>\n");
 							}
 							else {
-								print("					<tr class=\"tbl_alt\">\n");
+								print("					<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("  <td><a href=\"" . get_post_permalink( $stand->WPID ) . "\" title=\"View more information about this team\">" . esc_html( get_the_title( $stand->WPID ) ) . "</a></td>\n <td>".$stand->tc_played."</td>\n  <td>".$stand->tc_W."</td>\n  <td>".$stand->tc_D."</td>\n  <td>".$stand->tc_L."</td>\n  <td>".$stand->tc_tdfor."</td>\n  <td>".$stand->tc_tdagst."</td>\n  <td>".$stand->TDD."</td>\n  <td>".$stand->tc_casfor."</td>\n  <td>".$stand->tc_casagst."</td>\n  <td>".$stand->CASD."</td>\n  <td><strong>".$stand->tc_points."</strong></td>\n	</tr>\n");
 
@@ -212,7 +212,7 @@
 						print("</table>\n");
 ?>
 				<h4>Key</h4>
-				<ul class="expandablekey">
+				<ul class="bblm_expandablekey">
 					<li><strong>P</strong>: Number of games Played</li>
 					<li><strong>TF</strong>: Number of Touchdowns scored by the team</li>
 					<li><strong>TA</strong>: Number of Touchdowns scored against the team</li>
@@ -265,20 +265,20 @@
 
 					</ul>
 <?php
-				print("<table class=\"expandable\">\n	<thead>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   <th class=\"tbl_matchresult\">Result</th>\n		   <th class=\"tbl_matchgate\">Gate</th>\n		 </tr>\n	</thead>\n	<tbody>");
+				print("<table class=\"bblm_tablle bblm_expandable\">\n	<thead>\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchgate\">Gate</th>\n		 </tr>\n	</thead>\n	<tbody>");
 				$zebracount = 1;
 				foreach ($match as $md) {
 					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("		<tr class=\"tb_hide\">\n");
+						print("		<tr class=\"bblm_tbl_hide\">\n");
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
 						print("		<tr>\n");
 					}
 					else if (10 < $zebracount) {
-						print("		<tr class=\"tbl_alt tb_hide\">\n");
+						print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 					}
 					else {
-						print("		<tr class=\"tbl_alt\">\n");
+						print("		<tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("		   <td>".date("d.m.y", $md->mdate)."</td>\n		   <td><a href=\"".$md->guid."\" title=\"View the details of the match\">".$md->post_title."</a></td>\n		   <td>".$md->m_teamAtd." - ".$md->m_teamBtd." (".$md->m_teamAcas." - ".$md->m_teamBcas.")</td>\n		   <td><em>".number_format($md->m_gate)."</em></td>\n		 </tr>\n");
 					$zebracount++;
@@ -289,7 +289,7 @@
 			} //end of if match SQL
 			else {
 				//There are no matches to display
-				print("	<div class=\"info\">\n		<p>No Matches have taken place in this competition yet. Stay tuned for further updates.</p>	</div>.\n");
+				print("	<div class=\"bblm_info\">\n		<p>No Matches have taken place in this competition yet. Stay tuned for further updates.</p>	</div>.\n");
 			} //end of matches
 
 			  //////////////
@@ -298,7 +298,7 @@
 			$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_id AS TA, M.t_id AS TB, V.post_title AS TAname, O.post_title AS TBname, V.guid AS TAlink, O.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' O, '.$wpdb->prefix.'division D WHERE D.div_id = F.div_id AND T.t_id = F.f_teamA AND M.t_id = F.f_teamB AND T.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND M.t_id = N.tid AND N.prefix = \'t_\' AND N.pid = O.ID AND F.f_complete = 0 AND F.c_id = '.$cd->c_id.' ORDER BY F.f_date ASC, F.div_id DESC';
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
 				print("<h3>Upcoming Fixtures</h3>\n");
-				print("<table class=\"expandable\">\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		 </tr>\n");
+				print("<table class=\"bblm_table bblm_expandable\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
 
 				$is_first = 0;
 				$current_div = "";
@@ -312,28 +312,17 @@
 
 
 				foreach ($fixtures as $fd) {
-/*					if ($fd->div_name !== $current_div) {
-						$current_div = $fd->div_name;
-						if (1 !== $is_first) {
-							print(" </table>\n");
-						}
-						$is_first = 1;
-					}
-					if ($is_first) {
-						print("<h4>".$fd->div_name."</h4>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   </tr>\n");
-						$is_first_div = 0;
-					}*/
 					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("		<tr class=\"tb_hide\">\n");
+						print("		<tr class=\"bblm_tbl_hide\">\n");
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
 						print("		<tr>\n");
 					}
 					else if (10 < $zebracount) {
-						print("		<tr class=\"tbl_alt tb_hide\">\n");
+						print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 					}
 					else {
-						print("		<tr class=\"tbl_alt\">\n");
+						print("		<tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("		   <td>".date("d.m.y", $fd->fdate)."</td>\n		<td>\n");
 					if ($bblm_tbd_team == $fd->TA) {
@@ -370,21 +359,21 @@
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
 ?>
-				<table class="sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
-						<th class="tbl_name">Team</th>
-						<th class="tbl_stat">P</th>
-						<th class="tbl_stat">W</th>
-						<th class="tbl_stat">L</th>
-						<th class="tbl_stat">D</th>
-						<th class="tbl_stat">TF</th>
-						<th class="tbl_stat">TA</th>
-						<th class="tbl_stat">CF</th>
-						<th class="tbl_stat">CA</th>
-						<th class="tbl_stat">COMP</th>
-						<th class="tbl_stat">INT</th>
-						<th class="tbl_stat">Win %</th>
+						<th class="bblm_tbl_name">Team</th>
+						<th class="bblm_tbl_stat">P</th>
+						<th class="bblm_tbl_stat">W</th>
+						<th class="bblm_tbl_stat">L</th>
+						<th class="bblm_tbl_stat">D</th>
+						<th class="bblm_tbl_stat">TF</th>
+						<th class="bblm_tbl_stat">TA</th>
+						<th class="bblm_tbl_stat">CF</th>
+						<th class="bblm_tbl_stat">CA</th>
+						<th class="bblm_tbl_stat">COMP</th>
+						<th class="bblm_tbl_stat">INT</th>
+						<th class="bblm_tbl_stat">Win %</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -394,7 +383,7 @@
 							print("					<tr>\n");
 						}
 						else {
-							print("					<tr class=\"tbl_alt\">\n");
+							print("					<tr class=\"bblm_tbl_alt\">\n");
 						}
 ?>
 						<td><a href="<?php print( get_post_permalink( $ps->WPID ) ); ?>" title="Read more on this team"><?php print( esc_html( get_the_title( $ps->WPID ) ) ); ?></a></td>
@@ -446,10 +435,10 @@
 ?>
 					<h3 id="awardsfull">Awards</h3>
 					<h4>Main Awards</h4>
-					<table>
+					<table class="bblm_table">
 						<tr>
-							<th class="tbl_name">Award</th>
-							<th class="tbl_name">Team</th>
+							<th class="bblm_tbl_name">Award</th>
+							<th class="bblm_tbl_name">Team</th>
 						</tr>
 <?php
 					$compmajorawardssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = '.$cd->c_id.' ORDER BY A.a_id ASC';
@@ -460,7 +449,7 @@
 								print("						<tr>\n");
 							}
 							else {
-								print("						<tr class=\"tbl_alt\">\n");
+								print("						<tr class=\"bblm_tbl_alt\">\n");
 							}
 								print("		<td>".$cma->a_name."</td>\n		<td><a href=\"".$cma->guid."\" title=\"Read more about ".$cma->post_title."\">".$cma->post_title."</a></td>\n	</tr>\n");
 							$zebracount++;
@@ -469,11 +458,11 @@
 ?>
 					</table>
 					<h4>Awards assigned to Teams</h4>
-					<table>
+					<table class="bblm_table">
 						<tr>
-							<th class="tbl_name">Award</th>
-							<th class="tbl_name">Team</th>
-							<th class="tbl_stat">Value</th>
+							<th class="bblm_tbl_name">Award</th>
+							<th class="bblm_tbl_name">Team</th>
+							<th class="bblm_tbl_stat">Value</th>
 						</tr>
 <?php
 					$compteamawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value AS value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = '.$cd->c_id.' ORDER BY A.a_id ASC';
@@ -484,7 +473,7 @@
 								print("						<tr>\n");
 							}
 							else {
-								print("						<tr class=\"tbl_alt\">\n");
+								print("						<tr class=\"bblm_tbl_alt\">\n");
 							}
 								print("		<td>".$cta->a_name."</td>\n		<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n		<td>".$cta->value."</td>\n	</tr>\n");
 							$zebracount++;
@@ -493,12 +482,12 @@
 ?>
 					</table>
 					<h4>Awards assigned to Players</h4>
-					<table>
+					<table class="bblm_table">
 						<tr>
-							<th class="tbl_name">Award</th>
-							<th class="tbl_name">Player</th>
-							<th class="tbl_name">Team</th>
-							<th class="tbl_stat">Value</th>
+							<th class="bblm_tbl_name">Award</th>
+							<th class="bblm_tbl_name">Player</th>
+							<th class="bblm_tbl_name">Team</th>
+							<th class="bblm_tbl_stat">Value</th>
 						</tr>
 <?php
 					$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T WHERE R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND B.c_id = '.$cd->c_id.' ORDER BY A.a_id ASC';
@@ -509,7 +498,7 @@
 								print("						<tr>\n");
 							}
 							else {
-								print("						<tr class=\"tbl_alt\">\n");
+								print("						<tr class=\"bblm_tbl_alt\">\n");
 							}
 								print("		<td>".$cpa->a_name."</td>\n		<td><a href=\"".$cpa->Plink."\" title=\"Read more about ".$cpa->Pname."\">".$cpa->Pname."</a></td>\n		<td><a href=\"" .  get_post_permalink( $cpa->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $cpa->WPID ) ) . "</a></td>\n		<td>".$cpa->value."</td>\n	</tr>\n");
 							$zebracount++;

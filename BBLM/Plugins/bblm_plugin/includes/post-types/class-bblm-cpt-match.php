@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Match {
@@ -51,16 +51,16 @@ class BBLM_CPT_Match {
 
 		 foreach ( $recmatch as $rm ) {
 			 if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-				 echo '<tr class="tb_hide">';
+				 echo '<tr class="bblm_tbl_hide">';
 			 }
 			 else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
 				 echo '<tr>';
 			 }
 			 else if ( 10 < $zebracount ) {
-				 echo '<tr class="tbl_alt tb_hide">';
+				 echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
 			 }
 			 else {
-				 echo '<tr class="tbl_alt">';
+				 echo '<tr class="bblm_tbl_alt">';
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
 			 echo '<td><a href="' . $rm->guid . '" title="Read the full match report">' . $rm->post_title . '</a></td>';

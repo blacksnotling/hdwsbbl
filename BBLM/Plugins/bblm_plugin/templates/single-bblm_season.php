@@ -12,7 +12,7 @@
 
 				<div class="entry-content">
 
-				<div class="details bblm_details bblm_season_description">
+				<div class="bblm_details bblm_season_description">
 					<?php the_content(); ?>
 				</div>
 <?php
@@ -59,7 +59,7 @@
 				}//end of if matches
 				else {
 ?>
-					<div class="info bblm_info">
+					<div class="bblm_info">
 						<p><?php echo __( 'No matches have been played in this Season yet. Stay tuned for further updates as the games start rolling in!' , 'bblm' ) ?></p>
 					</div>
 <?php

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Team {
@@ -73,21 +73,21 @@ class BBLM_CPT_Team {
 		if ($teamstats = $wpdb->get_results($teamistingsql)) {
 			$zebracount = 1;
 		?>
-			<table class="sortable bblm_sortable">
+			<table class="bblm_table bblm_sortable">
 			<thead>
 				<tr>
-					<th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'P', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'W', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'L', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'D', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TF', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TA', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CF', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CA', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
-					<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'WIN%', 'bblm' ); ?></th>
+					<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'W', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'L', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'D', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'TF', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'TA', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'CF', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'CA', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'WIN%', 'bblm' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -97,7 +97,7 @@ class BBLM_CPT_Team {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 
 				echo '<td>' . bblm_get_team_link( $tst->WPID ) . '</td>';

@@ -183,7 +183,7 @@ font-weight:100;
 	font-size:larger;
 	font-weight:bold;
 }
-.details {
+.bblm_details {
 	padding: 3px;
 	border: 1px solid #aaa;
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
@@ -319,7 +319,7 @@ p.readmorelink {
 	padding: 3px;
 	font-weight:bold;
 }
-.info {
+.bblm_info {
 	border:1px solid #6B9CF4;
 	margin: 4px 0;
 	margin-left:2px;
@@ -328,7 +328,7 @@ p.readmorelink {
 	font-family: Verdana;
 	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;
 }
-.info p {
+.bblm_info p {
 	padding-top:4px;
 	margin-bottom:4px;
 }
@@ -457,7 +457,7 @@ table th {
 body.section-warzone table th {
 	background-color: #9F2500;
 }
-table tr.tbl_alt, table tr.odd {
+table tr.bblm_tbl_alt, table tr.odd {
 	background-color: #ddd;
 }
 
@@ -488,44 +488,44 @@ td.td_title {
 th.totaux {
 	border-bottom: 1px solid #000000;
 }
-th.tbl_matchname {
+th.bblm_tbl_matchname {
 	width: 280px;
 }
-th.tbl_matchdate {
+th.bblm_tbl_matchdate {
 	width: 50px;
 }
-th.tbl_matchgate {
+th.bblm_tbl_matchgate {
 	width: 40px;
 }
-th.tbl_matchresult {
+th.bblm_tbl_matchresult {
 	width: 80px;
 }
-th.tbl_matchop {
+th.bblm_tbl_matchop {
 	width: 50%;
 }
-th.tbl_stat {
+th.bblm_tbl_stat {
 	width: 5%;
 }
-th.tbl_name {
+th.bblm_tbl_name {
 	width: 30%;
 }
 td.score {
 	font-size: 2em;
 }
-.tbl_skills {
+.bblm_tbl_skills {
 	text-align:left;
 	font-size: smaller;
 }
-th.tbl_teamrace {
+th.bblm_tbl_teamrace {
 	width: 50px;
 }
-th.tbl_teamvalue {
+th.bblm_tbl_teamvalue {
 	width: 40px;
 }
-th.tbl_teamcup {
+th.bblm_tbl_teamcup {
 	width: 112px;
 }
-td.tbl_teamcup {
+td.bblm_tbl_teamcup {
 	text-align: left;
 }
 /***** Comments - old *********/

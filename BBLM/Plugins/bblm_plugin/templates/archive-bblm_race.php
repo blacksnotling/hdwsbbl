@@ -25,7 +25,7 @@ Template Name: Race Listing
 					print("</ul>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>There are no races currently set-up</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>There are no races currently set-up</p>\n	</div>\n");
 }
 
 ?>

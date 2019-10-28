@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.1.1
  */
 
 class BBLM_CPT_Owner {
@@ -314,7 +314,7 @@ class BBLM_CPT_Owner {
 					$c = true;
 					foreach ($gs as $g) {
 
-          $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
+          $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
                      <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
                      <td>'. $g->OP .'</td>
                      <td>'. $g->OW .'</td>
@@ -371,7 +371,7 @@ class BBLM_CPT_Owner {
 					 $c = true;
            foreach ($gs as $g) {
 
-           $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
+           $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
                       <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
                       <td>'. $g->OP .'</td>
                       <td>'. $g->OW .'</td>
@@ -428,7 +428,7 @@ class BBLM_CPT_Owner {
 						$c = true;
             foreach ($gs as $g) {
 
-            $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
+            $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
                        <td>'. bblm_get_season_link( $g->sea_id ) .' (as ' . bblm_get_team_name( $g->WPID ).')</td>
                        <td>'. $g->OP .'</td>
                        <td>'. $g->OW .'</td>
@@ -485,7 +485,7 @@ class BBLM_CPT_Owner {
 						 $c = true;
              foreach ($gs as $g) {
 
-             $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
+             $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
                         <td>'. bblm_get_cup_link( $g->CUP ) .'</td>
                         <td>'. $g->OP .'</td>
                         <td>'. $g->OW .'</td>
@@ -542,7 +542,7 @@ class BBLM_CPT_Owner {
 						 $c = true;
              foreach ($gs as $g) {
 
-             $output .=  '<tr'. (($c = !$c)?' class="tbl_alt bblm_tbl_alt"':'') .'>
+             $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
                         <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a> (as ' .esc_html( get_the_title( $g->TID ) ).')</td>
                         <td>'. $g->OP .'</td>
                         <td>'. $g->OW .'</td>
@@ -656,7 +656,7 @@ class BBLM_CPT_Owner {
 							 $c = true;
 	             foreach ($gs as $g) {
 
-	             $output .=  '<tr class"'. (($c = !$c)?' tbl_alt bblm_tbl_alt':'') .''. (($num > 10)?' tb_hide bblm_tbl_hide':'') .'">
+	             $output .=  '<tr class"'. (($c = !$c)?' bblm_tbl_alt':'') .''. (($num > 10)?' bblm_tbl_hide':'') .'">
 							 						<td>'.$num.'</td>
 	                        <td><a href="'. get_post_permalink( $g->PID ). '" title="Learn more about ' .esc_html( get_the_title( $g->PID ) ).' ">' .esc_html( get_the_title( $g->PID ) ).'</a></td>
 	                        <td>'. esc_html( $g->pos_name ) .'</td>
