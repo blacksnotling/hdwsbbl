@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Cup {
@@ -53,7 +53,7 @@ class BBLM_CPT_Cup {
   */
   public static function get_cup_listing() {
 ?>
-    <table class="bblm_tbl">
+    <table class="bblm_table">
       <thead>
         <tr>
           <th><?php echo __( 'Championship Cup Name', 'bblm' ); ?></th>
@@ -80,7 +80,7 @@ class BBLM_CPT_Cup {
           echo '<tr>';
         }
         else {
-          echo '<tr class="tbl_alt bblm_tbl_alt">';
+          echo '<tr class="bblm_tbl_alt">';
         }
         echo '<td>' . bblm_get_cup_link( $c->ID ) . '</td>';
         echo '<td>' . $comp->get_cup_count_by_cup( $c->ID ) . '</td>';

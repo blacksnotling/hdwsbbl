@@ -186,22 +186,22 @@
 					if ($period_alltime) {
 						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
-					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">COMP</th>\n		</tr>\n");
+					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">COMP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
 
 					foreach ($topstats as $ts) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("	<tr class=\"tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("	<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("	<tr class=\"tbl_alt tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -224,7 +224,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No players have made any successfull passes!!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No players have made any successfull passes!!</p>\n	</div>\n");
 				}
 
 				  //////////////////////////////
@@ -240,22 +240,22 @@
 					if ($period_alltime) {
 						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
-					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">INT</th>\n		</tr>\n");
+					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">INT</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
 
 					foreach ($topstats as $ts) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("	<tr class=\"tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("	<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("	<tr class=\"tbl_alt tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -278,7 +278,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No players have made any successfull Interceptions!!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No players have made any successfull Interceptions!!</p>\n	</div>\n");
 				}
 
 				  //////////////////
@@ -294,22 +294,22 @@
 					if ($period_alltime) {
 						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
-					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">MVP</th>\n		</tr>\n");
+					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">MVP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
 
 					foreach ($topstats as $ts) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("	<tr class=\"tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("	<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("	<tr class=\"tbl_alt tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -332,7 +332,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No players have been assigned an MVP!!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No players have been assigned an MVP!!</p>\n	</div>\n");
 				}
 
 

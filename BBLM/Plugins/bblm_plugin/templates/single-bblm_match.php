@@ -59,11 +59,11 @@
 			<h2><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on <?php print( $teamA ); ?>"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on <?php print( $teamB ); ?>"><?php print( $teamB ); ?></a></h2>
 		<!--<p><?php print($post->ID); ?> - <?php print($m->m_id); ?></p>-->
 
-				<table>
+				<table class="bblm_table">
 					<tr>
-						<th class="tbl_name"><?php print( $teamA );?></th>
-						<th class="tbl_name">VS</th>
-						<th class="tbl_name"><?php print( $teamB );?></th>
+						<th class="bblm_tbl_name"><?php print( $teamA );?></th>
+						<th class="bblm_tbl_name">VS</th>
+						<th class="bblm_tbl_name"><?php print( $teamB );?></th>
 					</tr>
 					<tr>
 						<td><strong><?php print($tAimg);?></strong></td>
@@ -71,49 +71,49 @@
 						<td><strong><?php print($tBimg);?></strong></td>
 					</tr>
 					<tr>
-						<td class="score"><strong><?php print($tA->mt_td);?></strong></td>
-						<th class="tottux">Score</th>
-						<td class="score"><strong><?php print($tB->mt_td);?></strong></td>
+						<td class="bblm_score"><strong><?php print($tA->mt_td);?></strong></td>
+						<th class="bblm_tottux">Score</th>
+						<td class="bblm_score"><strong><?php print($tB->mt_td);?></strong></td>
 					</tr>
 					<tr>
 						<td><?php print($tA->mt_cas);?></td>
-						<th class="tottux">Casulties</th>
+						<th class="bblm_tottux">Casulties</th>
 						<td><?php print($tB->mt_cas);?></td>
 					</tr>
 					<tr>
 						<td><?php print($tA->mt_comp);?></td>
-						<th class="tottux">Completions</th>
+						<th class="bblm_tottux">Completions</th>
 						<td><?php print($tB->mt_comp);?></td>
 					</tr>
 					<tr>
 						<td><?php print($tA->mt_int);?></td>
-						<th class="tottux">Inteceptions</th>
+						<th class="bblm_tottux">Inteceptions</th>
 						<td><?php print($tB->mt_int);?></td>
 					</tr>
 					<tr>
-						<td class="tv"><?php print(number_format($tA->mt_tv));?>gp</td>
-						<th class="tottux">Team Value</th>
-						<td class="tv"><?php print(number_format($tB->mt_tv));?>gp</td>
+						<td class="bblm_tv"><?php print(number_format($tA->mt_tv));?>gp</td>
+						<th class="bblm_tottux">Team Value</th>
+						<td class="bblm_tv"><?php print(number_format($tB->mt_tv));?>gp</td>
 					</tr>
 					<tr>
 						<td><?php print(number_format($tA->mt_winnings));?></td>
-						<th class="tottux">Fans</th>
+						<th class="bblm_tottux">Fans</th>
 						<td><?php print(number_format($tB->mt_winnings));?></td>
 					</tr>
 					<tr>
 						<td><?php print(number_format($tA->mt_att));?> gp</td>
-						<th class="tottux">Winnings</th>
+						<th class="bblm_tottux">Winnings</th>
 						<td><?php print(number_format($tB->mt_att));?> gp</td>
 					</tr>
 					<tr>
 						<td><?php print($tA->mt_ff);?></td>
-						<th class="tottux">FF Change</th>
+						<th class="bblm_tottux">FF Change</th>
 						<td><?php print($tB->mt_ff);?></td>
 					</tr>
 				</table>
 
 				<h3>Match Report</h3>
-				<div class="details">
+				<div class="bblm_details">
 					<?php the_content(); ?>
 				</div>
 
@@ -122,11 +122,11 @@
 				//Display match Trivia if something is present
 				if ("" !== $m->m_trivia) {
 					print("<h3>Match Trivia</h3>\n");
-					print("<div class=\"details\">\n".$m->m_trivia."</div>");
+					print("<div class=\"bblm_details\">\n".$m->m_trivia."</div>");
 				}
 ?>
 			<h3>Player Actions</h3>
-		<table>
+		<table class="bblm_table">
 			<tr>
 				<th><?php print( $teamA );?></th>
 				<th>&nbsp;</th>
@@ -147,7 +147,7 @@
 					$tainj = array();
 					$tainc = array();
 					$zebracount = 1;
-					print("<table>\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
+					print("<table class=\"bblm_table\">\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
 					foreach ($taplayer as $tap) {
 						if (1 == $tap->mp_mvp) {
 							//if this player has the MVP record it for later
@@ -171,7 +171,7 @@
 							print("	<tr>\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print ("		<td>".$tap->p_num."</td>\n		<td><a href=\"".$tap->guid."\" title=\"View the details of ".$tap->post_title."\">".$tap->post_title."</a></td>\n		<td>".$tap->mp_td."</td>\n		<td>".$tap->mp_cas."</td>\n		<td>".$tap->mp_comp."</td>\n		<td>".$tap->mp_int."</td>\n		<td><strong>".$tap->mp_spp."</strong></td>\n	</tr>\n");
 						$zebracount++;
@@ -200,7 +200,7 @@
 					$tbinj = array();
 					$tbinc = array();
 					$zebracount = 1;
-					print("<table>\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
+					print("<table class=\"bblm_table\">\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
 					foreach ($taplayer as $tap) {
 						if (1 == $tap->mp_mvp) {
 							//if this player has the MVP record it for later
@@ -224,7 +224,7 @@
 							print("	<tr>\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print ("		<td>".$tap->p_num."</td>\n		<td><a href=\"".$tap->guid."\" title=\"View the details of ".$tap->p_name."\">".$tap->p_name."</a></td>\n		<td>".$tap->mp_td."</td>\n		<td>".$tap->mp_cas."</td>\n		<td>".$tap->mp_comp."</td>\n		<td>".$tap->mp_int."</td>\n		<td><strong>".$tap->mp_spp."</strong></td>\n	</tr>\n");
 						$zebracount++;

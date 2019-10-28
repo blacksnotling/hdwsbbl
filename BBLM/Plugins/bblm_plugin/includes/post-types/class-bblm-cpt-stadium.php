@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Stadium {
@@ -90,7 +90,7 @@ class BBLM_CPT_Stadium {
    }
    else {
 
-     echo '<div class="info bblm_info"><p>' . __( 'At present no teams use this stadium for their home games.', 'bblm' ) . '</p></div>';
+     echo '<div class="bblm_info"><p>' . __( 'At present no teams use this stadium for their home games.', 'bblm' ) . '</p></div>';
 
    }
 

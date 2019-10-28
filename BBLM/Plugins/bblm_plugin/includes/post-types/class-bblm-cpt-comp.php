@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_CPT_Comp {
@@ -90,15 +90,15 @@ class BBLM_CPT_Comp {
 		if ( $compl = $wpdb->get_results( $complistingsql ) ) {
 			$zebracount = 1;
 ?>
-			<table class="bblm_tbl bblm_sortable sortable">
+			<table class="bblm_table bblm_sortable">
 				<thead>
 					<tr>
-						<th class="tbl_title bblm_tbl_title"><?php echo __( 'Competition(s)', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( '# Games', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
-						<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+						<th class="bblm_tbl_title"><?php echo __( 'Competition(s)', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( '# Games', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,7 +108,7 @@ class BBLM_CPT_Comp {
 					echo '<tr>';
 				}
 				else {
-					echo '<tr class="tbl_alt bblm_tbl_alt">';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td><a href="' . $cl->guid . '" title="View more info about "' . $cl->post_title . '">' . $cl->post_title . '</a></td>';
 				echo '<td>' . ( $cl->PLD / 2 ) . '</td>';

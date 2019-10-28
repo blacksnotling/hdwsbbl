@@ -283,7 +283,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 					$sumoutput .= "		<tr>\n";
 				}
 				else {
-					$sumoutput .= "		<tr class=\"tbl_alt\">\n";
+					$sumoutput .= "		<tr class=\"bblm_tbl_alt\">\n";
 				}
 				$sumoutput .= "  <td><a href=\"".$stand->guid."\" title=\"View more information about ".$stand->post_title."\">".$stand->post_title."</a></td>\n <td>".$stand->tc_played."</td>\n  <td>".$stand->tc_W."</td>\n  <td>".$stand->tc_D."</td>\n  <td>".$stand->tc_L."</td>\n  <td>".$stand->tc_tdfor."</td>\n  <td>".$stand->tc_tdagst."</td>\n  <td>".$stand->TDD."</td>\n  <td>".$stand->tc_casfor."</td>\n  <td>".$stand->tc_casagst."</td>\n  <td>".$stand->CASD."</td>\n  <td><strong>".$stand->tc_points."</strong></td>\n	</tr>\n";
 				//set flag so resulting </table> is printed
@@ -344,7 +344,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 			}
 			if ($topstats = $wpdb->get_results($statsql)) {
 			$sumoutput .= "<h4>".$sa[1]."</h4>\n";
-					$sumoutput .= "<table>\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n";
+					$sumoutput .= "<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n		</tr>\n";
 					$zebracount = 1;
 					$prevvalue = 0;
 						foreach ($topstats as $ts) {
@@ -352,7 +352,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 							$sumoutput .= "	<tr>\n";
 						}
 						else {
-							$sumoutput .= "	<tr class=\"tbl_alt\">\n";
+							$sumoutput .= "	<tr class=\"bblm_tbl_alt\">\n";
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -398,7 +398,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	border: 1px solid #000000;
 	border-collapse: collapse;
 }
-#bblm_sumpreview table tr.tbl_alt {
+#bblm_sumpreview table tr.bblm_tbl_alt {
 	background-color: #ddd;
 }
 #bblm_sumpreview table td {

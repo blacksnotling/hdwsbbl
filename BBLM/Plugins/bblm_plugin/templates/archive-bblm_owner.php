@@ -12,23 +12,23 @@
 
     <?php $own = new BBLM_CPT_Owner; ?>
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-      <table class="sortable bblm_tbl bblm_sortable">
+      <table class="bblm_table bblm_sortable">
         <thead>
         <tr>
-          <th class="tbl_title bblm_tbl_title"><?php echo __( 'Owner', 'bblm'); ?></th>
+          <th class="bblm_tbl_title"><?php echo __( 'Owner', 'bblm'); ?></th>
           <th><?php echo __( 'Teams', 'bblm'); ?></th>
           <th><?php echo __( 'Championships', 'bblm'); ?></th>
-          <th class="tbl_stat bblm_tbl_stat">P</th>
-          <th class="tbl_stat bblm_tbl_stat">W</th>
-          <th class="tbl_stat bblm_tbl_stat">L</th>
-          <th class="tbl_stat bblm_tbl_stat">D</th>
-          <th class="tbl_stat bblm_tbl_stat">Tf</th>
-          <th class="tbl_stat bblm_tbl_stat">Ta</th>
-          <th class="tbl_stat bblm_tbl_stat">Cf</th>
-          <th class="tbl_stat bblm_tbl_stat">Ca</th>
-          <th class="tbl_stat bblm_tbl_stat">Comp</th>
-          <th class="tbl_stat bblm_tbl_stat">Int</th>
-          <th class="tbl_stat bblm_tbl_stat">%</th>
+          <th class="bblm_tbl_stat">P</th>
+          <th class="bblm_tbl_stat">W</th>
+          <th class="bblm_tbl_stat">L</th>
+          <th class="bblm_tbl_stat">D</th>
+          <th class="bblm_tbl_stat">Tf</th>
+          <th class="bblm_tbl_stat">Ta</th>
+          <th class="bblm_tbl_stat">Cf</th>
+          <th class="bblm_tbl_stat">Ca</th>
+          <th class="bblm_tbl_stat">Comp</th>
+          <th class="bblm_tbl_stat">Int</th>
+          <th class="bblm_tbl_stat">%</th>
         </tr>
       </thead>
       <tbody>
@@ -37,7 +37,7 @@
 		<?php while (have_posts()) : the_post(); ?>
       <?php do_action( 'bblm_template_before_content' ); ?>
 
-          <tr<?php echo (($c = !$c)?' class="tbl_alt"':''); ?>>
+          <tr<?php echo (($c = !$c)?' class="bblm_tbl_alt"':''); ?>>
             <td><a href="<?php the_permalink(); ?>" title="<?php echo __( 'Read more about', 'bblm'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></td>
             <td><?php echo $own->get_number_teams() ?></td>
             <td><?php echo $own->get_number_championships(); ?></td>

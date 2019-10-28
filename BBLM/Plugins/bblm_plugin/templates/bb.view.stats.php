@@ -66,13 +66,13 @@
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.type_id = 1 GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
 					$zebracount = 1;
-					print("	<table>\n		<tr>\n			<th class=\"tbl_name\">Team</th>\n			<th class=\"tbl_stat\">Championships</th>\n		</tr>\n");
+					print("	<table class=\"bblm_table\">\n		<tr>\n			<th class=\"bblm_tbl_name\">Team</th>\n			<th class=\"bblm_tbl_stat\">Championships</th>\n		</tr>\n");
 					foreach ($champions as $champ) {
 						if ($zebracount % 2) {
 							print("		<tr>\n");
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							print("		<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print("			<td><a href=\"".$champ->guid."\" title=\"View more about ".$champ->post_title."\">".$champ->post_title."</a></td>\n			<td>".$champ->ANUM."</td>\n		</tr>\n");
 						$zebracount++;
@@ -88,15 +88,15 @@
 				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
 ?>
-					<table class="sortable bblm_table bblm_sortable">
+					<table class="bblm_table bblm_sortable">
 						<thead>
 							<tr>
-								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Season', 'bblm' ); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Games', 'bblm' ); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+								<th class="bblm_tbl_name"><?php echo __( 'Season', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'Games', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -107,7 +107,7 @@
 							echo '<tr>';
 						}
 						else {
-							echo '<tr class="tbl_alt bblm_tbl_alt">';
+							echo '<tr class="bblm_tbl_alt">';
 						}
 						echo '<td>' . bblm_get_season_link( $ss->sea_id ) . '</td><td>' . $ss->NUMMAT . '</td><td>' . $ss->TD . '</td><td>' . $ss->CAS . '</td><td>' . $ss->COMP . '</td><td>' . $ss->MINT . '</td></tr>';
 						$zebracount++;
@@ -121,14 +121,14 @@
 <?php
 				$compsql = 'SELECT P.post_title, P.guid, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
 				if ($compstats = $wpdb->get_results($compsql)) {
-					print("<table class=\"sortable\">\n	<thead>\n	<tr>\n		<th class=\"tbl_name\">Competition</th>\n		<th class=\"tbl_stat\">Games</th>\n		<th class=\"tbl_stat\">TD</th>\n		<th class=\"tbl_stat\">CAS</th>\n		<th class=\"tbl_stat\">COMP</th>\n		<th class=\"tbl_stat\">INT</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+					print("<table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_stat\">TD</th>\n		<th class=\"bblm_tbl_stat\">CAS</th>\n		<th class=\"bblm_tbl_stat\">COMP</th>\n		<th class=\"bblm_tbl_stat\">INT</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 					$zebracount = 1;
 					foreach ($compstats as $ss) {
 						if ($zebracount % 2) {
 							print("	<tr>\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print("		<td><a href=\"".$ss->guid."\" title=\"Read more on ".$ss->post_title."\">".$ss->post_title."</a></td>\n		<td>".$ss->NUMMAT."</td>\n		<td>".$ss->TD."</td>\n		<td>".$ss->CAS."</td>\n		<td>".$ss->COMP."</td>\n		<td>".$ss->MINT."</td>\n	</tr>\n");
 						$zebracount++;
@@ -139,21 +139,21 @@
 ?>
 
 				<h3>Statistics Breakdown by Teams</h3>
-				<table class="sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
-						<th class="tbl_name">Team</th>
-						<th class="tbl_stat">P</th>
-						<th class="tbl_stat">W</th>
-						<th class="tbl_stat">L</th>
-						<th class="tbl_stat">D</th>
-						<th class="tbl_stat">TF</th>
-						<th class="tbl_stat">TA</th>
-						<th class="tbl_stat">CF</th>
-						<th class="tbl_stat">CA</th>
-						<th class="tbl_stat">COMP</th>
-						<th class="tbl_stat">INT</th>
-						<th class="tbl_stat">Win%</th>
+						<th class="bblm_tbl_name">Team</th>
+						<th class="bblm_tbl_stat">P</th>
+						<th class="bblm_tbl_stat">W</th>
+						<th class="bblm_tbl_stat">L</th>
+						<th class="bblm_tbl_stat">D</th>
+						<th class="bblm_tbl_stat">TF</th>
+						<th class="bblm_tbl_stat">TA</th>
+						<th class="bblm_tbl_stat">CF</th>
+						<th class="bblm_tbl_stat">CA</th>
+						<th class="bblm_tbl_stat">COMP</th>
+						<th class="bblm_tbl_stat">INT</th>
+						<th class="bblm_tbl_stat">Win%</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -169,7 +169,7 @@
 							print("					<tr>\n");
 						}
 						else {
-							print("					<tr class=\"tbl_alt\">\n");
+							print("					<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print("						<td><a href=\"".$tst->guid."\" title=\"Read more on ".$tst->post_title."\">".$tst->post_title."</a></td>\n						<td>".$tst->TP."</td>\n						<td>".$tst->TW."</td>\n						<td>".$tst->TL."</td>\n						<td>".$tst->TD."</td>\n						<td>".$tst->TDF."</td>\n						<td>".$tst->TDA."</td>\n						<td>".$tst->TCF."</td>\n						<td>".$tst->TCA."</td>\n						<td>".$tst->TC."</td>\n						<td>".$tst->TI."</td>\n						");
 						if ($tst->TP > 0) {
@@ -214,22 +214,22 @@
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (Active)</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
-					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
+					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
 
 					foreach ($topstats as $ts) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("	<tr class=\"tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("	<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("	<tr class=\"tbl_alt tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -246,7 +246,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No active players have scored any Star Player Points!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No active players have scored any Star Player Points!</p>\n	</div>\n");
 				}
 
 				  //////////////////////////
@@ -255,22 +255,22 @@
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
-					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
+					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
 
 					foreach ($topstats as $ts) {
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("	<tr class=\"tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("	<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("	<tr class=\"tbl_alt tb_hide\">\n");
+							print("	<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 						}
 						else {
-							print("	<tr class=\"tbl_alt\">\n");
+							print("	<tr class=\"bblm_tbl_alt\">\n");
 						}
 						if ($ts->VALUE > 0) {
 							if ($prevvalue == $ts->VALUE) {
@@ -294,7 +294,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>Nobody has scored any Star Player Points!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>Nobody has scored any Star Player Points!</p>\n	</div>\n");
 				}
 
 ?>

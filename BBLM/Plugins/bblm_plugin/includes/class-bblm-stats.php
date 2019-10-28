@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.1
+ * @version		1.1.1
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         }
         else {
   ?>
-        <div class="info bblm_info">
+        <div class="bblm_info">
           <p><?php echo __( $tpa[ 'error' ], 'bblm' ); ?></p>
         </div>
   <?php
@@ -159,7 +159,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       }
       else {
 ?>
-      <div class="info bblm_info">
+      <div class="bblm_info">
         <p><?php echo __( 'So far nobody has died!', 'bblm' ); ?></p>
       </div>
 <?php
@@ -175,13 +175,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     */
     public function display_player_table( $args ) {
 ?>
-      <table class="expandable bblm_expandable bblm_table bblm_stats">
+      <table class="bblm_expandable bblm_table bblm_stats">
         <tr>
-          <th class="tbl_stat bblm_tbl_stat">#</th>
-          <th class="tbl_name bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat">#</th>
+          <th class="bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
           <th><?php echo __( 'Position', 'bblm' ); ?></th>
-          <th class="tbl_name bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-          <th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
+          <th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
         </tr>
 <?php
       $zebracount = 1;
@@ -189,16 +189,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
       foreach ( $args as $ts ) {
       if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-        echo '<tr class="tb_hide bblm_tbl_hide">';
+        echo '<tr class="bblm_tbl_hide">';
       }
       else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
         echo '<tr>';
       }
       else if ( 10 < $zebracount ) {
-        echo '<tr class="tb_hide bblm_tbl_hide tbl_alt bblm_tbl_alt">';
+        echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
       }
       else {
-        echo '<tr class="tbl_alt bblm_tbl_alt">';
+        echo '<tr class="bblm_tbl_alt">';
       }
       if ( $ts->VALUE > 0 ) {
         if ( $prevvalue == $ts->VALUE ) {

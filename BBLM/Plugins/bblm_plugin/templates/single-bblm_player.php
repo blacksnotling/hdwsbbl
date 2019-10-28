@@ -67,13 +67,13 @@ get_header(); ?>
 			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 				<h2 class="entry-title"><?php the_title(); ?></h2>
 
-					<table>
+					<table class="bblm_table">
 						<tr>
-							<th class="tbl_name">Position</th>
-							<th class="tbl_stat">MA</th>
-							<th class="tbl_stat">ST</th>
-							<th class="tbl_stat">AG</th>
-							<th class="tbl_stat">AV</th>
+							<th class="bblm_tbl_name">Position</th>
+							<th class="bblm_tbl_stat">MA</th>
+							<th class="bblm_tbl_stat">ST</th>
+							<th class="bblm_tbl_stat">AG</th>
+							<th class="bblm_tbl_stat">AV</th>
 							<th>Skills</th>
 							<th>Injuries</th>
 							<th>Cost</th>
@@ -84,13 +84,13 @@ get_header(); ?>
 							<td><?php print($pd->p_st); ?></td>
 							<td><?php print($pd->p_ag); ?></td>
 							<td><?php print($pd->p_av); ?></td>
-							<td class="tbl_skills"><?php print($pd->p_skills); ?></td>
+							<td class="bblm_tbl_skills"><?php print($pd->p_skills); ?></td>
 							<td><?php print($pd->p_injuries); ?></td>
 							<td><?php print(number_format($pd->p_cost)); ?>gp</td>
 						</tr>
 					</table>
 <!-- <?php print($pspp); ?> -->
-					<div class="details playerdet">
+					<div class="bblm_details bblm_player_description">
 					<?php the_content(); ?>
 					</div>
 
@@ -122,7 +122,7 @@ get_header(); ?>
 									print("an unkown player.</p>\n");
 								}
 							}
-							print("							<div class=\"details obit\">\n							<p>".$fate->pf_desc."</p>\n							</div>\n");
+							print("							<div class=\"bblm_details bblm_obit\">\n							<p>".$fate->pf_desc."</p>\n							</div>\n");
 						}
 					}
 
@@ -155,16 +155,16 @@ get_header(); ?>
 						$trans->display_player_transfer_history();
 			?>
 						<h3>Player Statistics</h3>
-						<table>
+						<table class="bblm_table">
  							<tr>
- 								<th class="tbl_title"><?php echo __( 'Performance', 'bblm' ); ?></th>
- 								<th class="tbl_stat">P</th>
- 								<th class="tbl_stat">TD</th>
- 								<th class="tbl_stat">CAS</th>
- 								<th class="tbl_stat">COMP</th>
- 								<th class="tbl_stat">INT</th>
- 								<th class="tbl_stat">MVP</th>
- 								<th class="tbl_stat">SPP</th>
+ 								<th class="bblm_tbl_title"><?php echo __( 'Performance', 'bblm' ); ?></th>
+ 								<th class="bblm_tbl_stat">P</th>
+ 								<th class="bblm_tbl_stat">TD</th>
+ 								<th class="bblm_tbl_stat">CAS</th>
+ 								<th class="bblm_tbl_stat">COMP</th>
+ 								<th class="bblm_tbl_stat">INT</th>
+ 								<th class="bblm_tbl_stat">MVP</th>
+ 								<th class="bblm_tbl_stat">SPP</th>
  							</tr>
 
 			<?php
@@ -181,16 +181,16 @@ get_header(); ?>
 						print("</table>\n");
 			?>
 						<h3>Breakdown by Competition</h3>
-						<table>
+						<table class="bblm_table">
 							<tr>
-								<th class="tbl_title">Competition</th>
-								<th class="tbl_stat">P</th>
-								<th class="tbl_stat">TD</th>
-								<th class="tbl_stat">CAS</th>
-								<th class="tbl_stat">INT</th>
-								<th class="tbl_stat">COMP</th>
-								<th class="tbl_stat">MVP</th>
-								<th class="tbl_stat">SPP</th>
+								<th class="bblm_tbl_title">Competition</th>
+								<th class="bblm_tbl_stat">P</th>
+								<th class="bblm_tbl_stat">TD</th>
+								<th class="bblm_tbl_stat">CAS</th>
+								<th class="bblm_tbl_stat">INT</th>
+								<th class="bblm_tbl_stat">COMP</th>
+								<th class="bblm_tbl_stat">MVP</th>
+								<th class="bblm_tbl_stat">SPP</th>
 							</tr>
 <?php
 					$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.c_id = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND C.c_show = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
@@ -201,7 +201,7 @@ get_header(); ?>
 								print("		<tr>\n");
 							}
 							else {
-								print("		<tr class=\"tbl_alt\">\n");
+								print("		<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("			<td><a href=\"".$pc->guid."\" title=\"View more details about this competition\">".$pc->post_title."</a></td>\n		<td>".$pc->GAMES."</td>\n		<td>".$pc->TD."</td>\n		<td>".$pc->CAS."</td>\n		<td>".$pc->MINT."</td>\n			<td>".$pc->COMP."</td>\n		<td>".$pc->MVP."</td>\n		<td>".$pc->SPP."</td>\n	</tr>\n");
 							$zebracount++;
@@ -210,16 +210,16 @@ get_header(); ?>
 					print("</table>\n");
 ?>
 						<h3>Breakdown by Season</h3>
-						<table>
+						<table class="bblm_table">
 							<tr>
-								<th class="tbl_title">Season</th>
-								<th class="tbl_stat">P</th>
-								<th class="tbl_stat">TD</th>
-								<th class="tbl_stat">CAS</th>
-								<th class="tbl_stat">INT</th>
-								<th class="tbl_stat">COMP</th>
-								<th class="tbl_stat">MVP</th>
-								<th class="tbl_stat">SPP</th>
+								<th class="bblm_tbl_title">Season</th>
+								<th class="bblm_tbl_stat">P</th>
+								<th class="bblm_tbl_stat">TD</th>
+								<th class="bblm_tbl_stat">CAS</th>
+								<th class="bblm_tbl_stat">INT</th>
+								<th class="bblm_tbl_stat">COMP</th>
+								<th class="bblm_tbl_stat">MVP</th>
+								<th class="bblm_tbl_stat">SPP</th>
 							</tr>
 <?php
 					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND C.c_show = 1 AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
@@ -230,7 +230,7 @@ get_header(); ?>
 								print("		<tr>\n");
 							}
 							else {
-								print("		<tr class=\"tbl_alt\">\n");
+								print("		<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("			<td>" . bblm_get_season_link( $pc->sea_id ) . "</td>\n		<td>".$pc->GAMES."</td>\n		<td>".$pc->TD."</td>\n		<td>".$pc->CAS."</td>\n			<td>".$pc->MINT."</td>\n		<td>".$pc->COMP."</td>\n			<td>".$pc->MVP."</td>\n		<td>".$pc->SPP."</td>\n	</tr>\n");
 							$zebracount++;
@@ -239,7 +239,7 @@ get_header(); ?>
 					print("</table>\n");
 ?>
 					<h3>Recent Matches</h3>
-						<table class="sortable expandable">
+						<table class="bblm_table bblm_sortable bblm_expandable">
 							<thead>
 							<tr>
 								<th>Date</th>
@@ -262,16 +262,16 @@ get_header(); ?>
 						$zebracount = 1;
 							foreach ($playermatch as $pm) {
 								if (($zebracount % 2) && (10 < $zebracount)) {
-									print("		<tr class=\"tb_hide\">\n");
+									print("		<tr class=\"bblm_tbl_hide\">\n");
 								}
 								else if (($zebracount % 2) && (10 >= $zebracount)) {
 									print("		<tr>\n");
 								}
 								else if (10 < $zebracount) {
-									print("		<tr class=\"tbl_alt tb_hide\">\n");
+									print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 								}
 								else {
-									print("		<tr class=\"tbl_alt\">\n");
+									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								print("			<td><a href=\"".$pm->guid."\" title=\"View the match in more detail\">".date("d.m.y", $pm->mdate)."</a></td>\n");
 								if ($pm->TAid == $pd->t_id) {
@@ -357,13 +357,13 @@ get_header(); ?>
 							$has_cups = 1;
 							$zebracount = 1;
 							print("<h4>Championships</h4>\n");
-							print("<table>\n	<tr>\n		<th class=\"tbl_name\">Title</th>\n		<th class=\"tbl_name\">Competition</th>\n	</tr>\n");
+							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr>\n");
 							foreach ($champs as $cc) {
 								if ($zebracount % 2) {
 									print("		<tr>\n");
 								}
 								else {
-									print("		<tr class=\"tbl_alt\">\n");
+									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								print("		<td>".$cc->a_name."</td>\n		<td><a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></td>\n	</tr>\n");
 								$zebracount++;
@@ -378,13 +378,13 @@ get_header(); ?>
 						if ($sawards = $wpdb->get_results($seasonsql)) {
 							$zebracount = 1;
 							print("<h4>Awards from Seasons</h4>\n");
-							print("<table>\n	<tr>\n		<th class=\"tbl_name\">Award</th>\n		<th class=\"tbl_name\">Competition</th>\n		<th class=\"tbl_stat\">Value</th>\n	</tr>\n");
+							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 							foreach ($sawards as $sa) {
 								if ($zebracount % 2) {
 									print("		<tr>\n");
 								}
 								else {
-									print("		<tr class=\"tbl_alt\">\n");
+									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								print("		<td>".$sa->a_name."</td>\n		<td>" . bblm_get_season_link( $sa->sea_id ) . "</td>\n		<td>".$sa->aps_value."</td>\n	</tr>\n");
 								$zebracount++;
@@ -400,13 +400,13 @@ get_header(); ?>
 						if ($cawards = $wpdb->get_results($compawardssql)) {
 							$zebracount = 1;
 							print("<h4>Awards from Competitions</h4>\n");
-							print("<table>\n	<tr>\n		<th class=\"tbl_name\">Award</th>\n		<th class=\"tbl_name\">Competition</th>\n		<th class=\"tbl_stat\">Value</th>\n	</tr>\n");
+							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 							foreach ($cawards as $ca) {
 								if ($zebracount % 2) {
 									print("		<tr>\n");
 								}
 								else {
-									print("		<tr class=\"tbl_alt\">\n");
+									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								print("		<td>".$ca->a_name."</td>\n		<td><a href=\"".$ca->guid."\" title=\"View full details about ".$ca->post_title."\">".$ca->post_title."</a></td>\n		<td>".$ca->apc_value."</td>\n	</tr>\n");
 								$zebracount++;
@@ -419,7 +419,7 @@ get_header(); ?>
 
 						if ($cafail && $safail && $ccfail) {
 							//no awards at all
-							print("	<div class=\"info\">\n		<p>This player has not any awards as of yet.</p>\n	</div>\n");
+							print("	<div class=\"bblm_info\">\n		<p>This player has not any awards as of yet.</p>\n	</div>\n");
 						}
 
 
@@ -427,7 +427,7 @@ get_header(); ?>
 					}//end of if player has played a game
 					else {
 						//Player has not made debut yet
-						print("	<div class=\"info\">\n	 <p>This player has not made their Debut yet. Stay tuned for further developments.</p>\n	</div>\n");
+						print("	<div class=\"bblm_info\">\n	 <p>This player has not made their Debut yet. Stay tuned for further developments.</p>\n	</div>\n");
 					}
 
 ?>

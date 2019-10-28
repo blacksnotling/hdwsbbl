@@ -19,7 +19,7 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
 
-				<div class="details racedet">
+				<div class="bblm_details bblm_race_description">
 					<?php the_content(); ?>
 				</div>
 <?php
@@ -43,21 +43,21 @@
 					$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = '.$race_id.' ORDER by pos_cost ASC';
 					if ($positions = $wpdb->get_results($positionsql)) {
 						$zebracount = 1;
-						print("<table>\n	<tr>\n		<th>Name</th>\n		<th>Limit</th>\n		<th class=\"tbl_stat\">MA</th>\n		<th class=\"tbl_stat\">ST</th>\n		<th class=\"tbl_stat\">AG</th>\n		<th class=\"tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Name</th>\n		<th>Limit</th>\n		<th class=\"bblm_tbl_stat\">MA</th>\n		<th class=\"bblm_tbl_stat\">ST</th>\n		<th class=\"bblm_tbl_stat\">AG</th>\n		<th class=\"bblm_tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
 						foreach ($positions as $pos) {
 							if ($zebracount % 2) {
 								print("		<tr id=\"pos-".$pos->pos_id."\">\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\" id=\"pos-".$pos->pos_id."\">\n");
+								print("	<tr class=\"bblm_tbl_alt\" id=\"pos-".$pos->pos_id."\">\n");
 							}
-							print("		<td>" . esc_html( $pos->pos_name ) . "</td>\n		<td>0 - ".$pos->pos_limit."</td>\n		<td>".$pos->pos_ma."</td>\n		<td>".$pos->pos_st."</td>\n		<td>".$pos->pos_ag."</td>\n		<td>".$pos->pos_av."</td>\n		<td class=\"tbl_skills\">".$pos->pos_skills."</td>\n		<td>".number_format($pos->pos_cost)."gp</td>\n	</tr>\n");
+							print("		<td>" . esc_html( $pos->pos_name ) . "</td>\n		<td>0 - ".$pos->pos_limit."</td>\n		<td>".$pos->pos_ma."</td>\n		<td>".$pos->pos_st."</td>\n		<td>".$pos->pos_ag."</td>\n		<td>".$pos->pos_av."</td>\n		<td class=\"bblm_tbl_skills\">".$pos->pos_skills."</td>\n		<td>".number_format($pos->pos_cost)."gp</td>\n	</tr>\n");
 							$zebracount++;
 						}
 						print("</table>\n");
 					}
 					else {
-						print("	<div class=\"info\">\n		<p>Sorry, but no positions have been filled out for this race</p>\n	</div>\n");
+						print("	<div class=\"bblm_info\">\n		<p>Sorry, but no positions have been filled out for this race</p>\n	</div>\n");
 					}
 
 					//Availible Star Players
@@ -65,15 +65,15 @@
 					if ($starplayer = $wpdb->get_results($starplayersql)) {
 						$zebracount = 1;
 						print("<h3>Star Players available for Race</h3>\n");
-						print("<table>\n	<tr>\n		<th>Name</th>\n		<th class=\"tbl_stat\">MA</th>\n		<th class=\"tbl_stat\">ST</th>\n		<th class=\"tbl_stat\">AG</th>\n		<th class=\"tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
+						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Name</th>\n		<th class=\"bblm_tbl_stat\">MA</th>\n		<th class=\"bblm_tbl_stat\">ST</th>\n		<th class=\"bblm_tbl_stat\">AG</th>\n		<th class=\"bblm_tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
 						foreach ($starplayer as $star) {
 							if ($zebracount % 2) {
 								print("		<tr>\n");
 							}
 							else {
-								print("	<tr class=\"tbl_alt\">\n");
+								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
-							print("		<td><a href=\"".$star->guid."\" title=\"See more details of this player\">".$star->post_title."</a></td>\n		<td>".$star->p_ma."</td>\n		<td>".$star->p_st."</td>\n		<td>".$star->p_ag."</td>\n		<td>".$star->p_av."</td>\n		<td class=\"tbl_skills\">".$star->p_skills."</td>\n		<td>".number_format($star->p_cost)."gp</td>\n	</tr>\n");
+							print("		<td><a href=\"".$star->guid."\" title=\"See more details of this player\">".$star->post_title."</a></td>\n		<td>".$star->p_ma."</td>\n		<td>".$star->p_st."</td>\n		<td>".$star->p_ag."</td>\n		<td>".$star->p_av."</td>\n		<td class=\"bblm_tbl_skills\">".$star->p_skills."</td>\n		<td>".number_format($star->p_cost)."gp</td>\n	</tr>\n");
 							$zebracount++;
 						}
 						print("</table>\n");
@@ -90,11 +90,11 @@
 						print("</ul>\n");
 					}
 					else {
-						print("	<div class=\"info\">\n		<p>There are currently no teams representing this Race.</p>\n	</div>.\n");
+						print("	<div class=\"bblm_info\">\n		<p>There are currently no teams representing this Race.</p>\n	</div>.\n");
 					}
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>There are currently no details set up for this Race.</p>\n </div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>There are currently no details set up for this Race.</p>\n </div>\n");
 				}
 
 ?>

@@ -99,25 +99,25 @@ Template Name: List Resuts
 								$is_first_div = 1;
 							}
 							if ($is_first_sea) {
-								echo '<h3>' . bblm_get_season_name( $m->sea_id ) . '</h3><h4><a href="' . $m->cguid . '" title="View more details about the ' . $m->c_name . '">' . $m->c_name .'</a></h4><h5>' . $m->div_name . '</h5><table class = "bblm_table"><tr><th class="tbl_matchdate bblm_tbl_matchdate">Date</th><th class="tbl_matchname bblm_tbl_matchname">Match</th><th class="tbl_matchresult bblm_tbl_matchresult">Result</th><th class="tbl_matchdgate bblm_tbl_matchdgate">Gate</th></tr>';
+								echo '<h3>' . bblm_get_season_name( $m->sea_id ) . '</h3><h4><a href="' . $m->cguid . '" title="View more details about the ' . $m->c_name . '">' . $m->c_name .'</a></h4><h5>' . $m->div_name . '</h5><table class="bblm_table"><tr><th class="bblm_tbl_matchdate">Date</th><th class="bblm_tbl_matchname">Match</th><th class="bblm_tbl_matchresult">Result</th><th class="bblm_tbl_matchdgate">Gate</th></tr>';
 								$is_first_sea = 0;
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
 							if ($is_first_comp) {
-								print("<h4><a href=\"".$m->cguid."\" title=\"View more details about the ".$m->c_name."\">".$m->c_name."</a></h4>\n <h5>".$m->div_name."</h5>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   <th class=\"tbl_matchresult\">Result</th>\n		   <th class=\"tbl_matchdgate\">Gate</th>\n		 </tr>\n");
+								print("<h4><a href=\"".$m->cguid."\" title=\"View more details about the ".$m->c_name."\">".$m->c_name."</a></h4>\n <h5>".$m->div_name."</h5>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchdgate\">Gate</th>\n		 </tr>\n");
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
 							if ($is_first_div) {
-								print("<h5>".$m->div_name."</h5>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   <th class=\"tbl_matchresult\">Result</th>\n		   <th class=\"tbl_matchdgate\">Gate</th>\n		 </tr>\n");
+								print("<h5>".$m->div_name."</h5>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchdgate\">Gate</th>\n		 </tr>\n");
 								$is_first_div = 0;
 							}
 							if ($zebracount % 2) {
 								print("		<tr>\n");
 							}
 							else {
-								print("		<tr class=\"tbl_alt\">\n");
+								print("		<tr class=\"bblm_tbl_alt\">\n");
 							}
 							//print("<table>\n		 <tr>\n		   <th>Date</th>\n		   <th>Match</th>\n		   <th>Result</th>\n		   <th>Attendance</th>\n		 </tr>\n");
 							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		   <td><a href=\"".$m->guid."\" title=\"View the details of the match\">".$m->post_title."</a></td>\n		   <td>".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")</td>\n		   <td><em>".number_format($m->m_gate)."</em></td>\n		 </tr>\n");
@@ -129,14 +129,14 @@ Template Name: List Resuts
 						//The Second Layout has been selected
 						$zebracount = 1;
 ?>
-				<table class="sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
-						<th class="tbl_matchdate">Date</th>
-						<th class="tbl_matchname">Match</th>
+						<th class="bblm_tbl_matchdate">Date</th>
+						<th class="bblm_tbl_matchname">Match</th>
 						<th>Result</th>
 						<th>Atten</th>
-						<th class="tbl_name">Comp</th>
+						<th class="bblm_tbl_name">Comp</th>
 						<th>Round</th>
 						<th>Season</th>
 					</tr>
@@ -148,7 +148,7 @@ Template Name: List Resuts
 								print("					<tr  id=\"F".$m->m_id."\">\n");
 							}
 							else {
-								print("					<tr class=\"tbl_alt\"  id=\"F".$m->m_id."\">\n");
+								print("					<tr class=\"bblm_tbl_alt\"  id=\"F".$m->m_id."\">\n");
 							}
 ?>
 						<td><?php echo date( "d.m.y", $m->mdate ); ?></td>

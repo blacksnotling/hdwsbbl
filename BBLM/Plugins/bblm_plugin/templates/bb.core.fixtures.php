@@ -85,19 +85,19 @@ Template Name: List Fixtures
 								$is_first_div = 1;
 							}
 							if ($is_first_comp) {
-								print("<h3><a href=\"".$m->clink."\" title=\"View more about the ".$m->cname."\">".$m->cname."</a></h3>\n <h4>".$m->div_name."</h4>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		 </tr>\n");
+								print("<h3><a href=\"".$m->clink."\" title=\"View more about the ".$m->cname."\">".$m->cname."</a></h3>\n <h4>".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
 							if ($is_first_div) {
-								print("<h4>".$m->div_name."</h4>\n  <table>\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">Match</th>\n		   </tr>\n");
+								print("<h4>".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   </tr>\n");
 								$is_first_div = 0;
 							}
 							if ($zebracount % 2) {
 								print("		<tr id=\"F".$m->f_id."\">\n");
 							}
 							else {
-								print("		<tr class=\"tbl_alt\"  id=\"F".$m->f_id."\">\n");
+								print("		<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
 							}
 							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		<td>");
 							if ($bblm_tbd_team == $m->TAid) {
@@ -124,13 +124,13 @@ Template Name: List Fixtures
 						//The Second Layout has been selected
 						$zebracount = 1;
 ?>
-				<table class="sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
-						<th class="tbl_matchdate">Date</th>
-						<th class="tbl_matchname">Match</th>
-						<th class="tbl_name">Competition</th>
-						<th class="tbl_matchname">Round</th>
+						<th class="bblm_tbl_matchdate">Date</th>
+						<th class="bblm_tbl_matchname">Match</th>
+						<th class="bblm_tbl_name">Competition</th>
+						<th class="bblm_tbl_matchname">Round</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -140,7 +140,7 @@ Template Name: List Fixtures
 								print("					<tr  id=\"F".$m->f_id."\">\n");
 							}
 							else {
-								print("					<tr class=\"tbl_alt\"  id=\"F".$m->f_id."\">\n");
+								print("					<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
 							}
 ?>
 						<td><?php print(date("d.m.y", $m->mdate)); ?></td>
@@ -181,7 +181,7 @@ Template Name: List Fixtures
 				}
 				else {
 					//The Query did not run
-					print("<div class=\"info\">\n	<p>There are currently no fixtures scheduled.</p>\n	</div>");
+					print("<div class=\"bblm_info\">\n	<p>There are currently no fixtures scheduled.</p>\n	</div>");
 				}
 
 ?>

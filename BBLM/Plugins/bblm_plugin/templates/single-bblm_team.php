@@ -39,7 +39,7 @@
 				}
 		}
 ?>
-				<div class="details team">
+				<div class="bblm_details bblm_team_description">
 					<?php the_content('Read the rest of this entry &raquo;'); ?>
 				</div>
 <?php
@@ -53,20 +53,20 @@
 				if ( !empty( $ohs ) ) { //Need something better - IE a result has been returned
 ?>
 				<h3>Career Statistics for <?php the_title(); ?></h3>
-				<table>
+				<table class="bblm_table">
 					<tr>
-						<th class="tbl_title">Team</th>
-						<th class="tbl_stat">P</th>
-						<th class="tbl_stat">W</th>
-						<th class="tbl_stat">L</th>
-						<th class="tbl_stat">D</th>
-						<th class="tbl_stat">TF</th>
-						<th class="tbl_stat">TA</th>
-						<th class="tbl_stat">CF</th>
-						<th class="tbl_stat">CA</th>
-						<th class="tbl_stat">COMP</th>
-						<th class="tbl_stat">INT</th>
-						<th class="tbl_stat">%</th>
+						<th class="bblm_tbl_title">Team</th>
+						<th class="bblm_tbl_stat">P</th>
+						<th class="bblm_tbl_stat">W</th>
+						<th class="bblm_tbl_stat">L</th>
+						<th class="bblm_tbl_stat">D</th>
+						<th class="bblm_tbl_stat">TF</th>
+						<th class="bblm_tbl_stat">TA</th>
+						<th class="bblm_tbl_stat">CF</th>
+						<th class="bblm_tbl_stat">CA</th>
+						<th class="bblm_tbl_stat">COMP</th>
+						<th class="bblm_tbl_stat">INT</th>
+						<th class="bblm_tbl_stat">%</th>
 					</tr>
 <?php
  			foreach ($ohs as $oh) {
@@ -100,7 +100,7 @@
 				</table>
 
 				<h4>Key</h4>
-				<ul class="expandablekey">
+				<ul class="bblm_expandablekey">
 					<li><strong>P</strong>: Number of games Played</li>
 					<li><strong>TF</strong>: Number of Touchdowns scored by the team</li>
 					<li><strong>TA</strong>: Number of Touchdowns scored against the team</li>
@@ -115,21 +115,21 @@
 			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
 				$zebracount = 1;
 ?>
-				<table class="bblm_table bblm_sortable sortable">
+				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
-							<th class="tbl_title bblm_tbl_title"><?php echo __( 'Season', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'P', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'W', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'L', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'D', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TF', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'TA', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CF', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'CA', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'COMP', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'INT', 'bblm'); ?></th>
-							<th class="tbl_stat bblm_tbl_stat"><?php echo __( '%', 'bblm'); ?></th>
+							<th class="bblm_tbl_title"><?php echo __( 'Season', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'W', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'L', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'D', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'TF', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'TA', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'CF', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'CA', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( '%', 'bblm'); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -139,7 +139,7 @@
 						echo '<tr>';
 					}
 					else {
-						echo '<tr class="tbl_alt bblm_tbl_alt">';
+						echo '<tr class="bblm_tbl_alt">';
 					}
 					echo '<td>' . bblm_get_season_link( $sh->sea_id ) . '</td>';
 					echo '<td>' . $sh->PLD . '</td>';
@@ -175,14 +175,14 @@
 
 			if ($matchh = $wpdb->get_results($matchhsql)) {
 				$zebracount = 1;
-				print("	<table class=\"sortable\">\n	<thead>\n		<tr>\n			<th class=\"tbl_title\">Competition</th>\n			<th class=\"tbl_stat\">P</th>\n			<th class=\"tbl_stat\">W</th>\n			<th class=\"tbl_stat\">L</th>\n			<th class=\"tbl_stat\">D</th>\n			<th class=\"tbl_stat\">TF</th>\n			<th class=\"tbl_stat\">TA</th>\n			<th class=\"tbl_stat\">CF</th>\n			<th class=\"tbl_stat\">CA</th>\n			<th class=\"tbl_stat\">COMP</th>\n			<th class=\"tbl_stat\">INT</th>\n			<th class=\"tbl_stat\">%</th>\n		</tr>\n	</thead>\n	<tbody>\n");
+				print("	<table class=\"bblm_table bblm_sortable\">\n	<thead>\n		<tr>\n			<th class=\"bblm_tbl_title\">Competition</th>\n			<th class=\"bblm_tbl_stat\">P</th>\n			<th class=\"bblm_tbl_stat\">W</th>\n			<th class=\"bblm_tbl_stat\">L</th>\n			<th class=\"bblm_tbl_stat\">D</th>\n			<th class=\"bblm_tbl_stat\">TF</th>\n			<th class=\"bblm_tbl_stat\">TA</th>\n			<th class=\"bblm_tbl_stat\">CF</th>\n			<th class=\"bblm_tbl_stat\">CA</th>\n			<th class=\"bblm_tbl_stat\">COMP</th>\n			<th class=\"bblm_tbl_stat\">INT</th>\n			<th class=\"bblm_tbl_stat\">%</th>\n		</tr>\n	</thead>\n	<tbody>\n");
 
 				foreach ($matchh as $mh) {
 					if ($zebracount % 2) {
 						print("		<tr>\n");
 					}
 					else {
-						print("		<tr class=\"tbl_alt\">\n");
+						print("		<tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("			<td><a href=\"".$mh->guid."\" title=\"View more info about ".$mh->post_title."\">".$mh->post_title."</a></td>\n			<td>".$mh->PLD."</td>\n			<td>".$mh->win."</td>\n			<td>".$mh->lose."</td>\n			<td>".$mh->draw."</td>\n			<td>".$mh->TDf."</td>\n			<td>".$mh->TDa."</td>\n			<td>".$mh->CASf."</td>\n			<td>".$mh->CASa."</td>\n			<td>".$mh->COMP."</td>\n			<td>".$mh->cINT."</td>\n");
 					if ($mh->PLD > 0) {
@@ -273,7 +273,7 @@
 
 			}
 			else {
-				print("<div class=\"info\">\n	<p>No players have been found for this team.</p>\n	</div>\n");
+				print("<div class=\"bblm_info\">\n	<p>No players have been found for this team.</p>\n	</div>\n");
 			}
 		} //end of if a team has played a match
 
@@ -283,7 +283,7 @@
 
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
 				print("<h3>Upcoming Matches (Fixtures)</h3>\n\n");
-				print("<table class=\"expandable\">\n		 <tr>\n		   <th class=\"tbl_matchdate\">Date</th>\n		   <th class=\"tbl_matchname\">opponent</th>\n		   <th class=\"tbl_matchname\">Competition</th>\n		 </tr>\n");
+				print("<table class=\"bblm_table bblm_expandable\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">opponent</th>\n		   <th class=\"bblm_tbl_matchname\">Competition</th>\n		 </tr>\n");
 
 				$is_first = 0;
 				$current_div = "";
@@ -295,16 +295,16 @@
 
 				foreach ($fixtures as $fd) {
 					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("		 <tr class=\"tb_hide\">\n");
+						print("		 <tr class=\"bblm_tbl_hide\">\n");
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
 						print("		 <tr>\n");
 					}
 					else if (10 < $zebracount) {
-						print("		 <tr class=\"tbl_alt tb_hide\">\n");
+						print("		 <tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 					}
 					else {
-						print("		 <tr class=\"tbl_alt\">\n");
+						print("		 <tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("		 	<td>".date("d.m.y", $fd->fdate)."</td>\n		 	<td>\n");
 					if ($tid == $fd->f_teamA) {
@@ -352,26 +352,26 @@
 				if ($matchs = $wpdb->get_results($matchssql)) {
 				$zebracount = 1;
 				$alt = "FALSE";
-					print("<table class=\"sortable expandable\" id=\"recentmatches\">\n	<thead>\n		 <tr>\n		   <th>Date</th>\n		   <th class=\"tbl_matchname\">Opponent</th>\n		   <th class=\"tbl_stat\">TF</th>\n		   <th class=\"tbl_stat\">TA</th>\n		   <th class=\"tbl_stat\">CF</th>\n		   <th class=\"tbl_stat\">CA</th>\n		   <th>Fans</th>\n		   <th>TV</th>\n		   <th>Result</th>\n		 </tr>\n	</thead>\n	<tbody>\n");
+					print("<table class=\"bblm_table bblm_sortable bblm_expandable\" id=\"bblm_recentmatches\">\n	<thead>\n		 <tr>\n		   <th>Date</th>\n		   <th class=\"bblm_tbl_matchname\">Opponent</th>\n		   <th class=\"bblm_tbl_stat\">TF</th>\n		   <th class=\"bblm_tbl_stat\">TA</th>\n		   <th class=\"bblm_tbl_stat\">CF</th>\n		   <th class=\"bblm_tbl_stat\">CA</th>\n		   <th>Fans</th>\n		   <th>TV</th>\n		   <th>Result</th>\n		 </tr>\n	</thead>\n	<tbody>\n");
 					foreach ($matchs as $ms) {
 						/*
 						  This one is a little different, we check for zebra (as normal but if it is also over 10 then we need to add the hooks to collapse it.
 						*/
 						if (($zebracount % 2) && (10 < $zebracount)) {
-							print("		<tr class=\"tb_hide\">\n");
+							print("		<tr class=\"bblm_tbl_hide\">\n");
 						}
 						else if (($zebracount % 2) && (10 >= $zebracount)) {
 							print("		<tr>\n");
 						}
 						else if (10 < $zebracount) {
-							print("		<tr class=\"tbl_alt tb_hide\">\n");
+							print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 							$alt = TRUE;
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							print("		<tr class=\"bblm_tbl_alt\">\n");
 							$alt = TRUE;
 						}
-						print("		   <td><a href=\"".$ms->Mlink."\" title=\"View full details of ".$ms->Mtitle."\">".date("d.m.y", $ms->mdate)."</a></td>\n		   <td class=\"tbl_matchop\">");
+						print("		   <td><a href=\"".$ms->Mlink."\" title=\"View full details of ".$ms->Mtitle."\">".date("d.m.y", $ms->mdate)."</a></td>\n		   <td class=\"bblm_tbl_matchop\">");
 
 						if ($tid == $ms->m_teamA) {
 							$team_name = esc_html( get_the_title( $ms->tBid ) );
@@ -387,7 +387,7 @@
 						//printing of match comment
 						print("		<tr id=\"mcomment-".$ms->m_id."\" class=\"mcomment");
 						if ($alt) {
-							print(" tbl_alt\">\n");
+							print(" bblm_tbl_alt\">\n");
 						}
 						else {
 							print("\">\n");
@@ -414,13 +414,13 @@
 					$has_cups = 1;
 					$zebracount = 1;
 					print("<h4>Championships</h4>\n");
-					print("<table>\n	<tr>\n		<th class=\"tbl_name\">Title</th>\n		<th class=\"tbl_name\">Competition</th>\n	</tr>\n");
+					print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr>\n");
 					foreach ($champs as $cc) {
 						if ($zebracount % 2) {
 							print("		<tr>\n");
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							print("		<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print("		<td>".$cc->a_name."</td>\n		<td><a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></td>\n	</tr>\n");
 						$zebracount++;
@@ -439,9 +439,9 @@
 					<table class="bblm_table">
 						<thead>
 							<tr>
-								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Award', 'bblm'); ?></th>
-								<th class="tbl_name bblm_tbl_name"><?php echo __( 'Competition', 'bblm'); ?></th>
-								<th class="tbl_stat bblm_tbl_stat"><?php echo __( 'Value', 'bblm'); ?></th>
+								<th class="bblm_tbl_name"><?php echo __( 'Award', 'bblm'); ?></th>
+								<th class="bblm_tbl_name"><?php echo __( 'Competition', 'bblm'); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm'); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -451,7 +451,7 @@
 							echo '<tr>';
 						}
 						else {
-							echo '<tr class="tbl_alt bblm_tbl_alt">';
+							echo '<tr class="bblm_tbl_alt">';
 						}
 						echo '<td>' . $sa->a_name . '</td>';
 						echo '<td>' . bblm_get_season_link( $sa->season ) . '</td>';
@@ -470,13 +470,13 @@
 				if ($cawards = $wpdb->get_results($compawardssql)) {
 					$zebracount = 1;
 					print("<h4>Awards from Competitions</h4>\n");
-					print("<table>\n	<tr>\n		<th class=\"tbl_name\">Award</th>\n		<th class=\"tbl_name\">Competition</th>\n		<th class=\"tbl_stat\">Value</th>\n	</tr>\n");
+					print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 					foreach ($cawards as $ca) {
 						if ($zebracount % 2) {
 							print("		<tr>\n");
 						}
 						else {
-							print("		<tr class=\"tbl_alt\">\n");
+							print("		<tr class=\"bblm_tbl_alt\">\n");
 						}
 						print("		<td>".$ca->a_name."</td>\n		<td><a href=\"".$ca->guid."\" title=\"View full details about ".$ca->post_title."\">".$ca->post_title."</a></td>\n		<td>".$ca->atc_value."</td>\n	</tr>\n");
 						$zebracount++;
@@ -489,7 +489,7 @@
 
 				if ($cafail && $safail && $ccfail) {
 					//no awards at all
-					print("	<div class=\"info\">\n		<p>This team has not any awards as of yet.</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>This team has not any awards as of yet.</p>\n	</div>\n");
 				}
 
 
@@ -497,7 +497,7 @@
 			}//end of if plyed a match
 			else {
 				$has_played = 0;
-				print("	<div class=\"info\">\n		<p>This Team has not yet made their debut!. Stay tuned to see how this team develops.</p>\n	</div>\n");
+				print("	<div class=\"bblm_info\">\n		<p>This Team has not yet made their debut!. Stay tuned to see how this team develops.</p>\n	</div>\n");
 			}
 
 

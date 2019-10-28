@@ -25,16 +25,16 @@
 <div class="entry">
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<h2 class="entry-title"><?php the_title(); ?></h2>
-	<div class="details">
+	<div class="bblm_details">
 		<?php the_content(); ?>
 		</div>
-			<table>
+			<table class="bblm_table">
 				<tr>
-					<th class="tbl_name">Position</th>
-					<th class="tbl_stat">MA</th>
-					<th class="tbl_stat">ST</th>
-					<th class="tbl_stat">AG</th>
-					<th class="tbl_stat">AV</th>
+					<th class="bblm_tbl_name">Position</th>
+					<th class="bblm_tbl_stat">MA</th>
+					<th class="bblm_tbl_stat">ST</th>
+					<th class="bblm_tbl_stat">AG</th>
+					<th class="bblm_tbl_stat">AV</th>
 					<th>Skills</th>
 					<th>Cost per match</th>
 				</tr>
@@ -44,7 +44,7 @@
 					<td><?php echo $pd->p_st; ?></td>
 					<td><?php echo $pd->p_ag; ?></td>
 					<td><?php echo $pd->p_av; ?></td>
-					<td class="tbl_skills"><?php  echo $pd->p_skills; ?></td>
+					<td class="bblm_tbl_skills"><?php  echo $pd->p_skills; ?></td>
 					<td><?php  echo number_format($pd->p_cost); ?>gp</td>
 				</tr>
 			</table>
@@ -71,16 +71,16 @@
 			//The Star has played a match so continue
 ?>
 			<h3>League Statistics</h3>
-			<table>
+			<table class="bblm_table">
 				<tr>
-					<th class="tbl_title">Career Total</th>
-					<th class="tbl_stat">Pld</th>
-					<th class="tbl_stat">TD</th>
-					<th class="tbl_stat">CAS</th>
-					<th class="tbl_stat">COMP</th>
-					<th class="tbl_stat">INT</th>
-					<th class="tbl_stat">MVP</th>
-					<th class="tbl_stat">SPP</th>
+					<th class="bblm_tbl_title">Career Total</th>
+					<th class="bblm_tbl_stat">Pld</th>
+					<th class="bblm_tbl_stat">TD</th>
+					<th class="bblm_tbl_stat">CAS</th>
+					<th class="bblm_tbl_stat">COMP</th>
+					<th class="bblm_tbl_stat">INT</th>
+					<th class="bblm_tbl_stat">MVP</th>
+					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 				<tr>
 					<td><?php the_title(); ?></th>
@@ -101,16 +101,16 @@
 				$zebracount = 1;
 ?>
 
-			<table>
+			<table class="bblm_table">
 				<tr>
-					<th class="tbl_title">Playing for</th>
-					<th class="tbl_stat">Pld</th>
-					<th class="tbl_stat">TD</th>
-					<th class="tbl_stat">CAS</th>
-					<th class="tbl_stat">COMP</th>
-					<th class="tbl_stat">INT</th>
-					<th class="tbl_stat">MVP</th>
-					<th class="tbl_stat">SPP</th>
+					<th class="bblm_tbl_title">Playing for</th>
+					<th class="bblm_tbl_stat">Pld</th>
+					<th class="bblm_tbl_stat">TD</th>
+					<th class="bblm_tbl_stat">CAS</th>
+					<th class="bblm_tbl_stat">COMP</th>
+					<th class="bblm_tbl_stat">INT</th>
+					<th class="bblm_tbl_stat">MVP</th>
+					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 
 <?php
@@ -119,7 +119,7 @@
 						print("				<tr>\n");
 					}
 					else {
-						print("				<tr class=\"tbl_alt\">\n");
+						print("				<tr class=\"bblm_tbl_alt\">\n");
 					}
 					$team_name = esc_html( get_the_title( $s->WPID ) );
 					print ("					<td><a href=\"" . get_post_permalink( $s->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
@@ -147,16 +147,16 @@
 
 ?>
 			<h3>Breakdown by Competition</h3>
-			<table>
+			<table class="bblm_table">
 				<tr>
-					<th class="tbl_title">Competition</th>
-					<th class="tbl_stat">Pld</th>
-					<th class="tbl_stat">TD</th>
-					<th class="tbl_stat">CAS</th>
-					<th class="tbl_stat">INT</th>
-					<th class="tbl_stat">COMP</th>
-					<th class="tbl_stat">MVP</th>
-					<th class="tbl_stat">SPP</th>
+					<th class="bblm_tbl_title">Competition</th>
+					<th class="bblm_tbl_stat">Pld</th>
+					<th class="bblm_tbl_stat">TD</th>
+					<th class="bblm_tbl_stat">CAS</th>
+					<th class="bblm_tbl_stat">INT</th>
+					<th class="bblm_tbl_stat">COMP</th>
+					<th class="bblm_tbl_stat">MVP</th>
+					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
 			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.c_id = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
@@ -167,7 +167,7 @@
 						print("				<tr>\n");
 					}
 					else {
-						print("				<tr class=\"tbl_alt\">\n");
+						print("				<tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("				<td><a href=\"".$pc->guid."\" title=\"View more details about this competition\">".$pc->post_title."</a></td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
 					$zebracount++;
@@ -177,16 +177,16 @@
 ?>
 
 			<h3>Breakdown by Season</h3>
-			<table>
+			<table class="bblm_table">
 				<tr>
-					<th class="tbl_title">Season</th>
-					<th class="tbl_stat">P</th>
-					<th class="tbl_stat">TD</th>
-					<th class="tbl_stat">CAS</th>
-					<th class="tbl_stat">INT</th>
-					<th class="tbl_stat">COMP</th>
-					<th class="tbl_stat">MVP</th>
-					<th class="tbl_stat">SPP</th>
+					<th class="bblm_tbl_title">Season</th>
+					<th class="bblm_tbl_stat">P</th>
+					<th class="bblm_tbl_stat">TD</th>
+					<th class="bblm_tbl_stat">CAS</th>
+					<th class="bblm_tbl_stat">INT</th>
+					<th class="bblm_tbl_stat">COMP</th>
+					<th class="bblm_tbl_stat">MVP</th>
+					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
 					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND C.c_show = 1 AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
@@ -197,7 +197,7 @@
 								print("				<tr>\n");
 							}
 							else {
-								print("				<tr class=\"tbl_alt\">\n");
+								print("				<tr class=\"bblm_tbl_alt\">\n");
 							}
 							print("					<td>" . bblm_get_season_link( $pc->sea_id ) . "</td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
 							$zebracount++;
@@ -207,7 +207,7 @@
 ?>
 
 			<h3>Recent Matches</h3>
-			<table class="sortable expandable">
+			<table class="bblm_table bblm_sortable bblm_expandable">
 				<thead>
 				<tr>
 					<th>Date</th>
@@ -228,16 +228,16 @@
 			$zebracount = 1;
 				foreach ($playermatch as $pm) {
 					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("				<tr class=\"tb_hide\">\n");
+						print("				<tr class=\"bblm_tbl_hide\">\n");
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
 						print("				<tr>\n");
 					}
 					else if (10 < $zebracount) {
-						print("				<tr class=\"tbl_alt tb_hide\">\n");
+						print("				<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 					}
 					else {
-						print("				<tr class=\"tbl_alt\">\n");
+						print("				<tr class=\"bblm_tbl_alt\">\n");
 					}
 					print("					<td><a href=\"".$pm->guid."\" title=\"View the match in more detail\">".date("d.m.y", $pm->mdate)."</a></td>\n");
 					if ($pm->TAid == $pm->t_id) {
@@ -300,7 +300,7 @@
 		}//End of if a player has played a match
 		else {
 			//Star has not made debut yet
-			print("					<div class=\"info\">\n						<p>This Star Player has not made their Debut yet. Stay tuned for further developments.</p>\n					</div>\n");
+			print("					<div class=\"bblm_info\">\n						<p>This Star Player has not made their Debut yet. Stay tuned for further developments.</p>\n					</div>\n");
 		}
 
 

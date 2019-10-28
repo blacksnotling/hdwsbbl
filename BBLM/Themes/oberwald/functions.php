@@ -371,7 +371,7 @@ function oberwald_comment( $comment, $args, $depth ) {
 			<?php edit_comment_link( __( 'Edit', 'oberwald' ), '<span class="edit-link">', '</span>' ); ?>
 
 			<?php if ( $comment->comment_approved == '0' ) : ?>
-				<span class="info"><?php _e( 'Your comment is awaiting moderation.', 'oberwald' ); ?></span>
+				<span class="bblm_info"><?php _e( 'Your comment is awaiting moderation.', 'oberwald' ); ?></span>
 				<br />
 			<?php endif; ?>
 

@@ -18,7 +18,7 @@
 
 				<div class="entry-content">
 
-					<div class="details bblm_cup_description bblm_details">
+					<div class="bblm_cup_description bblm_description">
 						<?php the_content(); ?>
 					</div>
 
@@ -53,7 +53,7 @@
 
 				}//end of if matches
 				else {
-					print("	<div class=\"info\">\n		<p>No matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
 				}
 
 ?>

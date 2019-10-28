@@ -28,7 +28,6 @@ if ($teams = $wpdb->get_results($teamsql)) {
 	$is_first_type = 1;
 	$current_type = "";
 
-	//print("<table>\n	<tr>\n		<th>Team</th>\n		<th>Race</th>\n	</tr>\n");
 	$zebracount = 1;
 	foreach ($teams as $team) {
 		if ($team->type_name !== $current_type) {
@@ -58,19 +57,19 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 
 		if ($is_first_type) {
-			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n  <table class=\"sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_teamrace\">Race</th>\n		<th class=\"tbl_teamvalue\">Team Value</th>\n		<th class=\"tbl_stat\">Games</th>\n		<th class=\"tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_type = 0;
 			$is_first_status = 0;
 		}
 		if ($is_first_status) {
-			print("<h4>".$status_title."</h4>\n  <table class=\"sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_teamrace\">Race</th>\n		<th class=\"tbl_teamvalue\">Team Value</th>\n		<th class=\"tbl_stat\">Games</th>\n		<th class=\"tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h4>".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_status = 0;
 		}
 		if ($zebracount % 2) {
 			print("		<tr id=\"".$team->t_id."\">\n");
 		}
 		else {
-			print("		<tr class=\"tbl_alt\" id=\"".$team->t_id."\">\n");
+			print("		<tr class=\"bblm_tbl_alt\" id=\"".$team->t_id."\">\n");
 		}
 		print("		<td>");
 
@@ -100,7 +99,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 		$cupscountsql = 'SElECT B.a_id, A.a_name, COUNT(*) AS ANUM FROM '.$wpdb->prefix.'awards_team_comp AS B, '.$wpdb->prefix.'awards AS A WHERE A.a_id = B.a_id AND (B.a_id = 1 or B.a_id = 2 or B.a_id = 3) AND B.t_id = '.$team->t_id.' GROUP BY B.a_id ORDER BY B.a_id ASC';
 		if ($cups = $wpdb->get_results($cupscountsql)) {
-			print("		<td class=\"tbl_teamcup\">");
+			print("		<td class=\"bblm_tbl_teamcup\">");
 			foreach ($cups as $cup) {
 			print("<img src=\"".home_url()."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
 			}
@@ -116,7 +115,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 	print("	</tbody>\n	</table>\n");
 }
 else {
-	print("	<div class=\"info\">\n		<p>There are no Teams currently set-up!</p>	</div>\n");
+	print("	<div class=\"bblm_info\">\n		<p>There are no Teams currently set-up!</p>	</div>\n");
 }
 
 //End of Custom content
