@@ -13,10 +13,13 @@
  */
 ?>
 <?php get_header(); ?>
-	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+ <?php do_action( 'bblm_template_before_posts' ); ?>
+ <?php if (have_posts()) : ?>
+   <?php do_action( 'bblm_template_before_loop' ); ?>
+   <?php while (have_posts()) : the_post(); ?>
+     <?php do_action( 'bblm_template_before_content' ); ?>
+
+			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 
 <?php
@@ -56,64 +59,71 @@
 				}
 
 ?>
-			<h2><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on <?php print( $teamA ); ?>"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on <?php print( $teamB ); ?>"><?php print( $teamB ); ?></a></h2>
-		<!--<p><?php print($post->ID); ?> - <?php print($m->m_id); ?></p>-->
+			<header class="entry-header">
+				<h2 class="entry-title"><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on this team"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on this team"><?php print( $teamB ); ?></a></h2>
+			</header><!-- .entry-header -->
+
+			<div class="entry-content">
 
 				<table class="bblm_table">
-					<tr>
-						<th class="bblm_tbl_name"><?php print( $teamA );?></th>
-						<th class="bblm_tbl_name">VS</th>
-						<th class="bblm_tbl_name"><?php print( $teamB );?></th>
-					</tr>
-					<tr>
-						<td><strong><?php print($tAimg);?></strong></td>
-						<th>&nbsp;</th>
-						<td><strong><?php print($tBimg);?></strong></td>
-					</tr>
-					<tr>
-						<td class="bblm_score"><strong><?php print($tA->mt_td);?></strong></td>
-						<th class="bblm_tottux">Score</th>
-						<td class="bblm_score"><strong><?php print($tB->mt_td);?></strong></td>
-					</tr>
-					<tr>
-						<td><?php print($tA->mt_cas);?></td>
-						<th class="bblm_tottux">Casulties</th>
-						<td><?php print($tB->mt_cas);?></td>
-					</tr>
-					<tr>
-						<td><?php print($tA->mt_comp);?></td>
-						<th class="bblm_tottux">Completions</th>
-						<td><?php print($tB->mt_comp);?></td>
-					</tr>
-					<tr>
-						<td><?php print($tA->mt_int);?></td>
-						<th class="bblm_tottux">Inteceptions</th>
-						<td><?php print($tB->mt_int);?></td>
-					</tr>
-					<tr>
-						<td class="bblm_tv"><?php print(number_format($tA->mt_tv));?>gp</td>
-						<th class="bblm_tottux">Team Value</th>
-						<td class="bblm_tv"><?php print(number_format($tB->mt_tv));?>gp</td>
-					</tr>
-					<tr>
-						<td><?php print(number_format($tA->mt_winnings));?></td>
-						<th class="bblm_tottux">Fans</th>
-						<td><?php print(number_format($tB->mt_winnings));?></td>
-					</tr>
-					<tr>
-						<td><?php print(number_format($tA->mt_att));?> gp</td>
-						<th class="bblm_tottux">Winnings</th>
-						<td><?php print(number_format($tB->mt_att));?> gp</td>
-					</tr>
-					<tr>
-						<td><?php print($tA->mt_ff);?></td>
-						<th class="bblm_tottux">FF Change</th>
-						<td><?php print($tB->mt_ff);?></td>
-					</tr>
+					<thead>
+						<tr>
+							<th class="bblm_tbl_name"><?php print( $teamA );?></th>
+							<th class="bblm_tbl_name">VS</th>
+							<th class="bblm_tbl_name"><?php print( $teamB );?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><strong><?php print($tAimg);?></strong></td>
+							<th>&nbsp;</th>
+							<td><strong><?php print($tBimg);?></strong></td>
+						</tr>
+						<tr>
+							<td class="bblm_score"><strong><?php print($tA->mt_td);?></strong></td>
+							<th class="bblm_tottux">Score</th>
+							<td class="bblm_score"><strong><?php print($tB->mt_td);?></strong></td>
+						</tr>
+						<tr>
+							<td><?php print($tA->mt_cas);?></td>
+							<th class="bblm_tottux">Casulties</th>
+							<td><?php print($tB->mt_cas);?></td>
+						</tr>
+						<tr>
+							<td><?php print($tA->mt_comp);?></td>
+							<th class="bblm_tottux">Completions</th>
+							<td><?php print($tB->mt_comp);?></td>
+						</tr>
+						<tr>
+							<td><?php print($tA->mt_int);?></td>
+							<th class="bblm_tottux">Inteceptions</th>
+							<td><?php print($tB->mt_int);?></td>
+						</tr>
+						<tr>
+							<td class="bblm_tv"><?php print(number_format($tA->mt_tv));?>gp</td>
+							<th class="bblm_tottux">Team Value</th>
+							<td class="bblm_tv"><?php print(number_format($tB->mt_tv));?>gp</td>
+						</tr>
+						<tr>
+							<td><?php print(number_format($tA->mt_winnings));?></td>
+							<th class="bblm_tottux">Fans</th>
+							<td><?php print(number_format($tB->mt_winnings));?></td>
+						</tr>
+						<tr>
+							<td><?php print(number_format($tA->mt_att));?> gp</td>
+							<th class="bblm_tottux">Winnings</th>
+							<td><?php print(number_format($tB->mt_att));?> gp</td>
+						</tr>
+						<tr>
+							<td><?php print($tA->mt_ff);?></td>
+							<th class="bblm_tottux">FF Change</th>
+							<td><?php print($tB->mt_ff);?></td>
+						</tr>
+					</tbody>
 				</table>
 
-				<h3>Match Report</h3>
-				<div class="bblm_details">
+				<h3><?php echo __( 'Match Report', 'bblm' ); ?></h3>
+				<div class="bblm_details bblm_match_report">
 					<?php the_content(); ?>
 				</div>
 
@@ -121,11 +131,15 @@
 <?php
 				//Display match Trivia if something is present
 				if ("" !== $m->m_trivia) {
-					print("<h3>Match Trivia</h3>\n");
-					print("<div class=\"bblm_details\">\n".$m->m_trivia."</div>");
-				}
 ?>
-			<h3>Player Actions</h3>
+					<h3><?php echo __( 'Match Trivia', 'bblm' ); ?></h3>
+					<div class="bblm_details bblm_match_trivia">
+						<p><?php echo esc_html($m->m_trivia); ?></p>
+					</div>
+<?php
+} // end of if ("" !== $m->m_trivia) {
+?>
+			<h3><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
 		<table class="bblm_table">
 			<tr>
 				<th><?php print( $teamA );?></th>
@@ -251,7 +265,7 @@
 						print($tamvp);
 ?>
 						</td>
-						<th class="tottux">MVP</th>
+						<th class="bblm_tottux">MVP</th>
 						<td>
 <?php
 						print($tbmvp);
@@ -280,7 +294,7 @@
 						}
 						?>
 						</td>
-						<th class="tottux">Inj</th>
+						<th class="bblm_tottux">Inj</th>
 						<td>
 						<?php
 						if (isset($tbinj)) {
@@ -325,7 +339,7 @@
 						}
 						?>
 						</td>
-						<th class="tottux">Inc</th>
+						<th class="bblm_tottux">Inc</th>
 						<td>
 						<?php
 						if (isset($tbinc)) {
@@ -350,7 +364,7 @@
 					</tr>
 					<tr>
 						<td><?php print(stripslashes($tA->mt_comment));?></td>
-						<th class="tottux">Comms</th>
+						<th class="bblm_tottux">Comms</th>
 						<td><?php print(stripslashes($tB->mt_comment));?></td>
 					</tr>
 				</table>
@@ -358,93 +372,17 @@
 		} //end of if match SQL
 
 ?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<footer class="entry-footer">
+	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+</footer><!-- .entry-footer -->
 
-			</div>
-		</div>
+</div><!-- .entry-content -->
+</article>
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
+<?php endif; ?>
 
-
-		<?php endwhile;?>
-	<?php endif; ?>
-
-<?php get_sidebar('content'); ?>
-
-</div><!-- end of #maincontent -->
-<?php
-		//Gathering data for the sidebar
-		//Top players in match
-		$topplayerssql = 'SELECT P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 5';
-
-		//scorers
-		$topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 10';
-
-		$compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
-		$comp = $wpdb->get_row($compsql);
-?>
-
-	<div id="subcontent">
-		<ul>
-			<li class="sideinfo"><h2>Match Information</h2>
-			  <ul>
-				<li><strong>Date:</strong> <?php print(date("d.m.25y", $m->mdate));?></li>
-				<li><strong>Competition:</strong> <a href="<?php print($comp->CompLink); ?>" title="View more about this Competition"><?php print($comp->Comp);?></a></li>
-				<li><strong>
-<?php
-		if ($m->div_id > 7) {
-			print("Division");
-		}
-		else {
-			print("Stage");
-		}
-?>
-				</strong> <?php print($comp->div_name);?></li>
-				<li><strong>Season:</strong> <?php echo bblm_get_season_link( $comp->sea_id ); ?></li>
-				<li><strong>Attendance:</strong> <?php print(number_format($m->m_gate));?></li>
-				<li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $m->stad_id ); ?></li>
-			  </ul>
-			 </li>
-<?php
-	if ($playeractions) {
-?>
-			 <li><h2>Top Players of the Match</h2>
-<?php
-			if ($topplayers = $wpdb->get_results($topplayerssql)) {
-				print("					<ul>\n");
-					foreach ($topplayers as $ts) {
-						print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value." spp</li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None!</p>\n");
-			}
-?>
-			 </li>
-			 <li><h2>Top Scorers of the Match</h2>
-<?php
-			if ($topscorers = $wpdb->get_results($topscorerssql)) {
-				print("					<ul>\n");
-					foreach ($topscorers as $ts) {
-						print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value."</li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None!</p>\n");
-			}
-?>
-			 </li>
-<?php
-	} //end of if $playeractions
-
-	if ( !dynamic_sidebar('sidebar-common') ) : ?>
-		<li><h2 class="widgettitle">Search</h2>
-			<ul>
-			 <li><?php get_search_form(); ?></li>
-			</ul>
-		</li>
-	<?php endif; ?>
-
-		</ul>
-	</div><!-- end of #subcontent -->
+<?php do_action( 'bblm_template_after_posts' ); ?>
+<?php get_sidebar(); ?>
 <?php get_footer(); ?>

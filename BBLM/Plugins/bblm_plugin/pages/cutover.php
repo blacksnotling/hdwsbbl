@@ -715,9 +715,14 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<h2>1.10 -> 1.11</h2>
 		<h3>Templates</h3>
 		<ul>
+			<li><strong>MAKE SURE I HAVE DONE A FULL CUTOVER AGAIN TO TEST</strong></li>
 			<li><input type="submit" name="bblm_template_updatemeta" value="Update Template Meta" title="Update Template Meta"/></li>
 			<li>Set the Star Player page to use the archive-bblm_starplayer template</li>
 			<li>Move the old templates out of the theme root</li>
+		</ul>
+		<h3>Sidebars</h3>
+		<ul>
+			<li>Add the new TC widgets for the single page templates that used to have sidebars - teams, players, comps, matches</li>
 		</ul>
 
 </form>

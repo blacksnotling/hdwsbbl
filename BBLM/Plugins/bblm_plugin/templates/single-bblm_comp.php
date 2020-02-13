@@ -13,11 +13,19 @@
  */
 ?>
 <?php get_header(); ?>
-	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+ <?php do_action( 'bblm_template_before_posts' ); ?>
+ <?php if (have_posts()) : ?>
+	 <?php do_action( 'bblm_template_before_loop' ); ?>
+	 <?php while (have_posts()) : the_post(); ?>
+		 <?php do_action( 'bblm_template_before_content' ); ?>
+
+		 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+					<header class="entry-header">
+						<h2 class="entry-title"><?php the_title(); ?></h2>
+					</header><!-- .entry-header -->
+
+					<div class="entry-content">
 <?php
 		$compsql = 'SELECT P.post_title, C.c_id, C.sea_id, C.series_id AS SERIES, T.ct_name, C.ct_id, C.c_active, C.c_showstandings, UNIX_TIMESTAMP(C.c_sdate) AS sdate, UNIX_TIMESTAMP(C.c_edate) AS edate FROM '.$wpdb->prefix.'comp AS C, '.$wpdb->prefix.'bb2wp AS J, '.$wpdb->prefix.'comp_type T, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND C.ct_id = T.ct_id AND J.pid = P.ID AND P.ID = '.$post->ID;;
 		if ($cd = $wpdb->get_row($compsql)) {
@@ -513,83 +521,20 @@
 			}//end of if_matches (for stats)
 
 
-
-
 		} //end of if sql
 
 ?>
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<footer class="entry-footer">
+	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+</footer><!-- .entry-footer -->
 
-			</div>
-		</div>
+</div><!-- .entry-content -->
+</article>
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
+<?php endif; ?>
 
-		<?php endwhile;?>
-	<?php endif; ?>
-
-	<?php get_sidebar('content'); ?>
-
-</div><!-- end of #maincontent -->
-<?php
-		//Gathering data for the sidebar
-		//number of teams
-		$teamnosql = 'SELECT COUNT( DISTINCT P.t_id ) AS value FROM '.$wpdb->prefix.'team_comp P WHERE P.c_id = '.$cd->c_id.' GROUP BY P.c_id';
-		$tno = $wpdb->get_var($teamnosql);
-
-		//comps this season
-		$comptseasql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.type_id = 1 AND C.sea_id = '.$cd->sea_id.' AND C.c_id != '.$cd->c_id;
-
-		//comps for this cup
-		$comptcupsql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.series_id = '.$cd->SERIES.' AND C.c_id != '.$cd->c_id;
-?>
-
-	<div id="subcontent">
-		<ul>
-			<li class="sideinfo"><h2>Comp Information</h2>
-			  <ul>
-			   <li><strong>Status:</strong> <?php print($cstatus) ?></li>
-			   <li><strong>Duration:</strong> <?php print($cduration) ?></li>
-			   <li><strong>Format:</strong> <?php print($cd->ct_name) ?></li>
-			   <li><strong>Cup:</strong> <?php echo bblm_get_cup_link( $cd->SERIES ); ?></li>
-			   <li><strong>Season:</strong> <?php echo bblm_get_season_link( $cd->sea_id ) ?></li>
-			   <li><strong>Number of teams:</strong> <?php print($tno) ?></li>
-			  </ul>
-			 </li>
-			 <li><h2>Other Competitions this Season</h2>
-<?php
-			if ($comptsea = $wpdb->get_results($comptseasql)) {
-				print("					<ul>\n");
-					foreach ($comptsea as $csea) {
-						print("						<li><a href=\"".$csea->guid."\" title=\"View more on this Competition\">".$csea->post_title."</a></li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None at present.</p>\n");
-			}
-?>
-			 </li>
-			 <li><h2>Other Competitions for this Cup</h2>
-<?php
-			if ($comptcup = $wpdb->get_results($comptcupsql)) {
-				print("					<ul>\n");
-					foreach ($comptcup as $ccup) {
-						print("						<li><a href=\"".$ccup->guid."\" title=\"View more on this Competition\">".$ccup->post_title."</a></li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None at present.</p>\n");
-			}
-?>
-			 </li>
-			 <?php if ( !dynamic_sidebar('sidebar-common') ) : ?>
-	 			<li><h2 class="widgettitle">Search</h2>
-	 			  <ul>
-	 			   <li><?php get_search_form(); ?></li>
-	 			  </ul>
-	 			</li>
-	 		<?php endif; ?>
-
-		</ul>
-	</div><!-- end of #subcontent -->
+<?php do_action( 'bblm_template_after_posts' ); ?>
+<?php get_sidebar(); ?>
 <?php get_footer(); ?>

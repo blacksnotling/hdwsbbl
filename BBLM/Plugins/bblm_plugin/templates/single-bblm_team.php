@@ -13,11 +13,19 @@
   */
 ?>
 <?php get_header(); ?>
-	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+ <?php do_action( 'bblm_template_before_posts' ); ?>
+ <?php if (have_posts()) : ?>
+	 <?php do_action( 'bblm_template_before_loop' ); ?>
+	 <?php while (have_posts()) : the_post(); ?>
+		 <?php do_action( 'bblm_template_before_content' ); ?>
+
+				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+					<header class="entry-header">
+						<h2 class="entry-title"><?php the_title(); ?></h2>
+					</header><!-- .entry-header -->
+
+					<div class="entry-content">
 <?php
 		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, T.stad_id FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		//stad //stadLink
@@ -40,7 +48,7 @@
 		}
 ?>
 				<div class="bblm_details bblm_team_description">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 <?php
 			//Set default value to flag if the team has played a game or not
@@ -503,132 +511,18 @@
 
 ?>
 
-<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<footer class="entry-footer">
+	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+</footer><!-- .entry-footer -->
 
-</div>
-</div>
+</div><!-- .entry-content -->
+</article>
 
-
-<?php endwhile;?>
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 
-<?php get_sidebar('content'); ?>
-
-</div><!-- end of #maincontent -->
-<?php
-		//Gathering data for the sidebar
-		//Current match form
-		$formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
-		$currentform = "";
-		if ($form = $wpdb->get_results($formsql)) {
-			foreach ($form as $tf) {
-				$currentform .= $tf->mt_result;
-			}
-		}
-		else {
-				$currentform = "N/A";
-		}
-
-
-	//determine debut season
-	if ( $has_played ) {
-		$seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
-		$sd = $wpdb->get_row( $seasondebutsql );
-	}
-?>
-
-	<div id="subcontent">
-		<ul>
-			<li class="sidelogo"><?php print($timg); ?></li>
-			<li class="sideinfo"><h2>Team Information</h2>
-			  <ul>
-			   <li><strong>Status:</strong> <?php if ($ti->t_active) { print("Active"); } else { print("Disbanded"); } ?></li>
-			   <li><strong>Team Value:</strong> <?php print(number_format($ti->t_tv)); ?>gp</li>
-			   <li><strong>Current Form:</strong> <?php print($currentform); ?></li>
-			   <li><strong>Head Coach:</strong> <?php print($ti->t_hcoach); ?></li>
-<?php
-		if (isset($teamcaplink)) {
-?>
-			   <li><strong>Current Captain:</strong> <?php print($teamcaplink); ?></li>
-<?php
-		}
-?>
-			   <li><strong>Team Owner:</strong> <?php echo '<A href="'.get_post_permalink( $ti->ID ).'" title="Learn more about '.esc_html( get_the_title( $ti->ID ) ).'">'.esc_html( get_the_title( $ti->ID ) ).'</a>'; ?></li>
-			   <li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $ti->stad_id ); ?></li>
-<?php if ( $has_played ) { ?>
-			   <li><strong>Debut:</strong> <?php echo bblm_get_season_link( $sd->season ); ?></li>
-<?php	} ?>
-			   <li><strong>Race:</strong> <a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></li>
-			  </ul>
-<?php
-				if ($ti->t_roster) {
-					print("			  <ul>\n			   <li><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></li>\n			  </ul>\n");
-				}
-?>
-			</li>
-<?php
-			if ($has_played) {
-?>
-			<li class="sideawards"><h2>Championships</h2>
-<?php
-		if ($has_cups) {
-			print("<ul>\n");
-			foreach ($champs as $cc) {
-				print("	<li><strong>".$cc->a_name."</strong> - <a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></li>\n");
-			}
-			print("</ul>\n");
-		}
-		else {
-			print("<p>This team has not won any Championships at present.</p>\n");
-		}
-		print("<p><a href=\"#awardsfull\" title=\"View all awards this team has won\">View all awards this team has won &gt;&gt;</a></p>");
-?>
-			</li>
-
-			<li><h2>Currently Participating in</h2>
-<?php
-			$currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
-			if ($currentcomp = $wpdb->get_results($currentcompssql)) {
-				print("				<ul>\n");
-				foreach ($currentcomp as $curc) {
-					print("					<li><a href=\"".$curc->guid."\" title=\"Read more about ".$curc->post_title."\">".$curc->post_title."</a></li>\n");
-				}
-				print("				</ul>\n");
-			}
-			else {
-				print("<p>This team is currently not taking part in any Competitions.</p>\n");
-			}
-			print("			</li>\n");
-
-
-			$topplayerssql = 'SELECT P.post_title, P.guid, T.p_spp FROM '.$wpdb->prefix.'player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.t_id = '.$tid.' ORDER BY T.p_spp DESC LIMIT 5';
-			if ($topp = $wpdb->get_results($topplayerssql)) {
-				print("<li>\n	<h2>Top Players on this team</h2>\n	<ul>\n");
-				foreach ($topp as $tp) {
-					print("	<li><a href=\"".$tp->guid."\" title=\"Read more about ".$tp->post_title."\">".$tp->post_title."</a> - ".$tp->p_spp."</li>\n");
-				}
-				print("</ul>\n</li>\n");
-			}
-		}//end of if $has_played
-
-
-			$otherteamssql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.t_id != '.$tid.' AND T.type_id = 1 ORDER BY RAND() LIMIT 5';
-			if ($oteam = $wpdb->get_results($otherteamssql)) {
-				print("<li>\n	<h2>Other Teams in the League</h2>\n	<ul>\n");
-				foreach ($oteam as $ot) {
-					print("	<li><a href=\"".$ot->guid."\" title=\"Read more about ".$ot->post_title."\">".$ot->post_title."</a></li>\n");
-				}
-				print("</ul>\n</li>\n");
-			}
-
-			if ( !dynamic_sidebar('sidebar-common') ) : ?>
-				<li><h2 class="widgettitle">Search</h2>
-				  <ul>
-				   <li><?php get_search_form(); ?></li>
-				  </ul>
-				</li>
-			<?php endif; ?>
-
-		</ul>
-	</div><!-- end of #subcontent -->
+<?php do_action( 'bblm_template_after_posts' ); ?>
+<?php get_sidebar(); ?>
 <?php get_footer(); ?>
