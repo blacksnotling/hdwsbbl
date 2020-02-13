@@ -14,8 +14,11 @@
 ?>
 <?php get_header(); ?>
  <?php do_action( 'bblm_template_before_posts' ); ?>
-	<?php if (have_posts()) : ?>
-		<?php while (have_posts()) : the_post(); ?>
+ <?php if (have_posts()) : ?>
+   <?php do_action( 'bblm_template_before_loop' ); ?>
+   <?php while (have_posts()) : the_post(); ?>
+     <?php do_action( 'bblm_template_before_content' ); ?>
+
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 
@@ -375,89 +378,11 @@
 
 </div><!-- .entry-content -->
 </article>
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
+<?php endif; ?>
 
-
-		<?php endwhile;?>
-	<?php endif; ?>
-
-<?php get_sidebar('content'); ?>
-
-</div><!-- end of #maincontent -->
-<?php
-		//Gathering data for the sidebar
-		//Top players in match
-		$topplayerssql = 'SELECT P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 5';
-
-		//scorers
-		$topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 10';
-
-		$compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
-		$comp = $wpdb->get_row($compsql);
-?>
-
-	<div id="subcontent">
-		<ul>
-			<li class="widget_bblm_matchdetails"><h2>Match Information</h2>
-			  <ul>
-				<li><strong>Date:</strong> <?php print(date("d.m.25y", $m->mdate));?></li>
-				<li><strong>Competition:</strong> <a href="<?php print($comp->CompLink); ?>" title="View more about this Competition"><?php print($comp->Comp);?></a></li>
-				<li><strong>
-<?php
-		if ($m->div_id > 7) {
-			print("Division");
-		}
-		else {
-			print("Stage");
-		}
-?>
-				</strong> <?php print($comp->div_name);?></li>
-				<li><strong>Season:</strong> <?php echo bblm_get_season_link( $comp->sea_id ); ?></li>
-				<li><strong>Attendance:</strong> <?php print(number_format($m->m_gate));?></li>
-				<li><strong>Stadium:</strong> <?php echo bblm_get_stadium_link( $m->stad_id ); ?></li>
-			  </ul>
-			 </li>
-<?php
-	if ($playeractions) {
-?>
-			 <li><h2>Top Players of the Match</h2>
-<?php
-			if ($topplayers = $wpdb->get_results($topplayerssql)) {
-				print("					<ul>\n");
-					foreach ($topplayers as $ts) {
-						print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value." spp</li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None!</p>\n");
-			}
-?>
-			 </li>
-			 <li><h2>Top Scorers of the Match</h2>
-<?php
-			if ($topscorers = $wpdb->get_results($topscorerssql)) {
-				print("					<ul>\n");
-					foreach ($topscorers as $ts) {
-						print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value."</li>");
-					}
-				print("					</ul>\n");
-			}
-			else {
-				print("					<p>None!</p>\n");
-			}
-?>
-			 </li>
-<?php
-	} //end of if $playeractions
-
-	if ( !dynamic_sidebar('sidebar-common') ) : ?>
-		<li><h2 class="widgettitle">Search</h2>
-			<ul>
-			 <li><?php get_search_form(); ?></li>
-			</ul>
-		</li>
-	<?php endif; ?>
-
-		</ul>
-	</div><!-- end of #subcontent -->
+<?php do_action( 'bblm_template_after_posts' ); ?>
+<?php get_sidebar(); ?>
 <?php get_footer(); ?>

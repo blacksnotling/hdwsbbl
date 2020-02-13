@@ -28,3 +28,5 @@ include_once( 'widgets/class-bblm-widget-recentdepartures.php' );
 include_once( 'widgets/class-bblm-widget-tccompdetails.php' );
 include_once( 'widgets/class-bblm-widget-tcteamlogo.php' );
 include_once( 'widgets/class-bblm-widget-tcteamdetails.php' );
+include_once( 'widgets/class-bblm-widget-tcmatchdetails.php' );
+include_once( 'widgets/class-bblm-widget-tcplayerdetails.php' );
