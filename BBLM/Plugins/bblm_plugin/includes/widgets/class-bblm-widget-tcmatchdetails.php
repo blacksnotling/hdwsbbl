@@ -16,7 +16,7 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
 
   function __construct() {
 
-    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcmatchdetails widget_bblm_matchdetails', 'description' => __( 'Displays the details of a match (Match page only)', 'bblm' ) );
+    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcmatchdetails', 'description' => __( 'Displays the details of a match (Match page only)', 'bblm' ) );
     parent::__construct('bblm_tcmatchdetails', __( 'BB:TC: Match Details', 'bblm' ), $widget_ops);
 
   }
@@ -50,23 +50,28 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
       $comp = $wpdb->get_row($compsql);
 
       echo $args['before_widget'];
-      echo $args['before_title'] . apply_filters( 'widget_title', 'Match Information' ) . $args['after_title'];
 
-      echo '<ul>';
-      echo '<li><strong>' . __( 'Date', 'bblm' ) . ':</strong> ' . date( "d.m.25y", $m->mdate ) . '</li>';
-      echo '<li><strong>' . __( 'Competition', 'bblm' ) . ':</strong> <a href="' . $comp->CompLink . '" title="View more about this Competition">' . $comp->Comp . '</a></li>';
-      echo '<li><strong>';
-      if ( $m->div_id > 7 ) {
-        echo 'Division';
-      }
-      else {
-        echo 'Stage';
-      }
-      echo '</strong> ' . $comp->div_name . '</li>';
-      echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $comp->sea_id ) . '</li>';
-      echo '<li><strong>' . __( 'Attendance', 'bblm' ) . ':</strong> ' . number_format( $m->m_gate ) . '</li>';
-      echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_stadium_link( $m->stad_id ) . '</li>';
-      echo '</ul>';
+      echo '<div class="widget_bblm_matchdetails">';
+
+        echo $args['before_title'] . apply_filters( 'widget_title', 'Match Information' ) . $args['after_title'];
+
+        echo '<ul>';
+        echo '<li><strong>' . __( 'Date', 'bblm' ) . ':</strong> ' . date( "d.m.25y", $m->mdate ) . '</li>';
+        echo '<li><strong>' . __( 'Competition', 'bblm' ) . ':</strong> <a href="' . $comp->CompLink . '" title="View more about this Competition">' . $comp->Comp . '</a></li>';
+        echo '<li><strong>';
+        if ( $m->div_id > 7 ) {
+          echo 'Division';
+        }
+        else {
+          echo 'Stage';
+        }
+        echo '</strong> ' . $comp->div_name . '</li>';
+        echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $comp->sea_id ) . '</li>';
+        echo '<li><strong>' . __( 'Attendance', 'bblm' ) . ':</strong> ' . number_format( $m->m_gate ) . '</li>';
+        echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_stadium_link( $m->stad_id ) . '</li>';
+        echo '</ul>';
+
+      echo '</div>';
 
       echo $args['after_widget'];
 

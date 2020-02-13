@@ -16,7 +16,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
   function __construct() {
 
-    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcteamdetails widget_bblm_teamdetails', 'description' => __( 'Displays the details of a team (Team page only)', 'bblm' ) );
+    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcteamdetails', 'description' => __( 'Displays the details of a team (Team page only)', 'bblm' ) );
     parent::__construct('bblm_tcteamdetails', __( 'BB:TC: Team Details', 'bblm' ), $widget_ops);
 
   }
@@ -66,45 +66,55 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
       }
 
       echo $args['before_widget'];
-      echo $args['before_title'] . apply_filters( 'widget_title', 'Team Information' ) . $args['after_title'];
 
-      echo '<ul>';
-      echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $tstatus . '</li>';
-      echo '<li><strong>' . __( 'Team Value', 'bblm' ) . ':</strong> ' . number_format( $ti->t_tv ) . '</li>';
-      echo '<li><strong>' . __( 'Current Form', 'bblm' ) . ':</strong> ' . $currentform . '</li>';
-      echo '<li><strong>' . __( 'Head Coach', 'bblm' ) . ':</strong> ' . $ti->t_hcoach . '</li>';
-      if ( isset( $teamcaplink ) ) {
-        echo '<li><strong>' . __( 'Current Captain', 'bblm' ) . ':</strong> ' . $teamcaplink . '</li>';
-      }
-      echo '<li><strong>' . __( 'Team Owner', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $ti->ID ) . ' " title="Learn more about ' . esc_html( get_the_title( $ti->ID ) ).'">'.esc_html( get_the_title( $ti->ID ) ) . '</a></li>';
-      echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_stadium_link( $ti->stad_id ) . '</li>';
-      if ( $has_played ) {
-        echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
-      }
-      echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $ti->racelink . ' " title="Learn more about ' . esc_html( $ti->r_name ) .'">'.esc_html( $ti->r_name ) . '</a></li>';
-      echo '</ul>';
-      if ( $ti->t_roster ) {
+      echo '<div class="widget_bblm_teamdetails">';
+
+        echo $args['before_title'] . apply_filters( 'widget_title', 'Team Information' ) . $args['after_title'];
+
         echo '<ul>';
-        echo '<li><a href="' . $rosterlink . '" title="View the teams full roster">View Full Roster &gt;&gt;</a></li>';
+        echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $tstatus . '</li>';
+        echo '<li><strong>' . __( 'Team Value', 'bblm' ) . ':</strong> ' . number_format( $ti->t_tv ) . '</li>';
+        echo '<li><strong>' . __( 'Current Form', 'bblm' ) . ':</strong> ' . $currentform . '</li>';
+        echo '<li><strong>' . __( 'Head Coach', 'bblm' ) . ':</strong> ' . $ti->t_hcoach . '</li>';
+        if ( isset( $teamcaplink ) ) {
+          echo '<li><strong>' . __( 'Current Captain', 'bblm' ) . ':</strong> ' . $teamcaplink . '</li>';
+        }
+        echo '<li><strong>' . __( 'Team Owner', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $ti->ID ) . ' " title="Learn more about ' . esc_html( get_the_title( $ti->ID ) ).'">'.esc_html( get_the_title( $ti->ID ) ) . '</a></li>';
+        echo '<li><strong>' . __( 'Stadium', 'bblm' ) . ':</strong> ' . bblm_get_stadium_link( $ti->stad_id ) . '</li>';
+        if ( $has_played ) {
+          echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
+        }
+        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $ti->racelink . ' " title="Learn more about ' . esc_html( $ti->r_name ) .'">'.esc_html( $ti->r_name ) . '</a></li>';
         echo '</ul>';
-      }
+        if ( $ti->t_roster ) {
+          echo '<ul>';
+          echo '<li><a href="' . $rosterlink . '" title="View the teams full roster">View Full Roster &gt;&gt;</a></li>';
+          echo '</ul>';
+        }
+
+      echo '</div>';
 
       echo $args['after_widget'];
       if ($has_played) {
         echo $args['before_widget'];
-        echo $args['before_title'] . apply_filters( 'widget_title', 'Championships' ) . $args['after_title'];
 
-        if ( $has_cups ) {
-          echo '<ul>';
-          foreach ( $champs as $cc ) {
-            print("	<li><strong>".$cc->a_name."</strong> - <a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></li>\n");
+        echo '<div class="widget_bblm_awards">';
+
+          echo $args['before_title'] . apply_filters( 'widget_title', 'Championships' ) . $args['after_title'];
+
+          if ( $has_cups ) {
+            echo '<ul>';
+            foreach ( $champs as $cc ) {
+              print("	<li><strong>".$cc->a_name."</strong> - <a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></li>\n");
+            }
+            echo '</ul>';
           }
-          echo '</ul>';
-        }
-        else {
-          echo '<p>' . __( 'This team has not won any Championships at present.', 'bblm' ) . '</p>';
-        }
-        print("<p><a href=\"#awardsfull\" title=\"View all awards this team has won\">View all awards this team has won &gt;&gt;</a></p>");
+          else {
+            echo '<p>' . __( 'This team has not won any Championships at present.', 'bblm' ) . '</p>';
+          }
+          print("<p><a href=\"#awardsfull\" title=\"View all awards this team has won\">View all awards this team has won &gt;&gt;</a></p>");
+
+        echo '</div>';
 
         echo $args['after_widget'];
 

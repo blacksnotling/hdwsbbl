@@ -16,7 +16,7 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
 
   function __construct() {
 
-    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tccompdetails widget_bblm_compdetails', 'description' => __( 'Displays the details of a competition (Competition page only)', 'bblm' ) );
+    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tccompdetails', 'description' => __( 'Displays the details of a competition (Competition page only)', 'bblm' ) );
     parent::__construct('bblm_tccompdetails', __( 'BB:TC: Competition Details', 'bblm' ), $widget_ops);
 
   }
@@ -50,16 +50,21 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
       $comptcupsql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.series_id = '.$cd->SERIES.' AND C.c_id != '.$cd->c_id;
 
       echo $args['before_widget'];
-      echo $args['before_title'] . apply_filters( 'widget_title', 'Comp Information' ) . $args['after_title'];
 
-      echo '<ul>';
-      echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $cstatus . '</li>';
-      echo '<li><strong>' . __( 'Duration', 'bblm' ) . ':</strong> ' . $cduration . '</li>';
-      echo '<li><strong>' . __( 'Format', 'bblm' ) . ':</strong> ' . $cd->ct_name . '</li>';
-      echo '<li><strong>' . __( 'Cup', 'bblm' ) . ':</strong> ' . bblm_get_cup_link( $cd->SERIES ) . '</li>';
-      echo '<li><strong>' . __( 'Season', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $cd->sea_id ) . '</li>';
-      echo '<li><strong>' . __( 'Number of teams', 'bblm' ) . ':</strong> ' . $tno . '</li>';
-      echo '</ul>';
+      echo '<div class="widget_bblm_compdetails">';
+
+        echo $args['before_title'] . apply_filters( 'widget_title', 'Comp Information' ) . $args['after_title'];
+
+        echo '<ul>';
+        echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $cstatus . '</li>';
+        echo '<li><strong>' . __( 'Duration', 'bblm' ) . ':</strong> ' . $cduration . '</li>';
+        echo '<li><strong>' . __( 'Format', 'bblm' ) . ':</strong> ' . $cd->ct_name . '</li>';
+        echo '<li><strong>' . __( 'Cup', 'bblm' ) . ':</strong> ' . bblm_get_cup_link( $cd->SERIES ) . '</li>';
+        echo '<li><strong>' . __( 'Season', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $cd->sea_id ) . '</li>';
+        echo '<li><strong>' . __( 'Number of teams', 'bblm' ) . ':</strong> ' . $tno . '</li>';
+        echo '</ul>';
+
+      echo '</div>';
 
       echo $args['after_widget'];
 

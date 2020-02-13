@@ -240,39 +240,39 @@ font-weight:100;
 	background-image: url(images/page_white.gif);
 }
 #subcontent li.sideinfo h2,
-#subcontent li.widget_bblm_compdetails h2,
-#subcontent li.widget_bblm_playerdetails h2,
-#subcontent li.widget_bblm_matchdetails h2,
-#subcontent li.widget_bblm_teamdetails h2 {
+#subcontent .widget_bblm_compdetails h2,
+#subcontent .widget_bblm_playerdetails h2,
+#subcontent .widget_bblm_matchdetails h2,
+#subcontent .widget_bblm_teamdetails h2 {
 	background-image: url(images/star.gif);
 }
-#subcontent li.sideawards h2{
+#subcontent .widget_bblm_awards h2{
 	background-image: url(images/trophy.gif);
 }
-#subcontent li.widget_bblm_recentmatches h2 {
+#subcontent .widget_bblm_recentmatches h2 {
 	background-image: url(images/helmet.gif);
 }
-#subcontent li.widget_bblm_listcomps h2 {
+#subcontent .widget_bblm_listcomps h2 {
 	background-image: url(images/trophy.gif);
 }
 #subcontent li.sideinfo,
-#subcontent li.sideawards,
-#subcontent li.widget_bblm_compdetails,
-#subcontent li.widget_bblm_playerdetails,
-#subcontent li.widget_bblm_matchdetails,
-#subcontent li.widget_bblm_teamdetails {
+#subcontent .widget_bblm_awards,
+#subcontent .widget_bblm_compdetails,
+#subcontent .widget_bblm_playerdetails,
+#subcontent .widget_bblm_matchdetails,
+#subcontent .widget_bblm_teamdetails {
 	border: 1px solid #aaa;
 	padding: 2px 3px 2px 5px;
 	width: 180px;
 }
 #subcontent li.sideinfo,
-#subcontent li.widget_bblm_compdetails,
-#subcontent li.widget_bblm_playerdetails,
-#subcontent li.widget_bblm_matchdetails,
-#subcontent li.widget_bblm_teamdetails {
+#subcontent .widget_bblm_compdetails,
+#subcontent .widget_bblm_playerdetails,
+#subcontent .widget_bblm_matchdetails,
+#subcontent .widget_bblm_teamdetails {
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
 }
-#subcontent li.sideawards {
+#subcontent .widget_bblm_awards {
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
 	margin-top:0.8em;
 }

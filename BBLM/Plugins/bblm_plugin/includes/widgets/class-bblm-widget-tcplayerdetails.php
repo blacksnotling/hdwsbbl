@@ -16,7 +16,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
 
   function __construct() {
 
-    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcplayerdetails widget_bblm_playerdetails', 'description' => __( 'Displays the details of a Player (Player page only)', 'bblm' ) );
+    $widget_ops = array('classname' => 'widget_bblm widget_bblm_tcplayerdetails', 'description' => __( 'Displays the details of a Player (Player page only)', 'bblm' ) );
     parent::__construct('bblm_tcplayerdetails', __( 'BB:TC: Player Details', 'bblm' ), $widget_ops);
 
   }
@@ -29,14 +29,17 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
 
     $parentpage = get_queried_object()->post_parent;
-    $grandparent = get_post( $parentpage );
-    if( $grandparent->post_parent ){
-      $greatGrandparent = get_post( $grandparent->post_parent );
+    $greatGrandparent = 0;
+    if ( $grandparent = get_post( $parentpage ) ) {
+      if( $grandparent->post_parent ){
+        $greatGrandparent = get_post( $grandparent->post_parent );
+        $greatGrandparent = $greatGrandparent->ID;
+      }
     }
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $greatGrandparent->ID ) {
+    if ( $parentoption == $greatGrandparent ) {
 
       //pulling in the vars from the single-bblm_comp template
       global $pd;
@@ -62,57 +65,67 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       $playerchampionshipssql .= 'AND J.prefix = \'c_\' AND J.pid = P.ID AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 
       echo $args['before_widget'];
-      echo $args['before_title'] . apply_filters( 'widget_title', 'Player Information' ) . $args['after_title'];
 
-      echo '<ul>';
-      //Check to see if the Player is the Captain
-      $captainsql = 'SELECT tcap_status FROM '.$wpdb->prefix.'team_captain WHERE p_id = '.$pd->p_id.' ORDER BY P_id ASC LIMIT 1';
-      if ( $pcap = $wpdb->get_var( $captainsql ) ) {
-        if ( $pcap ) {
-          echo '<li><strong>' . __( 'Current Captain', 'bblm' ) . '</strong></li>';
-        }
-        else if (0 == $pcap){
-          echo '<li><strong>' . __( 'Former Captain', 'bblm' ) . '</strong></li>';
-        }
-      }
-      echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $status . '</li>';
-      echo '<li><strong>' . __( 'Rank', 'bblm' ) . ':</strong> ' . $plevel . '</li>';
-      echo '<li><strong>' . __( 'Team', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $pd->WPID ) . '" title="Read more on this team">' . esc_html( get_the_title( $pd->WPID ) ) . '</a></li>';
-      echo '<li><strong>' . __( 'Position Number', 'bblm' ) . ':</strong> ' . $pd->p_num . '</li>';
+      echo '<div class="widget_bblm_playerdetails">';
 
-      $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned
-      if ( !empty( $race_check ) ) {
-        //Mercs and Journeymen will not return a race ID as the race positions are not assigned to a race
-        //Only display the players race if they are a pernament race position
-        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $rd->guid . '" title="Learn more about ' . $rd->r_name . '">' . $rd->r_name . '</a></li>';
-      }
-      if ( $has_played ) {
-        echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->sea_id ) . '</li>';
-      }
-      echo '</ul>';
+        echo $args['before_title'] . apply_filters( 'widget_title', 'Player Information' ) . $args['after_title'];
+
+        echo '<ul>';
+        //Check to see if the Player is the Captain
+        $captainsql = 'SELECT tcap_status FROM '.$wpdb->prefix.'team_captain WHERE p_id = '.$pd->p_id.' ORDER BY P_id ASC LIMIT 1';
+        if ( $pcap = $wpdb->get_var( $captainsql ) ) {
+          if ( $pcap ) {
+            echo '<li><strong>' . __( 'Current Captain', 'bblm' ) . '</strong></li>';
+          }
+          else if (0 == $pcap){
+            echo '<li><strong>' . __( 'Former Captain', 'bblm' ) . '</strong></li>';
+          }
+        }
+        echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $status . '</li>';
+        echo '<li><strong>' . __( 'Rank', 'bblm' ) . ':</strong> ' . $plevel . '</li>';
+        echo '<li><strong>' . __( 'Team', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $pd->WPID ) . '" title="Read more on this team">' . esc_html( get_the_title( $pd->WPID ) ) . '</a></li>';
+        echo '<li><strong>' . __( 'Position Number', 'bblm' ) . ':</strong> ' . $pd->p_num . '</li>';
+
+        $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned
+        if ( !empty( $race_check ) ) {
+          //Mercs and Journeymen will not return a race ID as the race positions are not assigned to a race
+          //Only display the players race if they are a pernament race position
+          echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $rd->guid . '" title="Learn more about ' . $rd->r_name . '">' . $rd->r_name . '</a></li>';
+        }
+        if ( $has_played ) {
+          echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->sea_id ) . '</li>';
+        }
+        echo '</ul>';
+
+      echo '</div>';
 
       echo $args['after_widget'];
 
       if ( $has_played ) {
 
         echo $args['before_widget'];
-        echo $args['before_title'] . apply_filters( 'widget_title', 'Major Awards' ) . $args['after_title'];
 
-        //note that both SQL strings are above
-        if ( ( $sawards = $wpdb->get_results( $seasonsql ) ) || ( $cawards = $wpdb->get_results( $playerchampionshipssql ) ) ) {
-          echo '<ul>';
-          foreach ( $cawards as $ca ) {
-            echo '<li><strong>' . $ca->a_name . '</strong> - <a href="' . $ca->guid . '" title="View full details about ' . $ca->post_title . '">' . $ca->post_title . '</a></li>';
+        echo '<div class="widget_bblm_awards">';
+
+          echo $args['before_title'] . apply_filters( 'widget_title', 'Major Awards' ) . $args['after_title'];
+
+          //note that both SQL strings are above
+          if ( ( $sawards = $wpdb->get_results( $seasonsql ) ) || ( $cawards = $wpdb->get_results( $playerchampionshipssql ) ) ) {
+            echo '<ul>';
+            foreach ( $cawards as $ca ) {
+              echo '<li><strong>' . $ca->a_name . '</strong> - <a href="' . $ca->guid . '" title="View full details about ' . $ca->post_title . '">' . $ca->post_title . '</a></li>';
+            }
+            foreach ( $sawards as $sa ) {
+              echo '<li><strong>' . $sa->a_name . '</strong> - ' . bblm_get_season_link( $sa->sea_id ) . '</li>';
+            }
+            echo '</ul>';
           }
-          foreach ( $sawards as $sa ) {
-            echo '<li><strong>' . $sa->a_name . '</strong> - ' . bblm_get_season_link( $sa->sea_id ) . '</li>';
+          else {
+            echo '<p>' . __( 'This player has not won any major awards yet', 'bblm' ) . '</p>';
           }
-          echo '</ul>';
-        }
-        else {
-          echo '<p>' . __( 'This player has not won any major awards yet', 'bblm' ) . '</p>';
-        }
-        echo '<p><a href="#awardsfull" title="View all awards this player has won">View all awards this player has won &gt;&gt;</a></p>';
+          echo '<p><a href="#awardsfull" title="View all awards this player has won">View all awards this player has won &gt;&gt;</a></p>';
+
+        echo '</div>';
 
         echo $args['after_widget'];
 
