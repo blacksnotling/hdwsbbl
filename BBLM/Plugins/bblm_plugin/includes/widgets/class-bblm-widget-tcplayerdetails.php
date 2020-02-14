@@ -25,8 +25,9 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
+    $parentoptions = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
 
     $parentpage = get_queried_object()->post_parent;
     $greatGrandparent = 0;
@@ -37,9 +38,9 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       }
     }
 
-    //Check we are on the correct poat_type before we display the widget
+    //Check we are on the correct post_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $greatGrandparent ) {
+    if ( ( $parentoption == $greatGrandparent ) && ( $parentpage != $staplayerteam ) ) {
 
       //pulling in the vars from the single-bblm_comp template
       global $pd;
