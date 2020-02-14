@@ -1,4 +1,6 @@
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-left-sidebar">
+  <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
     <?php do_action( 'bblm_template_before_loop' ); ?>
@@ -34,5 +36,7 @@
 		<?php endif; ?>
 
 	<?php do_action( 'bblm_template_after_posts' ); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 	<?php get_sidebar(); ?>
 	<?php get_footer(); ?>
