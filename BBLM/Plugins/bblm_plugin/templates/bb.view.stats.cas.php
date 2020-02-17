@@ -13,11 +13,22 @@
   */
 ?>
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
+  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
+		<?php do_action( 'bblm_template_before_loop' ); ?>
 		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+			<?php do_action( 'bblm_template_before_content' ); ?>
+			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+		<header class="page-header entry-header">
+
+			<h2 class="entry-title"><?php the_title(); ?></h2>
+
+		</header><!-- .page-header -->
+
+			<div class="entry-content">
 
 				<?php the_content(); ?>
 <?php
@@ -150,7 +161,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No players have caused any Casualties!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No players have caused any Casualties!</p>\n	</div>\n");
 				}
 
 				  ////////////////////////
@@ -204,7 +215,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No Teams have caused any Casualties!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No Teams have caused any Casualties!</p>\n	</div>\n");
 				}
 
 				  /////////////////////////
@@ -258,7 +269,7 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No players have made any Kills!!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No players have made any Kills!!</p>\n	</div>\n");
 				}
 
 				  ///////////////////////
@@ -312,18 +323,24 @@
 					print("</table>\n");
 				}
 				else {
-					print("	<div class=\"info\">\n		<p>No teams have made any Kills!</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No teams have made any Kills!</p>\n	</div>\n");
 				}
 
 ?>
-						<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+</div><!-- .entry-content -->
 
-					</div>
-				</div>
+<footer class="entry-footer">
+	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+</footer><!-- .entry-footer -->
 
+</article><!-- .post-ID -->
 
-		<?php endwhile;?>
-	<?php endif; ?>
-
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
+<?php endif; ?>
+<?php do_action( 'bblm_template_after_posts' ); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

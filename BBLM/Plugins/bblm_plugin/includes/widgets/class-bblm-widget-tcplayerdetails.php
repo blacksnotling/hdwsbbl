@@ -29,7 +29,12 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
     $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
 
-    $parentpage = get_queried_object()->post_parent;
+    if ( is_page() ) {
+      $parentpage = get_queried_object()->post_parent;
+    }
+    else {
+      $parentpage = 0;
+    }
     $greatGrandparent = 0;
     if ( $grandparent = get_post( $parentpage ) ) {
       if( $grandparent->post_parent ){

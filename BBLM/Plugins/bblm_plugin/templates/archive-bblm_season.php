@@ -1,7 +1,10 @@
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
     <?php do_action( 'bblm_template_before_loop' ); ?>
+    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<header class="page-header entry-header">
 
@@ -10,7 +13,7 @@
 
     </header><!-- .page-header -->
 
-		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<div class="entry-content">
 			<ul>
 
 				<?php while (have_posts()) : the_post(); ?>
@@ -30,15 +33,18 @@
 
 			</ul>
 
-			<footer class="entry-footer">
-				<p class="postmeta">&nbsp;</p>
-			</footer><!-- .entry-footer -->
+    </div><!-- .entry-content -->
 
-		</article><!-- .post-ID -->
+    <footer class="entry-footer">
+    	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+    </footer><!-- .entry-footer -->
 
-	<?php do_action( 'bblm_template_after_loop' ); ?>
-	<?php endif; ?>
+    </article><!-- .post-ID -->
 
-<?php do_action( 'bblm_template_after_posts' ); ?>
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+    <?php do_action( 'bblm_template_after_content' ); ?>
+    <?php endif; ?>
+    <?php do_action( 'bblm_template_after_posts' ); ?>
+    </main><!-- #main -->
+    </div><!-- #primary -->
+    <?php get_sidebar(); ?>
+    <?php get_footer(); ?>
