@@ -13,7 +13,7 @@
   */
 ?>
 <?php get_header(); ?>
-<div id="primary" class="content-area content-area-left-sidebar">
+<div id="primary" class="content-area content-area-right-sidebar">
   <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>

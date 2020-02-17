@@ -1,9 +1,10 @@
 <?php get_header(); ?>
-<div id="primary" class="content-area content-area-left-sidebar">
+<div id="primary" class="content-area content-area-right-sidebar">
   <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
     <?php do_action( 'bblm_template_before_loop' ); ?>
+    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
     <header class="page-header entry-header">
 
@@ -13,7 +14,8 @@
     </header><!-- .page-header -->
 
     <?php $own = new BBLM_CPT_Owner; ?>
-    <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <div class="entry-content">
+
       <table class="bblm_table bblm_sortable">
         <thead>
         <tr>
@@ -54,6 +56,8 @@
     <?php endwhile; ?>
           </tbody>
         </table>
+
+        </div><!-- .entry-content -->
 
       <footer class="entry-footer">
         <p class="postmeta">&nbsp;</p>
