@@ -25,21 +25,14 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoptions = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
+    $parentoption = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
 
-    if ( is_page() ) {
-      $parentpage = get_queried_object()->post_parent;
-      $current_page = get_queried_object()->ID;
-    }
-    else {
-      $parentpage = 0;
-    }
+    $parentpage = get_queried_object()->post_parent;
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( ( $parentoption == $parentpage ) && ( $current_page != $staplayerteam  ) ) {
+    if ( $parentoption == $parentpage ) {
 
       //pulling in the vars from the single-bblm_team template
       global $tid;

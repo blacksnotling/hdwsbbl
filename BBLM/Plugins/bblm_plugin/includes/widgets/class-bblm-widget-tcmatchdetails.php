@@ -28,12 +28,7 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
     $parentoption = get_option( 'bblm_config' );
     $parentoption = htmlspecialchars( $parentoption[ 'page_match' ], ENT_QUOTES );
 
-    if ( is_page() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
-    else {
-      $parentpage = 0;
-    }
+    $parentpage = get_queried_object()->post_parent;
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config

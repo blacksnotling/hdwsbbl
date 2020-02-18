@@ -13,14 +13,8 @@
  */
 ?>
 <?php get_header(); ?>
-<div id="primary" class="content-area content-area-right-sidebar">
-  <main id="main" class="site-main" role="main">
-  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
-    <?php do_action( 'bblm_template_before_loop' ); ?>
 		<?php while (have_posts()) : the_post(); ?>
-      <?php do_action( 'bblm_template_before_content' ); ?>
-      <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 <?php
 			/*
 			Gather Information for page
@@ -28,14 +22,9 @@
 			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-		<header class="entry-header">
-			<h2 class="entry-title"><?php the_title(); ?></h2>
-		</header><!-- .entry-header -->
-
-		<div class="entry-content">
-
+<div class="entry">
+	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<h2 class="entry-title"><?php the_title(); ?></h2>
 	<div class="bblm_details">
 		<?php the_content(); ?>
 		</div>
@@ -317,19 +306,15 @@
 
 
 ?>
-<footer class="entry-footer">
-	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
-</footer><!-- .entry-footer -->
 
-</div><!-- .entry-content -->
-</article>
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-<?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
-<?php do_action( 'bblm_template_after_loop' ); ?>
-<?php endif; ?>
-<?php do_action( 'bblm_template_after_posts' ); ?>
-</main><!-- #main -->
-</div><!-- #primary -->
+</div>
+</div>
+
+
+		<?php endwhile;?>
+	<?php endif; ?>
+
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

@@ -13,22 +13,11 @@
   */
 ?>
 <?php get_header(); ?>
-<div id="primary" class="content-area content-area-right-sidebar">
-  <main id="main" class="site-main" role="main">
-  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
-		<?php do_action( 'bblm_template_before_loop' ); ?>
 		<?php while (have_posts()) : the_post(); ?>
-			<?php do_action( 'bblm_template_before_content' ); ?>
-			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-		<header class="page-header entry-header">
-
-			<h2 class="entry-title"><?php the_title(); ?></h2>
-
-		</header><!-- .page-header -->
-
-			<div class="entry-content">
+			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
 				<?php the_content(); ?>
 <?php
@@ -348,20 +337,15 @@
 
 
 ?>
-</div><!-- .entry-content -->
 
-<footer class="entry-footer">
-	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
-</footer><!-- .entry-footer -->
+<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
-</article><!-- .post-ID -->
+</div>
+</div>
 
-<?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
-<?php do_action( 'bblm_template_after_loop' ); ?>
-<?php endif; ?>
-<?php do_action( 'bblm_template_after_posts' ); ?>
-</main><!-- #main -->
-</div><!-- #primary -->
+
+		<?php endwhile;?>
+	<?php endif; ?>
+
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
