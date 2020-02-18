@@ -44,8 +44,14 @@
 			}
 			else {
 				$winnersql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.c_id = '.$cd->c_id.' LIMIT 1';
-				$cw = $wpdb->get_row($winnersql);
-				print("	<div class=\"bblm_info\">\n		<p>This Competition is now <strong>complete</strong>. The winners were <a href=\"".$cw->guid."\" title=\"View more on the winners\">".$cw->post_title."</a>.(<a href=\"#awardsfull\" title=\"See the rest of the awards assigned in this competition\">See more Awards</a>)</p>\n	</div>\n");
+				if ( $cw = $wpdb->get_row( $winnersql ) ) {
+          //Display the complete message with the winner
+          echo '<div class="bblm_info"><p>This Competition is now <strong>complete</strong>. The winners were <a href=' . $cw->guid . ' title="View more on the winners">' . $cw->post_title . '</a>.(<a href="#awardsfull" title="See the rest of the awards assigned in this competition">See more Awards</a>)</p></div>';
+        }
+        else {
+          //no winner assigned
+          echo '<div class="bblm_info"><p>This Competition is now <strong>complete</strong>. <a href="#awardsfull" title="See the rest of the awards assigned in this competition">See the Awards earnt this Competition</a></p></div>';
+        }
 				$cstatus = "Complete";
 				$cduration = date("d.m.Y", $cd->sdate)." - ".date("d.m.Y", $cd->edate);
 			}
