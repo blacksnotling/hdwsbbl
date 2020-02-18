@@ -13,11 +13,13 @@
  */
  ?>
  <?php get_header(); ?>
-  <?php do_action( 'bblm_template_before_posts' ); ?>
-	<?php if (have_posts()) : ?>
-		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
-			<?php do_action( 'bblm_template_before_content' ); ?>
+ <div id="primary" class="content-area content-area-right-sidebar">
+   <main id="main" class="site-main" role="main">
+   <?php do_action( 'bblm_template_before_posts' ); ?>
+ 	<?php if (have_posts()) : ?>
+     <?php do_action( 'bblm_template_before_loop' ); ?>
+ 		<?php while (have_posts()) : the_post(); ?>
+       <?php do_action( 'bblm_template_before_content' ); ?>
 		<?php
 			/*
 			Gather Information for page
@@ -415,10 +417,6 @@
 
 						<h3><?php echo __( 'Awards list in full', 'bblm' ); ?></h3>
 <?php
-            $cafail = 0;
-            $safail = 0;
-            $ccfail = 0;
-
 						$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.c_id AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 						if ($champs = $wpdb->get_results($championshipssql)) {
 							$has_cups = 1;
@@ -508,7 +506,8 @@
       <?php endwhile; ?>
       <?php do_action( 'bblm_template_after_loop' ); ?>
       <?php endif; ?>
-
       <?php do_action( 'bblm_template_after_posts' ); ?>
+      </main><!-- #main -->
+      </div><!-- #primary -->
       <?php get_sidebar(); ?>
       <?php get_footer(); ?>

@@ -8,11 +8,22 @@ Template Name: List Teams
 */
 ?>
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
+  <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
+		<?php do_action( 'bblm_template_before_loop' ); ?>
 		<?php while (have_posts()) : the_post(); ?>
-			<div class="entry">
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+			<?php do_action( 'bblm_template_before_content' ); ?>
+			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+		<header class="page-header entry-header">
+
+			<h2 class="entry-title"><?php the_title(); ?></h2>
+
+		</header><!-- .page-header -->
+
+			<div class="entry-content">
 
 					<?php the_content(); ?>
 
@@ -57,12 +68,12 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 
 		if ($is_first_type) {
-			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_type = 0;
 			$is_first_status = 0;
 		}
 		if ($is_first_status) {
-			print("<h4>".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h4>".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_status = 0;
 		}
 		if ($zebracount % 2) {
@@ -122,16 +133,20 @@ else {
 
 ?>
 
+</div><!-- .entry-content -->
 
-				<p class="postmeta"><?php edit_post_link( __( 'Edit', 'oberwald' ), ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+<footer class="entry-footer">
+	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+</footer><!-- .entry-footer -->
 
-			</div>
-		</div>
+</article><!-- .post-ID -->
 
-
-		<?php endwhile;?>
-		<?php endif; ?>
-
-
+<?php do_action( 'bblm_template_after_content' ); ?>
+<?php endwhile; ?>
+<?php do_action( 'bblm_template_after_loop' ); ?>
+<?php endif; ?>
+<?php do_action( 'bblm_template_after_posts' ); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
