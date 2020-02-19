@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0.1
+ * @version   1.1
  */
 
 class BBLM_CPT_Comp {
@@ -133,12 +133,33 @@ class BBLM_CPT_Comp {
 
 		}
 
-
-
-
-
-
 	} // end of display_comp_list_with_stats()
+
+	/**
+	 * Determines if a Competition is active
+	 *
+	 * @param int $ID the ID of the Competition (WP post ID)
+	 * @return bool true (Active), or False (Completed)
+	 */
+	 public static function is_competition_active( $ID ) {
+
+		 //create a Unix timestamp from the end date of a season
+		 $enddate = get_post_meta( $ID, 'comp_fdate', true );
+		 $compenddate = DateTime::createFromFormat('Y-m-d', $enddate );
+		 $compened = $compenddate->format('U');
+
+		 if ( ( $compened > time() ) || ( $enddate == '0000-00-00' ) ) {
+
+			 return true;
+
+		 }
+		 else {
+
+			 return false;
+
+		 }
+
+	 } //end of is_competition_active()
 
 
 } //end of class

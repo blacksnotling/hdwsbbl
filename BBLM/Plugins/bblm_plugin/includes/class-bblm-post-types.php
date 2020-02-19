@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.3
+ * @version		1.4
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -210,6 +210,36 @@ class BBLM_Post_types {
 				'menu_icon' 			=> 'dashicons-calendar',
 			)
 		); //end of bblm_season
+		register_post_type( 'bblm_comp',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Competitions', 'bblm' ),
+					'singular_name' 		=> __( 'Competition', 'bblm' ),
+					'add_new_item' 			=> __( 'Start a New Competition', 'bblm' ),
+					'add_new' 			=> __( 'New Competition', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Competition', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Competition', 'bblm' ),
+					'view_items' 			=> __( 'View Competition', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Competitions', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'competitions' ),
+				'supports' 				=> array( 'title', 'editor', 'author' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-list-view',
+			)
+		); //end of bblm_comp
 	}
 
   /**

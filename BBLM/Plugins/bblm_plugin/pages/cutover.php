@@ -724,6 +724,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<ul>
 			<li>Add the new TC widgets for the single page templates that used to have sidebars - teams, players, comps, matches</li>
 		</ul>
+		<h3>Competitions</h3>
+		<ul>
+			<li>First take a copy of the text at the top of the Competitions page</li>
+			<li>Update the awards-comp tables to BIGINT(20)</li>
+		</ul>
 
 </form>
 
