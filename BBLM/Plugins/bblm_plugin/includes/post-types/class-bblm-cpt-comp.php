@@ -148,6 +148,10 @@ class BBLM_CPT_Comp {
 		 $compenddate = DateTime::createFromFormat('Y-m-d', $enddate );
 		 $compened = $compenddate->format('U');
 
+		 $enddate = get_post_meta( $ID, 'comp_fdate', true );
+		 $seasonenddate = DateTime::createFromFormat('Y-m-d', $enddate );
+		 $seasonened = $seasonenddate->format('U');
+
 		 if ( ( $compened > time() ) || ( $enddate == '0000-00-00' ) ) {
 
 			 return true;
@@ -161,6 +165,60 @@ class BBLM_CPT_Comp {
 
 	 } //end of is_competition_active()
 
+	/**
+	 * Returns a list of all the Competitions, split by season
+	 *
+	 * @param wordpress $query
+	 * @return none
+	 */
+	 public static function get_comp_listing() {
+
+		 //Grabs a list of 'posts' from the bblm_comp CPT
+		 $cpostsarg = array(
+			 'post_type' => 'bblm_comp',
+			 'numberposts' => -1,
+			 'meta_key' => 'comp_season',
+			 'orderby' => array(
+				 'comp_season' => 'DESC',
+				 'post_title' => 'ASC',
+			 )
+		 );
+		 if ( $cposts = get_posts( $cpostsarg ) ) {
+			 $is_first = 1;
+			 $current_sea = 0;
+
+			 foreach( $cposts as $c ) {
+				 $cm = get_post_meta( $c->ID );
+
+				 if ( $cm[ 'comp_season' ][0] !== $current_sea ) {
+					 $current_sea = $cm[ 'comp_season' ][0];
+
+					 if ( 1 !== $is_first ) {
+						 echo '</ul>';
+					 }
+					 $is_first = 1;
+				 }
+				 if ( $is_first ) {
+					 echo '<h3>' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . '</h3>';
+					 echo '<ul>';
+					 $is_first = 0;
+				 }
+
+				 echo '<li';
+				 if ( BBLM_CPT_Comp::is_competition_active( $c->ID ) ) {
+					 echo (' class="bblm_comp_active"');
+				 }
+				 echo '>' . bblm_get_competition_link( $c->ID ) . ' - (' . bblm_get_cup_name( $cm[ 'comp_cup' ][0] ) . ')</li>';
+
+			 }//end of foreach
+			 echo '</ul>';
+
+		 }//end of if ( $cposts = get_posts( $cpostsarg )
+		 else {
+			 echo  '<p>' . __( 'Sorry, but no Competitions could be retrieved at this time, please try again later.', 'bblm' ) . '</p>';
+		 }
+
+	 } //end of get_comp_listing
 
 } //end of class
 

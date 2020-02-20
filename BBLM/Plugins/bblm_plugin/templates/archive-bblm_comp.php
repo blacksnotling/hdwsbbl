@@ -1,62 +1,22 @@
-<?php
-/*
-Template Name: List Competitions
-*/
-/*
-*	Filename: bb.core.comp.php
-*	Description: Page template to list the compettions.
-*/
-?>
 <?php get_header(); ?>
 <div id="primary" class="content-area content-area-right-sidebar">
   <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
-		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
 			<?php do_action( 'bblm_template_before_content' ); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<header class="page-header entry-header">
 
-			<h2 class="entry-title"><?php the_title(); ?></h2>
+			<h2 class="entry-title"><?php echo __( 'Competitions', 'bblm'); ?></h2>
+			<div class="archive-description"><?php echo bblm_echo_archive_desc( 'cup' ) ?></div>
 
 		</header><!-- .page-header -->
 
-			<div class="entry-content">
+    <div class="entry-content">
+<?php
 
-					<?php the_content(); ?>
-				<?php
-
-				$compsql = 'SELECT P.post_title, P.guid, C.sea_id, C.series_id AS CupName, C.c_active FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_show = 1 ORDER BY C.sea_id DESC, C.c_sdate DESC';
-				if ($comps = $wpdb->get_results($compsql)) {
-					$is_first = 1;
-					$current_sea = 0;
-
-					foreach ( $comps as $c ) {
-						if ( $c->sea_id !== $current_sea ) {
-							$current_sea = $c->sea_id;
-							if ( 1 !== $is_first ) {
-								print("				</ul>\n");
-							}
-							$is_first = 1;
-						}
-						if ( $is_first ) {
-							echo '<h3>' . bblm_get_season_link( $c->sea_id ) . '</h3>';
-							echo '<ul>';
-							$is_first = 0;
-						}
-						print("					<li");
-						if ($c->c_active) {
-							print(" class=\"active\"");
-						}
-						print("><a href=\"".$c->guid."\" title=\"View the standings from the ".$c->post_title."\">".$c->post_title."</a> - (". bblm_get_cup_name( $c->CupName) . ")</li>\n");
-					}
-					print("				</ul>\n");
-				}
-				else {
-					print("  <p>Sorry, but no Competitions could be retrieved at this time, please try again later.</p>\n");
-				}
+        BBLM_CPT_Comp::get_comp_listing();
 
 ?>
 
@@ -69,8 +29,6 @@ Template Name: List Competitions
 </article><!-- .post-ID -->
 
 <?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
-<?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 <?php do_action( 'bblm_template_after_posts' ); ?>
 </main><!-- #main -->

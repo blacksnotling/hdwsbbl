@@ -411,7 +411,7 @@ img.alignright {
 	padding: 0.2em 0.2em 0 0.2em;
 	margin-bottom: 0.2em;
 }
-li.active {
+li.bblm_comp_active {
 	background: url(images/star.gif) no-repeat 100% 0;
 	padding: 0 20px 0 0;
 }
