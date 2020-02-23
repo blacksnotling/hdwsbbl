@@ -88,6 +88,7 @@ class BBLM_Meta_COMPETITION {
 	 $comp_ptd = ! isset( $meta['comp_ptd'][0] ) ? '0' : $meta['comp_ptd'][0];
 	 $comp_pcas = ! isset( $meta['comp_pcas'][0] ) ? '0' : $meta['comp_pcas'][0];
 	 $comp_pround = ! isset( $meta['comp_pround'][0] ) ? '0' : $meta['comp_pround'][0];
+	 $comp_showstandings = ! isset( $meta['comp_showstandings'][0] ) ? '0' : $meta['comp_showstandings'][0];
    wp_nonce_field( basename( __FILE__ ), 'competition_info' );
 ?>
 <script type="text/javascript">
@@ -193,6 +194,11 @@ class BBLM_Meta_COMPETITION {
 				<option value="0"<?php if ( 0 == $comp_pround) { echo ' selected="selected"'; } ?>>No</option>
 				<option value="1"<?php if ( 1 == $comp_pround) { echo ' selected="selected"'; } ?>>Yes</option>
 			</select></p>
+		<p><label for="comp_showstandings">Show the standings on the competition page??</label><br>
+			<select name="comp_showstandings" id="comp_showstandings">
+				<option value="0"<?php if ( 0 == $comp_showstandings) { echo ' selected="selected"'; } ?>>No</option>
+				<option value="1"<?php if ( 1 == $comp_showstandings) { echo ' selected="selected"'; } ?>>Yes</option>
+			</select></p>
 </div>
 <?php
 
@@ -233,6 +239,7 @@ class BBLM_Meta_COMPETITION {
 		$meta['comp_ptd'] = ( isset( $_POST['comp_ptd'] ) ? esc_textarea( $_POST['comp_ptd'] ) : '' );
 		$meta['comp_pcas'] = ( isset( $_POST['comp_pcas'] ) ? esc_textarea( $_POST['comp_pcas'] ) : '' );
 		$meta['comp_pround'] = ( isset( $_POST['comp_pround'] ) ? esc_textarea( $_POST['comp_pround'] ) : '' );
+		$meta['comp_showstandings'] = ( isset( $_POST['comp_showstandings'] ) ? esc_textarea( $_POST['comp_showstandings'] ) : '' );
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}

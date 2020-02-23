@@ -35,12 +35,15 @@ class BBLM_Admin_CPT_Competition {
   function my_edit_competition_columns( $columns ) {
 
   	$columns = array(
-  		'cb' => '<input type="checkbox" />',
-  		'title' => __( 'Season', 'bblm' ),
+			'cb' => '<input type="checkbox" />',
+  		'title' => __( 'Competition', 'bblm' ),
+			'id' => __( 'ID', 'bblm' ),
   		'season' => __( 'Season', 'bblm' ),
 			'cup' => __( 'Championship', 'bblm' ),
+			'teams' => __( 'Teams', 'bblm' ),
   		'sdate' => __( 'Started', 'bblm' ),
 			'fdate' => __( 'Ended', 'bblm' ),
+			'awards' => __( 'Awards', 'bblm' ),
   	);
 
   	return $columns;
@@ -55,17 +58,38 @@ class BBLM_Admin_CPT_Competition {
 
     switch( $column ) {
 
+			/* If displaying the 'id' column. */
+      case 'id' :
+
+        echo $post_id;
+
+      break;
+
       /* If displaying the 'season' column. */
       case 'season' :
 
-        echo 'Season';
+        echo bblm_get_season_name( get_post_meta( $post_id, 'comp_season', true ) );
 
       break;
 
 			/* If displaying the 'cup' column. */
 			case 'cup' :
 
-				echo 'Champiosnip';
+				echo bblm_get_season_name( get_post_meta( $post_id, 'comp_cup', true ) );
+
+			break;
+
+			/* If displaying the 'team' column. */
+			case 'teams' :
+
+				echo 'Manage Teams';
+
+			break;
+
+			/* If displaying the 'awards' column. */
+			case 'awards' :
+
+				echo 'Manage Awards';
 
 			break;
 
