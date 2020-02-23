@@ -25,29 +25,65 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_comp' ], ENT_QUOTES );
-
-    $parentpage = get_queried_object()->post_parent;
+    if ( (is_single() ) && ( $compid = get_queried_object() ) ) {
+      $compid = get_queried_object()->ID;
+    }
+    else {
+      $compid = 0;
+    }
+    $cm = get_post_meta( $compid );
 
     //Check we are on the correct poat_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
-
-      //pulling in the vars from the single-bblm_comp template
-      global $cd;
-      global $cstatus;
-      global $cduration;
+    if ( ( is_single() ) && ( get_post_type( $compid ) == 'bblm_comp' ) ) {
 
       //number of teams
-      $teamnosql = 'SELECT COUNT( DISTINCT P.t_id ) AS value FROM '.$wpdb->prefix.'team_comp P WHERE P.c_id = '.$cd->c_id.' GROUP BY P.c_id';
-      $tno = $wpdb->get_var($teamnosql);
+      $teamnosql = 'SELECT COUNT( DISTINCT P.t_id ) AS value FROM '.$wpdb->prefix.'team_comp P WHERE P.c_id = ' . $compid . ' GROUP BY P.c_id';
+      $tno = $wpdb->get_var( $teamnosql );
+      if ( 0 == $tno ) {
+        $tno = 0;
+      }
+
+      //Competition Status
+      if ( BBLM_CPT_Comp::is_competition_active( $compid ) ) {
+        $cstatus = "In Progress";
+      }
+      else {
+        $cstatus = "Complete";
+      }
 
       //comps this season
-      $comptseasql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.type_id = 1 AND C.sea_id = '.$cd->sea_id.' AND C.c_id != '.$cd->c_id;
+      $sposts = get_posts(
+        array(
+          'post_type' => 'bblm_comp',
+          'numberposts' => -1,
+          'orderby' => 'ID',
+          'order' => 'DESC',
+          'meta_query' => array(
+              array(
+                  'key' => 'comp_season',
+                  'value' => $cm[ 'comp_season' ][0],
+                  'compare' => '=',
+              )
+          ),
+        )
+      );
 
       //comps for this cup
-      $comptcupsql = 'SELECT C.c_id, P.post_title, P.guid FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.series_id = '.$cd->SERIES.' AND C.c_id != '.$cd->c_id;
+      $cposts = get_posts(
+        array(
+          'post_type' => 'bblm_comp',
+          'numberposts' => -1,
+          'orderby' => 'ID',
+          'order' => 'DESC',
+          'meta_query' => array(
+              array(
+                  'key' => 'comp_cup',
+                  'value' => $cm[ 'comp_cup' ][0],
+                  'compare' => '=',
+              )
+          ),
+        )
+      );
 
       echo $args['before_widget'];
 
@@ -57,11 +93,11 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
 
         echo '<ul>';
         echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $cstatus . '</li>';
-        echo '<li><strong>' . __( 'Duration', 'bblm' ) . ':</strong> ' . $cduration . '</li>';
-        echo '<li><strong>' . __( 'Format', 'bblm' ) . ':</strong> ' . $cd->ct_name . '</li>';
-        echo '<li><strong>' . __( 'Cup', 'bblm' ) . ':</strong> ' . bblm_get_cup_link( $cd->SERIES ) . '</li>';
-        echo '<li><strong>' . __( 'Season', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $cd->sea_id ) . '</li>';
-        echo '<li><strong>' . __( 'Number of teams', 'bblm' ) . ':</strong> ' . $tno . '</li>';
+        echo '<li><strong>' . __( 'Duration', 'bblm' ) . ':</strong> ' . BBLM_CPT_Comp::get_comp_duration( $compid ) . '</li>';
+        echo '<li><strong>' . __( 'Format', 'bblm' ) . ':</strong> ' . BBLM_CPT_Comp::get_comp_format_name( $compid ) . '</li>';
+        echo '<li><strong>' . __( 'Cup', 'bblm' ) . ':</strong> ' . bblm_get_cup_link( $cm[ 'comp_cup' ][0] ) . '</li>';
+        echo '<li><strong>' . __( 'Season', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . '</li>';
+        echo '<li><strong>' . __( 'Number of teams', 'bblm' ) . ':</strong> ' . esc_html( $tno ) . '</li>';
         echo '</ul>';
 
       echo '</div>';
@@ -71,15 +107,15 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
       echo $args['before_widget'];
       echo $args['before_title'] . apply_filters( 'widget_title', 'Other Competitions this Season' ) . $args['after_title'];
 
-      if ( $comptsea = $wpdb->get_results( $comptseasql ) ) {
+      if( $sposts ) {
         echo '<ul>';
-        foreach ( $comptsea as $csea ) {
-          echo '<li><a href="' . $csea->guid . '" title="View more on this Competition">' . $csea->post_title . '</a></li>';
+        foreach( $sposts as $o ) {
+          echo '<li>' . bblm_get_competition_link( $o->ID ) . '</li>';
         }
         echo '</ul>';
       }
       else {
-        echo '<p>None at present.</p>';
+        echo '<p>' . __( 'None at present.', 'bblm' ) . '</p>';
       }
 
       echo $args['after_widget'];
@@ -87,15 +123,15 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
       echo $args['before_widget'];
       echo $args['before_title'] . apply_filters( 'widget_title', 'Other Competitions for this Cup' ) . $args['after_title'];
 
-      if ( $comptcup = $wpdb->get_results( $comptcupsql ) ) {
+      if( $cposts ) {
         echo '<ul>';
-        foreach ( $comptcup as $ccup ) {
-          echo '<li><a href="' . $ccup->guid . '" title="View more on this Competition">' . $ccup->post_title . '</a></li>';
+        foreach( $cposts as $o ) {
+          echo '<li>' . bblm_get_competition_link( $o->ID ) . '</li>';
         }
         echo '</ul>';
       }
       else {
-        echo '<p>None at present.</p>';
+        echo '<p>' . __( 'None at present.', 'bblm' ) . '</p>';
       }
 
       echo $args['after_widget'];

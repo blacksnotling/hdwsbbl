@@ -220,6 +220,48 @@ class BBLM_CPT_Comp {
 
 	 } //end of get_comp_listing
 
+	 /**
+		* Returns the name of the competition format
+		*
+		* @param wordpress $query
+		* @return string
+		*/
+		public static function get_comp_format_name( $ID ) {
+
+			$ctype = get_post_meta( $ID, 'comp_format', true );
+			$ctype = bblm_get_competition_format_name( $ctype );
+
+			return $ctype;
+
+		} //end of get_comp_format_name()
+
+		/**
+ 		* Returns dates which a competition ran for
+ 		*
+ 		* @param wordpress $query
+ 		* @return string
+ 		*/
+ 		public static function get_comp_duration( $ID ) {
+
+			$csdate = date("d-m-Y", strtotime( get_post_meta( $ID, 'comp_sdate', true ) ) );
+			$duration = "";
+
+			if ( BBLM_CPT_Comp::is_competition_active( $ID ) ) {
+
+				$duration = $csdate . __( ' to the present', 'bblm' );
+
+			}
+			else {
+
+				$cfdate = date("d-m-Y", strtotime( get_post_meta( $ID, 'comp_fdate', true ) ) );
+				$duration = $csdate . __( ' to', 'bblm' ) . $cfdate;
+
+			}
+
+ 			return $duration;
+
+ 		} //end of get_comp_duration()
+
 } //end of class
 
 new BBLM_CPT_Comp();

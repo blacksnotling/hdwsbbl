@@ -216,3 +216,23 @@ function bblm_get_competition_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_season_link
+
+/**
+ * Returns the title of a Competition Format, properly escaped and formatted
+ * Takes in the ID of the Competition format
+ */
+function bblm_get_competition_format_name( $ID ) {
+	global $wpdb;
+
+	$output = "Undefined";
+
+	$sql = 'SELECT ct_name FROM ' . $wpdb->prefix . 'comp_type WHERE ct_id = ' . $ID;
+	if ( $cname = $wpdb->get_var( $sql ) ) {
+
+		$output = esc_html( $cname );
+
+	}
+
+  return $output;
+
+}// end of bblm_get_competition_format_name
