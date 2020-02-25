@@ -57,10 +57,11 @@ function bblm_return_div_name($games) {
 
 ?>
 <div class="wrap">
-	<h2>Edit Tournament brackets.</h2>
-	<p>The following page can be used to Edit the brackets for a Knock-Out Tournemant, or final phase of an open season.</p>
-
 <?php
+	echo '<h2>' . __( 'Edit Tournament brackets.', 'bblm' ) . '</h2>';
+	echo '<p>' . __( 'The following page can be used to Edit the brackets for a Knock-Out Tournemant, or final phase of an open season.', 'bblm' ) . '</p>';
+
+
 
 if (isset($_POST['bblm_update_bracket'])) {
   //////////////////////////
@@ -76,7 +77,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 	//Generate text for bracket
 	if (F== $_POST['bblm_game']) {
 		$match_id = 0;
-		$fixture_id = $_POST['bblm_fixture'];
+		$fixture_id = intval( $_POST['bblm_fixture'] );
 		if (0 == $fixture_id) {
 			$match_text = "To Be Determined";
 		}
@@ -129,7 +130,7 @@ if (isset($_POST['bblm_update_bracket'])) {
 	}
 	//end of text generation
 
-	$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.$_POST['bblm_match'].'\', `f_id` = \''.$_POST['bblm_fixture'].'\', `cb_text` = \''.$match_text.'\' WHERE `cb_id` = '.$_POST['bblm_bid'].' LIMIT 1';
+	$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.intval( $_POST['bblm_match'] ).'\', `f_id` = \''.intval( $_POST['bblm_fixture'] ).'\', `cb_text` = \''.$match_text.'\' WHERE `cb_id` = '.intval( $_POST['bblm_bid'] ).' LIMIT 1';
 	//print($updatebracketsql);
 
 	if (FALSE !== $wpdb->query($updatebracketsql)) {
@@ -183,11 +184,11 @@ else if ( "edit" == $_GET['action'] ) {
 			//generate output into a static string
 			print("				<option value=\"0\">Not Applicable</option>\n");
 			foreach ($matches as $m) {
-					print("				<option value=\"".$m[m_id]."\"");
-					if ($m[m_id] == $cb->m_id) {
+					print("				<option value=\"".$m['m_id']."\"");
+					if ($m['m_id'] == $cb->m_id) {
 						print(" selected=\"selected\"");
 					}
-					print(">".date("d.m.Y", $m[mdate])." - ".$m[TA]." (".$m[m_teamAtd].") vs ".$m[TB]." (".$m[m_teamBtd].")</option>\n");
+					print(">".date("d.m.Y", $m['mdate'])." - ".$m['TA']." (".$m['m_teamAtd'].") vs ".$m['TB']." (".$m['m_teamBtd'].")</option>\n");
 			}
 		}
 ?>
@@ -234,7 +235,7 @@ else if (isset($_POST['bblm_select_comp'])) {
   /////////////////////////////////
  // Display the brackets so far //
 /////////////////////////////////
-	$cid = $_POST['bblm_cid'];
+	$cid = intval( $_POST['bblm_cid'] );
 	print("<h3>Brackets for this competition</h3>\n");
 	print("<p>Below are the brackets for this competition. Press the edit button in the relevent bracket to change it.</p>\n");
 
@@ -351,12 +352,18 @@ else {
 		<th scope="row" valign="top"><label for="bblm_cid">Competition</label></th>
 		<td><select name="bblm_cid" id="bblm_cid">
 <?php
-		$compbsql = 'SELECT DISTInCT(C.c_id), P.post_title FROM '.$wpdb->prefix.'comp_brackets C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID ORDER BY C.c_id DESC';
-			if ($compb = $wpdb->get_results($compbsql)) {
-				foreach ($compb as $c) {
-					print("			<option value=\"".$c->c_id."\">".$c->post_title."</option>\n");
-				}
-			}
+$oposts = get_posts(
+	array(
+		'post_type' => 'bblm_comp',
+		'numberposts' => -1,
+		'orderby' => 'ID',
+		'order' => 'DESC'
+	)
+);
+if( ! $oposts ) return;
+foreach( $oposts as $o ) {
+	echo '<option value="' . $o->ID . '">' . bblm_get_competition_name( $o->ID ) . '</option>';
+}
 ?>
 		</select></td>
 	</tr>
