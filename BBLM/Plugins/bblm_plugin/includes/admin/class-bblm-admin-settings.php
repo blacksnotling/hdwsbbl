@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_Settings_Admin {
@@ -53,9 +53,9 @@ class BBLM_Settings_Admin {
 ?>
 
     	<div class="wrap">
-    		<h2>League Settings</h2>
-        <p>Use the following page to define the various settings required to maintain the Blood Bowl league.</p>
-        <?php
+<?php
+				echo '<h2>'.__( 'League Settings', 'bblm' ).'</h2>';
+				echo '<p>'.__( 'Use the following page to define the various settings required to maintain the Blood Bowl league.', 'bblm' ).'</p>';
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
                   $this->admin_notice();
             }
@@ -76,7 +76,7 @@ class BBLM_Settings_Admin {
     public function admin_notice() {
       ?>
         <div class="notice notice-success is-dismissible">
-            <p>Your settings have been updated</p>
+            <p><?php echo __( 'Your settings have been updated', 'bblm' ); ?></p>
         </div>
         <?php
     }
@@ -222,44 +222,12 @@ class BBLM_Settings_Admin {
             'helper' => __( 'The Wordpress Page ID "Teams" Page.', 'bblm' ),
         	),
           array(
-        		'uid' => 'page_series',
-        		'label' => __( 'Page # - Championship Cups', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Series" Page.', 'bblm' ),
-        	),
-          array(
-        		'uid' => 'page_season',
-        		'label' => __( 'Page # - Seasons', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Seasons" Page.', 'bblm' ),
-        	),
-          array(
-        		'uid' => 'page_comp',
-        		'label' => __( 'Page # - Competitions', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "competitions" Page.', 'bblm' ),
-        	),
-          array(
         		'uid' => 'page_match',
         		'label' => __( 'Page # - Match / Results', 'bblm' ),
         		'section' => 'third_section',
         		'type' => 'number',
             'placeholder' => '',
             'helper' => __( 'The Wordpress Page ID "results" Page.', 'bblm' ),
-        	),
-          array(
-        		'uid' => 'page_stats',
-        		'label' => __( 'Page # - Statistics', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Statistics" Page.', 'bblm' ),
         	),
           array(
         		'uid' => 'page_stars',
