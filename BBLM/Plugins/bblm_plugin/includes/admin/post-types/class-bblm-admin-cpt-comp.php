@@ -82,7 +82,9 @@ class BBLM_Admin_CPT_Competition {
 			/* If displaying the 'team' column. */
 			case 'teams' :
 
-				echo 'Manage Teams';
+				echo '<a href="';
+				bloginfo('url');
+				echo '/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php&comp=' . $post_id . '" title="Assign teams to a Competition">Manage Teams</a>';
 
 			break;
 
