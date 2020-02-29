@@ -262,6 +262,22 @@ class BBLM_CPT_Comp {
 
  		} //end of get_comp_duration()
 
+		/**
+ 		* Returns if the competition counts towards ststisticd
+		* or if it id sn exhibition / friendly game
+ 		*
+ 		* @param wordpress $query
+ 		* @return bool
+ 		*/
+ 		public static function does_comp_count( $ID ) {
+
+ 			$ccounts = get_post_meta( $ID, 'comp_counts', true );
+
+ 			return $ccounts;
+
+ 		} //end of does_comp_count()
+
+
 } //end of class
 
 new BBLM_CPT_Comp();

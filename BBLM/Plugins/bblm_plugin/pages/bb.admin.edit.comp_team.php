@@ -23,6 +23,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		$bblm_div = 0;
 		$bblm_teams = 0;
 		$bblm_tc_id = 0;
+		$bblm_comp_counts = 0;
 
 		if ( isset( $_POST['bblm_comp'] ) ) {
 			$bblm_comp = intval( $_POST['bblm_comp'] );
@@ -37,11 +38,16 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 			$bblm_tc_id = $_POST['bblm_tcid']; //for teams removed with the delete button
 		}
 
+		//Check to see if the competitio counts
+		if ( BBLM_CPT_Comp::does_comp_count( $bblm_comp ) ) {
+			$bblm_comp_counts = 1;
+		}
+
 		if ( isset( $_POST['bblm_teamcomp_add'] ) ) {
 
 			foreach ($bblm_teams as $team) {
 
-				$addsql = 'INSERT INTO `'.$wpdb->prefix.'team_comp` (`tc_id`, `t_id`, `c_id`, `div_id`, `tc_played`, `tc_W`, `tc_L`, `tc_D`, `tc_tdfor`, `tc_tdagst`, `tc_casfor`, `tc_casagst`, `tc_int`, `tc_comp`, `tc_points`) VALUES (\'\', \''.intval( $team ).'\', \''.$bblm_comp.'\', \''.$bblm_div.'\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\')';
+				$addsql = 'INSERT INTO `'.$wpdb->prefix.'team_comp` (`tc_id`, `t_id`, `c_id`, `div_id`, `tc_played`, `tc_W`, `tc_L`, `tc_D`, `tc_tdfor`, `tc_tdagst`, `tc_casfor`, `tc_casagst`, `tc_int`, `tc_comp`, `tc_points`, `tc_counts`) VALUES (\'\', \''.intval( $team ).'\', \''.$bblm_comp.'\', \''.$bblm_div.'\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \'0\', \''. $bblm_comp_counts .'\')';
 
 				if ( FALSE !== $wpdb->query( $addsql ) ) {
 					$sucess = TRUE;

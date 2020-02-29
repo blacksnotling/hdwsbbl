@@ -728,7 +728,10 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<ul>
 			<li>First take a copy of the text at the top of the Competitions page</li>
 			<li>Update the awards-comp tables to BIGINT(20)</li>
-			<li>CONVERT</li>
+			<li>OTHER TABLES HERE</li>
+			<li>Add column &quot;tc_counts&quot; (INT 1, Default 1) to *team_comp</li>
+			<li>POPULATE COLUMN</li>
+			<li>CONVERT COMPETITIONS</li>
 			<li>Now you can delete the Competitions Page and update the menus!</li>
 		</ul>
 
