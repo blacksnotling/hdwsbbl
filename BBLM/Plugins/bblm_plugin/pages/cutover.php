@@ -731,6 +731,8 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>OTHER TABLES HERE</li>
 			<li>Add column &quot;tc_counts&quot; (INT 1, Default 1) to *team_comp</li>
 			<li>POPULATE COLUMN</li>
+			<li>Add column &quot;m_counts&quot; (INT 1, Default 1) to *match</li>
+			<li>POPULATE COLUMN</li>
 			<li>CONVERT COMPETITIONS</li>
 			<li>Now you can delete the Competitions Page and update the menus!</li>
 		</ul>
