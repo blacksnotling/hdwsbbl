@@ -611,7 +611,54 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 							echo '</ul>';
 						}
 					} //end of if ( isset( $_POST[ 'bblm_template_updatemeta' ] ) ) {
+						/**
+						 *
+						 * UPDATING team_comp table with new column
+						 */
+						if (isset($_POST['bblm_comp_populate_teamcomp'])) {
 
+								$comppostsql = "SELECT * FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_id = T.c_id";
+								if ($teamposts = $wpdb->get_results($comppostsql)) {
+									foreach ($teamposts as $tc) {
+										$tcupdate = "UPDATE `".$wpdb->prefix."team_comp` SET `tc_counts` = '".$tc->c_counts."' WHERE `".$wpdb->prefix."team_comp`.`tc_id` = ".$tc->tc_id.";";
+										if ( $wpdb->query($tcupdate) ) {
+											$result = true;
+										}
+										else {
+											$result = false;
+										}
+
+									} //end of foreach
+									if ( $result ) {
+										print("<div id=\"updated\" class=\"updated fade\"><p>The team_comp table updated with the new value!</p></div>\n");
+									}
+								}//end of if sql was successful
+
+						} // end of if (isset($_POST['bblm_comp_populate_teamcomp'])) {
+							/**
+							 *
+							 * UPDATING team_comp table with new column
+							 */
+							if (isset($_POST['bblm_comp_populate_matchcol'])) {
+
+									$comppostsql = "SELECT * FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id";
+									if ($teamposts = $wpdb->get_results($comppostsql)) {
+										foreach ($teamposts as $tc) {
+											$tcupdate = "UPDATE `".$wpdb->prefix."match` SET `m_counts` = '".$tc->c_counts."' WHERE `".$wpdb->prefix."match`.`m_id` = ".$tc->m_id.";";
+											if ( $wpdb->query($tcupdate) ) {
+												$result = true;
+											}
+											else {
+												$result = false;
+											}
+
+										} //end of foreach
+										if ( $result ) {
+											print("<div id=\"updated\" class=\"updated fade\"><p>The team_comp table updated with the new value!</p></div>\n");
+										}
+									}//end of if sql was successful
+
+							} // end of if (isset($_POST['bblm_comp_populate_matchcol'])) {
 
 /**
  *
@@ -730,9 +777,9 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>Update the awards-comp tables to BIGINT(20)</li>
 			<li>OTHER TABLES HERE</li>
 			<li>Add column &quot;tc_counts&quot; (INT 1, Default 1) to *team_comp</li>
-			<li>POPULATE COLUMN</li>
+			<li><input type="submit" name="bblm_comp_populate_teamcomp" value="Populate New Field" title="Populate New Field"/></li>
 			<li>Add column &quot;m_counts&quot; (INT 1, Default 1) to *match</li>
-			<li>POPULATE COLUMN</li>
+			<li><input type="submit" name="bblm_comp_populate_matchcol" value="Populate New Field" title="Populate New Field"/></li>
 			<li>CONVERT COMPETITIONS</li>
 			<li>Now you can delete the Competitions Page and update the menus!</li>
 		</ul>

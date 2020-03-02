@@ -154,7 +154,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		/*
 		-- Gather Information about Comp --
 		*/
-		$compid = bblm_safe_input['mcomp'];
+		$compid = $bblm_safe_input['mcomp'];
 		$bblm_comp_counts = 0;
 		$comp = array();
 		$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE c_id = ".$compid;
