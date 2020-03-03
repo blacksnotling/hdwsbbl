@@ -37,8 +37,8 @@ class BBLM_CPT_Comp {
 
 	    if( is_post_type_archive( 'bblm_comp' ) && !is_admin() && $query->is_main_query() ) {
 	        $query->set( 'posts_per_page', -1 );
-          $query->set( 'orderby', 'title' );
-          $query->set( 'order', 'asc' );
+  //        $query->set( 'orderby', 'title' );
+    //      $query->set( 'order', 'asc' );
           $query->set( 'post_status', 'publish' );
 	    }
 
@@ -177,11 +177,14 @@ class BBLM_CPT_Comp {
 		 $cpostsarg = array(
 			 'post_type' => 'bblm_comp',
 			 'numberposts' => -1,
-			 'meta_key' => 'comp_season',
-			 'orderby' => array(
-				 'comp_season' => 'DESC',
-				 'post_title' => 'ASC',
-			 )
+//			 'meta_key' => 'comp_season',
+			 'meta_query' => array(
+				 'season' => array(
+					 'key' => 'comp_season',
+					 'type' => 'NUMERIC'
+				 ),
+				),
+				'orderby' => 'season'
 		 );
 		 if ( $cposts = get_posts( $cpostsarg ) ) {
 			 $is_first = 1;
@@ -199,7 +202,7 @@ class BBLM_CPT_Comp {
 					 $is_first = 1;
 				 }
 				 if ( $is_first ) {
-					 echo '<h3>' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . '</h3>';
+					 echo '<h3>' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . ' - '.$current_sea.'</h3>';
 					 echo '<ul>';
 					 $is_first = 0;
 				 }

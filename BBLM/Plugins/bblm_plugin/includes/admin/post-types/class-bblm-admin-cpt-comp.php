@@ -26,6 +26,9 @@ class BBLM_Admin_CPT_Competition {
 
     add_filter( 'manage_edit-bblm_comp_columns', array( $this, 'my_edit_competition_columns' ) );
     add_action( 'manage_bblm_comp_posts_custom_column', array( $this, 'my_manage_competition_columns' ), 10, 2 );
+		add_filter( 'manage_edit-bblm_comp_sortable_columns', array( $this, 'my_manage_sortable_columns' ) );
+		add_action( 'restrict_manage_posts', array( $this, 'comp_filter_season' ) );
+		add_filter( 'parse_query', array( $this, 'comp_filter_comp_by_season' ) );
 
  	}
 
@@ -136,8 +139,68 @@ class BBLM_Admin_CPT_Competition {
 
     }
 
-  }
+  } //end of my_manage_competition_columns
 
-}
+	 /*
+		* Sets the columns that are filterable
+		*/
+		function my_manage_sortable_columns( $columns ) {
+			$columns['season'] = 'comp_season_filter';
+			return $columns;
+		}
+
+	 /**
+		* Allow the page to be filtered on meta_values
+ 		*/
+		function comp_filter_season() {
+			global $typenow;
+			global $wpdb;
+
+			if ( $typenow == 'bblm_comp' ) {
+
+				$query = $wpdb->prepare('
+				SELECT DISTINCT pm.meta_value FROM %1$s pm
+				LEFT JOIN %2$s p ON p.ID = pm.post_id
+				WHERE pm.meta_key = "%3$s"
+				AND p.post_status = "%4$s"
+				AND p.post_type = "%5$s"
+				ORDER BY "%3$s"',
+				$wpdb->postmeta,
+				$wpdb->posts,
+				'comp_season',
+				'publish',
+				'bblm_comp',
+				'comp_season'
+			);
+			$results = $wpdb->get_col($query);
+			$current_season = '';
+			if( isset( $_GET['bblm_comp-filter-season'] ) ) {
+				$current_season = $_GET['bblm_comp-filter-season']; // Check if option has been selected
+			}
+	?>
+	 <select name="bblm_comp-filter-season" id="bblm_comp-filter-season">
+			<option value="all" <?php selected( 'all', $current_season ); ?>><?php _e( 'All Seasons', 'bblm' ); ?></option>
+			<?php foreach( $results as $key ) { ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $current_season ); ?>><?php echo bblm_get_season_name( $key ); ?></option>
+			<?php } ?>
+		</select>
+	<?php }
+		} // end of comp_filter_season()
+
+	 /*
+		* *Modifies thre WP_Query to account for any selected filter
+		*/
+		function comp_filter_comp_by_season( $query ) {
+			global $pagenow;
+			// Get the post type
+			$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+			if ( is_admin() && $pagenow=='edit.php' && $post_type == 'bblm_comp' && isset( $_GET['bblm_comp-filter-season'] ) && $_GET['bblm_comp-filter-season'] !='all' ) {
+				$query->query_vars['meta_key'] = 'comp_season';
+		    $query->query_vars['meta_value'] = $_GET['bblm_comp-filter-season'];
+		    $query->query_vars['meta_compare'] = '=';
+		  }
+		} //end of comp_filter_comp_by_season()
+
+} //end of class
 
 new BBLM_Admin_CPT_Competition();

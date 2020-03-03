@@ -659,6 +659,68 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 									}//end of if sql was successful
 
 							} // end of if (isset($_POST['bblm_comp_populate_matchcol'])) {
+								/**
+					 		    *
+					 		    * UPDATING WP Posts TABLE FOR THE NEW COMPETITIONS CPT
+					 		    */
+					 		   if (isset($_POST['bblm_comp_compcpt'])) {
+
+					 		     //$cuppostsql = "SELECT P.ID, R.sea_id, P.post_title, UNIX_TIMESTAMP(R.sea_sdate) AS sdate, UNIX_TIMESTAMP(R.sea_fdate) AS fdate FROM ".$wpdb->prefix."season R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.sea_id = J.tid AND P.ID = J.pid and J.prefix = 'sea_' ORDER BY P.ID ASC";
+									 $cuppostsql = "SELECT P.ID, R.c_id, R.ct_id, R.c_counts, R.series_id, R.sea_id, R.c_pW, R.c_pL, R.c_pD, R.c_ptd, R.c_pcas, R.c_pround, R.c_showstandings, P.post_title, UNIX_TIMESTAMP(R.c_sdate) AS sdate, UNIX_TIMESTAMP(R.c_edate) AS fdate FROM ".$wpdb->prefix."comp R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_' ORDER BY P.ID ASC";
+					 		       if ($stadposts = $wpdb->get_results($cuppostsql)) {
+					 		         echo '<ul>';
+					 		         foreach ($stadposts as $stad) {
+					 		           $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_comp' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+	//				 		           print("<li>".$stadupdatesql."</li>");
+					 		           if ( date("Y-m-d", $stad->fdate) == '1970-01-01' ) {
+					 		             $fdate = '0000-00-00';
+					 		           }
+					 		           else {
+					 		             $fdate = date("Y-m-d", $stad->fdate);
+					 		           }
+/*					 		           print("<li>Meta -> '".$stad->ID."', 'comp_sdate', '".date("Y-m-d", $stad->sdate)."'</li>");
+					 		           print("<li>Meta -> '".$stad->ID."', 'comp_fdate', '".$fdate."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_season', '".$stad->sea_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_cup', '".$stad->series_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_format', '".$stad->ct_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_counts', '".$stad->c_counts."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pw', '".$stad->c_pW."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pl', '".$stad->c_pL."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pd', '".$stad->c_pD."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_ptd', '".$stad->c_ptd."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pcas', '".$stad->c_pcas."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pround', '".$stad->c_pround."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_showstandings', '".$stad->c_showstandings."'</li>");
+*/
+
+					 		           if ( $wpdb->query($stadupdatesql) ) {
+					 		             $result = true;
+					 		             add_post_meta( $stad->ID, 'comp_sdate', date("Y-m-d", $stad->sdate), true );
+					 		             add_post_meta( $stad->ID, 'comp_fdate', $fdate, true );
+													 add_post_meta( $stad->ID, 'comp_season', $stad->sea_id, true );
+													 add_post_meta( $stad->ID, 'comp_cup', $stad->series_id, true );
+													 add_post_meta( $stad->ID, 'comp_format', $stad->ct_id, true );
+													 add_post_meta( $stad->ID, 'comp_counts', $stad->c_counts, true );
+													 add_post_meta( $stad->ID, 'comp_pw', $stad->c_pW, true );
+													 add_post_meta( $stad->ID, 'comp_pl', $stad->c_pL, true );
+													 add_post_meta( $stad->ID, 'comp_pd', $stad->c_pD, true );
+													 add_post_meta( $stad->ID, 'comp_ptd', $stad->c_ptd, true );
+													 add_post_meta( $stad->ID, 'comp_pcas', $stad->c_pcas, true );
+													 add_post_meta( $stad->ID, 'comp_pround', $stad->c_pround, true );
+													 add_post_meta( $stad->ID, 'comp_showstandings', $stad->c_showstandings, true );
+					 		           }
+					 		           else {
+					 		             $result = false;
+					 		           }
+
+					 		         } //end of foreach
+					 		 //        echo '</ul>';
+					 		         if ( $result ) {
+					 		           print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Competitions! <strong>Now you can delete the Competitions page!</strong></p></div>\n");
+					 		         }
+					 		       }//end of if sql was successful
+
+					 		   } //end of if (isset($_POST['bblm_comp_compcpt']))
 
 /**
  *
@@ -780,7 +842,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_comp_populate_teamcomp" value="Populate New Field" title="Populate New Field"/></li>
 			<li>Add column &quot;m_counts&quot; (INT 1, Default 1) to *match</li>
 			<li><input type="submit" name="bblm_comp_populate_matchcol" value="Populate New Field" title="Populate New Field"/></li>
-			<li>CONVERT COMPETITIONS</li>
+			<li><input type="submit" name="bblm_comp_compcpt" value="Convert Competition Post Types" title="Convert the Competition Post Types"/></li>
 			<li>Now you can delete the Competitions Page and update the menus!</li>
 		</ul>
 
