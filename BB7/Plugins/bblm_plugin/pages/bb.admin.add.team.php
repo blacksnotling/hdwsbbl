@@ -255,7 +255,7 @@ function UpdateBankTv() {
 	var tot_tv = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
 	document.getElementById('bblm_ttv').value = tot_tv;
 
-	var tot_bank = 1000000 - tot_tv;
+	var tot_bank = 600000 - tot_tv;
 	document.getElementById('bblm_tbank').value = tot_bank;
 }
 </script>
