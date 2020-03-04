@@ -190,7 +190,7 @@ else if(isset($_POST['bblm_race_select'])) {
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
-		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="25" class="large-text"/></td>
+		<td><input type="text" name="bblm_thcoach" size="50" value="Unkown" maxlength="25" class="large-text"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tstad"><?php echo __( 'Home Stadium', 'bblm' ); ?></label></th>
