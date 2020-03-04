@@ -148,10 +148,6 @@ class BBLM_CPT_Comp {
 		 $compenddate = DateTime::createFromFormat('Y-m-d', $enddate );
 		 $compened = $compenddate->format('U');
 
-		 $enddate = get_post_meta( $ID, 'comp_fdate', true );
-		 $seasonenddate = DateTime::createFromFormat('Y-m-d', $enddate );
-		 $seasonened = $seasonenddate->format('U');
-
 		 if ( ( $compened > time() ) || ( $enddate == '0000-00-00' ) ) {
 
 			 return true;
