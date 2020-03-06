@@ -201,6 +201,30 @@ class BBLM_Admin_CPT_Competition {
 		  }
 		} //end of comp_filter_comp_by_season()
 
+	 /*
+		* Updates the *comp table with the competition details upon saving,
+		* or creating a new competition
+		* Assumes input has already been sanitised
+		*/
+		public static function update_comp_table( $ID, $args ) {
+			global $wpdb;
+
+			//check to see if the comp is already in the database
+			$compexistsql = 'SELECT WPID FROM `'.$wpdb->prefix.'comp` WHERE WPID = ' . $ID;
+			if ( $wpdb->get_var( $compexistsql ) ) {
+				return $ID;
+			}
+			else {
+
+				//new competition to be inserted
+				$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'comp` (`c_id`, `c_name`, `series_id`, `sea_id`, `ct_id`, `c_active`, `c_counts`, `c_pW`, `c_pL`, `c_pD`, `c_ptd`, `c_pcas`, `c_pround`, `c_sdate`, `c_edate`, `c_showstandings`, `c_show`, `type_id`, `WPID`) ';
+				$bblmdatasql .= 'VALUES (\'\', \'Competition\', \''.$args['comp_cup'].'\', \''.$args['comp_season'].'\', \''.$args['comp_format'].'\', \'1\', \''.$args['comp_counts'].'\', \''.$args['comp_pw'].'\', \''.$args['comp_pl'].'\', \''.$args['comp_pd'].'\', \''.$args['comp_ptd'].'\', \''.$args['comp_pcas'].'\', \''.$args['comp_pround'].'\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'0\', \'1\', \'1\', \''.$ID.'\')';
+				$wpdb->query( $bblmdatasql );
+
+			}
+
+		} //end of update_comp_table
+
 } //end of class
 
 new BBLM_Admin_CPT_Competition();

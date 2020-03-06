@@ -626,7 +626,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 							$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
 
 							//This line should work but for some reason prpduces blanks!
-							//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, dev_posts P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
 							if ($comps = $wpdb->get_results($compsql)) {
 								foreach ($comps as $comp) {
 									print("<option value=\"".$comp->c_id."\">".$comp->c_name."</option>\n");

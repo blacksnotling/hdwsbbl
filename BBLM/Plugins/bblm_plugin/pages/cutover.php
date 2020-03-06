@@ -708,6 +708,9 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 													 add_post_meta( $stad->ID, 'comp_pcas', $stad->c_pcas, true );
 													 add_post_meta( $stad->ID, 'comp_pround', $stad->c_pround, true );
 													 add_post_meta( $stad->ID, 'comp_showstandings', $stad->c_showstandings, true );
+
+													 $stadupdatesql = "UPDATE `".$wpdb->prefix."comp` SET `WPID` = '".$stad->ID."' WHERE `c_id` = '".$stad->c_id."'";
+													 $wpdb->query($stadupdatesql);
 					 		           }
 					 		           else {
 					 		             $result = false;
@@ -990,6 +993,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 					<li>*team_comp</li>
 				</ul>
 			</li>
+			<li>Add column &quot;WPiD&quot; (BIGINT 20) to comp</li>
 			<li>Add column &quot;tc_counts&quot; (INT 1, Default 1) to *team_comp</li>
 			<li><input type="submit" name="bblm_comp_populate_teamcomp" value="Populate New Field" title="Populate New Field"/></li>
 			<li>Add column &quot;m_counts&quot; (INT 1, Default 1) to *match</li>

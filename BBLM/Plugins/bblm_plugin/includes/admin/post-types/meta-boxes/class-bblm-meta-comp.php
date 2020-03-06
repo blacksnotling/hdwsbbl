@@ -243,6 +243,7 @@ class BBLM_Meta_COMPETITION {
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}
+		BBLM_Admin_CPT_Competition::update_comp_table( $post->ID , $meta );
 
  	}
 
