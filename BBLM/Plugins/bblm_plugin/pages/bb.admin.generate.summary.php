@@ -492,8 +492,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 	</tr>
 <?php
 		//Now we determine the lst of Competitions that took part in this time period
-		$complistsql = 'SELECT DISTINCT C.c_id, C.ct_id AS Type, c_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY Type ASC';
-		//$complistsql = 'SELECT DISTINCT C.c_id, C.ct_id AS Type, c_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND M.m_date > \'2008-04-28\' AND M.m_date < \'2008-05-10\' ORDER BY Type ASC LIMIT 0, 30 ';
+		$complistsql = 'SELECT DISTINCT C.c_id, C.ct_id AS Type FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY Type ASC';
 		if ($complist = $wpdb->get_results($complistsql)) {
 ?>
 	<tr>
@@ -505,7 +504,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 <?php
 			foreach ($complist as $cl) {
 				if (1 ==$cl->Type || 2 ==$cl->Type) {
-					print("		<label title=\"Yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_sftbl\"> <strong>Yes</strong> - ".$cl->c_name.".</label><br />\n");
+					print("		<label title=\"Yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_sftbl\"> <strong>Yes</strong> - ".bblm_get_competition_name( $cl->c_id ).".</label><br />\n");
 				}
 			}
 ?>
@@ -521,7 +520,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 		<label title="Yes"><input type="radio" value="S" name="bblm_splstat"> <strong>Yes</strong> - Stats for the Season to date</label><br />
 <?php
 			foreach ($complist as $cl) {
-				print("		<label title=\"yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_splstat\"> <strong>Yes</strong> - Stats for ".$cl->c_name.".</label><br />\n");
+				print("		<label title=\"yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_splstat\"> <strong>Yes</strong> - Stats for ".bblm_get_competition_name( $cl->c_id ).".</label><br />\n");
 			}
 ?>
 		</fieldset></td>

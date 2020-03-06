@@ -349,12 +349,12 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 				//Check to see if a fixture was submitted, or a blank match
 				if ("F" == $_POST['bblm_mtype']) {
 
-					$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, F.c_id, D.div_name, D.div_id, T.t_name AS TA, R.t_name AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
+					$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.t_name AS TA, R.t_name AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
 
 					if ($fixturedt = $wpdb->get_results($fixturedetailsql)) { //check the fixture exists
 
 						foreach ($fixturedt as $fd) {
-							$comp_name = $fd->c_name;
+							$comp_name = bblm_get_competition_name( $fd->c_id );
 							$div_name = $fd->div_name;
 							$comp_id = $fd->c_id;
 							$div_id = $fd->div_id;
@@ -429,13 +429,13 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 						//If we are here then this is a new match - not based on a fixture
 						//SQL to gather names and IDs of Competitions and Division
-						$compsql = "SELECT c_name, c_id FROM ".$wpdb->prefix."comp WHERE c_id = ".$_POST['bblm_mcomp'];
+						$compsql = "SELECT c_id FROM ".$wpdb->prefix."match WHERE c_id = ".$_POST['bblm_mcomp'];
 						$divsql = "SELECT div_name, div_id FROM ".$wpdb->prefix."division WHERE div_id = ".$_POST['bblm_mdiv'];
 
 						//Detemining the comp / div name and ID
 						if ( $result = $wpdb->get_results( $compsql ) ) {
 							foreach ($result as $res) {
-								$comp_name = $res->c_name;
+								$comp_name = bblm_get_competition_name( $res->c_id );
 								$comp_id = $res->c_id;
 							}
 						}
@@ -623,13 +623,17 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 						<label for="bblm_mcomp" class="selectit">Competition:</label>
 						<select name="bblm_mcomp" id="bblm_mcomp">
 							<?php
-							$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
-
-							//This line should work but for some reason prpduces blanks!
-							if ($comps = $wpdb->get_results($compsql)) {
-								foreach ($comps as $comp) {
-									print("<option value=\"".$comp->c_id."\">".$comp->c_name."</option>\n");
-								}
+							$oposts = get_posts(
+								array(
+									'post_type' => 'bblm_comp',
+									'numberposts' => -1,
+									'orderby' => 'ID',
+									'order' => 'DESC'
+								)
+							);
+							if( ! $oposts ) return;
+							foreach( $oposts as $o ) {
+								echo '<option value="' . $o->ID . '">' . bblm_get_competition_name( $o->ID ) . '</option>';
 							}
 							?>
 						</select>
@@ -652,10 +656,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 						<label for="bblm_fid">Fixture:</label>
 						<select name="bblm_fid" id="bblm_fid">
 							<?php
-							$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, D.div_name, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
+							$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, T.WPID AS TA, R.WPID AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
 							if ($fixtures = $wpdb->get_results($fixturesql)) {
 								foreach ($fixtures as $fd) {
-									print("<option value=\"".$fd->f_id."\">".$fd->TA." vs ".$fd->TB." (".$fd->c_name."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
+									print("<option value=\"".$fd->f_id."\">".bblm_get_team_name( $fd->TA )." vs ".bblm_get_team_name( $fd->TB )." (".bblm_get_competition_name( $fd->c_id )."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
 								}
 							}
 							else {
