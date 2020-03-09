@@ -120,7 +120,7 @@
 
 				<h3>Performance by Season</h3>
 <?php
-			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND tc_played > 0 AND C.c_counts = 1 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND tc_played > 0 AND C.c_counts = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
 				$zebracount = 1;
 ?>
@@ -180,7 +180,7 @@
 				<h3>Performance by Competition</h3>
 
 <?php
-			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND C.c_show = 1 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 
 			if ($matchh = $wpdb->get_results($matchhsql)) {
 				$zebracount = 1;
@@ -355,7 +355,7 @@
 				<h3>Recent Matches</h3>
 <?php
 				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
-				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_show = 1';
+				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID';
 				$matchssql .= ' AND N.m_id = M.m_id AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
 
 				if ($matchs = $wpdb->get_results($matchssql)) {

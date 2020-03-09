@@ -41,7 +41,7 @@ Template Name: List Resuts
 				</form>
 
 <?php
-				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, M.c_id, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\'  AND C.type_id = 1 AND C.c_show = 1 AND J.pid = P.ID ORDER BY ';
+				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, M.c_id, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\'  AND C.type_id = 1 AND J.pid = P.ID ORDER BY ';
 				$layout = "";
 				//determine the required Layout
 				if (isset($_POST['bblm_flayout'])) {

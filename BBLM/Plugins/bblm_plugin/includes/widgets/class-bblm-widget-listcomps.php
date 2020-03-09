@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1.1
+ * @version   1.2
  */
 
 class BBLM_Widget_ListComps extends WP_Widget {
@@ -29,7 +29,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
     //get current Season
     $sea_id = BBLM_CPT_Season::get_current_season();
 
-		$compsql = 'SELECT P.post_title, P.guid, C.c_active, UNIX_TIMESTAMP(C.c_sdate) AS sdate  FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.type_id = 1 AND C.c_counts = 1 AND C.sea_id = '.$sea_id.' ORDER BY C.c_active DESC, C.c_sdate ASC';
+		$compsql = 'SELECT C.WPID AS CWPID, C.c_active, UNIX_TIMESTAMP(C.c_sdate) AS sdate  FROM '.$wpdb->prefix.'comp C WHERE C.type_id = 1 AND C.c_counts = 1 AND C.sea_id = '.$sea_id.' ORDER BY C.c_active DESC, C.c_sdate ASC';
 		if ($complisting = $wpdb->get_results($compsql)) {
       //set up the code below
 			$is_first = 1;
@@ -50,7 +50,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
 
               $is_first = 0;
 						}
-						print("			<li><a href=\"".$cl->guid."\" title=\"View more about ".$cl->post_title."\">".$cl->post_title."</a></li>\n");
+						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
 						$last_stat = 1;
 				}//end of active comp
 				else if (($cl->c_active) && ($cl->sdate > $today)) {
@@ -66,7 +66,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
 
 							$is_first = 0;
 						}
-						print("			<li><a href=\"".$cl->guid."\" title=\"View more about ".$cl->post_title."\">".$cl->post_title."</a></li>\n");
+						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
 						$last_stat = 2;
 				}//end of upcoming comp
 				else {
@@ -82,7 +82,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
 
 							$is_first = 0;
 						}
-						print("			<li><a href=\"".$cl->guid."\" title=\"View more about ".$cl->post_title."\">".$cl->post_title."</a></li>\n");
+						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
 						$last_stat = 3;
 				}//end of recent comp
 			}//end of for each

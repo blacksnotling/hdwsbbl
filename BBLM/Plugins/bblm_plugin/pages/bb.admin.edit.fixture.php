@@ -61,7 +61,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	<form name="bblm_editfixture" method="post" id="post">
 <?php
 
-	$compnamesql = 'SELECT P.post_name FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE P.ID = J.pid AND J.prefix = \'c_\' AND J.tid = '.intval( $_POST['bblm_fcomp'] ).' LIMIT 1';
+	$comp_name = bblm_get_competition_name( intval( $_POST['bblm_fcomp'] ) );
 	$divnamesql = 'SELECT div_name FROM '.$wpdb->prefix.'division WHERE div_id = '.intval( $_POST['bblm_fdiv'] );
 	$fixturessql = 'SELECT * FROM '.$wpdb->prefix.'fixture F WHERE F.f_complete = 0 AND F.c_id = '.intval( $_POST['bblm_fcomp'] ).' AND F.div_id = '.intval( $_POST['bblm_fdiv'] ).' ORDER BY F.f_date ASC';
 	//If the "Cross Division" has been selected, pull all the teams taking part in that comp
@@ -71,8 +71,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	else {
 		$teamssql = 'SELECT P.post_title, C.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.intval( $_POST['bblm_fcomp'] ).' AND C.div_id = '.intval( $_POST['bblm_fdiv'] ).' ORDER BY P.post_title ASC';
 	}
-
-	$comp_name = $wpdb->get_var($compnamesql);
 	$div_name = $wpdb->get_var($divnamesql);
 ?>
 	<p>Below are the fixtures for <strong><?php print($comp_name); ?></strong>, <strong><?php print($div_name); ?></strong>.</p>

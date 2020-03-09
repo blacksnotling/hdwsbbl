@@ -39,7 +39,7 @@
 
 					if ($aw->a_cup) {
 						//The award in question is a Championship
-						$compmajorawardssql = 'SELECT P.post_title, P.guid, H.post_title AS CompName, H.guid AS CompLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = H.ID AND A.a_id = B.a_id AND a_cup = 1 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = C.c_id AND C.c_show = 1 AND C.c_counts = 1 AND A.a_id = '.$aw->a_id.' ORDER BY C.c_id DESC';
+						$compmajorawardssql = 'SELECT P.post_title, P.guid, H.post_title AS CompName, H.guid AS CompLink FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = H.ID AND A.a_id = B.a_id AND a_cup = 1 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = C.c_id AND C.c_counts = 1 AND A.a_id = '.$aw->a_id.' ORDER BY C.c_id DESC';
 						if (($cmawards = $wpdb->get_results($compmajorawardssql)) && (0 < count($cmawards))) {
 							$aoutput .= "					<table class=\"bblm_table\">\n						<tr>\n							<th class=\"bblm_tbl_name\">Team</th>\n							<th class=\"bblm_tbl_name\">Competition</th>\n						</tr>\n";
 							$zebracount = 1;

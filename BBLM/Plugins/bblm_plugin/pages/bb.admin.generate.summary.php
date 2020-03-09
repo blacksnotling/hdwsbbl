@@ -140,9 +140,9 @@ else if(isset($_POST['bblm_gen_preview'])) {
 		}
 	}
 
-	$sumstatssql = 'SELECT SUM(M.m_tottd) AS TTD, SUM(M.m_totcas) AS TCAS, SUM(M.m_totcomp) AS TCOMP, SUM(M.m_totint) AS TINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
+	$sumstatssql = 'SELECT SUM(M.m_tottd) AS TTD, SUM(M.m_totcas) AS TCAS, SUM(M.m_totcomp) AS TCOMP, SUM(M.m_totint) AS TINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
 	$sumstat = $wpdb->get_row($sumstatssql);
-	$deathsnumsql = 'SELECT COUNT(*) AS Deaths FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'comp C WHERE F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.c_id = M.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
+	$deathsnumsql = 'SELECT COUNT(*) AS Deaths FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'comp C WHERE F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.c_id = M.c_id AND C.c_counts = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
 	$deathsnum = $wpdb->get_var($deathsnumsql);
 	$sumoutput .= "<li><strong>".$sumstat->TTD."</strong> Touchdowns scored</li>\n";
 	$sumoutput .= "<li><strong>".$sumstat->TCAS."</strong> Casualties caused (<strong>".$deathsnum."</strong> resulted in Death)</li>\n";
@@ -155,7 +155,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	}
 
 	//Highest attemdance
-	$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND C.c_counts = 1 AND  M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'  ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+	$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND  M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'  ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 	$bc = $wpdb->get_row($biggestattendcesql);
 	$sumoutput .= "<li><strong>".number_format($bc->VALUE)." fans</strong> was the highest recorded attendance.</li>\n";
 
@@ -243,7 +243,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 
 	//Obituaries
 	if ($is_death) {
-		$obitsql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, X.pos_name, T.t_name AS TEAM, T.t_guid AS TEAMLink, F.pf_desc AS FATE FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.id AND F.p_id = P.p_id AND P.pos_id = X.pos_id AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 and C.c_show = 1 AND C.type_id = 1 AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY F.m_id ASC LIMIT 0, 30 ';
+		$obitsql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, X.pos_name, T.t_name AS TEAM, T.t_guid AS TEAMLink, F.pf_desc AS FATE FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.id AND F.p_id = P.p_id AND P.pos_id = X.pos_id AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY F.m_id ASC LIMIT 0, 30 ';
 		if ($obit = $wpdb->get_results($obitsql)) {
 			$sumoutput .= "<h3>Obituaries for Week ".$_POST['bblm_sweekno']."</h3>\n\n	<ul>\n";
 			foreach ($obit as $o) {

@@ -170,7 +170,7 @@
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
-			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.c_id = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.m_id AND Q.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 			if ($playercomp = $wpdb->get_results($playercompsql)) {
 				$zebracount = 1;
 				foreach ($playercomp as $pc) {
@@ -180,7 +180,7 @@
 					else {
 						print("				<tr class=\"bblm_tbl_alt\">\n");
 					}
-					print("				<td><a href=\"".$pc->guid."\" title=\"View more details about this competition\">".$pc->post_title."</a></td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
+					print("				<td>" . bblm_get_competition_link( $pc->CWPID ) . "</td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
 					$zebracount++;
 				}
 			}
@@ -200,7 +200,7 @@
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
-					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND C.c_show = 1 AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.m_id AND Q.c_id = C.c_id AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 					if ($playersea = $wpdb->get_results($playerseasql)) {
 					$zebracount = 1;
 						foreach ($playersea as $pc) {
@@ -234,7 +234,7 @@
 				</thead>
 				<tbody>
 <?php
-			$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_counts = 1 AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
+			$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_counts = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
 			if ($playermatch = $wpdb->get_results($playermatchsql)) {
 			$zebracount = 1;
 				foreach ($playermatch as $pm) {

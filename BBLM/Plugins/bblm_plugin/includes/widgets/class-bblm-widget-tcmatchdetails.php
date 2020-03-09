@@ -46,7 +46,7 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
       //scorers
       $topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 10';
 
-      $compsql = 'SELECT B.post_title AS Comp, B.guid AS CompLink, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B, '.$wpdb->prefix.'division D WHERE C.c_id = V.tid AND V.prefix = \'c_\' AND V.pid = B.ID AND D.div_id = '.$m->div_id.' AND C.c_id = '.$m->c_id.' LIMIT 1';
+      $compsql = 'SELECT C.WPID AS CWPID, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE D.div_id = '.$m->div_id.' AND C.WPID = '.$m->c_id.' LIMIT 1';
       $comp = $wpdb->get_row($compsql);
 
       echo $args['before_widget'];
@@ -57,7 +57,7 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
 
         echo '<ul>';
         echo '<li><strong>' . __( 'Date', 'bblm' ) . ':</strong> ' . date( "d.m.25y", $m->mdate ) . '</li>';
-        echo '<li><strong>' . __( 'Competition', 'bblm' ) . ':</strong> <a href="' . $comp->CompLink . '" title="View more about this Competition">' . $comp->Comp . '</a></li>';
+        echo '<li><strong>' . __( 'Competition', 'bblm' ) . ':</strong> ' . bblm_get_competition_link( $comp->CWPID ) . '</li>';
         echo '<li><strong>';
         if ( $m->div_id > 7 ) {
           echo 'Division';
