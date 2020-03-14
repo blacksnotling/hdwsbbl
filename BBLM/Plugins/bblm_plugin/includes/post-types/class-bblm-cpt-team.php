@@ -65,7 +65,7 @@ class BBLM_CPT_Team {
 		} //end of if ( $post_type == "bblm_cup" )
 		else if ( $post_type == "bblm_season" ) {
 
-				$teamistingsql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id anD Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 AND C.type_id = 1 AND C.sea_id = ' . $itemid . ' GROUP BY T.t_id ORDER BY Z.t_name ASC';
+				$teamistingsql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id anD Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 
 		} //end of else if ( $post_type == "bblm_season" ) {
 

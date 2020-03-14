@@ -33,22 +33,22 @@
 				<?php the_content(); ?>
 
 <?php
-				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID';
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID';
 				$matchnum = $wpdb->get_var($matchnumsql);
 				$compnum = wp_count_posts( 'bblm_comp')->publish;
 				$cupnum = wp_count_posts( 'bblm_cup')->publish; //Determine number of 'Published' Championship Cups
-				$playernumsql = 'SELECT COUNT(*) AS playernum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_id = T.t_id AND T.t_show = 1 AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID';
+				$playernumsql = 'SELECT COUNT(*) AS playernum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_id = T.t_id AND T.t_show = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID';
 				$playernum = $wpdb->get_var($playernumsql);
-				$teamnumsql = 'SELECT COUNT(*) AS teamnum FROM '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_show = 1 AND M.type_id = 1 AND M.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID';
+				$teamnumsql = 'SELECT COUNT(*) AS teamnum FROM '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.t_show = 1 AND M.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID';
 				$teamnum = $wpdb->get_var($teamnumsql);
 				$countseanum = wp_count_posts( 'bblm_season' );
 				$seanum = $countseanum->publish;
-				$sppnumsql = 'SELECT SUM(M.p_spp) AS sppnum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND T.type_id = 1 AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND M.p_spp > 0';
+				$sppnumsql = 'SELECT SUM(M.p_spp) AS sppnum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND M.p_spp > 0';
 				$sppnum = $wpdb->get_var($sppnumsql);
-				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1';
+				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1';
 				$deathnum = $wpdb->get_var($deathnumsql);
 
-				$matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1';
+				$matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1';
 				if ($matchstats = $wpdb->get_results($matchstatssql)) {
 					foreach ($matchstats as $ms) {
 						$tottd = $ms->TD;
@@ -73,7 +73,7 @@
 
 				<h3><?php echo bblm_get_league_name(); ?> Cup Winners</h3>
 <?php
-				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id AND C.type_id = 1 GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
+				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
 					$zebracount = 1;
 					print("	<table class=\"bblm_table\">\n		<tr>\n			<th class=\"bblm_tbl_name\">Team</th>\n			<th class=\"bblm_tbl_stat\">Championships</th>\n		</tr>\n");
@@ -95,7 +95,7 @@
 
 				<h3>Statistics Breakdown by Season</h3>
 <?php
-				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
 ?>
 					<table class="bblm_table bblm_sortable">
@@ -129,7 +129,7 @@
 ?>
 				<h3>Statistics Breakdown by Competition</h3>
 <?php
-				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
+				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
 				if ($compstats = $wpdb->get_results($compsql)) {
 					print("<table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_stat\">TD</th>\n		<th class=\"bblm_tbl_stat\">CAS</th>\n		<th class=\"bblm_tbl_stat\">COMP</th>\n		<th class=\"bblm_tbl_stat\">INT</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 					$zebracount = 1;
@@ -169,7 +169,7 @@
 					<tbody>
 
 <?php
-				$teamstatssql = 'SELECT P.post_title, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, P.guid FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 AND C.type_id = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID GROUP BY T.t_id ORDER BY P.post_title ASC';
+				$teamstatssql = 'SELECT P.post_title, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, P.guid FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID GROUP BY T.t_id ORDER BY P.post_title ASC';
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
 

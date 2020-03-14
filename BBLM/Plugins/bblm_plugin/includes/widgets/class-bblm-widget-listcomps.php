@@ -29,7 +29,7 @@ class BBLM_Widget_ListComps extends WP_Widget {
     //get current Season
     $sea_id = BBLM_CPT_Season::get_current_season();
 
-		$compsql = 'SELECT C.WPID AS CWPID, C.c_active, UNIX_TIMESTAMP(C.c_sdate) AS sdate  FROM '.$wpdb->prefix.'comp C WHERE C.type_id = 1 AND C.c_counts = 1 AND C.sea_id = '.$sea_id.' ORDER BY C.c_active DESC, C.c_sdate ASC';
+		$compsql = 'SELECT C.WPID AS CWPID, C.c_active, UNIX_TIMESTAMP(C.c_sdate) AS sdate  FROM '.$wpdb->prefix.'comp C WHERE C.c_counts = 1 AND C.sea_id = '.$sea_id.' ORDER BY C.c_active DESC, C.c_sdate ASC';
 		if ($complisting = $wpdb->get_results($compsql)) {
       //set up the code below
 			$is_first = 1;

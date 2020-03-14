@@ -44,7 +44,7 @@
 		}
 
 		//Main SQL Query to determine the Dead
-		$deadsql = 'SELECT P.p_id, T.WPID, K.post_title, K.guid, P.p_num, O.pos_name, UNIX_TIMESTAMP(M.m_date) AS mdate, F.f_id FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (f_id = 1 OR f_id = 6 OR f_id = 7) AND F.p_id = P.p_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = O.pos_id AND M.m_id = F.m_id AND M.c_id = C.c_id AND T.type_id = 1 AND T.t_show = 1 ORDER BY T.t_name ASC, P.p_num ASC, K.post_title ASC';
+		$deadsql = 'SELECT P.p_id, T.WPID, K.post_title, K.guid, P.p_num, O.pos_name, UNIX_TIMESTAMP(M.m_date) AS mdate, F.f_id FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (f_id = 1 OR f_id = 6 OR f_id = 7) AND F.p_id = P.p_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = O.pos_id AND M.m_id = F.m_id AND M.c_id = C.c_id AND T.t_show = 1 ORDER BY T.t_name ASC, P.p_num ASC, K.post_title ASC';
 		if ($dead = $wpdb->get_results($deadsql)) {
 			$is_first = 1;
 			$last_team = "";

@@ -30,7 +30,7 @@ Template Name: List Teams
 <?php
 	//Start of Custom content
 	//$teamsql = "SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team AS R, $wpdb->posts AS P, '.$wpdb->prefix.'bb2wp AS J WHERE R.t_id = J.tid AND P.ID = J.pid AND J.prefix = 't_' AND R.t_show = 1 ORDER BY t_name ASC";
-	$teamsql = 'SELECT P.post_title, R.r_name, R.r_id, P.guid, T.t_active, T.t_tv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND R.r_id = T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 AND T.type_id = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
+	$teamsql = 'SELECT P.post_title, R.r_name, R.r_id, P.guid, T.t_active, T.t_tv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND R.r_id = T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
 
 
 if ($teams = $wpdb->get_results($teamsql)) {

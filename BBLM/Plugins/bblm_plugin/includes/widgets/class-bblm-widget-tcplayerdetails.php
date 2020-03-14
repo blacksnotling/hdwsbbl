@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCplayerdetails extends WP_Widget {
@@ -54,7 +54,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$rd = $wpdb->get_row($racesql);
 
     	//determine debut season
-    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
+    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
     	$sd = $wpdb->get_row($seasondebutsql);
 
     	//grab list of other players on the team

@@ -123,7 +123,7 @@ class BBLM_CPT_Award {
 
 	 if ( $post_type == "bblm_season" ) {
 
-		 $winnerssql = 'SELECT COUNT(*) AS wins, X.WPID FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team X WHERE X.t_id = T.t_id AND T.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 AND A.a_id = 1 AND A.a_id = T.a_id AND C.sea_id = ' . $itemid . ' GROUP BY T.t_id ORDER BY wins DESC, X.WPID DESC';
+		 $winnerssql = 'SELECT COUNT(*) AS wins, X.WPID FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team X WHERE X.t_id = T.t_id AND T.c_id = C.WPID AND C.c_counts = 1 AND A.a_id = 1 AND A.a_id = T.a_id AND C.sea_id = ' . $itemid . ' GROUP BY T.t_id ORDER BY wins DESC, X.WPID DESC';
 
 	 } //end of if ( $post_type == "bblm_cup" )
 	 if ( $winners = $wpdb->get_results( $winnerssql ) ) {
@@ -192,7 +192,7 @@ class BBLM_CPT_Award {
 		} //end of if ( $post_type == "bblm_cup" )
 		else if ( $post_type == "bblm_season" ) {
 
-			$compmajorawardssql = 'SELECT A.a_name, T.WPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_counts = 1 AND C.type_id = 1 AND C.sea_id = ' . $itemid . ' ORDER BY C.c_id ASC, A.a_id ASC';
+			$compmajorawardssql = 'SELECT A.a_name, T.WPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' ORDER BY C.c_id ASC, A.a_id ASC';
 			$compteamawardssql = 'SELECT A.a_name, B.ats_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'team T WHERE A.a_id = B.a_id AND B.t_id = T.t_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
 			$compplayerawardssql = 'SELECT A.a_name, P.WPID AS PID, B.aps_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P WHERE P.t_id = T.t_id AND A.a_id = B.a_id AND B.p_id = P.p_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
 
