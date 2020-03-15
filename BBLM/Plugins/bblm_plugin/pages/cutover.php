@@ -1007,6 +1007,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_comp_match" value="Update Matches" title="Update Matches"/></li>
 			<li><input type="submit" name="bblm_comp_teamcomp" value="Update Teams in Comp" title="Update Teams in Comp"/></li>
 		</ul>
+		<h3>Other</h3>
+		<ul>
+			<li>Update the <em>t_hcoach</em> coloumn to length 50 in the *teams table</li>
+		</ul>
+		t_hcoach
 
 </form>
 
