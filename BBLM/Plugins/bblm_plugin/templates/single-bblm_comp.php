@@ -237,8 +237,8 @@
 			if ($match = $wpdb->get_results($matchsql)) {
 				//We have matches so we can proceed
 
-				$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND (M.div_id = 1 OR M.div_id = 2 OR M.div_id = 3) AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
-				$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+				$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND (M.div_id = 1 OR M.div_id = 2 OR M.div_id = 3) AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+				$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 ?>
 					<ul>
 <?php
@@ -344,8 +344,6 @@
 				 // Team //
 				///////////
 				print("<h3>Team Statistics</h3>\n");
-				//$teamstatssql = 'SELECT P.post_title, P.guid, COUNT(*) AS PLAYED, T.tc_W, T.tc_L, T.tc_D, SUM(C.mt_td) AS TD, SUM(C.mt_cas) AS CAS, SUM(C.mt_int) AS MINT, SUM(C.mt_comp) AS COMP FROM '.$wpdb->prefix.'match_team C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team_comp T WHERE C.t_id = T.t_id AND C.m_id = M.m_id AND C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND M.c_id = '.$cid.' AND T.c_id = '.$cid.' GROUP BY T.t_id ORDER BY P.post_title ASC LIMIT 0, 30 ';
-				//$teamstatssql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC, P.guid FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.c_id = '.$cid.' GROUP BY T.t_id ORDER BY P.post_title ASC';
 				$teamstatssql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.c_id = '.$cid.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;

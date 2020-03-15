@@ -41,7 +41,7 @@ Template Name: List Resuts
 				</form>
 
 <?php
-				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, M.c_id, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY ';
+				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, M.c_id, D.div_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY ';
 				$layout = "";
 				//determine the required Layout
 				if (isset($_POST['bblm_flayout'])) {
@@ -110,13 +110,13 @@ Template Name: List Resuts
 								$is_first_div = 1;
 							}
 							if ($is_first_sea) {
-								echo '<h3>' . bblm_get_season_name( $m->sea_id ) . '</h3><h4>' . bblm_get_competition_link( $m->c_id ) . '</h4><h5>' . $m->div_name . '</h5><table class="bblm_table"><tr><th class="bblm_tbl_matchdate">Date</th><th class="bblm_tbl_matchname">Match</th><th class="bblm_tbl_matchresult">Result</th><th class="bblm_tbl_matchdgate">Gate</th></tr>';
+								echo '<h3>' . bblm_get_season_name( $m->sea_id ) . '</h3><h4>' . bblm_get_competition_link( $m->CWPID ) . '</h4><h5>' . $m->div_name . '</h5><table class="bblm_table"><tr><th class="bblm_tbl_matchdate">Date</th><th class="bblm_tbl_matchname">Match</th><th class="bblm_tbl_matchresult">Result</th><th class="bblm_tbl_matchdgate">Gate</th></tr>';
 								$is_first_sea = 0;
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
 							if ($is_first_comp) {
-								print("<h4>" . bblm_get_competition_link( $m->c_id ) . "</h4>\n <h5>".$m->div_name."</h5>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchdgate\">Gate</th>\n		 </tr>\n");
+								print("<h4>" . bblm_get_competition_link( $m->CWPID ) . "</h4>\n <h5>".$m->div_name."</h5>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchdgate\">Gate</th>\n		 </tr>\n");
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
@@ -166,7 +166,7 @@ Template Name: List Resuts
 						<td><a href="<?php echo $m->guid; ?>" title="View more details of the match"><?php echo $m->post_title; ?></a></td>
 						<td><?php echo $m->m_teamAtd . ' - ' . $m->m_teamBtd . ' (' . $m->m_teamAcas . ' - ' . $m->m_teamBcas . ')'; ?></td>
 						<td><?php echo number_format( $m->m_gate ); ?></td>
-						<td><a href="<?php echo bblm_get_competition_link( $m->c_id ) ?></td>
+						<td><a href="<?php echo bblm_get_competition_link( $m->CWPID ) ?></td>
 						<td><?php echo $m->div_name; ?></td>
 						<td><?php echo bblm_get_season_name( $m->sea_id ); ?></td>
 					</tr>

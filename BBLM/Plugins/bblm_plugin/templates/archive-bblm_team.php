@@ -99,7 +99,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>".$team->r_name."</td>\n		<td>".number_format($team->t_tv)."gp</td>\n");
 
 
-		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
+		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
 		$nummatch = $wpdb->get_var($nummatchsql);
 		//If not more than 1 then team is new, set to 0 as the default result will be null).
 		if (NULL == $nummatch) {

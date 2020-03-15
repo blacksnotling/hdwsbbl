@@ -170,7 +170,7 @@ a:hover, a:active {
 				//checks to see the player belongs in this position
 				if ($pcount == $pl->p_num) {
 
-				$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_int) AS PINT, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE M.m_id = N.m_id AND N.c_id = C.c_id AND C.c_counts = 1 AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
+				$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_int) AS PINT, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE M.m_id = N.m_id AND N.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
 				$pd = $wpdb->get_row($playerdetailssql)
 ?>
 <tr>

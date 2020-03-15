@@ -43,7 +43,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
       global $champs;
 
       //Current match form
-      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
+      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
       $currentform = "";
       if ( $form = $wpdb->get_results( $formsql ) ) {
         foreach ( $form as $tf ) {
@@ -56,7 +56,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
       //determine debut season
       if ( $has_played ) {
-        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
+        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.WPID = M.c_id AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
         $sd = $wpdb->get_row( $seasondebutsql );
       }
 

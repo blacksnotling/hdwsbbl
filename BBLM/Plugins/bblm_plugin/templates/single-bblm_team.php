@@ -55,7 +55,7 @@
 			//Set default value to flag if the team has played a game or not
 			$has_played = 1;
 
-			$overallsql = "SELECT SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT, C.c_counts FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_id = T.c_id AND T.tc_played > 0 AND T.t_id = ".$tid ." GROUP BY C.c_counts ORDER BY C.c_counts DESC";
+			$overallsql = "SELECT SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT, C.c_counts FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.WPID = T.c_id AND T.tc_played > 0 AND T.t_id = ".$tid ." GROUP BY C.c_counts ORDER BY C.c_counts DESC";
 
 			if ($ohs = $wpdb->get_results($overallsql)) {
 
@@ -120,7 +120,7 @@
 
 				<h3>Performance by Season</h3>
 <?php
-			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.c_id AND tc_played > 0 AND C.c_counts = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND tc_played > 0 AND C.c_counts = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
 				$zebracount = 1;
 ?>
@@ -180,7 +180,7 @@
 				<h3>Performance by Competition</h3>
 
 <?php
-			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.c_id AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+			$matchhsql = 'SELECT P.post_title, P.guid, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.c_id = C.WPID AND J.tid = C.c_id AND J.prefix = \'c_\' AND J.pid = P.ID AND tc_played > 0 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 
 			if ($matchh = $wpdb->get_results($matchhsql)) {
 				$zebracount = 1;
@@ -288,7 +288,7 @@
 
 
 		//The next part is displayed regardless of if a team hs plyed  match or not (google code issue 18)
-				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.WPID AS tAid, Y.WPID AS tBid, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
+				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.WPID AS tAid, Y.WPID AS tBid, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.WPID = F.c_id AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
 
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
 				print("<h3>Upcoming Matches (Fixtures)</h3>\n\n");
@@ -418,7 +418,7 @@
 				$cafail = 0;
 				$safail = 0;
 				$has_cups = 0;
-				$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
+				$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($champs = $wpdb->get_results($championshipssql)) {
 					$has_cups = 1;
 					$zebracount = 1;
@@ -475,7 +475,7 @@
 					$safail = 1;
 				}
 
-				$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
+				$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($cawards = $wpdb->get_results($compawardssql)) {
 					$zebracount = 1;
 					print("<h4>Awards from Competitions</h4>\n");
