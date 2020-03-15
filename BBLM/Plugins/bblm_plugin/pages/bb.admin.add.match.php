@@ -157,7 +157,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		$compid = $bblm_safe_input['mcomp'];
 		$bblm_comp_counts = 0;
 		$comp = array();
-		$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE c_id = ".$compid;
+		$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE WPID = ".$compid;
 		if ($compdetails = $wpdb->get_results($compdatasql)) {
 			foreach ($compdetails as $compd) {
 				$comp['counts'] = $compd->c_counts;
@@ -211,7 +211,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		);
 
 		if ($bblm_submission = wp_insert_post( $my_post )) {
-			add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.match.php');
+			add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_match.php');
 
 			$matchsql = 'INSERT INTO `'.$wpdb->prefix.'match` (`m_id`, `c_id`, `div_id`, `m_date`, `m_gate`, `m_teamA`, `m_teamB`, `m_teamAtd`, `m_teamBtd`, `m_teamAcas`, `m_teamBcas`, `m_tottd`, `m_totcas`, `m_totint`, `m_totcomp`, `weather_id`, `weather_id2`, `m_trivia`, `m_complete`, `stad_id`, `m_counts`) VALUES (\'\', \''.$bblm_safe_input['mcomp'].'\', \''.$bblm_safe_input['mdiv'].'\', \''.$bblm_safe_input['mdate'].'\', \''.$bblm_safe_input['mgate'].'\', \''.$teamA['id'].'\', \''.$teamB['id'].'\', \''.$bblm_safe_input['tAtd'].'\', \''.$bblm_safe_input['tBtd'].'\', \''.$bblm_safe_input['tAcas'].'\', \''.$bblm_safe_input['tBcas'].'\', \''.$mtottd.'\', \''.$mtotcas.'\', \''.$mtotint.'\', \''.$mtotcomp.'\', \''.$bblm_safe_input['mweather1'].'\', \''.$bblm_safe_input['mweather2'].'\', \''.$bblm_trivia_content.'\', \'0\', \''.$bblm_safe_input['mstad'].'\', \''.$bblm_comp_counts.'\')';
 

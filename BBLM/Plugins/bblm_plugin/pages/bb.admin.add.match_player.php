@@ -126,7 +126,8 @@ $playermatchsql = "INSERT INTO `".$wpdb->prefix."match_player` (`m_id`, `p_id`, 
 
 //Initialize var to capture first input
 $is_first_player = 1;
-$playersqla = array();
+$playersqla = array(); //stores the SQL to update the MNG records
+$playerplayed = array(); //Records the list of players who took part
 
 //Beginning of main loop.
 while ($p <= $pmax){
@@ -134,6 +135,8 @@ while ($p <= $pmax){
 //before we go any further, we should see if the player in question ctually took part in the match!
 if ( isset( $_POST['bblm_plyd'.$p] ) ) {
 	if ("on" == $_POST['bblm_plyd'.$p]) {
+
+		$playerplayed[$p] = $_POST['bblm_pid'.$p];
 
 
 	//we only want a comma added for all but the first
@@ -167,20 +170,10 @@ if ( isset( $_POST['bblm_plyd'.$p] ) ) {
 	//generate the SQL
 	$playermatchsql .= '(\''.$_POST['bblm_mid'].'\', \''.$_POST['bblm_pid'.$p].'\', \''.$_POST['bblm_tid'.$p].'\', \''.$_POST['bblm_td'.$p].'\', \''.$_POST['bblm_cas'.$p].'\', \''.$_POST['bblm_comp'.$p].'\', \''.$_POST['bblm_int'.$p].'\', \''.$_POST['bblm_mvp'.$p].'\', \''.$_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.$_POST['bblm_injury'.$p].'\', \''.$_POST['bblm_increase'.$p].'\', \''.$compcounts.'\')';
 
-	//if the comp counts, update the bb_player table with new spp values and p_mng if player is injured.
+	//If the player is injured (exhibition or otherwise) then update the player table
 	$playerupdatesql = "";
-	if ($compcounts)  {
-		$playerupdatesql = "UPDATE ".$wpdb->prefix."player SET `p_spp` = p_spp+." . $_POST['bblm_spp'.$p];
-		if ( $mng[$p] )  {
-			$playerupdatesql .= ', `p_cost_ng` = \'0\', `p_mng` = \'1\'';
-		}
-		$playerupdatesql .= ' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
-	}
-	else {
-		//If the game is an exhibition game
-		if ( $mng[$p] )  {
-			$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
-		}
+	if ( $mng[$p] )  {
+		$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
 	}
 
 	//once we have the sql generated, we can insert into the array to insert later on
@@ -220,6 +213,10 @@ if (FALSE !== $wpdb->query($playermatchsql)) {
 		if (FALSE !== $wpdb->query($ps)) {
 			$sucess = TRUE;
 		}
+	}
+	foreach ($playerplayed as $pssp) {
+		//Update the players SPP
+		bblm_update_player( $pssp, $compcounts );
 	}
 
 
