@@ -33,9 +33,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     * @param int $active Binary option to determine if only active players are to be shown
     * @return html
     */
-    public function display_top_players_table( $ID, $coverage = '', $limit = 0, $active = 0 ) {
+    public function display_top_players_table( $limit = 0, $active = 0 ) {
       global $post;
       global $wpdb;
+
+			$post_type = get_post_type(); //Determine the CPT that is calling this function
+			$ID = get_the_ID(); //The ID of the Page being displayed
 
       //Generates an array containing all the Stats that are going to be checked
       $playerstatsarray = array();
@@ -62,26 +65,25 @@ if ( ! defined( 'ABSPATH' ) ) {
       foreach ( $playerstatsarray as $tpa ) {
 
         $statsql = '';
-        $statsql .= 'SELECT P.WPID AS PID, T.WPID, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name, P.p_status ';
+        $statsql .= 'SELECT P.WPID AS PWPID, T.WPID AS TWPID, SUM(M.'.$tpa['item'].') AS VALUE, R.pos_name, P.p_status ';
 
-        switch ( $coverage ) {
+        if ( $post_type == "bblm_comp" ) {
 
-          case "bblm_comp":
-            $statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-            $statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
-            break;
+					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
 
-          case "bblm_season":
-            $statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-            $statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.sea_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() . ' GROUP BY P.p_id ORDER BY VALUE DESC';
-            break;
+				}
+				else if ( $post_type == "bblm_season" ) {
 
-          case "bblm_cup":
-            $statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-            $statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$ID.' AND T.t_id != '.bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
-            break;
+					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.sea_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() . ' GROUP BY P.p_id ORDER BY VALUE DESC';
 
-        }
+				}
+				if ( $post_type == "bblm_cup" ) {
+
+					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$ID.' AND T.t_id != '.bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
+				}
 
         if ( $limit > 0 ) {
           $statsql .= ' LIMIT '.bblm_get_stat_limit();
@@ -117,33 +119,34 @@ if ( ! defined( 'ABSPATH' ) ) {
     * @param int $active Binary option to determine if only active players are to be shown
     * @return html
     */
-    public function display_top_killers_table( $ID, $coverage = '', $limit = 0, $active = 0 ) {
+    public function display_top_killers_table( $limit = 0, $active = 0 ) {
       global $post;
       global $wpdb;
 
+			$post_type = get_post_type(); //Determine the CPT that is calling this function
+			$ID = get_the_ID(); //The ID of the Page being displayed
+
       $statsql = '';
-      $statsql .= 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, P.p_status, T.WPID';
+      $statsql .= 'SELECT P.WPID AS PWPID, COUNT(*) AS VALUE , E.pos_name, P.p_status, T.WPID AS TWPID';
 
-      switch ( $coverage ) {
+			if ( $post_type == "bblm_comp" ) {
 
-        case "bblm_comp":
-          $statsql .= ' FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T';
-          $statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$ID .' AND T.t_id != ' . bblm_get_star_player_team();
-          break;
+				$statsql .= ' FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T';
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$ID .' AND T.t_id != ' . bblm_get_star_player_team();
 
-        case "bblm_season":
-          $statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
-          $statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
-          break;
+			}
+			else if ( $post_type == "bblm_season" ) {
 
-        case "bblm_cup":
-          $statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
-          $statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.series_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
-          break;
+				$statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
 
-        default:
-        break;
-      }
+			}
+			else if ( $post_type == "bblm_cup" ) {
+
+				$statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.series_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
+
+			}
 
       $statsql .= ' GROUP BY F.pf_killer ORDER BY VALUE DESC';
       if ( $limit > 0 ) {
@@ -208,7 +211,7 @@ if ( ! defined( 'ABSPATH' ) ) {
           echo '<td><strong>' . $zebracount . '</strong></td>';
         }
 
-        echo '<td>' . bblm_get_player_link( $ts->PID ) . '</td> <td>' . esc_html( $ts->pos_name ) . '</td> <td>' . bblm_get_team_link( $ts->WPID ) . '</td> <td>' . $ts->VALUE . '</td> </tr>';
+        echo '<td>' . bblm_get_player_link( $ts->PWPID ) . '</td> <td>' . esc_html( $ts->pos_name ) . '</td> <td>' . bblm_get_team_link( $ts->TWPID ) . '</td> <td>' . $ts->VALUE . '</td> </tr>';
         $prevvalue = $ts->VALUE;
       }
       $zebracount++;

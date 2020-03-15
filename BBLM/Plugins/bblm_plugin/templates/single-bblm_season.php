@@ -45,8 +45,8 @@
 
 					echo '<h3>' . __( 'Player Statistics for this Season', 'bblm' ) . '</h3>';
 					$stat_limit = bblm_get_stat_limit();
-					$bblm_stats->display_top_players_table( $season, 'bblm_season', $stat_limit );
-					$bblm_stats->display_top_killers_table( $season, 'bblm_season', $stat_limit );
+					$bblm_stats->display_top_players_table( $stat_limit );
+					$bblm_stats->display_top_killers_table( $stat_limit );
 
 					//Awards
 					if ( !$seasonactive ) {

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.0
+ * @version   1.1
  */
 
 /**
@@ -68,7 +68,7 @@ function bblm_template_display_top_players_table_cup() {
 
 	$bblm_stats = new BBLM_Stat;
 	$stat_limit = bblm_get_stat_limit();
-	$bblm_stats->display_top_players_table( $cupid, 'bblm_cup', $stat_limit );
+	$bblm_stats->display_top_players_table( $stat_limit );
 
 } //end of bblm_template_display_top_players_table_cup
 
@@ -79,6 +79,6 @@ function bblm_template_display_top_killers_table_cup() {
 
 	$bblm_stats = new BBLM_Stat;
 	$stat_limit = bblm_get_stat_limit();
-	$bblm_stats->display_top_killers_table( $cupid, 'bblm_cup', $stat_limit );
+	$bblm_stats->display_top_killers_table( $stat_limit );
 
 } //end of bblm_template_display_top_killers_table_cup

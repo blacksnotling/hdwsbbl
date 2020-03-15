@@ -411,8 +411,8 @@
 
 				$stat_limit = bblm_get_stat_limit();
 
-				$bblm_stats->display_top_players_table( $cid, 'bblm_comp', $stat_limit );
-				$bblm_stats->display_top_killers_table( $cid, 'bblm_comp', $stat_limit );
+				$bblm_stats->display_top_players_table( $stat_limit );
+				$bblm_stats->display_top_killers_table( $stat_limit );
 
 					  /////////////////////////
 					 // End of Player Stats //

@@ -47,8 +47,8 @@
 
 					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';
 					$stat_limit = bblm_get_stat_limit();
-					$bblm_stats->display_top_players_table( $cupid, 'bblm_cup', $stat_limit );
-					$bblm_stats->display_top_killers_table( $cupid, 'bblm_cup', $stat_limit );
+					$bblm_stats->display_top_players_table( $stat_limit );
+					$bblm_stats->display_top_killers_table( $stat_limit );
 
 					echo '<h3>' . __( 'Awards', 'bblm' ) . '</h3>';
 					$bblm_award->display_list_award_winners();
