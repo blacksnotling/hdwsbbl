@@ -234,76 +234,87 @@
 				</thead>
 				<tbody>
 <?php
-			$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.WPID = X.c_id AND C.c_counts = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
-			if ($playermatch = $wpdb->get_results($playermatchsql)) {
+  $playermatchsql = 'SELECT P.*, J.pid AS MID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND J.prefix = \'m_\' AND J.tid = M.m_id AND M.m_id = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
+			if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
 			$zebracount = 1;
-				foreach ($playermatch as $pm) {
-					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("				<tr class=\"bblm_tbl_hide\">\n");
-					}
-					else if (($zebracount % 2) && (10 >= $zebracount)) {
-						print("				<tr>\n");
-					}
-					else if (10 < $zebracount) {
-						print("				<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
-					}
-					else {
-						print("				<tr class=\"bblm_tbl_alt\">\n");
-					}
-					print("					<td><a href=\"".$pm->guid."\" title=\"View the match in more detail\">".date("d.m.y", $pm->mdate)."</a></td>\n");
-					if ($pm->TAid == $pm->t_id) {
-						print("					<td><a href=\"".$pm->TAlink."\" title=\"Read up on this team\">".$pm->TA."</a></td>\n					<td><a href=\"".$pm->TBlink."\" title=\"Read up on the opponants\">".$pm->TB."</a></td>\n");
-					}
-					else {
-						print("					<td><a href=\"".$pm->TBlink."\" title=\"Read up on this team\">".$pm->TB."</a></td>\n					<td><a href=\"".$pm->TAlink."\" title=\"Read up on the opponants\">".$pm->TA."</a></td>\n");
-					}
-					print("					<td>");
-					if (0 == $pm->mp_td) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_td."</strong>");
-					}
-					print("</td>\n					<td>");
-					if (0 == $pm->mp_cas) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_cas."</strong>");
-					}
-					print("</td>\n					<td>");
-					if (0 == $pm->mp_int) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_int."</strong>");
-					}
-					print("</td>\n					<td>");
-					if (0 == $pm->mp_comp) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_comp."</strong>");
-					}
-					print("</td>\n					<td>");
-					if (0 == $pm->mp_mvp) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_mvp."</strong>");
-					}
-					print("</td>\n					<td>");
-					if (0 == $pm->mp_spp) {
-						print("0");
-					}
-					else {
-						print("<strong>".$pm->mp_spp."</strong>");
-					}
-					print("</td>\n");
-					$zebracount++;
-				}
-				print("				</tbody>\n			</table>\n");
-			}
+      foreach ( $playermatch as $pm ) {
+				if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
+          echo '<tr class="bblm_tbl_hide">';
+        }
+        else if (($zebracount % 2) && (10 >= $zebracount)) {
+          echo '<tr>';
+        }
+        else if ( 10 < $zebracount ) {
+          echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
+        }
+        else {
+          echo '<tr class="bblm_tbl_alt">';
+        }
+        echo '<td>';
+        echo '<a href="' . get_post_permalink( $pm->MID ) . '" title="View the match in more detail">' . date( 'd.m.y' , $pm->mdate ) . '</a>';
+        echo '</td>';
+        if ( $pm->TAid == $pm->t_id ) {
+          echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';
+          echo '<td>' . bblm_get_team_link( $pm->TB ) . '</td>';
+        }
+        else {
+          echo '<td>' . bblm_get_team_link( $pm->TB ) . '</td>';
+          echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';
+        }
+        echo '<td>';
+        if (0 == $pm->mp_td) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_td . '</strong>';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ( 0 == $pm->mp_cas ) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_cas . '</strong>';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ( 0 == $pm->mp_int ) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_int . '</strong>';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ( 0 == $pm->mp_comp ) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_comp . '</strong>';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ( 0 == $pm->mp_mvp ) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_mvp . '</strong>';
+        }
+        echo '</td>';
+        echo '<td>';
+        if ( 0 == $pm->mp_spp ) {
+          echo "0";
+        }
+        else {
+          echo '<strong>' . $pm->mp_spp . '</strong>';
+        }
+        echo '</td>';
+        echo '</tr>';
+        $zebracount++;
+      }
+      echo '</tbody>';
+      echo '</table>';
+    }
 
 
 
