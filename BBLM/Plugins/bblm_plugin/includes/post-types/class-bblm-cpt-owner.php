@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Owner {
@@ -421,7 +421,7 @@ class BBLM_CPT_Owner {
         if ( $games > 0 ) {
 
           $gamestatsql = 'SELECT X.sea_id, C.WPID, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
-          $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X WHERE T.t_id = C.t_id AND X.c_id = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.sea_id ORDER BY X.sea_id ASC'; //splitting the line for length reasons!
+          $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X WHERE T.t_id = C.t_id AND X.WPID = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.sea_id ORDER BY X.sea_id ASC'; //splitting the line for length reasons!
 
           if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
@@ -478,7 +478,7 @@ class BBLM_CPT_Owner {
          if ( $games > 0 ) {
 
            $gamestatsql = 'SELECT X.series_id AS CUP, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
-           $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X WHERE T.t_id = C.t_id AND X.c_id = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.series_id ORDER BY X.series_id ASC'; //splitting the line for length reasons!
+           $gamestatsql .= $wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team C, '.$wpdb->prefix.'comp X WHERE T.t_id = C.t_id AND X.WPID = T.c_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY X.series_id ORDER BY X.series_id ASC'; //splitting the line for length reasons!
 
            if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
@@ -534,8 +534,8 @@ class BBLM_CPT_Owner {
          //quick check to make sure this owner has played any games
          if ( $games > 0 ) {
 
-           $gamestatsql = 'SELECT J.pid, Z.pid AS TID, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
-           $gamestatsql .= $wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C,'.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'bb2wp Z WHERE Z.prefix = "t_" AND Z.tid = T.t_id AND J.prefix = "c_" AND J.tid = T.c_id AND T.t_id = C.t_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY T.c_id ORDER BY T.c_id ASC'; //splitting the line for length reasons!
+           $gamestatsql = 'SELECT T.c_id AS CWPID, Z.pid AS TID, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
+           $gamestatsql .= $wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C, '.$wpdb->prefix.'bb2wp Z WHERE Z.prefix = "t_" AND Z.tid = T.t_id AND T.t_id = C.t_id AND T.tc_counts = 1 AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY T.c_id ORDER BY T.c_id ASC'; //splitting the line for length reasons!
 
            if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
@@ -543,7 +543,7 @@ class BBLM_CPT_Owner {
              foreach ($gs as $g) {
 
              $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
-                        <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a> (as ' .esc_html( get_the_title( $g->TID ) ).')</td>
+                        <td>'. bblm_get_competition_link( $g->CWPID ) . ' (as ' . bblm_get_team_name( $g->TID ) .')</td>
                         <td>'. $g->OP .'</td>
                         <td>'. $g->OW .'</td>
                         <td>'. $g->OL .'</td>

@@ -374,7 +374,7 @@ else if (isset($_POST['bblm_match_select'])) {
 	 // Step 2: Generate a list of payers based on the match selected //
 	///////////////////////////////////////////////////////////////////
 
-$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, C.c_counts FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE C.c_id = M.c_id AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ".$_POST['bblm_mid'];
+$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, C.c_counts FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE C.WPID = M.c_id AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ".$_POST['bblm_mid'];
 	if ($md = $wpdb->get_row($matchsql2)) {
 ?>
 	<h3>Match Reference</h3>
@@ -696,10 +696,10 @@ else {
 				<th scope="row"><label for="bblm_mid" >Match: </label></th>
 				<td><select name="bblm_mid" id="bblm_mid">
 	<?php
-$matchsql = "SELECT M.m_id, M.m_date, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, C.c_name FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id AND M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
+$matchsql = "SELECT M.m_id, M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q WHERE M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
 	if ($matches = $wpdb->get_results($matchsql)) {
 		foreach ($matches as $match) {
-			print("					<option value=\"$match->m_id\">".$match->c_name." - ".$match->tA." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".$match->tB."</option>\n");
+			print("					<option value=\"$match->m_id\">".bblm_get_competition_name( $match->c_id )." - ".bblm_get_team_name( $match->tA )." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".bblm_get_team_name( $match->tB )."</option>\n");
 		}
 	}
 	?>

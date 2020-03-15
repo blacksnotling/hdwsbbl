@@ -21,7 +21,7 @@
 				$season = get_the_ID();
 				$seasonactive = BBLM_CPT_Season::is_season_active( get_the_ID() );
 
-				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.sea_id = ' . $season;
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.sea_id = ' . $season;
 				$matchnum = $wpdb->get_var( $matchnumsql );
 
 				//From this point, we only go further if any matches have been played

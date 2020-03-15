@@ -58,11 +58,9 @@ function bblm_return_div_name($games) {
 
 ?>
 <div class="wrap">
-	<h2>Set-up Tournament brackets.</h2>
-	<p>The following page can be used to set up the brackets for a Knock-Out Tournemant, or final phase of an open season.</p>
-
 <?php
-
+	echo '<h2>' . __( 'Set-up Tournament brackets..', 'bblm' ) . '</h2>';
+	echo '<p>' . __( 'The following page can be used to set up the brackets for a Knock-Out Tournemant, or final phase of an open season.', 'bblm' ) . '</p>';
 
 
 if (isset($_POST['bblm_create_brackets'])) {
@@ -71,9 +69,6 @@ if (isset($_POST['bblm_create_brackets'])) {
 	print("</pre>");
 	print("<hr />");*/
 
-	/*
-		$sql = 'INSERT INTO `'.$wpdb->prefix.'comp_brackets` (`c_id`, `div_id`, `m_id`, `f_id`, `cb_text`, `cb_order`) VALUES (\'1\', \'2\', \'9\', \'8\', \'?\', \'1\'), (\'1\', \'2\', \'9\', \'8\', \'?\', \'2\')';
-	*/
 	$insertsql = 'INSERT INTO `'.$wpdb->prefix.'comp_brackets` (`cb_id`, `c_id`, `div_id`, `m_id`, `f_id`, `cb_text`, `cb_order`) VALUES';
 	//Initialize var to capture first input
 	$is_first_bracket = 1;
@@ -99,7 +94,6 @@ if (isset($_POST['bblm_create_brackets'])) {
 								$match_text = "To Be Determined";
 							}
 							else {
-								//$fixturesql = 'SELECT T.t_name AS TA, T.t_id AS TAid, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.f_id = '.$fixture_id.' AND F.f_complete = 0 ORDER BY F.div_id';
 								$fixturesql = 'SELECT T.t_name AS TA, T.t_id AS TAid, O.guid AS TAlink, R.t_name AS TB, R.t_id AS TBid, V.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'bb2wp P, '.$wpdb->posts.' O WHERE R.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND T.t_id = P.tid AND P.prefix = \'t_\' AND P.pid = O.ID AND F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.f_id = '.$fixture_id.' AND F.f_complete = 0 ORDER BY F.div_id LIMIT 0, 30 ';
 								$fd = $wpdb->get_row($fixturesql, ARRAY_A);
 								//check to see if either team_id matches the default TBD and build the link string.
@@ -151,9 +145,8 @@ if (isset($_POST['bblm_create_brackets'])) {
 						if (1 !== $is_first_bracket) {
 							$insertsql .= ",";
 						}
-						//print("<p>Game ".$p.", round ".$div_id." - Match: ".$match_id.", fixture: ".$fixture_id.", text: ".$match_text."</p>");
 
-						$insertsql .= ' (\'\', \''.$_POST['bblm_cbcomp'].'\', \''.$div_id.'\', \''.$match_id.'\', \''.$fixture_id.'\', \''.$match_text.'\', \''.$p.'\')';
+						$insertsql .= ' (\'\', \''.intval( $_POST['bblm_cbcomp'] ).'\', \''.$div_id.'\', \''.$match_id.'\', \''.$fixture_id.'\', \''.$match_text.'\', \''.$p.'\')';
 
 						$p++;
 						$is_first_bracket = 0;
@@ -194,8 +187,8 @@ if (isset($_POST['bblm_create_brackets'])) {
 ////////////////
 else if (isset($_POST['bblm_comp_select'])) {
 
-	$numteams = $_POST['bblm_cbteams'];
-	$comp_id = $_POST['bblm_cbcomp']
+	$numteams = intval($_POST['bblm_cbteams']);
+	$comp_id = intval($_POST['bblm_cbcomp']);
 
 ?>
 	<form name="bblm_addbrackets" method="post" id="post">
@@ -205,7 +198,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 
 <?php
 		//before we generate the list of fixtures, we need to grab the teams into an array
-		$fixturesql = 'SELECT F.f_id, F.div_id, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = '.$comp_id.' AND F.f_complete = 0 ORDER BY F.div_id';
+		$fixturesql = 'SELECT F.f_id, F.div_id, T.WPID AS TA, R.WPID AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = '.$comp_id.' AND F.f_complete = 0 ORDER BY F.div_id';
 		$fixtures = $wpdb->get_results($fixturesql, ARRAY_A);
 		if (empty($fixtures)) {
 			$fixturelist = "<option value=\"0\">To Be Determined</option>\n";
@@ -214,11 +207,11 @@ else if (isset($_POST['bblm_comp_select'])) {
 			//generate output into a static string
 			$fixturelist = "<option value=\"0\">To Be Determined</option>\n";
 			foreach ($fixtures as $f) {
-					$fixturelist .= "<option value=\"".$f['f_id']."\">".$f['TA']." vs ".$f['TB']."</option>\n";
+					$fixturelist .= "<option value=\"".$f['f_id']."\">".bblm_get_team_name( $f['TA'] )." vs ".bblm_get_team_name( $f['TB'] )."</option>\n";
 			}
 		}
 
-		$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, T.t_name AS TA, M.m_teamAtd, R.t_name as TB, M.m_teamBtd, M.div_id from '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.c_id = '.$comp_id.' ORDER BY M.div_id DESC';
+		$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, T.WPID AS TA, M.m_teamAtd, R.WPID as TB, M.m_teamBtd, M.div_id from '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.c_id = '.$comp_id.' ORDER BY M.div_id DESC';
 		$matches = $wpdb->get_results($matchsql, ARRAY_A);
 		if (empty($matches)) {
 			$matchlist = "<option value=\"x\">No matches have been played, Please select a fixture</option>\n";
@@ -227,7 +220,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 			//generate output into a static string
 			$matchlist = "<option value=\"0\">Not Appliccable</option>\n";
 			foreach ($matches as $m) {
-					$matchlist .= "<option value=\"".$m[m_id]."\">".date("d.m.Y", $m[mdate])." - ".$m[TA]." (".$m[teamAtd].") vs ".$m[TB]." (".$m[teamBtd].")</option>\n";
+					$matchlist .= "<option value=\"".$m['m_id']."\">".date("d.m.Y", $m['mdate'])." - ".bblm_get_team_name( $m['TA'] )." (".$m['m_teamAtd'].") vs ".bblm_get_team_name( $m['TB'] )." (".$m['m_teamBtd'].")</option>\n";
 			}
 		}
 		//if there are no fixtures and no matches then instruct the user to go and set some up
@@ -294,13 +287,17 @@ else {
 	  <label for="bblm_cbcomp" class="selectit">Competition</label>
 	  <select name="bblm_cbcomp" id="bblm_cbcomp">
 	<?php
-	$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
-	//This line should work but for some reason prpduces blanks!
-	//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
-	if ($comps = $wpdb->get_results($compsql)) {
-		foreach ($comps as $comp) {
-			print("<option value=\"$comp->c_id\">".$comp->c_name."</option>\n");
-		}
+	$oposts = get_posts(
+		array(
+			'post_type' => 'bblm_comp',
+			'numberposts' => -1,
+			'orderby' => 'ID',
+			'order' => 'DESC'
+		)
+	);
+	if( ! $oposts ) return;
+	foreach( $oposts as $o ) {
+		echo '<option value="' . $o->ID . '">' . bblm_get_competition_name( $o->ID ) . '</option>';
 	}
 	?>
 	</select>

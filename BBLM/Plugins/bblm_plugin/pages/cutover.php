@@ -611,7 +611,263 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 							echo '</ul>';
 						}
 					} //end of if ( isset( $_POST[ 'bblm_template_updatemeta' ] ) ) {
+						/**
+						 *
+						 * UPDATING team_comp table with new column
+						 */
+						if (isset($_POST['bblm_comp_populate_teamcomp'])) {
 
+								$comppostsql = "SELECT * FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_id = T.c_id";
+								if ($teamposts = $wpdb->get_results($comppostsql)) {
+									foreach ($teamposts as $tc) {
+										$tcupdate = "UPDATE `".$wpdb->prefix."team_comp` SET `tc_counts` = '".$tc->c_counts."' WHERE `".$wpdb->prefix."team_comp`.`tc_id` = ".$tc->tc_id.";";
+										if ( $wpdb->query($tcupdate) ) {
+											$result = true;
+										}
+										else {
+											$result = false;
+										}
+
+									} //end of foreach
+									if ( $result ) {
+										print("<div id=\"updated\" class=\"updated fade\"><p>The team_comp table updated with the new value!</p></div>\n");
+									}
+								}//end of if sql was successful
+
+						} // end of if (isset($_POST['bblm_comp_populate_teamcomp'])) {
+							/**
+							 *
+							 * UPDATING team_comp table with new column
+							 */
+							if (isset($_POST['bblm_comp_populate_matchcol'])) {
+
+									$comppostsql = "SELECT * FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id";
+									if ($teamposts = $wpdb->get_results($comppostsql)) {
+										foreach ($teamposts as $tc) {
+											$tcupdate = "UPDATE `".$wpdb->prefix."match` SET `m_counts` = '".$tc->c_counts."' WHERE `".$wpdb->prefix."match`.`m_id` = ".$tc->m_id.";";
+											if ( $wpdb->query($tcupdate) ) {
+												$result = true;
+											}
+											else {
+												$result = false;
+											}
+
+										} //end of foreach
+										if ( $result ) {
+											print("<div id=\"updated\" class=\"updated fade\"><p>The team_comp table updated with the new value!</p></div>\n");
+										}
+									}//end of if sql was successful
+
+							} // end of if (isset($_POST['bblm_comp_populate_matchcol'])) {
+								/**
+					 		    *
+					 		    * UPDATING WP Posts TABLE FOR THE NEW COMPETITIONS CPT
+					 		    */
+					 		   if (isset($_POST['bblm_comp_compcpt'])) {
+
+					 		     //$cuppostsql = "SELECT P.ID, R.sea_id, P.post_title, UNIX_TIMESTAMP(R.sea_sdate) AS sdate, UNIX_TIMESTAMP(R.sea_fdate) AS fdate FROM ".$wpdb->prefix."season R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.sea_id = J.tid AND P.ID = J.pid and J.prefix = 'sea_' ORDER BY P.ID ASC";
+									 $cuppostsql = "SELECT P.ID, R.c_id, R.ct_id, R.c_counts, R.series_id, R.sea_id, R.c_pW, R.c_pL, R.c_pD, R.c_ptd, R.c_pcas, R.c_pround, R.c_showstandings, P.post_title, UNIX_TIMESTAMP(R.c_sdate) AS sdate, UNIX_TIMESTAMP(R.c_edate) AS fdate FROM ".$wpdb->prefix."comp R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_' ORDER BY P.ID ASC";
+					 		       if ($stadposts = $wpdb->get_results($cuppostsql)) {
+					 		         echo '<ul>';
+					 		         foreach ($stadposts as $stad) {
+					 		           $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_comp' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+	//				 		           print("<li>".$stadupdatesql."</li>");
+					 		           if ( date("Y-m-d", $stad->fdate) == '1970-01-01' ) {
+					 		             $fdate = '0000-00-00';
+					 		           }
+					 		           else {
+					 		             $fdate = date("Y-m-d", $stad->fdate);
+					 		           }
+/*					 		           print("<li>Meta -> '".$stad->ID."', 'comp_sdate', '".date("Y-m-d", $stad->sdate)."'</li>");
+					 		           print("<li>Meta -> '".$stad->ID."', 'comp_fdate', '".$fdate."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_season', '".$stad->sea_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_cup', '".$stad->series_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_format', '".$stad->ct_id."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_counts', '".$stad->c_counts."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pw', '".$stad->c_pW."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pl', '".$stad->c_pL."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pd', '".$stad->c_pD."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_ptd', '".$stad->c_ptd."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pcas', '".$stad->c_pcas."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_pround', '".$stad->c_pround."'</li>");
+												 print("<li>Meta -> '".$stad->ID."', 'comp_showstandings', '".$stad->c_showstandings."'</li>");
+*/
+
+					 		           if ( $wpdb->query($stadupdatesql) ) {
+					 		             $result = true;
+					 		             add_post_meta( $stad->ID, 'comp_sdate', date("Y-m-d", $stad->sdate), true );
+					 		             add_post_meta( $stad->ID, 'comp_fdate', $fdate, true );
+													 add_post_meta( $stad->ID, 'comp_season', $stad->sea_id, true );
+													 add_post_meta( $stad->ID, 'comp_cup', $stad->series_id, true );
+													 add_post_meta( $stad->ID, 'comp_format', $stad->ct_id, true );
+													 add_post_meta( $stad->ID, 'comp_counts', $stad->c_counts, true );
+													 add_post_meta( $stad->ID, 'comp_pw', $stad->c_pW, true );
+													 add_post_meta( $stad->ID, 'comp_pl', $stad->c_pL, true );
+													 add_post_meta( $stad->ID, 'comp_pd', $stad->c_pD, true );
+													 add_post_meta( $stad->ID, 'comp_ptd', $stad->c_ptd, true );
+													 add_post_meta( $stad->ID, 'comp_pcas', $stad->c_pcas, true );
+													 add_post_meta( $stad->ID, 'comp_pround', $stad->c_pround, true );
+													 add_post_meta( $stad->ID, 'comp_showstandings', $stad->c_showstandings, true );
+
+													 $stadupdatesql = "UPDATE `".$wpdb->prefix."comp` SET `WPID` = '".$stad->ID."' WHERE `c_id` = '".$stad->c_id."'";
+													 $wpdb->query($stadupdatesql);
+					 		           }
+					 		           else {
+					 		             $result = false;
+					 		           }
+
+					 		         } //end of foreach
+					 		 //        echo '</ul>';
+					 		         if ( $result ) {
+					 		           print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Competitions! <strong>Now you can delete the Competitions page!</strong></p></div>\n");
+					 		         }
+					 		       }//end of if sql was successful
+
+					 		   } //end of if (isset($_POST['bblm_comp_compcpt']))
+								 /**
+									*
+									* UPDATING Team Awards Comp TABLE FOR THE NEW comp IDs
+									*/
+								 if (isset($_POST['bblm_comp_awardteam'])) {
+
+										 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."awards_team_comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+										 if ($teamposts = $wpdb->get_results($comppostsql)) {
+											 foreach ($teamposts as $stad) {
+												 $stadupdatesql = "UPDATE `".$wpdb->prefix."awards_team_comp` SET `c_id` = '".$stad->ID."' WHERE `a_id` = '".$stad->a_id."' AND `t_id` = ".$stad->t_id." AND `c_id` = ".$stad->c_id;
+												 if ( $wpdb->query($stadupdatesql) ) {
+													 $result = true;
+												 }
+												 else {
+													 $result = false;
+												 }
+
+											 } //end of foreach
+											 if ( $result ) {
+												 print("<div id=\"updated\" class=\"updated fade\"><p>The Team Awards for Competitions table updated with the new Competition!</p></div>\n");
+											 }
+										 }//end of if sql was successful
+
+								 } // end of if (isset($_POST['bblm_comp_awardteam'])) {
+									 /**
+										*
+										* UPDATING Player Awards Comp TABLE FOR THE NEW comp IDs
+										*/
+									 if (isset($_POST['bblm_comp_awardplayer'])) {
+
+											 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."awards_player_comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+											 if ($teamposts = $wpdb->get_results($comppostsql)) {
+												 foreach ($teamposts as $stad) {
+													 $stadupdatesql = "UPDATE `".$wpdb->prefix."awards_player_comp` SET `c_id` = '".$stad->ID."' WHERE `a_id` = '".$stad->a_id."' AND `p_id` = ".$stad->p_id." AND `c_id` = ".$stad->c_id;
+													 if ( $wpdb->query($stadupdatesql) ) {
+														 $result = true;
+													 }
+													 else {
+														 $result = false;
+													 }
+
+												 } //end of foreach
+												 if ( $result ) {
+													 print("<div id=\"updated\" class=\"updated fade\"><p>The Player Awards for Competitions table updated with the new Competition!</p></div>\n");
+												 }
+											 }//end of if sql was successful
+
+									 } // end of if (isset($_POST['bblm_comp_awardplayer'])) {
+										 /**
+											*
+											* UPDATING Comp Brackets TABLE FOR THE NEW comp IDs
+											*/
+										 if (isset($_POST['bblm_comp_brackets'])) {
+
+												 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."comp_brackets T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+												 if ($teamposts = $wpdb->get_results($comppostsql)) {
+													 foreach ($teamposts as $stad) {
+														 $stadupdatesql = "UPDATE `".$wpdb->prefix."comp_brackets` SET `c_id` = '".$stad->ID."' WHERE `cb_id` = '".$stad->cb_id."'";
+														 if ( $wpdb->query($stadupdatesql) ) {
+															 $result = true;
+														 }
+														 else {
+															 $result = false;
+														 }
+
+													 } //end of foreach
+													 if ( $result ) {
+														 print("<div id=\"updated\" class=\"updated fade\"><p>The Competition Brackets table updated with the new Competition!</p></div>\n");
+													 }
+												 }//end of if sql was successful
+
+										 } // end of if (isset($_POST['bblm_comp_brackets'])) {
+											 /**
+												*
+												* UPDATING Comp Brackets TABLE FOR THE NEW comp IDs
+												*/
+											 if (isset($_POST['bblm_comp_fixtures'])) {
+
+													 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."fixture T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+													 if ($teamposts = $wpdb->get_results($comppostsql)) {
+														 foreach ($teamposts as $stad) {
+															 $stadupdatesql = "UPDATE `".$wpdb->prefix."fixture` SET `c_id` = '".$stad->ID."' WHERE `f_id` = '".$stad->f_id."'";
+															 if ( $wpdb->query($stadupdatesql) ) {
+																 $result = true;
+															 }
+															 else {
+																 $result = false;
+															 }
+
+														 } //end of foreach
+														 if ( $result ) {
+															 print("<div id=\"updated\" class=\"updated fade\"><p>The Fixtures table updated with the new Competition!</p></div>\n");
+														 }
+													 }//end of if sql was successful
+
+											 } // end of if (isset($_POST['bblm_comp_fixtures'])) {
+												 /**
+													*
+													* UPDATING Comp Brackets TABLE FOR THE NEW comp IDs
+													*/
+												 if (isset($_POST['bblm_comp_match'])) {
+
+														 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."match T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+														 if ($teamposts = $wpdb->get_results($comppostsql)) {
+															 foreach ($teamposts as $stad) {
+																 $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `c_id` = '".$stad->ID."' WHERE `m_id` = '".$stad->m_id."'";
+																 if ( $wpdb->query($stadupdatesql) ) {
+																	 $result = true;
+																 }
+																 else {
+																	 $result = false;
+																 }
+
+															 } //end of foreach
+															 if ( $result ) {
+																 print("<div id=\"updated\" class=\"updated fade\"><p>The Matches table updated with the new Competition!</p></div>\n");
+															 }
+														 }//end of if sql was successful
+
+												 } // end of if (isset($_POST['bblm_comp_match'])) {
+													 /**
+														*
+														* UPDATING Comp Brackets TABLE FOR THE NEW comp IDs
+														*/
+													 if (isset($_POST['bblm_comp_teamcomp'])) {
+
+															 $comppostsql = "SELECT T.*, P.ID FROM ".$wpdb->prefix."team_comp T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.c_id = J.tid AND P.ID = J.pid and J.prefix = 'c_'";
+															 if ($teamposts = $wpdb->get_results($comppostsql)) {
+																 foreach ($teamposts as $stad) {
+																	 $stadupdatesql = "UPDATE `".$wpdb->prefix."team_comp` SET `c_id` = '".$stad->ID."' WHERE `tc_id` = '".$stad->tc_id."'";
+																	 if ( $wpdb->query($stadupdatesql) ) {
+																		 $result = true;
+																	 }
+																	 else {
+																		 $result = false;
+																	 }
+
+																 } //end of foreach
+																 if ( $result ) {
+																	 print("<div id=\"updated\" class=\"updated fade\"><p>The Matches table updated with the new Competition!</p></div>\n");
+																 }
+															 }//end of if sql was successful
+
+													 } // end of if (isset($_POST['bblm_comp_teamcomp'])) {
 
 /**
  *
@@ -723,6 +979,33 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<h3>Sidebars</h3>
 		<ul>
 			<li>Add the new TC widgets for the single page templates that used to have sidebars - teams, players, comps, matches</li>
+		</ul>
+		<h3>Competitions</h3>
+		<ul>
+			<li>First take a copy of the text at the top of the Competitions page</li>
+			<li>Update the following tables c_id field to BIGINT(20):
+				<ul>
+					<li>*awards_player_comp</li>
+					<li>*awards_team_comp</li>
+					<li>*comp_brackets</li>
+					<li>*fixture</li>
+					<li>*match</li>
+					<li>*team_comp</li>
+				</ul>
+			</li>
+			<li>Add column &quot;WPiD&quot; (BIGINT 20) to comp</li>
+			<li>Add column &quot;tc_counts&quot; (INT 1, Default 1) to *team_comp</li>
+			<li><input type="submit" name="bblm_comp_populate_teamcomp" value="Populate New Field" title="Populate New Field"/></li>
+			<li>Add column &quot;m_counts&quot; (INT 1, Default 1) to *match</li>
+			<li><input type="submit" name="bblm_comp_populate_matchcol" value="Populate New Field" title="Populate New Field"/></li>
+			<li><input type="submit" name="bblm_comp_compcpt" value="Convert Competition Post Types" title="Convert the Competition Post Types"/></li>
+			<li>Now you can delete the Competitions Page and update the menus!</li>
+			<li><input type="submit" name="bblm_comp_awardteam" value="Update Competitions in Team Awards" title="Update Competitions in Team Awards"/></li>
+			<li><input type="submit" name="bblm_comp_awardplayer" value="Update Competitions in Player Awards" title="Update Competitions in Player Awards"/></li>
+			<li><input type="submit" name="bblm_comp_brackets" value="Update Competition Brackets" title="Update Competition Brackets"/></li>
+			<li><input type="submit" name="bblm_comp_fixtures" value="Update Fixtures" title="Update Fixtures"/></li>
+			<li><input type="submit" name="bblm_comp_match" value="Update Matches" title="Update Matches"/></li>
+			<li><input type="submit" name="bblm_comp_teamcomp" value="Update Teams in Comp" title="Update Teams in Comp"/></li>
 		</ul>
 
 </form>

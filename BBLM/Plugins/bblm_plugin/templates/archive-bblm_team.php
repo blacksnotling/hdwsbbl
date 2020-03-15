@@ -30,7 +30,7 @@ Template Name: List Teams
 <?php
 	//Start of Custom content
 	//$teamsql = "SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team AS R, $wpdb->posts AS P, '.$wpdb->prefix.'bb2wp AS J WHERE R.t_id = J.tid AND P.ID = J.pid AND J.prefix = 't_' AND R.t_show = 1 ORDER BY t_name ASC";
-	$teamsql = 'SELECT P.post_title, R.r_name, R.r_id, P.guid, T.t_active, T.t_tv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND R.r_id = T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 AND T.type_id = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
+	$teamsql = 'SELECT P.post_title, R.r_name, R.r_id, P.guid, T.t_active, T.t_tv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND R.r_id = T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
 
 
 if ($teams = $wpdb->get_results($teamsql)) {
@@ -99,7 +99,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>".$team->r_name."</td>\n		<td>".number_format($team->t_tv)."gp</td>\n");
 
 
-		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
+		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
 		$nummatch = $wpdb->get_var($nummatchsql);
 		//If not more than 1 then team is new, set to 0 as the default result will be null).
 		if (NULL == $nummatch) {

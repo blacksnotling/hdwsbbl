@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0.1
+ * @version   1.1
  */
 
 class BBLM_CPT_Match {
@@ -37,7 +37,7 @@ class BBLM_CPT_Match {
    global $post;
    global $wpdb;
 
-	 $recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, C.c_name, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
+	 $recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, D.div_name, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
 	 if ( $recmatch = $wpdb->get_results( $recentmatchsql ) ) {
 		 $zebracount = 1;
 
@@ -64,7 +64,7 @@ class BBLM_CPT_Match {
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
 			 echo '<td><a href="' . $rm->guid . '" title="Read the full match report">' . $rm->post_title . '</a></td>';
-			 echo '<td>' . $rm->c_name . ' (' . $rm->div_name . ')</td>';
+			 echo '<td>' . bblm_get_competition_name( $rm->c_id ) . ' (' . $rm->div_name . ')</td>';
 			 echo '<td>' . number_format( $rm->m_gate ) . '</td>';
 			 echo '</tr>';
 

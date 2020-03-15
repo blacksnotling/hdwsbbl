@@ -110,14 +110,14 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	$sumoutput .= "	<li><strong>Duration</strong>: ".date('jS M 25y',strtotime($_POST['bblm_sdatef']))." - ".date('jS M 25y',strtotime($_POST['bblm_sdatet']))."</li>\n";
 	$sumoutput .= "	<li><strong>Competition(s)</strong>: ";
 
-	$sumcompsql = 'SELECT DISTINCT M.c_id, P.post_title AS Comp, P.guid AS CompLink, C.sea_id AS Sea FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY P.post_title ASC';
+	$sumcompsql = 'SELECT DISTINCT M.c_id, C.WPID AS CWPID, C.sea_id AS Sea FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY P.post_title ASC';
 	if ($sumcomp = $wpdb->get_results($sumcompsql,ARRAY_A)) {
 		$is_followon = 0;
 		foreach ($sumcomp as $sc) {
 			if ($is_followon) {
 				$sumoutput .= ", ";
 			}
-			$sumoutput .= "<a href=\"".$sc['CompLink']."\" title=\"View more on this Competition\">".$sc['Comp']."</a>";
+			$sumoutput .= bblm_get_competition_link( $sc->CWPID  );
 			$is_followon = 1;
 		}
 	}
@@ -132,17 +132,17 @@ else if(isset($_POST['bblm_gen_preview'])) {
 
 	$sumoutput .= "<h3>Quick Summary of Week ".$_POST['bblm_sweekno']."</h3>\n";
 
-	$matchbdsql = 'SELECT COUNT(M.m_id) AS Games, P.post_title AS Comp, P.guid AS CompLink, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' GROUP BY M.div_id ORDER BY Comp ASC, D.div_id ASC';
+	$matchbdsql = 'SELECT COUNT(M.m_id) AS Games, M.c_id AS CWPID, D.div_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' GROUP BY M.div_id ORDER BY M.c_id ASC, D.div_id ASC';
 	$sumoutput .= "<ul>\n";
 	if ($matchbd = $wpdb->get_results($matchbdsql)) {
 		foreach ($matchbd as $mbd) {
-			$sumoutput .= "	<li><strong>".$mbd->Games."</strong> games in <strong>".$mbd->div_name."</strong> - ".$mbd->Comp."</li>\n";
+			$sumoutput .= "	<li><strong>".$mbd->Games."</strong> games in <strong>".$mbd->div_name."</strong> - ".bblm_get_competition_name( $mbd->CWPID )."</li>\n";
 		}
 	}
 
-	$sumstatssql = 'SELECT SUM(M.m_tottd) AS TTD, SUM(M.m_totcas) AS TCAS, SUM(M.m_totcomp) AS TCOMP, SUM(M.m_totint) AS TINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
+	$sumstatssql = 'SELECT SUM(M.m_tottd) AS TTD, SUM(M.m_totcas) AS TCAS, SUM(M.m_totcomp) AS TCOMP, SUM(M.m_totint) AS TINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
 	$sumstat = $wpdb->get_row($sumstatssql);
-	$deathsnumsql = 'SELECT COUNT(*) AS Deaths FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'comp C WHERE F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.c_id = M.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
+	$deathsnumsql = 'SELECT COUNT(*) AS Deaths FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'comp C WHERE F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.WPID = M.c_id AND C.c_counts = 1 AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'';
 	$deathsnum = $wpdb->get_var($deathsnumsql);
 	$sumoutput .= "<li><strong>".$sumstat->TTD."</strong> Touchdowns scored</li>\n";
 	$sumoutput .= "<li><strong>".$sumstat->TCAS."</strong> Casualties caused (<strong>".$deathsnum."</strong> resulted in Death)</li>\n";
@@ -155,7 +155,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	}
 
 	//Highest attemdance
-	$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.type_id = 1 AND C.c_counts = 1 AND  M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'  ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+	$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND  M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\'  ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 	$bc = $wpdb->get_row($biggestattendcesql);
 	$sumoutput .= "<li><strong>".number_format($bc->VALUE)." fans</strong> was the highest recorded attendance.</li>\n";
 
@@ -170,7 +170,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 	if ($_POST['bblm_smtcres']) {
 		$sumoutput .= "<h3>Match Results for Week ".$_POST['bblm_sweekno']."</h3>\n\n<p>(numbers in brackets are the casualties caused by each team)</p>\n\n";
 
-		$matchsql = 'SELECT M.m_id, B.guid AS MatchLink, C.post_title AS Comp, D.div_name, T.post_title AS Ta, G.post_title AS Tb, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' B, '.$wpdb->prefix.'bb2wp X, '.$wpdb->posts.' C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' T, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G WHERE M.m_teamA = R.tid AND R.prefix = \'t_\' AND R.pid = T.ID AND M.m_teamB = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND M.div_id = D.div_id AND M.c_id = X.tid AND X.prefix = \'c_\' AND X.pid = C.ID AND M.m_id = N.tid AND N.prefix = \'m_\' AND N.pid = B.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY M.c_id DESC, M.div_id ASC LIMIT 0, 30 ';
+		$matchsql = 'SELECT M.m_id, M.c_id AS CWPID, D.div_name, T.post_title AS Ta, G.post_title AS Tb, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' B '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' T, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G WHERE M.m_teamA = R.tid AND R.prefix = \'t_\' AND R.pid = T.ID AND M.m_teamB = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND M.div_id = D.div_id AND M.m_id = N.tid AND N.prefix = \'m_\' AND N.pid = B.ID AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY M.c_id DESC, M.div_id ASC LIMIT 0, 30 ';
 		if ($matches = $wpdb->get_results($matchsql)) {
 			$is_first_m = "1";
 			$is_first_d = "1";
@@ -178,12 +178,12 @@ else if(isset($_POST['bblm_gen_preview'])) {
 			$prev_div = "";
 
 				foreach ($matches as $ma) {
-					if ($ma->Comp !== $prev_comp) {
+					if ($ma->CWPID !== $prev_comp) {
 						if (!$is_first_m) {
 							$sumoutput .= "</ul>\n";
 						}
-						$sumoutput .= "<h4>".$ma->Comp." - ".$ma->div_name."</h4>\n<ul>\n";
-						$prev_comp = $ma->Comp;
+						$sumoutput .= "<h4>".bblm_get_competition_name( $ma->CWPID )." - ".$ma->div_name."</h4>\n<ul>\n";
+						$prev_comp = $ma->CWPID;
 						$prev_div = $ma->div_name;
 						$is_first_m = "0";
 						$is_first_d = "1"; //this ensures that if it is a new comp, a new div is not triggered
@@ -192,7 +192,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 					if (!$is_first_d) {
 						if ($ma->div_name !== $prev_div) {
 							$prev_div = $ma->div_name;
-							$sumoutput .= "</ul>\n<h4>".$ma->Comp." - ".$ma->div_name."</h4>\n<ul>\n";
+							$sumoutput .= "</ul>\n<h4>".$ma->CWPID." - ".$ma->div_name."</h4>\n<ul>\n";
 							$is_first_d = "1";
 						}
 					}
@@ -243,7 +243,7 @@ else if(isset($_POST['bblm_gen_preview'])) {
 
 	//Obituaries
 	if ($is_death) {
-		$obitsql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, X.pos_name, T.t_name AS TEAM, T.t_guid AS TEAMLink, F.pf_desc AS FATE FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.id AND F.p_id = P.p_id AND P.pos_id = X.pos_id AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 and C.c_show = 1 AND C.type_id = 1 AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY F.m_id ASC LIMIT 0, 30 ';
+		$obitsql = 'SELECT O.post_title AS PLAYER, O.guid AS PLAYERLink, X.pos_name, T.t_name AS TEAM, T.t_guid AS TEAMLink, F.pf_desc AS FATE FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND F.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.id AND F.p_id = P.p_id AND P.pos_id = X.pos_id AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY F.m_id ASC LIMIT 0, 30 ';
 		if ($obit = $wpdb->get_results($obitsql)) {
 			$sumoutput .= "<h3>Obituaries for Week ".$_POST['bblm_sweekno']."</h3>\n\n	<ul>\n";
 			foreach ($obit as $o) {
@@ -337,10 +337,10 @@ else if(isset($_POST['bblm_gen_preview'])) {
 
 			//load in the SQL based on the comp/season selection
 			if ($is_seasonstat) {
-				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.sea_id = '.$sea_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
+				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.sea_id = '.$sea_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
 			}
 			else {
-				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.c_id = '.$_POST['bblm_splstat'].' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
+				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.c_id = '.$_POST['bblm_splstat'].' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
 			}
 			if ($topstats = $wpdb->get_results($statsql)) {
 			$sumoutput .= "<h4>".$sa[1]."</h4>\n";
@@ -492,8 +492,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 	</tr>
 <?php
 		//Now we determine the lst of Competitions that took part in this time period
-		$complistsql = 'SELECT DISTINCT C.c_id, C.ct_id AS Type, c_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY Type ASC';
-		//$complistsql = 'SELECT DISTINCT C.c_id, C.ct_id AS Type, c_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND M.m_date > \'2008-04-28\' AND M.m_date < \'2008-05-10\' ORDER BY Type ASC LIMIT 0, 30 ';
+		$complistsql = 'SELECT DISTINCT C.c_id, C.WPID AS CWPID, C.ct_id AS Type FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.WPID = M.c_id AND M.m_date > \''.$_POST['bblm_sdatef'].'\' AND M.m_date < \''.$_POST['bblm_sdatet'].'\' ORDER BY Type ASC';
 		if ($complist = $wpdb->get_results($complistsql)) {
 ?>
 	<tr>
@@ -505,7 +504,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 <?php
 			foreach ($complist as $cl) {
 				if (1 ==$cl->Type || 2 ==$cl->Type) {
-					print("		<label title=\"Yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_sftbl\"> <strong>Yes</strong> - ".$cl->c_name.".</label><br />\n");
+					print("		<label title=\"Yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_sftbl\"> <strong>Yes</strong> - ".bblm_get_competition_name( $cl->CWPID ).".</label><br />\n");
 				}
 			}
 ?>
@@ -521,7 +520,7 @@ else if(isset($_POST['bblm_select_dates'])) {
 		<label title="Yes"><input type="radio" value="S" name="bblm_splstat"> <strong>Yes</strong> - Stats for the Season to date</label><br />
 <?php
 			foreach ($complist as $cl) {
-				print("		<label title=\"yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_splstat\"> <strong>Yes</strong> - Stats for ".$cl->c_name.".</label><br />\n");
+				print("		<label title=\"yes\"><input type=\"radio\" value=\"".$cl->c_id."\" name=\"bblm_splstat\"> <strong>Yes</strong> - Stats for ".bblm_get_competition_name( $cl->CWPID ).".</label><br />\n");
 			}
 ?>
 		</fieldset></td>

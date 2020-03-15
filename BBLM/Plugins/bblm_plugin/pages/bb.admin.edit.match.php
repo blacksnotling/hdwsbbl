@@ -268,10 +268,10 @@ $sucess = false;
 		else if ("comment" == $_GET['item']) {
 			//Editing match Comments
 			$match_id = $_GET['id'];
-			$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.c_id, M.m_teamA, M.m_teamB, D.div_name, C.c_name, T.t_name AS TA, V.t_name AS TB, R.mt_comment AS TAcomm, S.mt_comment AS TBcomm FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team V, '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match_team S, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.c_id = C.c_id AND M.div_id = D.div_id AND M.m_id = R.m_id AND M.m_id = S.m_id AND M.m_teamA = R.t_id AND M.m_teamB = S.t_id AND M.m_teamA = T.t_id AND M.m_teamB = V.t_id AND M.m_id = '.$match_id;
+			$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.c_id, M.m_teamA, M.m_teamB, D.div_name, M.c_id, T.WPID AS TA, V.WPID AS TB, R.mt_comment AS TAcomm, S.mt_comment AS TBcomm FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team V, '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match_team S, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.m_id = R.m_id AND M.m_id = S.m_id AND M.m_teamA = R.t_id AND M.m_teamB = S.t_id AND M.m_teamA = T.t_id AND M.m_teamB = V.t_id AND M.m_id = '.$match_id;
 			if ($m = $wpdb->get_row($matchsql)) {
 				print("<h3>Edit Coaches Comments</h3>");
-				print("<p>You are editing the Match Comments for <strong>".$m->TA." vs ".$m->TB."</strong> (".$m->c_name.", ".$m->div_name."):</p>\n");
+				print("<p>You are editing the Match Comments for <strong>".bblm_get_competition_name( $m->TA )." vs ".bblm_get_competition_name( $m->TB )."</strong> (".bblm_get_competition_name( $m->c_id ).", ".$m->div_name."):</p>\n");
 ?>
 				<form name="bblm_editmatchcomments" method="post" id="post">
 					<h3>Match Comment</h3>
@@ -281,9 +281,9 @@ $sucess = false;
 					<input type="hidden" name="team_b" value="<?php print($m->m_teamB); ?>">
 					<table>
 					<tr>
-						<th><?php print($m->TA); ?></th>
+						<th><?php echo bblm_get_competition_name( $m->TA ); ?></th>
 						<th>Vs</th>
-						<th><?php print($m->TB); ?></th>
+						<th><?php echo bblm_get_competition_name( $m->TB ); ?></th>
 					</tr>
 					<tr>
 						<td><textarea name="matchcomment1" cols="50" rows="6"><?php print(stripslashes($m->TAcomm)); ?></textarea></td>
@@ -301,7 +301,7 @@ $sucess = false;
 			echo '<p>'.__( 'it will NOT update a teams treasurey or TV, you will need to update those on the edit team page', 'bblm' ).'</p>';
 			$match_id = $_GET['id'];
 
-			$matchsql = "SELECT M.m_id, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamA, M.m_teamB, M.stad_id, C.c_name, C.c_id, D.div_name, D.div_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."comp C, ".$wpdb->prefix."division D WHERE M.c_id = C.c_id AND M.div_id = D.div_id AND M.m_id = ".$match_id;
+			$matchsql = "SELECT M.m_id, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamA, M.m_teamB, M.stad_id, M.c_id, D.div_name, D.div_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."division D WHERE M.div_id = D.div_id AND M.m_id = ".$match_id;
 			$m = $wpdb->get_row($matchsql);
 			$teamAsql = "SELECT M.*, T.t_name FROM ".$wpdb->prefix."match_team M, ".$wpdb->prefix."team T WHERE M.t_id = T.t_id AND M.m_id = ".$match_id." AND M.t_id = ".$m->m_teamA;
 			$mA = $wpdb->get_row($teamAsql);
@@ -324,7 +324,7 @@ function BBLM_UpdateGate() {
 
 		<ul>
 			<li><strong>Date</strong>: <?php echo date("d.m.y", $m->mdate); ?></li>
-			<li><strong>Competition</strong>: <?php echo $m->c_name; ?></li>
+			<li><strong>Competition</strong>: <?php echo bblm_get_competition_name( $m->c_id ); ?></li>
 			<li><strong>Division</strong>: <?php echo $m->div_name; ?></li>
 		</ul>
 
@@ -413,7 +413,7 @@ function BBLM_UpdateGate() {
 	<p>Below is a list of matches that have taken place in the League. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
 
 <?php
-				$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.c_name, Z.guid AS cguid, D.div_name, P.ID, M.m_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY C.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';
+				$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, D.div_name, P.ID, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY M.c_id DESC, D.div_id ASC, M.m_date DESC';
 		if ($match = $wpdb->get_results($matchsql)) {
 			$zebracount = 1;
 
@@ -430,7 +430,7 @@ function BBLM_UpdateGate() {
 				print("		   <td>".$m->m_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/post.php?post=".$m->ID."&action=edit\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".$m->c_name." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
+				print("/wp-admin/post.php?post=".$m->ID."&action=edit\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".bblm_get_competition_name( $m->c_id )." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
 
 				print("<td><a href=\"");
 				bloginfo('url');

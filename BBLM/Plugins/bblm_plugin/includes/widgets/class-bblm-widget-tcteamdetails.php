@@ -28,7 +28,11 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
     $parentoption = get_option( 'bblm_config' );
     $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
 
-    $parentpage = get_queried_object()->post_parent;
+    $parentpage = 0;
+    if ( is_single() ) {
+      $parentpage = get_queried_object()->post_parent;
+    }
+
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
@@ -43,7 +47,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
       global $champs;
 
       //Current match form
-      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
+      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
       $currentform = "";
       if ( $form = $wpdb->get_results( $formsql ) ) {
         foreach ( $form as $tf ) {
@@ -56,7 +60,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
       //determine debut season
       if ( $has_played ) {
-        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.c_id = M.c_id AND C.c_show = 1 AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
+        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.WPID = M.c_id AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
         $sd = $wpdb->get_row( $seasondebutsql );
       }
 
@@ -105,7 +109,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
           if ( $has_cups ) {
             echo '<ul>';
             foreach ( $champs as $cc ) {
-              print("	<li><strong>".$cc->a_name."</strong> - <a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></li>\n");
+              print("	<li><strong>".$cc->a_name."</strong> - " . bblm_get_competition_link( $cc->CWPID ) . "</li>\n");
             }
             echo '</ul>';
           }
@@ -121,11 +125,11 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         echo $args['before_widget'];
         echo $args['before_title'] . apply_filters( 'widget_title', 'Currently Participating in' ) . $args['after_title'];
 
-        $currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
+        $currentcompssql = 'SELECT C.WPID AS CWPID FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
         if ( $currentcomp = $wpdb->get_results( $currentcompssql ) ) {
           echo '<ul>';
           foreach ($currentcomp as $curc) {
-            print("					<li><a href=\"".$curc->guid."\" title=\"Read more about ".$curc->post_title."\">".$curc->post_title."</a></li>\n");
+            echo '<li>' . bblm_get_competition_link( $curc->CWPID ) . '</li>';
           }
           echo '</ul>';
         }

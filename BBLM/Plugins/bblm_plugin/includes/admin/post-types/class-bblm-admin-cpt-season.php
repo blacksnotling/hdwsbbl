@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Admin_CPT_Season {
@@ -37,9 +37,11 @@ class BBLM_Admin_CPT_Season {
   	$columns = array(
   		'cb' => '<input type="checkbox" />',
   		'title' => __( 'Season', 'bblm' ),
+			'id' => __( 'ID', 'bblm' ),
   		'competition' => __( 'Competitions', 'bblm' ),
   		'sdate' => __( 'Started', 'bblm' ),
 			'fdate' => __( 'Ended', 'bblm' ),
+			'awards' => __( 'Awards', 'bblm' ),
   	);
 
   	return $columns;
@@ -57,7 +59,7 @@ class BBLM_Admin_CPT_Season {
       /* If displaying the 'competition' column. */
       case 'competition' :
 
-        echo 'View Comps';
+        echo '<a href="' . get_bloginfo("url") . '/wp-admin/edit.php?s&post_status=all&post_type=bblm_comp&action=-1&m=0&bblm_comp-filter-season=' . $post_id . '&filter_action=Filter&paged=1&action2=-1" title="Start a new Competition">Manage Competitions.</a>';
 
       break;
 
@@ -78,6 +80,13 @@ class BBLM_Admin_CPT_Season {
 
       break;
 
+			/* If displaying the 'id' column. */
+			case 'id' :
+
+				echo $post_id;
+
+			break;
+
 			// If displaying the 'fdate' column.
       case 'fdate' :
 
@@ -95,6 +104,13 @@ class BBLM_Admin_CPT_Season {
         }
 
       break;
+
+			/* If displaying the 'awards' column. */
+			case 'awards' :
+
+				echo 'Manage Awards';
+
+			break;
 
       // Break out of the switch statement for anything else.
       default :

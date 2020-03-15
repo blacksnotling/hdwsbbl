@@ -29,7 +29,10 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
     $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
 
-    $parentpage = get_queried_object()->post_parent;
+    $parentpage = 0;
+    if ( is_single() ) {
+      $parentpage = get_queried_object()->post_parent;
+    }
     $greatGrandparent = 0;
     if ( $grandparent = get_post( $parentpage ) ) {
       if( $grandparent->post_parent ){
@@ -54,7 +57,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$rd = $wpdb->get_row($racesql);
 
     	//determine debut season
-    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.c_id AND C.c_counts = 1 AND C.c_show = 1 AND C.type_id = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
+    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
     	$sd = $wpdb->get_row($seasondebutsql);
 
     	//grab list of other players on the team
@@ -62,8 +65,8 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$otherplayers = $wpdb->get_results($otherplayerssql);
 
     	//SQL for chapsionships won. like above but restricted to Winner Only!
-    	$playerchampionshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.c_id AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid ';
-      $playerchampionshipssql .= 'AND J.prefix = \'c_\' AND J.pid = P.ID AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
+    	$playerchampionshipssql = 'SELECT A.a_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID ';
+      $playerchampionshipssql .= 'AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 
       echo $args['before_widget'];
 
@@ -111,13 +114,17 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
           echo $args['before_title'] . apply_filters( 'widget_title', 'Major Awards' ) . $args['after_title'];
 
           //note that both SQL strings are above
-          if ( ( $sawards = $wpdb->get_results( $seasonsql ) ) || ( $cawards = $wpdb->get_results( $playerchampionshipssql ) ) ) {
+          if ( ( ( $cawards = $wpdb->get_results( $playerchampionshipssql ) ) || $sawards = $wpdb->get_results( $seasonsql ) ) ) {
             echo '<ul>';
-            foreach ( $cawards as $ca ) {
-              echo '<li><strong>' . $ca->a_name . '</strong> - <a href="' . $ca->guid . '" title="View full details about ' . $ca->post_title . '">' . $ca->post_title . '</a></li>';
+            if ( $cawards = $wpdb->get_results( $playerchampionshipssql ) ) {
+              foreach ( $cawards as $ca ) {
+                echo '<li><strong>' . $ca->a_name . '</strong> - ' . bblm_get_competition_link( $ca->CWPID ) . '</li>';
+              }
             }
-            foreach ( $sawards as $sa ) {
-              echo '<li><strong>' . $sa->a_name . '</strong> - ' . bblm_get_season_link( $sa->sea_id ) . '</li>';
+            if ( $sawards = $wpdb->get_results( $seasonsql ) ) {
+              foreach ( $sawards as $sa ) {
+                echo '<li><strong>' . $sa->a_name . '</strong> - ' . bblm_get_season_link( $sa->sea_id ) . '</li>';
+              }
             }
             echo '</ul>';
           }
@@ -133,11 +140,11 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
         echo $args['before_widget'];
         echo $args['before_title'] . apply_filters( 'widget_title', 'Currently Participating in' ) . $args['after_title'];
 
-        $currentcompssql = 'SELECT O.post_title, O.guid FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE P.t_id = M.t_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = O.ID AND M.c_id = C.c_id AND C.c_show = 1 AND C.c_active = 1 AND T.t_id = M.t_id AND P.p_id = '.$pd->p_id.' GROUP BY C.c_id LIMIT 0, 30 ';
+        $currentcompssql = 'SELECT C.WPID AS CWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C WHERE P.t_id = M.t_id AND M.c_id = C.WPID AND C.c_active = 1 AND T.t_id = M.t_id AND P.p_id = '.$pd->p_id.' GROUP BY C.c_id LIMIT 0, 30 ';
         if ( $currentcomps = $wpdb->get_results( $currentcompssql ) ) {
           echo '<ul>';
           foreach ($currentcomps as $curc) {
-            echo '<li><a href="' . $curc->guid . '" title="Read more about "' . $curc->post_title . '">' . $curc->post_title . '</a></li>';
+            echo '<li>' . bblm_get_competition_link( $curc->CWPID ) . '</li>';
           }
           echo '</ul>';
         }

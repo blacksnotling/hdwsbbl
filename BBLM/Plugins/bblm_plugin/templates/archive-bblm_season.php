@@ -20,7 +20,7 @@
 					<?php do_action( 'bblm_template_before_content' ); ?>
 <?php
 						if ( BBLM_CPT_Season::is_season_active( get_the_ID() ) ) {
-							echo '<li class="active bblm_season_active">';
+							echo '<li class="bblm_season_active">';
 						}
 						else {
 							echo '<li>';
