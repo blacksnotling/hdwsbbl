@@ -42,7 +42,7 @@ if(isset($_POST['bblm_star_submit'])) {
 		'post_parent' => $bblm_page_parent
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.starplayer.php');
+		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_starplayers.php');
 
 		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$bblm_team_star.'\', \''.$posnum.'\', \''.wp_filter_nohtml_kses($_POST['bblm_pname']).'\', \'00\', \''.$_POST['bblm_pma'].'\', \''.$_POST['bblm_pst'].'\', \''.$_POST['bblm_pag'].'\', \''.$_POST['bblm_pav'].'\', \'0\', \''.$_POST['bblm_pskills'].'\', \'0\', \'none\', \''.$_POST['bblm_pcost'].'\', \''.$_POST['bblm_pcost'].'\', \'1\', \'\', \'0\')';
 		$wpdb->query($bblmdatasql);

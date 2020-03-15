@@ -60,7 +60,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		'post_parent' => $bblm_page_parent
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.team.php');
+		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
@@ -93,7 +93,7 @@ if(isset($_POST['bblm_team_submit'])) {
 				'post_parent' => $bblm_submission
 			);
 			if ($bblm_submission = wp_insert_post( $my_post )) {
-				add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.roster.php');
+				add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_roster.php');
 
 				$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'roster\')';
 				$wpdb->query($bblmmappingsql);
