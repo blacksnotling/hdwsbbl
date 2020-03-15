@@ -225,7 +225,7 @@
 							</thead>
 							<tbody>
 <?php
-					$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, S.guid, S.post_title FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE C.WPID = R.tid AND R.pid = S.ID AND R.prefix = \'c_\' AND M.m_id = Q.m_id AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+					$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.m_id AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 					if ( $playercomp = $wpdb->get_results( $playercompsql ) ) {
 						$zebracount = 1;
 						foreach ( $playercomp as $pc ) {
@@ -235,7 +235,7 @@
 							else {
 								echo '<tr class="bblm_tbl_alt">';
 							}
-							echo '<td><a href="' . $pc->guid .'" title="View more details about this competition">' . $pc->post_title . '</a></td>';
+							echo '<td>' . bblm_get_competition_link( $pc->CWPID  ) . '</td>';
 							echo '<td>' . $pc->GAMES . '</td>';
 							echo '<td>' . $pc->TD . '</td>';
 							echo '<td>' . $pc->CAS . '</td>';
@@ -313,7 +313,7 @@
 							</thead>
 							<tbody>
 <?php
-						$playermatchsql = 'SELECT M.*, P.p_name, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.WPID = X.c_id AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pd->p_id.' ORDER BY X.m_date DESC';
+            $playermatchsql = 'SELECT P.*, J.pid AS MID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND J.prefix = \'m_\' AND J.tid = M.m_id AND M.m_id = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
 						if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
 						$zebracount = 1;
 							foreach ( $playermatch as $pm ) {
@@ -329,12 +329,12 @@
 								else {
 									echo '<tr class="bblm_tbl_alt">';
 								}
-								echo '<td><a href="' . $pm->guid . '" title="View the match in more detail">' . date( "d.m.y", $pm->mdate ). '</a></td>';
+								echo '<td><a href="' . get_post_permalink( $pm->MID ) . '" title="View the match in more detail">' . date( "d.m.y", $pm->mdate ). '</a></td>';
 								if ( $pm->TAid == $pd->t_id ) {
-									echo '<td><a href="' . $pm->TBlink . '" title="View more about this match">' . $pm->TB . '</a></td>';
+                  echo '<td>' . bblm_get_team_link( $pm->TB ) . '</td>';
 								}
 								else {
-									echo '<td><a href="' . $pm->TAlink . '" title="View more about this match">' . $pm->TA . '</a></td>';
+									echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';
 								}
 								echo '<td>';
 								if ( 0 == $pm->mp_td ) {
@@ -417,7 +417,7 @@
 
 						<h3><?php echo __( 'Awards list in full', 'bblm' ); ?></h3>
 <?php
-						$championshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
+						$championshipssql = 'SELECT A.a_name, B.c_id AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 						if ($champs = $wpdb->get_results($championshipssql)) {
 							$has_cups = 1;
 							$zebracount = 1;
@@ -430,7 +430,7 @@
 								else {
 									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
-								print("		<td>".$cc->a_name."</td>\n		<td><a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></td>\n	</tr>\n");
+								print("		<td>".$cc->a_name."</td>\n		<td>" . bblm_get_competition_link( $cc->CWPID ) . "</td>\n	</tr>\n");
 								$zebracount++;
 							}
 							print("</table>\n");
@@ -461,7 +461,7 @@
 						}
 
 						$cafail = 0;
-						$compawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.apc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
+						$compawardssql = 'SELECT A.a_name, B.apc_value, B.c_id AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($cawards = $wpdb->get_results($compawardssql)) {
 							$zebracount = 1;
 							print("<h4>Awards from Competitions</h4>\n");
@@ -473,7 +473,7 @@
 								else {
 									print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
-								print("		<td>".$ca->a_name."</td>\n		<td><a href=\"".$ca->guid."\" title=\"View full details about ".$ca->post_title."\">".$ca->post_title."</a></td>\n		<td>".$ca->apc_value."</td>\n	</tr>\n");
+								print("		<td>".$ca->a_name."</td>\n		<td>" . bblm_get_competition_link( $ca->CWPID ) . "</td>\n		<td>".$ca->apc_value."</td>\n	</tr>\n");
 								$zebracount++;
 							}
 						print("</table>\n");

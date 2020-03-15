@@ -105,7 +105,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
           if ( $has_cups ) {
             echo '<ul>';
             foreach ( $champs as $cc ) {
-              print("	<li><strong>".$cc->a_name."</strong> - <a href=\"".$cc->guid."\" title=\"View full details about ".$cc->post_title."\">".$cc->post_title."</a></li>\n");
+              print("	<li><strong>".$cc->a_name."</strong> - " . bblm_get_competition_link( $cc->CWPID ) . "</li>\n");
             }
             echo '</ul>';
           }
