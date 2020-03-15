@@ -198,7 +198,7 @@ class BBLM_CPT_Comp {
 					 $is_first = 1;
 				 }
 				 if ( $is_first ) {
-					 echo '<h3>' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . ' - '.$current_sea.'</h3>';
+					 echo '<h3>' . bblm_get_season_link( $cm[ 'comp_season' ][0] ) . '</h3>';
 					 echo '<ul>';
 					 $is_first = 0;
 				 }
