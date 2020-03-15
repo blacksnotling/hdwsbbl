@@ -185,18 +185,26 @@ class BBLM_CPT_Award {
 
 		if ( $post_type == "bblm_cup" ) {
 
-			$compmajorawardssql = 'SELECT A.a_name, T.WPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 1 AND B.t_id = T.t_id AND B.c_id = C.WPID AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
-			$compteamawardssql = 'SELECT A.a_name, T.WPID, B.atc_value AS value, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team T WHERE C.WPID = B.c_id AND A.a_id = B.a_id AND a_cup = 0 AND B.t_id = T.t_id AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
-			$compplayerawardssql = 'SELECT A.a_name, R.WPID AS PID, B.apc_value AS value, T.WPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE C.WPID = B.c_id AND R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
+			$compmajorawardssql = 'SELECT A.a_name, T.WPID AS TWPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 1 AND B.t_id = T.t_id AND B.c_id = C.WPID AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
+			$compteamawardssql = 'SELECT A.a_name, T.WPID AS TWPID, B.atc_value AS value, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team T WHERE C.WPID = B.c_id AND A.a_id = B.a_id AND a_cup = 0 AND B.t_id = T.t_id AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
+			$compplayerawardssql = 'SELECT A.a_name, R.WPID AS PWPID, B.apc_value AS value, T.WPID AS TWPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE C.WPID = B.c_id AND R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND C.series_id = '.$itemid.' ORDER BY A.a_id ASC, C.c_id DESC';
 
 		} //end of if ( $post_type == "bblm_cup" )
 		else if ( $post_type == "bblm_season" ) {
 
-			$compmajorawardssql = 'SELECT A.a_name, T.WPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' ORDER BY C.c_id ASC, A.a_id ASC';
-			$compteamawardssql = 'SELECT A.a_name, B.ats_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'team T WHERE A.a_id = B.a_id AND B.t_id = T.t_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
-			$compplayerawardssql = 'SELECT A.a_name, P.WPID AS PID, B.aps_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P WHERE P.t_id = T.t_id AND A.a_id = B.a_id AND B.p_id = P.p_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
+			$compmajorawardssql = 'SELECT A.a_name, T.WPID AS TWPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' ORDER BY C.c_id ASC, A.a_id ASC';
+			$compteamawardssql = 'SELECT A.a_name, B.ats_value AS value, T.WPID AS TWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_sea B, '.$wpdb->prefix.'team T WHERE A.a_id = B.a_id AND B.t_id = T.t_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
+			$compplayerawardssql = 'SELECT A.a_name, P.WPID AS PWPID, B.aps_value AS value, T.WPID AS TWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P WHERE P.t_id = T.t_id AND A.a_id = B.a_id AND B.p_id = P.p_id AND B.sea_id = '.$itemid.' ORDER BY A.a_id ASC';
 
 		} //end of else if ( $post_type == "bblm_season" ) {
+		else if ( $post_type == "bblm_comp" ) {
+
+			$compmajorawardssql = 'SELECT A.a_name, T.WPID AS TWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = '.$itemid.' ORDER BY A.a_id ASC';
+			$compteamawardssql = 'SELECT A.a_name, T.WPID AS TWPID, B.atc_value AS value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'team T WHERE T.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 0 AND B.c_id = '.$itemid.' ORDER BY A.a_id ASC';
+			$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, T.WPID AS TWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T WHERE R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND B.c_id = '.$itemid.' ORDER BY A.a_id ASC';
+			$compplayerawardssql = 'SELECT A.a_name, R.WPID AS PWPID, B.apc_value AS value, T.WPID AS TWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T WHERE R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.c_id = '.$itemid.' ORDER BY A.a_id ASC';
+
+		} //end of else if ( $post_type == "bblm_comp" ) {
 
 		if ( $cmawards = $wpdb->get_results( $compmajorawardssql ) ) {
 			$zebracount = 1;
@@ -208,7 +216,9 @@ class BBLM_CPT_Award {
 					<tr>
 						<th class="bblm_tbl_name"><?php echo __( 'Award', 'bblm' ); ?></th>
 						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+<?php				if ( ( $post_type == "bblm_cup" ) || ( $post_type == "bblm_season" ) ) { ?>
 						<th class="bblm_tbl_name"><?php echo __( 'Competition', 'bblm' ); ?></th>
+<?php 			}		 ?>
 					</tr>
 	      </thead>
 	      <tbody>
@@ -221,8 +231,10 @@ class BBLM_CPT_Award {
 					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cma->a_name . '</td>';
-				echo '<td>' . bblm_get_team_link( $cma->WPID ) . '</td>';
-				echo '<td>' . bblm_get_competition_link( $cma->CWPID ) . '</td>';
+				echo '<td>' . bblm_get_team_link( $cma->TWPID ) . '</td>';
+				if ( ( $post_type == "bblm_cup" ) || ( $post_type == "bblm_season" ) ) {
+					echo '<td>' . bblm_get_competition_link( $cma->CWPID ) . '</td>';
+				}
 				echo '</tr>';
 				$zebracount++;
 			} //end of foreach
@@ -256,7 +268,7 @@ class BBLM_CPT_Award {
 					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cta->a_name . '</td>';
-				echo '<td>' . bblm_get_team_link( $cta->WPID ) . '</td>';
+				echo '<td>' . bblm_get_team_link( $cta->TWPID ) . '</td>';
 				if ( $post_type == "bblm_cup" ) {
 					echo '<td>' . bblm_get_competition_link( $cta->CWPID ) . '</td>';
 				}
@@ -296,8 +308,8 @@ class BBLM_CPT_Award {
 					echo '<tr class="bblm_tbl_alt">';
 				}
 				echo '<td>' . $cpa->a_name . '</td>';
-				echo '<td>' . bblm_get_player_link( $cpa->PID ) . '</td>';
-				echo '<td>' . bblm_get_team_link( $cpa->WPID ) . '</td>';
+				echo '<td>' . bblm_get_player_link( $cpa->PWPID ) . '</td>';
+				echo '<td>' . bblm_get_team_link( $cpa->TWPID ) . '</td>';
 				if ( $post_type == "bblm_cup" ) {
 					echo '<td>' . bblm_get_competition_link( $cpa->CWPID ) . '</td>';
 				}

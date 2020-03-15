@@ -421,80 +421,11 @@
 					//Awards
 					if ( !BBLM_CPT_Comp::is_competition_active( $cid ) ) {
 						//the comp is over, display the awards!
+
+          $bblm_award = new BBLM_CPT_Award;
 ?>
-					<h3 id="awardsfull">Awards</h3>
-					<h4>Main Awards</h4>
-					<table class="bblm_table">
-						<tr>
-							<th class="bblm_tbl_name">Award</th>
-							<th class="bblm_tbl_name">Team</th>
-						</tr>
-<?php
-					$compmajorawardssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 1 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = '.$cid.' ORDER BY A.a_id ASC';
-					if ($cmawards = $wpdb->get_results($compmajorawardssql)) {
-						$zebracount = 1;
-						foreach ($cmawards as $cma) {
-							if ($zebracount % 2) {
-								print("						<tr>\n");
-							}
-							else {
-								print("						<tr class=\"bblm_tbl_alt\">\n");
-							}
-								print("		<td>".$cma->a_name."</td>\n		<td><a href=\"".$cma->guid."\" title=\"Read more about ".$cma->post_title."\">".$cma->post_title."</a></td>\n	</tr>\n");
-							$zebracount++;
-						}
-					}
-?>
-					</table>
-					<h4>Awards assigned to Teams</h4>
-					<table class="bblm_table">
-						<tr>
-							<th class="bblm_tbl_name">Award</th>
-							<th class="bblm_tbl_name">Team</th>
-							<th class="bblm_tbl_stat">Value</th>
-						</tr>
-<?php
-					$compteamawardssql = 'SELECT A.a_name, P.post_title, P.guid, B.atc_value AS value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = '.$cid.' ORDER BY A.a_id ASC';
-					if ($ctawards = $wpdb->get_results($compteamawardssql)) {
-						$zebracount = 1;
-						foreach ($ctawards as $cta) {
-							if ($zebracount % 2) {
-								print("						<tr>\n");
-							}
-							else {
-								print("						<tr class=\"bblm_tbl_alt\">\n");
-							}
-								print("		<td>".$cta->a_name."</td>\n		<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n		<td>".$cta->value."</td>\n	</tr>\n");
-							$zebracount++;
-						}
-					}
-?>
-					</table>
-					<h4>Awards assigned to Players</h4>
-					<table class="bblm_table">
-						<tr>
-							<th class="bblm_tbl_name">Award</th>
-							<th class="bblm_tbl_name">Player</th>
-							<th class="bblm_tbl_name">Team</th>
-							<th class="bblm_tbl_stat">Value</th>
-						</tr>
-<?php
-					$compplayerawardssql = 'SELECT A.a_name, P.post_title AS Pname, P.guid AS Plink, B.apc_value AS value, T.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player R, '.$wpdb->prefix.'team T WHERE R.t_id = T.t_id AND R.p_id = B.p_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND B.c_id = '.$cid.' ORDER BY A.a_id ASC';
-					if ($cpawards = $wpdb->get_results($compplayerawardssql)) {
-						$zebracount = 1;
-						foreach ($cpawards as $cpa) {
-							if ($zebracount % 2) {
-								print("						<tr>\n");
-							}
-							else {
-								print("						<tr class=\"bblm_tbl_alt\">\n");
-							}
-								print("		<td>".$cpa->a_name."</td>\n		<td><a href=\"".$cpa->Plink."\" title=\"Read more about ".$cpa->Pname."\">".$cpa->Pname."</a></td>\n		<td><a href=\"" .  get_post_permalink( $cpa->WPID ) . "\" title=\"Read more about this team\">" . esc_html( get_the_title( $cpa->WPID ) ) . "</a></td>\n		<td>".$cpa->value."</td>\n	</tr>\n");
-							$zebracount++;
-						}
-					}
-?>
-					</table>
+          <h3 id="awardsfull bblm_awardsfull"><?php echo __( 'Awards', 'bblm'); ?></h3>
+          <?php $bblm_award->display_list_award_winners(); ?>
 <?php
 
 					}
