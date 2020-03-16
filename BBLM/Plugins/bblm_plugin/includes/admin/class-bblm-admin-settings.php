@@ -206,14 +206,6 @@ class BBLM_Settings_Admin {
         		'helper' => __( 'The location of the wordpress install from the SERVER root WITHOUT Slashes. eg hdwsbbl', 'bblm' ),
         	),
           array(
-        		'uid' => 'page_race',
-        		'label' => __( 'Page # - Races', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "Races" Page.', 'bblm' ),
-        	),
-          array(
         		'uid' => 'page_team',
         		'label' => __( 'Page # - Teams', 'bblm' ),
         		'section' => 'third_section',

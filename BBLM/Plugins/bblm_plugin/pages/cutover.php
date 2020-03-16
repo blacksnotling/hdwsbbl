@@ -868,6 +868,128 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 															 }//end of if sql was successful
 
 													 } // end of if (isset($_POST['bblm_comp_teamcomp'])) {
+														 /**
+													     *
+													     * UPDATING WP Posts TABLE FOR THE NEW CHAMPIONSHIPS CPT
+													     */
+													    if (isset($_POST['bblm_race_racecpt'])) {
+
+													      $cuppostsql = "SELECT P.ID, R.r_id, P.post_title, R.r_rrcost, R.r_show FROM ".$wpdb->prefix."race R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_' ORDER BY P.ID ASC";
+													        if ($stadposts = $wpdb->get_results($cuppostsql)) {
+													  //        echo '<ul>';
+													          foreach ($stadposts as $stad) {
+													            $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_race' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+													  //          print("<li>".$stadupdatesql."</li>");
+													  //          print("<li>Meta -> '".$stad->ID."', 'race_rrcost', '".$stad->r_rrcost."'</li>");
+													  /*          if ( ! $stad->r_show ) {
+													              print("<li>Meta -> '".$stad->ID."', 'race_hide', '1'</li>");
+													            }
+													  */          if ( $wpdb->query($stadupdatesql) ) {
+													              $result = true;
+													              add_post_meta( $stad->ID, 'race_rrcost', $stad->r_rrcost, true );
+													              if ( ! $stad->r_show ) {
+													                add_post_meta( $stad->ID, 'race_hide', '1', true );
+													              }
+													            }
+													            else {
+													              $result = false;
+													            }
+
+													          } //end of foreach
+													//          echo '</ul>';
+													          if ( $result ) {
+													            print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Championships Page! <strong>Now you can delete the Races page!</strong></p></div>\n");
+													          }
+													        }//end of if sql was successful
+
+													    } //end of if (isset($_POST['bblm_raceracecpt']))
+													    /**
+													     *
+													     * UPDATING positions TABLE FOR THE NEW Race IDs
+													     */
+													    if (isset($_POST['bblm_race_positions'])) {
+
+													      $teampostsql = "SELECT T.r_id, T.pos_id, P.ID FROM ".$wpdb->prefix."position T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_'";
+													        if ($teamposts = $wpdb->get_results($teampostsql)) {
+													//          echo '<ul>';
+													          foreach ($teamposts as $stad) {
+													            $stadupdatesql = "UPDATE `".$wpdb->prefix."position` SET `r_id` = '".$stad->ID."' WHERE pos_id = '".$stad->pos_id."';";
+													//            print("<li>".$stad->pos_id." = ".$stad->r_id." -> ".$stad->ID."</li>");
+													//            print("<li>".$stadupdatesql."</li>");
+													            if ( $wpdb->query($stadupdatesql) ) {
+													              $result = true;
+													            }
+													            else {
+													              $result = false;
+													            }
+
+													          } //end of foreach
+													//          echo '</ul>';
+													          if ( $result ) {
+													            print("<div id=\"updated\" class=\"updated fade\"><p>Positions table updated with the new Races!</p></div>\n");
+													          }
+													        }//end of if sql was successful
+
+													    } // end of if (isset($_POST['bblm_race_teams'])) {
+																/**
+														     *
+														     * UPDATING Teams TABLE FOR THE NEW Race IDs
+														     */
+														    if (isset($_POST['bblm_race_teams'])) {
+
+														      $teampostsql = "SELECT T.r_id, T.t_id, P.ID FROM ".$wpdb->prefix."team T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_'";
+														        if ($teamposts = $wpdb->get_results($teampostsql)) {
+													//	          echo '<ul>';
+														          foreach ($teamposts as $stad) {
+														            $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `r_id` = '".$stad->ID."' WHERE t_id = '".$stad->t_id."';";
+													//	            print("<li>".$stad->t_id." = ".$stad->r_id." -> ".$stad->ID."</li>");
+													//	            print("<li>".$stadupdatesql."</li>");
+
+														            if ( $wpdb->query($stadupdatesql) ) {
+																		      $result = true;
+														            }
+														            else {
+														              $result = false;
+														            }
+
+														          } //end of foreach
+													//	          echo '</ul>';
+														          if ( $result ) {
+														            print("<div id=\"updated\" class=\"updated fade\"><p>Teams table updated with the new Races!</p></div>\n");
+														          }
+														        }//end of if sql was successful
+
+														    } // end of if (isset($_POST['bblm_race_teams'])) {
+
+													      /**
+													       *
+													       * UPDATING race2star TABLE FOR THE NEW Race IDs
+													       */
+													      if (isset($_POST['bblm_race_race2star'])) {
+
+													        $teampostsql = "SELECT T.r_id, T.p_id, P.ID FROM ".$wpdb->prefix."race2star T, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE T.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_'";
+													          if ($teamposts = $wpdb->get_results($teampostsql)) {
+													//            echo '<ul>';
+													            foreach ($teamposts as $stad) {
+													              $stadupdatesql = "UPDATE `".$wpdb->prefix."race2star` SET `r_id` = '".$stad->ID."' WHERE r_id = ".$stad->r_id." AND p_id = '".$stad->p_id."';";
+													//              print("<li>".$stad->r_id." and ".$stad->p_id." -> ".$stad->ID." and ".$stad->p_id."</li>");
+													//              print("<li>".$stadupdatesql."</li>");
+													              if ( $wpdb->query($stadupdatesql) ) {
+													                $result = true;
+													              }
+													              else {
+													                $result = false;
+													              }
+
+													            } //end of foreach
+													  //          echo '</ul>';
+													            if ( $result ) {
+													              print("<div id=\"updated\" class=\"updated fade\"><p>race2star table updated with the new Races!</p></div>\n");
+													            }
+													          }//end of if sql was successful
+
+													      } // end of if (isset($_POST['bblm_race_race2star'])) {
+
 
 /**
  *
@@ -1007,11 +1129,21 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_comp_match" value="Update Matches" title="Update Matches"/></li>
 			<li><input type="submit" name="bblm_comp_teamcomp" value="Update Teams in Comp" title="Update Teams in Comp"/></li>
 		</ul>
+
+		<h3>Races</h3>
+		<ul>
+			<li>First take a copy of the text at the top of the Races page.</li>
+			<li><input type="submit" name="bblm_race_racecpt" value="Convert Race Post Types" title="Convert the Race Post Types"/></li>
+			<li>Now you can delete the Races Page and update the menus!</li>
+			<li><input type="submit" name="bblm_race_positions" value="Update Races in Positions" title="Update Races in Positions Table"/></li>
+			<li><input type="submit" name="bblm_race_race2star" value="Update Races in Race2star" title="Update Races in Race2star Table"/></li>
+			<li><input type="submit" name="bblm_race_teams" value="Update Races in Teams" title="Update Teams in Race2star Table"/></li>
+		</ul>
+
 		<h3>Other</h3>
 		<ul>
 			<li>Update the <em>t_hcoach</em> coloumn to length 50 in the *teams table</li>
 		</ul>
-		t_hcoach
 
 </form>
 
