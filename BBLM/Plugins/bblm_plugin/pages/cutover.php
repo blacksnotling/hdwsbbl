@@ -1135,6 +1135,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>First take a copy of the text at the top of the Races page.</li>
 			<li><input type="submit" name="bblm_race_racecpt" value="Convert Race Post Types" title="Convert the Race Post Types"/></li>
 			<li>Now you can delete the Races Page and update the menus!</li>
+			<li>Upload all the images for the teams</li>
 			<li><input type="submit" name="bblm_race_positions" value="Update Races in Positions" title="Update Races in Positions Table"/></li>
 			<li><input type="submit" name="bblm_race_race2star" value="Update Races in Race2star" title="Update Races in Race2star Table"/></li>
 			<li><input type="submit" name="bblm_race_teams" value="Update Races in Teams" title="Update Teams in Race2star Table"/></li>

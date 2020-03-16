@@ -59,7 +59,7 @@ class BBLM_Admin_CPT_Race {
 			// If displaying the 'picture' column.
       case 'picture' :
 
-        the_post_thumbnail( 'bblm-fit-icon');
+        the_post_thumbnail( 'bblm-fit-mini');
 
       break;
 
