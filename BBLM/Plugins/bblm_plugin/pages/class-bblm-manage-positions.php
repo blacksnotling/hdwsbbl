@@ -338,7 +338,7 @@ class BBLM_Manage_Positions {
 	public function manage_positions_page() {
 ?>
 		<div class="wrap">
-      <h1 class="wp-heading-inline">Positions</h1>
+      <h1 class="wp-heading-inline"><?php echo __( 'Positions', 'bblm' ); ?></h1>
  			<a href="<?php echo admin_url(); ?>admin.php?page=bblm_positions&bblm_action=new" class="page-title-action">Add Position</a>
 
 <?php
@@ -477,7 +477,7 @@ class BBLM_Manage_Positions {
 		else {
 			//we are adding a new position
 
-			echo '<h2>Add New Position</h2>';
+			echo '<h2>' . __( 'Add New Position', 'bblm') . '</h2>';
 
 		}
 
@@ -497,42 +497,42 @@ class BBLM_Manage_Positions {
          $query = new WP_Query( $raceargs );
 
          if ( $query->have_posts() ) : ?>
-         <select name="bblm_rid" id="bblm_rid">
+         <p><label for="bblm_rid"><?php echo __( 'Race', 'bblm' ); ?>: </label><select name="bblm_rid" id="bblm_rid">
          <?php while ( $query->have_posts() ) : $query->the_post(); ?>
              <option value="<?php the_ID(); ?>"<?php if ( get_the_ID() == $pos[0][ 'r_id' ] ) { echo ' selected="selected"'; } ?>><?php the_title(); ?></option>
          <?php endwhile; wp_reset_postdata();?>
-         </select>
+       </select></p>
        <?php endif; ?>
              </td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pname">Position Name: </label><input type="text" name="bblm_pname" size="20" maxlength="20" value="<?php if ( '' !== $pos[0][ 'pos_name' ] ) { echo $pos[0][ 'pos_name' ]; } ?>" id="bblm_pname"></td>
+             <td colspan="5"><label for="bblm_pname"><?php echo __( 'Position Name', 'bblm' ); ?>: </label><input type="text" name="bblm_pname" size="20" maxlength="20" value="<?php if ( '' !== $pos[0][ 'pos_name' ] ) { echo $pos[0][ 'pos_name' ]; } ?>" id="bblm_pname"></td>
            </tr>
            <tr>
-             <td><label for="bblm_plimit">Limit: </label>0-<input type="text" name="bblm_plimit" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_limit' ] ) { echo '0'; } else { echo $pos[0][ 'pos_limit' ]; } ?>" id="bblm_plimit"></td>
-             <td><label for="bblm_pma">MA: </label><input type="text" name="bblm_pma" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ma' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ma' ]; } ?>" id="bblm_pma"></td>
-             <td><label for="bblm_pst">ST: </label><input type="text" name="bblm_pst" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_st' ] ) { echo '4'; } else { echo $pos[0][ 'pos_st' ]; } ?>" id="bblm_pst"></td>
-             <td><label for="bblm_pag">AG: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ag' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ag' ]; } ?>" id="bblm_pag"></td>
-             <td><label for="bblm_pav">AV: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_av' ] ) { echo '4'; } else { echo $pos[0][ 'pos_av' ]; } ?>" id="bblm_pav"></td>
+             <td><label for="bblm_plimit"><?php echo __( 'Limit', 'bblm' ); ?>: </label>0 - <input type="text" name="bblm_plimit" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_limit' ] ) { echo '0'; } else { echo $pos[0][ 'pos_limit' ]; } ?>" id="bblm_plimit"></td>
+             <td><label for="bblm_pma"><?php echo __( 'MA', 'bblm' ); ?>: </label><input type="text" name="bblm_pma" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ma' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ma' ]; } ?>" id="bblm_pma"></td>
+             <td><label for="bblm_pst"><?php echo __( 'ST', 'bblm' ); ?>: </label><input type="text" name="bblm_pst" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_st' ] ) { echo '4'; } else { echo $pos[0][ 'pos_st' ]; } ?>" id="bblm_pst"></td>
+             <td><label for="bblm_pag"><?php echo __( 'AG', 'bblm' ); ?>: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ag' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ag' ]; } ?>" id="bblm_pag"></td>
+             <td><label for="bblm_pav"><?php echo __( 'AV', 'bblm' ); ?>: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_av' ] ) { echo '4'; } else { echo $pos[0][ 'pos_av' ]; } ?>" id="bblm_pav"></td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pskills">Skills: </label><textarea name="pskills" cols="100" rows="3"><?php if ( '' == $pos[0][ 'pos_skills' ] ) { echo 'none'; } else { echo $pos[0][ 'pos_skills' ]; } ?></textarea></td>
+             <td colspan="5"><label for="bblm_pskills"><?php echo __( 'Skills', 'bblm' ); ?>: </label><textarea name="pskills" cols="100" rows="3"><?php if ( '' == $pos[0][ 'pos_skills' ] ) { echo 'none'; } else { echo $pos[0][ 'pos_skills' ]; } ?></textarea></td>
            </tr>
            <tr>
-             <td colspan="5"><label for="bblm_pcost">Cost: </label><input type="text" name="bblm_pcost" size="7" maxlength="6" value="<?php if ( '' == $pos[0][ 'pos_cost' ] ) { echo '50000'; } else { echo $pos[0][ 'pos_cost' ]; } ?>" id="bblm_pcost">GP
-                     <p>(No Commas)</p></td>
+             <td colspan="5"><label for="bblm_pcost"><?php echo __( 'Cost', 'bblm' ); ?>: </label><input type="text" name="bblm_pcost" size="7" maxlength="6" value="<?php if ( '' == $pos[0][ 'pos_cost' ] ) { echo '50000'; } else { echo $pos[0][ 'pos_cost' ]; } ?>" id="bblm_pcost">GP
+                     <p>(<?php echo __( 'No Commas', 'bblm' ); ?>)</p></td>
            </tr>
 <?php
 					//Only display these if we are editing an existing position
 					if ( $bblm_isediting ) {
 ?>
 					<tr>
-						<td colspan="5"><label for="bblm_pfreebooter">Freebooter: </label><input type="text" name="bblm_pfreebooter" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_freebooter' ]; ?>" id="bblm_pfreebooter">
-						<p>(Do Journeymen use this position? There should only be ONE for each race! 1 = Yes, 0 = No</p></td>
+						<td colspan="5"><label for="bblm_pfreebooter"><?php echo __( 'Freebooter', 'bblm' ); ?>: </label><input type="text" name="bblm_pfreebooter" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_freebooter' ]; ?>" id="bblm_pfreebooter">
+						<p><?php echo __( 'Do Journeymen use this position? There should only be ONE for each race! 1 = Yes, 0 = No', 'bblm' ); ?></p></td>
 					</tr>
 					<tr>
-						<td colspan="5"><label for="bblm_pstatus">Still active? </label><input type="text" name="bblm_pstatus" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_status' ]; ?>" id="bblm_pstatus">
-						<p>1 = Yes, 0 = No. Yes will allow new players to be hired into this position. Set to 0 for legacy positions</p></td>
+						<td colspan="5"><label for="bblm_pstatus"><?php echo __( 'Still Active', 'bblm' ); ?>? </label><input type="text" name="bblm_pstatus" size="3" maxlength="1" value="<?php echo $pos[0][ 'pos_status' ]; ?>" id="bblm_pstatus">
+						<p><?php echo __( '1 = Yes, 0 = No. Yes will allow new players to be hired into this position. Set to 0 for legacy positions', 'bblm' ); ?></p></td>
 					</tr>
 					</table>
 					<input type="hidden" name="bblm_ppid" value="<?php echo $pos[0][ 'pos_id' ]; ?>" />
