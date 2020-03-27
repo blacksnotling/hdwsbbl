@@ -77,10 +77,23 @@ class BBLM_Meta_Race {
   *
   */
   function render_meta_boxes_stars( $post ) {
+		global $wpdb;
 
- ?>
-<p>To Be Implemented!</p>
- <?php
+		$starssql = 'SELECT X.p_id, X.WPID AS PWPID FROM `'.$wpdb->prefix.'player` X WHERE X.t_id = ' . bblm_get_star_player_team() . ' order by p_name ASC';
+		if ( $stars = $wpdb->get_results( $starssql ) ) {
+			$p = 1;
+
+			echo '<ul>';
+			foreach ($stars as $star) {
+				echo '<li>';
+				echo '<input type="checkbox" name="bblm_plyd' . $p . '" /> ';
+				echo bblm_get_player_name( $star->PWPID );
+				echo ' <input type="hidden" name="bblm_spid' . $p . '" id="bblm_spid' . $p . '" value="' . $star->p_id . '">';
+				echo '</li>';
+				$p++;
+			}
+			echo '</ul>';
+		}
 
   }
 
