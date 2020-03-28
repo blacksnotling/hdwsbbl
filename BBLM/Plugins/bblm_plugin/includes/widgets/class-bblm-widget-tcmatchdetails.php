@@ -29,7 +29,7 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
     $parentoption = htmlspecialchars( $parentoption[ 'page_match' ], ENT_QUOTES );
 
     $parentpage = 0;
-    if ( is_single() ) {
+    if ( is_singular() ) {
       $parentpage = get_queried_object()->post_parent;
     }
 

@@ -131,8 +131,6 @@ $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.php', 'BBLM Sta
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.cas.php', 'BBLM Statistics - Casualities' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.misc.php', 'BBLM Statistics -Misc' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.td.php', 'BBLM Statistics - Touchdowns' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_comp.php', 'BBLM Competition Archive' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_comp.php', 'BBLM Competition Details' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_award.php', 'BBLM Awards Archive' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.core.fixtures.php', 'BBLM Fixtures' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_match.php', 'BBLM Match Archive' );

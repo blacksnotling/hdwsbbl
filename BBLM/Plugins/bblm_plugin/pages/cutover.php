@@ -954,12 +954,15 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>Now you can delete the Championship Cups Page!</li>
 			<li>Update the Menus to include the new Cups Page</li>
 			<li>Also delete the BBBL sevens cup.... (sorry A)</li>
+			<li>Update the *comp tables series_id column to BIGINT(20)</li>
 			<li><input type="submit" name="bblm_cup_cupincomp" value="Update championship cup references" title="Update championship cup references"/></li>
 		</ul>
 		<h3>Seasons</h3>
 		<ul>
 			<li>First take a copy of the text at the top of the Seasons page</li>
 			<li>Update the Competitions and awards-seasons tables to BIGINT(20)</li>
+			<li>Update the *comp tables sea_id column to BIGINT(20)</li>
+			<li>Update the *_awards_player_sea and *awards_team_sea tables sea_id column to BIGINT(20)</li>
 			<li><input type="submit" name="bblm_season_seacpt" value="Convert Season Post Types" title="Convert the Season Post Types"/></li>
 			<li>Now you can delete the Championship Cups Page!</li>
 			<li>Update the Menus to include the new Cups Page</li>
@@ -971,7 +974,6 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<h2>1.10 -> 1.11</h2>
 		<h3>Templates</h3>
 		<ul>
-			<li><strong>MAKE SURE I HAVE DONE A FULL CUTOVER AGAIN TO TEST</strong></li>
 			<li><input type="submit" name="bblm_template_updatemeta" value="Update Template Meta" title="Update Template Meta"/></li>
 			<li>Set the Star Player page to use the archive-bblm_starplayer template</li>
 			<li>Move the old templates out of the theme root</li>
@@ -1011,7 +1013,6 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<ul>
 			<li>Update the <em>t_hcoach</em> coloumn to length 50 in the *teams table</li>
 		</ul>
-		t_hcoach
 
 </form>
 
