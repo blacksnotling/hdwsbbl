@@ -60,12 +60,12 @@ if(isset($_POST['bblm_team_submit'])) {
 		'post_parent' => $bblm_page_parent
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.team.php');
+		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -93,7 +93,7 @@ if(isset($_POST['bblm_team_submit'])) {
 				'post_parent' => $bblm_submission
 			);
 			if ($bblm_submission = wp_insert_post( $my_post )) {
-				add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.roster.php');
+				add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_roster.php');
 
 				$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'roster\')';
 				$wpdb->query($bblmmappingsql);
@@ -190,7 +190,7 @@ else if(isset($_POST['bblm_race_select'])) {
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
-		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="25" class="large-text"/></td>
+		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="50" class="large-text"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tstad"><?php echo __( 'Home Stadium', 'bblm' ); ?></label></th>
@@ -219,19 +219,6 @@ else if(isset($_POST['bblm_race_select'])) {
 		<td><select name="bblm_roster" id="bblm_roster">
 			<option value="1">Yes</option>
 			<option value="0">No</option>
-		</select></td>
-	</tr>
-	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_ttype">Team Type</label></th>
-		  <td><select name="bblm_ttype" id="bblm_tuser">
-<?php
-		$typesql = 'SELECT type_id, type_name FROM '.$wpdb->prefix.'team_type ORDER BY type_id';
-		if ($types = $wpdb->get_results($typesql)) {
-			foreach ($types as $type) {
-				print("<option value=\"$type->type_id\">".$type->type_name."</option>\n");
-			}
-		}
-?>
 		</select></td>
 	</tr>
 

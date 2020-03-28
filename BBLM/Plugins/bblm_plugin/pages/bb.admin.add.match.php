@@ -154,8 +154,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		/*
 		-- Gather Information about Comp --
 		*/
+		$compid = $bblm_safe_input['mcomp'];
+		$bblm_comp_counts = 0;
 		$comp = array();
-		$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE c_id = ".$bblm_safe_input['mcomp'];
+		$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE WPID = ".$compid;
 		if ($compdetails = $wpdb->get_results($compdatasql)) {
 			foreach ($compdetails as $compd) {
 				$comp['counts'] = $compd->c_counts;
@@ -167,6 +169,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 				$comp['round'] = $compd->c_pround;
 
 			}
+		}
+		//Check to see if the competitio counts
+		if ( BBLM_CPT_Comp::does_comp_count( $compid ) ) {
+			$bblm_comp_counts = 1;
 		}
 		if ($comp['round']) {
 			$tAcomp = array();
@@ -205,9 +211,9 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		);
 
 		if ($bblm_submission = wp_insert_post( $my_post )) {
-			add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.match.php');
+			add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_match.php');
 
-			$matchsql = 'INSERT INTO `'.$wpdb->prefix.'match` (`m_id`, `c_id`, `div_id`, `m_date`, `m_gate`, `m_teamA`, `m_teamB`, `m_teamAtd`, `m_teamBtd`, `m_teamAcas`, `m_teamBcas`, `m_tottd`, `m_totcas`, `m_totint`, `m_totcomp`, `weather_id`, `weather_id2`, `m_trivia`, `m_complete`, `stad_id`) VALUES (\'\', \''.$bblm_safe_input['mcomp'].'\', \''.$bblm_safe_input['mdiv'].'\', \''.$bblm_safe_input['mdate'].'\', \''.$bblm_safe_input['mgate'].'\', \''.$teamA['id'].'\', \''.$teamB['id'].'\', \''.$bblm_safe_input['tAtd'].'\', \''.$bblm_safe_input['tBtd'].'\', \''.$bblm_safe_input['tAcas'].'\', \''.$bblm_safe_input['tBcas'].'\', \''.$mtottd.'\', \''.$mtotcas.'\', \''.$mtotint.'\', \''.$mtotcomp.'\', \''.$bblm_safe_input['mweather1'].'\', \''.$bblm_safe_input['mweather2'].'\', \''.$bblm_trivia_content.'\', \'0\', \''.$bblm_safe_input['mstad'].'\')';
+			$matchsql = 'INSERT INTO `'.$wpdb->prefix.'match` (`m_id`, `c_id`, `div_id`, `m_date`, `m_gate`, `m_teamA`, `m_teamB`, `m_teamAtd`, `m_teamBtd`, `m_teamAcas`, `m_teamBcas`, `m_tottd`, `m_totcas`, `m_totint`, `m_totcomp`, `weather_id`, `weather_id2`, `m_trivia`, `m_complete`, `stad_id`, `m_counts`) VALUES (\'\', \''.$bblm_safe_input['mcomp'].'\', \''.$bblm_safe_input['mdiv'].'\', \''.$bblm_safe_input['mdate'].'\', \''.$bblm_safe_input['mgate'].'\', \''.$teamA['id'].'\', \''.$teamB['id'].'\', \''.$bblm_safe_input['tAtd'].'\', \''.$bblm_safe_input['tBtd'].'\', \''.$bblm_safe_input['tAcas'].'\', \''.$bblm_safe_input['tBcas'].'\', \''.$mtottd.'\', \''.$mtotcas.'\', \''.$mtotint.'\', \''.$mtotcomp.'\', \''.$bblm_safe_input['mweather1'].'\', \''.$bblm_safe_input['mweather2'].'\', \''.$bblm_trivia_content.'\', \'0\', \''.$bblm_safe_input['mstad'].'\', \''.$bblm_comp_counts.'\')';
 
 			//Insert into the Match table
 			$wpdb->query($matchsql);
@@ -343,12 +349,12 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 				//Check to see if a fixture was submitted, or a blank match
 				if ("F" == $_POST['bblm_mtype']) {
 
-					$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, F.c_id, D.div_name, D.div_id, T.t_name AS TA, R.t_name AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
+					$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.t_name AS TA, R.t_name AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
 
 					if ($fixturedt = $wpdb->get_results($fixturedetailsql)) { //check the fixture exists
 
 						foreach ($fixturedt as $fd) {
-							$comp_name = $fd->c_name;
+							$comp_name = bblm_get_competition_name( $fd->c_id );
 							$div_name = $fd->div_name;
 							$comp_id = $fd->c_id;
 							$div_id = $fd->div_id;
@@ -423,13 +429,13 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 						//If we are here then this is a new match - not based on a fixture
 						//SQL to gather names and IDs of Competitions and Division
-						$compsql = "SELECT c_name, c_id FROM ".$wpdb->prefix."comp WHERE c_id = ".$_POST['bblm_mcomp'];
+						$compsql = "SELECT c_id FROM ".$wpdb->prefix."match WHERE c_id = ".$_POST['bblm_mcomp'];
 						$divsql = "SELECT div_name, div_id FROM ".$wpdb->prefix."division WHERE div_id = ".$_POST['bblm_mdiv'];
 
 						//Detemining the comp / div name and ID
 						if ( $result = $wpdb->get_results( $compsql ) ) {
 							foreach ($result as $res) {
-								$comp_name = $res->c_name;
+								$comp_name = bblm_get_competition_name( $res->c_id );
 								$comp_id = $res->c_id;
 							}
 						}
@@ -617,14 +623,17 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 						<label for="bblm_mcomp" class="selectit">Competition:</label>
 						<select name="bblm_mcomp" id="bblm_mcomp">
 							<?php
-							$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
-
-							//This line should work but for some reason prpduces blanks!
-							//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, dev_posts P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
-							if ($comps = $wpdb->get_results($compsql)) {
-								foreach ($comps as $comp) {
-									print("<option value=\"".$comp->c_id."\">".$comp->c_name."</option>\n");
-								}
+							$oposts = get_posts(
+								array(
+									'post_type' => 'bblm_comp',
+									'numberposts' => -1,
+									'orderby' => 'ID',
+									'order' => 'DESC'
+								)
+							);
+							if( ! $oposts ) return;
+							foreach( $oposts as $o ) {
+								echo '<option value="' . $o->ID . '">' . bblm_get_competition_name( $o->ID ) . '</option>';
 							}
 							?>
 						</select>
@@ -647,10 +656,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 						<label for="bblm_fid">Fixture:</label>
 						<select name="bblm_fid" id="bblm_fid">
 							<?php
-							$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, D.div_name, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
+							$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, T.WPID AS TA, R.WPID AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
 							if ($fixtures = $wpdb->get_results($fixturesql)) {
 								foreach ($fixtures as $fd) {
-									print("<option value=\"".$fd->f_id."\">".$fd->TA." vs ".$fd->TB." (".$fd->c_name."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
+									print("<option value=\"".$fd->f_id."\">".bblm_get_team_name( $fd->TA )." vs ".bblm_get_team_name( $fd->TB )." (".bblm_get_competition_name( $fd->c_id )."/".$fd->div_name." - ".date("d.m.y", $fd->mdate).")</option>\n");
 								}
 							}
 							else {

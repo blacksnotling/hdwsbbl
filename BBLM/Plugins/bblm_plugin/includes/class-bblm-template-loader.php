@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Template Loader
  *
  * @class 		BBLM_Template_Loader
- * @version		1.1
+ * @version		1.2
  * @package		BBowlLeagueMan/Templates
  * @category	Class
  * @author 		Blacksnotliung
@@ -62,6 +62,11 @@ class BBLM_Template_Loader {
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 			}
+			elseif ($post_type == "bblm_comp") {
+				$file = 'single-' . $post_type . '.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+			}
 		}
 		elseif ( is_post_type_archive( 'bblm_stadium' ) ) {
 
@@ -102,6 +107,12 @@ class BBLM_Template_Loader {
 		elseif ( is_post_type_archive( 'bblm_transfer' ) ) {
 
 				$file = 'archive-bblm_transfer.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+		}
+		elseif ( is_post_type_archive( 'bblm_comp' ) ) {
+
+				$file = 'archive-bblm_comp.php';
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 		}

@@ -187,3 +187,52 @@ function bblm_get_season_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_season_link
+
+/**
+ * Returns the name of a Competition, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_competition_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_season_name
+
+/**
+ * Returns the link of a Competition, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_competition_link( $ID ) {
+
+  $competition_name = bblm_get_competition_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $competition_name . '" href="' . get_post_permalink( $ID ) . '">' . $competition_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_season_link
+
+/**
+ * Returns the title of a Competition Format, properly escaped and formatted
+ * Takes in the ID of the Competition format
+ */
+function bblm_get_competition_format_name( $ID ) {
+	global $wpdb;
+
+	$output = "Undefined";
+
+	$sql = 'SELECT ct_name FROM ' . $wpdb->prefix . 'comp_type WHERE ct_id = ' . $ID;
+	if ( $cname = $wpdb->get_var( $sql ) ) {
+
+		$output = esc_html( $cname );
+
+	}
+
+  return $output;
+
+}// end of bblm_get_competition_format_name

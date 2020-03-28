@@ -1,4 +1,6 @@
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
     <?php do_action( 'bblm_template_before_loop' ); ?>
@@ -12,14 +14,14 @@
 
 				<div class="entry-content">
 
-				<div class="details bblm_details bblm_season_description">
+				<div class="bblm_details bblm_season_description">
 					<?php the_content(); ?>
 				</div>
 <?php
 				$season = get_the_ID();
 				$seasonactive = BBLM_CPT_Season::is_season_active( get_the_ID() );
 
-				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.sea_id = ' . $season;
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.sea_id = ' . $season;
 				$matchnum = $wpdb->get_var( $matchnumsql );
 
 				//From this point, we only go further if any matches have been played
@@ -43,8 +45,8 @@
 
 					echo '<h3>' . __( 'Player Statistics for this Season', 'bblm' ) . '</h3>';
 					$stat_limit = bblm_get_stat_limit();
-					$bblm_stats->display_top_players_table( $season, 'bblm_season', $stat_limit );
-					$bblm_stats->display_top_killers_table( $season, 'bblm_season', $stat_limit );
+					$bblm_stats->display_top_players_table( $stat_limit );
+					$bblm_stats->display_top_killers_table( $stat_limit );
 
 					//Awards
 					if ( !$seasonactive ) {
@@ -59,7 +61,7 @@
 				}//end of if matches
 				else {
 ?>
-					<div class="info bblm_info">
+					<div class="bblm_info">
 						<p><?php echo __( 'No matches have been played in this Season yet. Stay tuned for further updates as the games start rolling in!' , 'bblm' ) ?></p>
 					</div>
 <?php
@@ -78,7 +80,8 @@
 <?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
-
 <?php do_action( 'bblm_template_after_posts' ); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

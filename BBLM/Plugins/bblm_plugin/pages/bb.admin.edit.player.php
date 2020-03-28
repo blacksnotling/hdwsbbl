@@ -401,7 +401,7 @@ else if ("edit" == $_GET['action']) {
 		//////////////////////////
 		$pid = $_GET['id'];
 
-		$playermatchsql = 'SELECT M.*, P.p_name, P.t_id, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.c_id = X.c_id AND C.c_show = 1 AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pid.' ORDER BY X.m_date DESC';
+		$playermatchsql = 'SELECT M.*, P.p_name, P.t_id, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.WPID = X.c_id AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pid.' ORDER BY X.m_date DESC';
 		if ($playermatch = $wpdb->get_results($playermatchsql)) {
 			$count = 1;
 ?>
@@ -723,7 +723,7 @@ else if ("edit" == $_GET['action']) {
 			<select name="bblm_fmatch" id="bblm_fmatch">
 				<option value="0" selected="selected">N/A</option>
 <?php
-			$lastmatchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, P.post_title, M.m_teamAtd, M.m_teamBtd, C.c_name FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_team X, '.$wpdb->prefix.'comp C WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = X.m_id AND C.c_id = M.c_id AND X.t_id = '.$t_id.' ORDER BY M.m_date DESC LIMIT 8';
+			$lastmatchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, P.post_title, M.m_teamAtd, M.m_teamBtd, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_team X WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = X.m_id AND X.t_id = '.$t_id.' ORDER BY M.m_date DESC LIMIT 8';
 			if ($lastmatch = $wpdb->get_results($lastmatchsql)) {
 				foreach ($lastmatch as $lm) {
 					print("<option value=\"$lm->m_id\">".date("d.m.Y", $lm->MDATE)." - ".$lm->post_title." (".$lm->m_teamAtd." - ".$lm->m_teamBtd.")</option>\n");

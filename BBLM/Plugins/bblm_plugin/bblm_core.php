@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: A BloodBowl League Manager
-Version: 1.10.1
+Version: 1.11
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
@@ -24,9 +24,6 @@ function bblm_insert_admin_pages() {
 	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Add Competition', 'Add Competition', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp.php');
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Manage Comps', 'Manage Comps', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.manage.comps.php');
-add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Assign teams (comp)', 'Assign teams (comp)', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_team.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Set-up Brackets (comp)', 'Set-up Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.comp_brackets.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Edit Brackets (comp)', 'Edit Brackets', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.comp_brackets.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.award.php');
@@ -231,6 +228,7 @@ final class BBowlLeagueMan {
 		include_once( 'includes/class-bblm-widgets.php' );			// Loads the Widgets
 		include_once( 'includes/bblm-conditional-functions.php' );		// loads the conditional functions for templating
 		include_once( 'includes/bblm-common-template-functions.php' );
+		include_once( 'includes/class-custom-template.php' );					// Class for static (non CPT) templates
 
 	}
 

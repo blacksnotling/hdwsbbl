@@ -36,7 +36,7 @@ if(isset($_POST['bblm_race_submit'])) {
 		'post_parent' => $bblm_page_parent
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.race.php');
+		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_race.php');
 
 		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'race` (`r_id`, `r_name`, `r_rrcost`, `r_active`, `r_show`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_rname']).'\', \''.$_POST['bblm_rrrcost'].'\', \'1\', \'1\')';
 		$wpdb->query($bblmdatasql);

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Admin
- * @version   1.1
+ * @version   1.2
  */
 
  /**
@@ -125,4 +125,27 @@ function bblm_jm_report() {
     echo __( '<p><strong>There are no Journeymen or Mercenarys currently active in the league!</strong></p>', 'bblm');
 	}
 
+} // end of bblm_jm_report
+
+/**
+ * When a bblm_comp post thpe is added, create a new taxonomy
+ */
+ function bblm_add_comp_tax( $post_id, $post, $update ) {
+
+    // If this is a revision, don't send the email.
+    if ( wp_is_post_revision( $post_id ) ) {
+        return;
+		}
+		if ( (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || ( defined('DOING_AJAX') && DOING_AJAX) || isset($_REQUEST['bulk_edit']) ) {
+			return;
+		}
+		//Check the taxonomy file_exists
+		if ( taxonomy_exists('post_competitions') ) {
+			$postslug = get_post_field( 'post_name', $post);
+			wp_insert_term(
+				wp_filter_nohtml_kses( $postslug ), // the term
+				'post_competitions' // the taxonomy
+			);
+		}
 }
+add_action( 'wp_insert_post', 'bblm_add_comp_tax', 10, 3 );

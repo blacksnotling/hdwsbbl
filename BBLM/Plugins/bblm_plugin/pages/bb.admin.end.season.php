@@ -173,8 +173,7 @@ else if (isset($_POST['bblm_season_select'])) {
 		/////////////////
 
 		//before we generate the list of awards, we need to grab the teams into an array
-		//$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND T.t_show = 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
-		$teamsql = 'SELECT DISTINCT(C.t_id), T.WPID, T.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp A WHERE A.c_id = C.c_id AND C.t_id = T.t_id AND T.t_show = 1 AND A.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC';
+		$teamsql = 'SELECT DISTINCT(C.t_id), T.WPID, T.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp A WHERE A.WPID = C.c_id AND C.t_id = T.t_id AND T.t_show = 1 AND A.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC';
 		//initialise vars
 		$are_teams = 1;
 		if ($teams = $wpdb->get_results( $teamsql )) {
@@ -220,7 +219,7 @@ else if (isset($_POST['bblm_season_select'])) {
 		 // Player Awards //
 		/////////////////
 
-		$playersql = 'SELECT DISTINCT(P.p_id), P.WPID AS PID, T.WPID, T.t_id, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC, P.p_num ASC';
+		$playersql = 'SELECT DISTINCT(P.p_id), P.WPID AS PID, T.WPID, T.t_id, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.WPID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.sea_id = '.$_POST['bblm_cid'].' ORDER BY T.WPID ASC, P.p_num ASC';
 		//initialise vars
 		$are_players = 1;
 		$last_team = "";

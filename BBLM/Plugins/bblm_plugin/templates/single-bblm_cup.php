@@ -1,4 +1,6 @@
 <?php get_header(); ?>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
     <?php do_action( 'bblm_template_before_loop' ); ?>
@@ -18,7 +20,7 @@
 
 				<div class="entry-content">
 
-					<div class="details bblm_cup_description bblm_details">
+					<div class="bblm_cup_description bblm_description">
 						<?php the_content(); ?>
 					</div>
 
@@ -45,15 +47,15 @@
 
 					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';
 					$stat_limit = bblm_get_stat_limit();
-					$bblm_stats->display_top_players_table( $cupid, 'bblm_cup', $stat_limit );
-					$bblm_stats->display_top_killers_table( $cupid, 'bblm_cup', $stat_limit );
+					$bblm_stats->display_top_players_table( $stat_limit );
+					$bblm_stats->display_top_killers_table( $stat_limit );
 
 					echo '<h3>' . __( 'Awards', 'bblm' ) . '</h3>';
 					$bblm_award->display_list_award_winners();
 
 				}//end of if matches
 				else {
-					print("	<div class=\"info\">\n		<p>No matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
+					print("	<div class=\"bblm_info\">\n		<p>No matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
 				}
 
 ?>
@@ -66,11 +68,12 @@
 
 			</article><!-- .post-ID -->
 
-			<?php do_action( 'bblm_template_after_content' ); ?>
-			<?php endwhile; ?>
-			<?php do_action( 'bblm_template_after_loop' ); ?>
-			<?php endif; ?>
-
-			<?php do_action( 'bblm_template_after_posts' ); ?>
-			<?php get_sidebar(); ?>
-			<?php get_footer(); ?>
+      <?php do_action( 'bblm_template_after_content' ); ?>
+      <?php endwhile; ?>
+      <?php do_action( 'bblm_template_after_loop' ); ?>
+      <?php endif; ?>
+      <?php do_action( 'bblm_template_after_posts' ); ?>
+      </main><!-- #main -->
+      </div><!-- #primary -->
+      <?php get_sidebar(); ?>
+      <?php get_footer(); ?>

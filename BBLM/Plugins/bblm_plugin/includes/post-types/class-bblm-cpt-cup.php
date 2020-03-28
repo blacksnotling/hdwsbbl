@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_CPT_Cup {
@@ -53,7 +53,7 @@ class BBLM_CPT_Cup {
   */
   public static function get_cup_listing() {
 ?>
-    <table class="bblm_tbl">
+    <table class="bblm_table">
       <thead>
         <tr>
           <th><?php echo __( 'Championship Cup Name', 'bblm' ); ?></th>
@@ -80,7 +80,7 @@ class BBLM_CPT_Cup {
           echo '<tr>';
         }
         else {
-          echo '<tr class="tbl_alt bblm_tbl_alt">';
+          echo '<tr class="bblm_tbl_alt">';
         }
         echo '<td>' . bblm_get_cup_link( $c->ID ) . '</td>';
         echo '<td>' . $comp->get_cup_count_by_cup( $c->ID ) . '</td>';
@@ -114,7 +114,7 @@ class BBLM_CPT_Cup {
     global $post;
     global $wpdb;
 
-    $matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.series_id = ' . get_the_ID();
+    $matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.series_id = ' . get_the_ID();
     $matchnum = $wpdb->get_var( $matchnumsql );
 
     return $matchnum;

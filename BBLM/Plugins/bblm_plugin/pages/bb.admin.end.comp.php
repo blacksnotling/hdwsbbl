@@ -14,8 +14,8 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 ?>
 <div class="wrap">
-	<h2>End a Competition</h2>
-	<p>Use the following page to close down a competition once it has been completed. You will get the chance to asign any Awards.</p>
+	<h2>Assign End of Competition Awards</h2>
+	<p>Use the following page to assign the end of Competition awards to teams and players. <strong>If you wish to close a season then navigate to the Seasons menu and add an end date!</strong></p>
 
 <?php
 
@@ -24,16 +24,12 @@ if (isset($_POST['bblm_comp_close'])) {
  // Third Step - Final Input //
 //////////////////////////////
 
-/*	print("<pre>");
-	print_r($_POST);
-	print("</pre>");
-	print("<hr />");*/
+
 
 	$bblm_safe_input['edate'] = $_POST['bblm_edate'] ." 00:00:01";
     $bblm_safe_input['cid'] = $_POST['bblm_cid'];
 
-    //start to build SQL Strings
-    $updatecompsql = 'UPDATE `'.$wpdb->prefix.'comp` SET `c_active` = \'0\', `c_edate` = \''.$bblm_safe_input['edate'].'\'  WHERE `c_id` = '.$bblm_safe_input['cid'].' LIMIT 1';
+
 
 	// Loop for team assignments //
 
@@ -114,16 +110,8 @@ if (isset($_POST['bblm_comp_close'])) {
       ///////////////
 	 // SQL Input //
 	///////////////
-	//For debugging only
-/*	print("<p>".$updatecompsql."</p>");
-    print("<p>".$awardteamsql."</p>");
-    print("<p>".$awardplayersql."</p>"); */
 
 
-  if (FALSE !== $wpdb->query($updatecompsql)) {
-		$sucess = TRUE;
-		do_action( 'bblm_post_submission' );
-	}
 	if (0 < $_POST['bblm_numoftawards']) {
 		if (FALSE !== $wpdb->query($awardteamsql)) {
 			$sucess = TRUE;
@@ -162,17 +150,9 @@ if (isset($_POST['bblm_comp_close'])) {
 /////////////////////////////////
 
 else if (isset($_POST['bblm_comp_select'])) {
-/*	print("<pre>");
-	print_r($_POST);
-	print("</pre>");
-	print("<hr />");*/
 ?>
-
 	<form name="bblm_endcomp" method="post" id="post">
-		<p>Please enter the date that this competition ended:</p>
 
-		<label for="bblm_edate" class="selectit">End Date:</label>
-		<input type="text" name="bblm_edate" size="11" tabindex="1" value="<?php print(date('Y-m-d')); ?>" maxlength="10">
 
 		<input type="hidden" name="bblm_cid" size="3" value="<?php print($_POST['bblm_cid']); ?>">
 
@@ -183,7 +163,6 @@ else if (isset($_POST['bblm_comp_select'])) {
 		/////////////////
 
 		//before we generate the list of awards, we need to grab the teams into an array
-		//$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
 		$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND T.t_show = 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
 		//initialise vars
 		$are_teams = 1;
@@ -238,8 +217,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 		/////////////////
 
 		//before we generate the list of awards, we need to grab the players into an array
-		//$teamsql = 'SELECT DISTINCT(C.t_id), T.t_name FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE C.t_id = T.t_id AND T.t_show = 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC';
-		$playersql = 'SELECT DISTINCT(P.p_id), P.p_name, T.t_name, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.c_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC, P.p_num ASC';
+		$playersql = 'SELECT DISTINCT(P.p_id), P.p_name, T.t_name, P.p_num FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player A, '.$wpdb->prefix.'team T WHERE A.m_id = M.m_id AND M.c_id = C.WPID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.mp_spp > 1 AND C.c_id = '.$_POST['bblm_cid'].' ORDER BY T.t_name ASC, P.p_num ASC';
 		//initialise vars
 		$are_players = 1;
 		$last_team = "";
@@ -308,16 +286,14 @@ else {
     	  <label for="bblm_cid" class="selectit">Competition</label>
 		  <select name="bblm_cid" id="bblm_cid">
 		<?php
-		$compsql = 'SELECT C.c_id, C.c_name, C.series_id, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1';
+		$compsql = 'SELECT C.c_id, C.WPID, C.series_id, C.sea_id FROM '.$wpdb->prefix.'comp C WHERE C.c_active = 1';
 		if ($comps = $wpdb->get_results($compsql)) {
 			foreach ($comps as $comp) {
-				print("<option value=\"".$comp->c_id."\">".$comp->c_name." - ".bblm_get_season_name( $comp->sea_id )." - ". bblm_get_cup_name( $comp->series_id ) ."</option>\n");
+				print("<option value=\"".$comp->WPID."\">".bblm_get_competition_name( $comp->WPID )." - ".bblm_get_season_name( $comp->sea_id )." - ". bblm_get_cup_name( $comp->series_id ) ."</option>\n");
 			}
 		}
 		?>
 	</select>
-
-	<p>By Continuing, the competition will be closed down.</p>
 
 	<p class="submit">
 	<input type="submit" name="bblm_comp_select" tabindex="4" value="Select above competition" title="Select above competition"/>

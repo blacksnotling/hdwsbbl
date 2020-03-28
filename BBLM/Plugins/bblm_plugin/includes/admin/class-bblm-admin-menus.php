@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.2
+ * @version   1.3
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -63,6 +63,16 @@ class BBLM_Admin_Menus {
 		//Create the 'Players Transfers page'
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-addbulk.php' );
 		new BBLM_Player_AddBulk();
+
+		//Add the 'assign teams to comp page' under the competitions CPT
+
+		add_submenu_page(
+			'bblm_main_menu',
+			__( 'Assign teams (comp)', 'bblm'),
+			__( 'Assign teams (comp)', 'bblm'),
+			'bblm_manage_league',
+			'bblm_plugin/pages/bb.admin.edit.comp_team.php'
+		);
 
 	}
 

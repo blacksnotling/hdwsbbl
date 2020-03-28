@@ -2,7 +2,7 @@
 Theme Name: Oberwald
 Theme URI: https://github.com/blacksnotling/HDWSBBL-Themes
 Description: Custom Theme for the HDWSBBL. Named after the greatest Star Player of all time.
-Version: 1.10
+Version: 1.11
 Author: The HDWSBBL
 Author URI: https://github.com/blacksnotling
 License: GNU General Public License v2 or later
@@ -183,7 +183,7 @@ font-weight:100;
 	font-size:larger;
 	font-weight:bold;
 }
-.details {
+.bblm_details {
 	padding: 3px;
 	border: 1px solid #aaa;
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
@@ -239,27 +239,40 @@ font-weight:100;
 	background-repeat: no-repeat;
 	background-image: url(images/page_white.gif);
 }
-#subcontent li.sideinfo h2{
+#subcontent li.sideinfo h2,
+#subcontent .widget_bblm_compdetails h2,
+#subcontent .widget_bblm_playerdetails h2,
+#subcontent .widget_bblm_matchdetails h2,
+#subcontent .widget_bblm_teamdetails h2 {
 	background-image: url(images/star.gif);
 }
-#subcontent li.sideawards h2{
+#subcontent .widget_bblm_awards h2{
 	background-image: url(images/trophy.gif);
 }
-#subcontent li.widget_bblm_recentmatches h2 {
+#subcontent .widget_bblm_recentmatches h2 {
 	background-image: url(images/helmet.gif);
 }
-#subcontent li.widget_bblm_listcomps h2 {
+#subcontent .widget_bblm_listcomps h2 {
 	background-image: url(images/trophy.gif);
 }
-#subcontent li.sideinfo, #subcontent li.sideawards {
+#subcontent li.sideinfo,
+#subcontent .widget_bblm_awards,
+#subcontent .widget_bblm_compdetails,
+#subcontent .widget_bblm_playerdetails,
+#subcontent .widget_bblm_matchdetails,
+#subcontent .widget_bblm_teamdetails {
 	border: 1px solid #aaa;
 	padding: 2px 3px 2px 5px;
 	width: 180px;
 }
-#subcontent li.sideinfo {
+#subcontent li.sideinfo,
+#subcontent .widget_bblm_compdetails,
+#subcontent .widget_bblm_playerdetails,
+#subcontent .widget_bblm_matchdetails,
+#subcontent .widget_bblm_teamdetails {
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
 }
-#subcontent li.sideawards {
+#subcontent .widget_bblm_awards {
 	background: #ddd url(images/bg_detail.gif) top repeat-y;
 	margin-top:0.8em;
 }
@@ -319,7 +332,7 @@ p.readmorelink {
 	padding: 3px;
 	font-weight:bold;
 }
-.info {
+.bblm_info {
 	border:1px solid #6B9CF4;
 	margin: 4px 0;
 	margin-left:2px;
@@ -328,7 +341,7 @@ p.readmorelink {
 	font-family: Verdana;
 	background: #AAD5FF url(images/information.gif) 7px 50% no-repeat;
 }
-.info p {
+.bblm_info p {
 	padding-top:4px;
 	margin-bottom:4px;
 }
@@ -398,7 +411,8 @@ img.alignright {
 	padding: 0.2em 0.2em 0 0.2em;
 	margin-bottom: 0.2em;
 }
-li.active {
+li.bblm_comp_active,
+li.bblm_season_active {
 	background: url(images/star.gif) no-repeat 100% 0;
 	padding: 0 20px 0 0;
 }
@@ -457,7 +471,7 @@ table th {
 body.section-warzone table th {
 	background-color: #9F2500;
 }
-table tr.tbl_alt, table tr.odd {
+table tr.bblm_tbl_alt, table tr.odd {
 	background-color: #ddd;
 }
 
@@ -488,44 +502,44 @@ td.td_title {
 th.totaux {
 	border-bottom: 1px solid #000000;
 }
-th.tbl_matchname {
+th.bblm_tbl_matchname {
 	width: 280px;
 }
-th.tbl_matchdate {
+th.bblm_tbl_matchdate {
 	width: 50px;
 }
-th.tbl_matchgate {
+th.bblm_tbl_matchgate {
 	width: 40px;
 }
-th.tbl_matchresult {
+th.bblm_tbl_matchresult {
 	width: 80px;
 }
-th.tbl_matchop {
+th.bblm_tbl_matchop {
 	width: 50%;
 }
-th.tbl_stat {
+th.bblm_tbl_stat {
 	width: 5%;
 }
-th.tbl_name {
+th.bblm_tbl_name {
 	width: 30%;
 }
 td.score {
 	font-size: 2em;
 }
-.tbl_skills {
+.bblm_tbl_skills {
 	text-align:left;
 	font-size: smaller;
 }
-th.tbl_teamrace {
+th.bblm_tbl_teamrace {
 	width: 50px;
 }
-th.tbl_teamvalue {
+th.bblm_tbl_teamvalue {
 	width: 40px;
 }
-th.tbl_teamcup {
+th.bblm_tbl_teamcup {
 	width: 112px;
 }
-td.tbl_teamcup {
+td.bblm_tbl_teamcup {
 	text-align: left;
 }
 /***** Comments - old *********/

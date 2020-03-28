@@ -126,7 +126,8 @@ $playermatchsql = "INSERT INTO `".$wpdb->prefix."match_player` (`m_id`, `p_id`, 
 
 //Initialize var to capture first input
 $is_first_player = 1;
-$playersqla = array();
+$playersqla = array(); //stores the SQL to update the MNG records
+$playerplayed = array(); //Records the list of players who took part
 
 //Beginning of main loop.
 while ($p <= $pmax){
@@ -134,6 +135,8 @@ while ($p <= $pmax){
 //before we go any further, we should see if the player in question ctually took part in the match!
 if ( isset( $_POST['bblm_plyd'.$p] ) ) {
 	if ("on" == $_POST['bblm_plyd'.$p]) {
+
+		$playerplayed[$p] = $_POST['bblm_pid'.$p];
 
 
 	//we only want a comma added for all but the first
@@ -167,20 +170,10 @@ if ( isset( $_POST['bblm_plyd'.$p] ) ) {
 	//generate the SQL
 	$playermatchsql .= '(\''.$_POST['bblm_mid'].'\', \''.$_POST['bblm_pid'.$p].'\', \''.$_POST['bblm_tid'.$p].'\', \''.$_POST['bblm_td'.$p].'\', \''.$_POST['bblm_cas'.$p].'\', \''.$_POST['bblm_comp'.$p].'\', \''.$_POST['bblm_int'.$p].'\', \''.$_POST['bblm_mvp'.$p].'\', \''.$_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.$_POST['bblm_injury'.$p].'\', \''.$_POST['bblm_increase'.$p].'\', \''.$compcounts.'\')';
 
-	//if the comp counts, update the bb_player table with new spp values and p_mng if player is injured.
+	//If the player is injured (exhibition or otherwise) then update the player table
 	$playerupdatesql = "";
-	if ($compcounts)  {
-		$playerupdatesql = "UPDATE ".$wpdb->prefix."player SET `p_spp` = p_spp+." . $_POST['bblm_spp'.$p];
-		if ( $mng[$p] )  {
-			$playerupdatesql .= ', `p_cost_ng` = \'0\', `p_mng` = \'1\'';
-		}
-		$playerupdatesql .= ' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
-	}
-	else {
-		//If the game is an exhibition game
-		if ( $mng[$p] )  {
-			$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
-		}
+	if ( $mng[$p] )  {
+		$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
 	}
 
 	//once we have the sql generated, we can insert into the array to insert later on
@@ -220,6 +213,10 @@ if (FALSE !== $wpdb->query($playermatchsql)) {
 		if (FALSE !== $wpdb->query($ps)) {
 			$sucess = TRUE;
 		}
+	}
+	foreach ($playerplayed as $pssp) {
+		//Update the players SPP
+		bblm_update_player( $pssp, $compcounts );
 	}
 
 
@@ -374,7 +371,7 @@ else if (isset($_POST['bblm_match_select'])) {
 	 // Step 2: Generate a list of payers based on the match selected //
 	///////////////////////////////////////////////////////////////////
 
-$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, C.c_counts FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE C.c_id = M.c_id AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ".$_POST['bblm_mid'];
+$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, C.c_counts FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE C.WPID = M.c_id AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ".$_POST['bblm_mid'];
 	if ($md = $wpdb->get_row($matchsql2)) {
 ?>
 	<h3>Match Reference</h3>
@@ -696,10 +693,10 @@ else {
 				<th scope="row"><label for="bblm_mid" >Match: </label></th>
 				<td><select name="bblm_mid" id="bblm_mid">
 	<?php
-$matchsql = "SELECT M.m_id, M.m_date, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, C.c_name FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id AND M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
+$matchsql = "SELECT M.m_id, M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q WHERE M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
 	if ($matches = $wpdb->get_results($matchsql)) {
 		foreach ($matches as $match) {
-			print("					<option value=\"$match->m_id\">".$match->c_name." - ".$match->tA." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".$match->tB."</option>\n");
+			print("					<option value=\"$match->m_id\">".bblm_get_competition_name( $match->c_id )." - ".bblm_get_team_name( $match->tA )." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".bblm_get_team_name( $match->tB )."</option>\n");
 		}
 	}
 	?>

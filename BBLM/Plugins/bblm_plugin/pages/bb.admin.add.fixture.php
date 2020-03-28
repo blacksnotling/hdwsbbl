@@ -14,10 +14,10 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 ?>
 <div class="wrap">
-	<h2>Add a Fixture</h2>
-	<p>The Following page allows you to add fixtures to the league.</p>
-
 <?php
+	echo '<h2>' . __( 'Add a Fixture', 'bblm' ) . '</h2>';
+	echo '<p>' . __( 'The Following page allows you to add fixtures to the league.', 'bblm' ) . '</p>';
+
 $addattempt = 0;
 $sucess = 0;
 
@@ -40,7 +40,7 @@ if (isset($_POST['bblm_add_fixture'])) {
 			if (1 !== $is_first_fixture) {
 				$insertsql .= ", ";
 			}
-			$insertsql .= '(\'\', \''.$_POST['bblm_fcomp'].'\', \''.$_POST['bblm_fdiv'].'\', \''.$_POST['fdate'.$p].' 19:00:01\', \''.$_POST['bblm_teamA'.$p].'\', \''.$_POST['bblm_teamB'.$p].'\', \'0\')';
+			$insertsql .= '(\'\', \''.intval( $_POST['bblm_fcomp'] ).'\', \''.intval( $_POST['bblm_fdiv'] ).'\', \''.$_POST['fdate'.$p].' 19:00:01\', \''.$_POST['bblm_teamA'.$p].'\', \''.$_POST['bblm_teamB'.$p].'\', \'0\')';
 		}
 
 		$p++;
@@ -66,7 +66,7 @@ if (isset($_POST['bblm_comp_select'])) {
 	print("</pre>");
 	print("<hr />");*/
 
-	$countmax = $_POST['bblm_fgames'];
+	$countmax = intval( $_POST['bblm_fgames'] );
 
 ?>
 	<form name="bblm_addfixture" method="post" id="post">
@@ -74,18 +74,18 @@ if (isset($_POST['bblm_comp_select'])) {
 	<p>Please enter the details of the fixtures below:</p>
 
 	<input type="hidden" name="bblm_fgames" size="2" value="<?php print($countmax); ?>">
-	<input type="hidden" name="bblm_fcomp" size="2" value="<?php print($_POST['bblm_fcomp']); ?>">
-	<input type="hidden" name="bblm_fdiv" size="2" value="<?php print($_POST['bblm_fdiv']); ?>">
+	<input type="hidden" name="bblm_fcomp" size="2" value="<?php print( intval( $_POST['bblm_fcomp'] ) ); ?>">
+	<input type="hidden" name="bblm_fdiv" size="2" value="<?php print( intval( $_POST['bblm_fdiv'] ) ); ?>">
 
 <?php
 		//before we generate the list of fixtures, we need to grab the teams into an array
 		if (13 == $_POST['bblm_fdiv']) {
 			//Cross Division has been selected, All the teams in the compeition are slected
-			$teamsql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_fcomp'];
+			$teamsql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".intval( $_POST['bblm_fcomp'] );
 		}
 		else {
 			//Just select the temas in this division
-			$teamsql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_fcomp']." AND C.div_id = ".$_POST['bblm_fdiv'];
+			$teamsql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".intval( $_POST['bblm_fcomp'] )." AND C.div_id = ".intval( $_POST['bblm_fdiv'] );
 		}
 		$teams = $wpdb->get_results($teamsql, ARRAY_A);
 		if (empty($teams)) {
@@ -171,13 +171,17 @@ else {
 				<th scope="row"><label for="bblm_fcomp">Competition</label></th>
 				<td><select name="bblm_fcomp" id="bblm_fcomp">
 	<?php
-	$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
-	//This line should work but for some reason prpduces blanks!
-	//$compsql = 'SELECT C.c_id, C.c_name FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, dev_posts P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND C.c_active = 1 ORDER BY C.c_name ASC LIMIT';
-	if ($comps = $wpdb->get_results($compsql)) {
-		foreach ($comps as $comp) {
-			print("					<option value=\"$comp->c_id\">".$comp->c_name."</option>\n");
-		}
+	$oposts = get_posts(
+		array(
+			'post_type' => 'bblm_comp',
+			'numberposts' => -1,
+			'orderby' => 'ID',
+			'order' => 'DESC'
+		)
+	);
+	if( ! $oposts ) return;
+	foreach( $oposts as $o ) {
+		echo '<option value="' . $o->ID . '">' . bblm_get_competition_name( $o->ID ) . '</option>';
 	}
 	?>
 				</select></td>

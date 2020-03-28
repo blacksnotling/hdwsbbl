@@ -55,7 +55,7 @@
 <div id="respond">
 
 <h3 id="respond">Make your opinion known:</h3>
-<div class="info">
+<div class="bblm_info">
 	<p>Please note that the site reserves the right to edit or remove any comment without prior notice.</p>
 </div>
 
