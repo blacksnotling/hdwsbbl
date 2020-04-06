@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * and https://github.com/codelight-eu/wp-page-templates
  *
  * @class 		Codelight_PageTemplates
- * @version		1.0
+ * @version		1.1
  * @package		Templates
  * @category	Class
  * @author 		Codelight
@@ -131,14 +131,10 @@ $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.php', 'BBLM Sta
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.cas.php', 'BBLM Statistics - Casualities' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.misc.php', 'BBLM Statistics -Misc' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.view.stats.td.php', 'BBLM Statistics - Touchdowns' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_comp.php', 'BBLM Competition Archive' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_comp.php', 'BBLM Competition Details' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_award.php', 'BBLM Awards Archive' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'bb.core.fixtures.php', 'BBLM Fixtures' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_match.php', 'BBLM Match Archive' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_match.php', 'BBLM Match Details' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_race.php', 'BBLM Race Archive' );
-$pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_race.php', 'BBLM Race Details' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'archive-bblm_team.php', 'BBLM Team Archive' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_team.php', 'BBLM Team Details' );
 $pageTemplates->addTemplate( BBLM_TEMPLATE_PATH . 'single-bblm_player.php', 'BBLM Player Details' );

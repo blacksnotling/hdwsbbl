@@ -103,7 +103,7 @@ class BBLM_Positions_List extends WP_List_Table {
         }
         else {
 
-          return get_the_title( $item[ 'r_id' ] );
+          return bblm_get_race_name( $item[ 'r_id' ] );
 
         }
 

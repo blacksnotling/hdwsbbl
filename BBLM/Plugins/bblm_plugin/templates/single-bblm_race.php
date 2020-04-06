@@ -27,27 +27,30 @@
         </header><!-- .entry-header -->
 
 				<div class="entry-content">
+          <div class="bblm-template-logo"><?php BBLM_CPT_Race::display_race_icon( get_the_ID(), 'icon' ); ?></div>
 
 				<div class="bblm_details bblm_race_description">
 					<?php the_content(); ?>
 				</div>
 <?php
 				$racesql = "SELECT P.*, R.r_rrcost, R.r_id FROM ".$wpdb->prefix."race R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.r_id = J.tid AND P.ID = J.pid AND P.ID = ".$post->ID;
-				if ($races = $wpdb->get_results($racesql)) {
-					print("<ul\n>");
-					foreach ($races as $race) {
-						print("	<li><strong>Re-Roll Cost</strong>: ".number_format($race->r_rrcost)."gp</li>\n");
+				if ( $races = $wpdb->get_results( $racesql ) ) {
+          echo '<ul>';
+					foreach ( $races as $race ) {
+            echo '<li><strong>' . __( 'Re-Roll Cost:', 'bblm' ) . '</strong> ' . number_format( $race->r_rrcost ) . ' GP</li>';
 						$race_id = $race->r_id;
 					}
-					print("</ul>\n");
+          echo '</ul>';
 				}
 				else {
-					print("	<ul>\n	<li><strong>Re-Roll Cost</strong>: Not Available</li>\n</ul>\n");
+          echo '<ul>';
+          echo '<li><strong>' . __( 'Re-Roll Cost:', 'bblm' ) . '</strong> ' . __( 'Not Availible', 'bblm' ) . '</li>';
+          echo '</ul>';
 				}
 
-				if (isset($race_id)) {
+				if ( isset( $race_id ) ) {
 					//we only want to continue if the above selection returned something.
-					print("<h3>Positions available for Race</h3>\n");
+          echo '<h3 class="bblm-table-caption">' . __( 'Positions available for Race', 'bblm' ) . '</h3>';
 					//Grab Positions
 					$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = '.$race_id.' ORDER by pos_cost ASC';
 					if ($positions = $wpdb->get_results($positionsql)) {

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.4
+ * @version		1.5
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -323,6 +323,7 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-award.php' );
 		include_once( 'post-types/class-bblm-cpt-team.php' );
 		include_once( 'post-types/class-bblm-cpt-season.php' );
+		include_once( 'post-types/class-bblm-cpt-race.php' );
 
  }
 
