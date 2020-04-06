@@ -1404,3 +1404,556 @@ object {
 .gallery .gallery-item:hover dd {
 	display: block;
 }
+
+/** BBLM **/
+.bblm-template {
+	margin-bottom: 1.25em;
+}
+
+.bblm-template table:last-child {
+	margin-bottom: 0;
+}
+
+.bblm-template iframe {
+	display: block;
+	margin: 0 auto;
+}
+
+.bblm-view-all-link {
+	text-align: right;
+	font-size: 14px;
+}
+
+.bblm-table-caption,
+.bblm-template-countdown .event-name,
+.opta-widget-container h2 {
+	font-weight: normal;
+	text-align: left;
+	border: none;
+	margin: 0 0 -1px;
+	font-size: 16px;
+	position: relative;
+	z-index: 2;
+}
+
+.bblm-table-caption h1,
+.bblm-table-caption h2,
+.bblm-table-caption h3,
+.bblm-table-caption h4,
+.bblm-table-caption h5,
+.bblm-table-caption h6 {
+	margin: 0;
+	font-size: inherit;
+}
+
+.bblm-data-table tbody tr.odd {
+	background: initial;
+}
+
+.bblm-data-table tbody tr.sub {
+	background: rgba(0,0,0,0.05);
+}
+
+.bblm-table-wrapper .dataTables_paginate {
+	margin-top: -1px;
+	font-size: 14px;
+	padding: 0.125em 0.625em;
+}
+
+.bblm-template-countdown h5 {
+	font-weight: bold;
+	text-align: left;
+	font-size: 14px;
+	padding: 0.635em 15px;
+	border: 1px solid transparent;
+	border-top: none;
+	margin: 0;
+}
+
+.bblm-template-countdown {
+	width: 100%;
+	overflow: auto;
+		zoom: 1;
+}
+
+.bblm-template-countdown .bblm-countdown {
+	margin: 0;
+}
+
+.bblm-template-countdown time span {
+	box-sizing: border-box;
+	display: block;
+	float: left;
+	width: 25%;
+	text-align: center;
+	padding: 14px 0;
+	line-height: 1.25;
+	font-size: 24px;
+}
+
+.bblm-template-countdown time span small {
+	display: block;
+	clear: both;
+	font-size: 14px;
+}
+
+.bblm-template-event-calendar table {
+	table-layout: fixed;
+}
+
+.bblm-template-event-calendar tbody td {
+		position: relative;
+}
+
+.bblm-template-event-calendar tbody td a:before {
+		content: '•';
+		position: absolute;
+		line-height: 1;
+		width: 1em;
+		top: 0;
+		right: 0;
+}
+
+.bblm-template-event-calendar #today {
+	font-weight: bold;
+}
+
+.widget .bblm-template-event-calendar thead th,
+.widget .bblm-template-event-calendar tbody td {
+	padding: 0.625em;
+}
+
+.widget .bblm-template-event-calendar tbody td a:before {
+	font-size: 1em;
+}
+
+.archive .bblm-template-event-logos {
+	margin-bottom: 2.5em;
+}
+
+.bblm-template-event-logos-inline {
+	margin-top: 0.5em;
+	font-size: 36px;
+	clear: both;
+}
+
+.bblm-template-event-logos img {
+	vertical-align: middle;
+}
+
+.bblm-template-event-logos .bblm-team-name {
+	font-weight: inherit;
+}
+
+.bblm-template-event-logos .bblm-team-result {
+	height: 1.5em;
+	min-width: 1.5em;
+	padding: 0 0.25em;
+	box-sizing: border-box;
+	text-align: center;
+	line-height: 1.5em;
+	font-weight: normal;
+}
+
+.bblm-template-event-video {
+		background: #000;
+}
+
+.bblm-template-event-video .bblm-table-caption {
+	display: none;
+}
+
+.bblm-event-staff {
+	font-size: 14px;
+	padding: 0.625em 15px;
+}
+
+.bblm-template-event-performance-icons thead {
+	display: none;
+}
+
+.bblm-template-event-performance-icons td {
+	border-width: 0;
+}
+
+.bblm-template-event-performance-icons .bblm-performance-icons {
+	width: 40%;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.bblm-template-event-performance-icons tbody tr:first-child td {
+	padding-top: 0.625em;
+}
+
+.bblm-template-event-performance-icons tbody tr:last-child td {
+	padding-bottom: 0.625em;
+}
+
+.bblm-template-event-performance-icons .data-number {
+	text-align: right;
+	padding-left: 15px;
+}
+
+.bblm-template-event-performance-icons .data-name {
+	text-align: left;
+	padding-right: 15px;
+}
+
+.bblm-template-event-performance-icons td:first-child {
+	border-left-width: 1px;
+}
+
+.bblm-template-event-performance-icons td:last-child {
+	border-right-width: 1px;
+}
+
+.bblm-template-event-performance-icons tr:last-child td {
+	border-bottom-width: 1px;
+}
+
+.bblm-template-event-venue .bblm-event-venue-map-row td {
+	padding: 0;
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.bblm-template-event-blocks .event-results,
+.bblm-template-event-blocks .event-time {
+	font-size: 24px;
+}
+
+.bblm-template-event-blocks .event-league,
+.bblm-template-event-blocks .event-season,
+.bblm-template-event-blocks .event-venue {
+	display: block;
+	font-weight: bold;
+	font-size: 14px;
+	clear: both;
+	margin: 0 -0.5625em;
+	padding: 0 0.625em 15px;
+}
+
+.bblm-template-event-blocks .event-title {
+	clear: both;
+	font-weight: bold;
+	font-size: 16px;
+	margin: 0 -0.9375em -0.625em;
+	padding: 0.625em 15px;
+}
+
+.widget .bblm-template-event-blocks .event-results,
+.widget .bblm-template-event-blocks .event-time {
+	font-size: 24px;
+}
+
+.widget .bblm-template-event-blocks .event-title {
+	margin: 0 -0.9375em -0.625em;
+	padding: 0.625em 15px;
+}
+
+.bblm-template-logo {
+	margin: 0 auto 1.25em;
+	text-align: center;
+	clear: both;
+	float: none;
+	max-width: auto;
+}
+
+.bblm-template-photo {
+	max-width: none;
+	width: 100%;
+	text-align: center;
+	margin: 0 0 1.25em 0;
+	float: none;
+}
+
+.widget .bblm-template-photo {
+	max-width: none;
+	margin: 0;
+	float: none;
+}
+
+.bblm-template-photo img {
+	width: 100%;
+	display: block;
+}
+
+.bblm-template-team-details {
+	display: block;
+	clear: both;
+}
+
+.bblm-template-details dl {
+	font-size: 14px;
+	padding: 1em 15px 0;
+	margin-bottom: 1.25em;
+}
+
+.bblm-template-details dt {
+	width: 40%;
+	margin: 0 0 1em;
+	float: left;
+	clear: left;
+}
+
+.bblm-template-details dd {
+	overflow: hidden;
+	margin: 0 0 1em 45%;
+}
+
+.bblm-template-details dd img {
+	vertical-align: middle;
+	margin-right: 0.25em;
+}
+
+.bblm-template .player-group-name,
+.bblm-staff-name {
+	margin-top: 1.25em;
+}
+
+.bblm-template .player-gallery-group-name,
+.bblm-staff-name {
+	clear: both;
+	font-size: 24px;
+}
+
+.bblm-template-league-gallery dl {
+	padding: 0.75em;
+}
+
+.gallery dl {
+	max-width: 100%;
+}
+
+.gallery dd {
+	height: auto;
+	display: block;
+	pointer-events: auto;
+	position: relative;
+	bottom: auto;
+	padding: 0.625em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.gallery dd.has-number {
+	padding-left: 49px;
+}
+
+.gallery dd strong {
+	font-weight: normal;
+	font-size: 20px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 39px;
+	padding: 5px 0;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.bblm-header-sponsors {
+	margin-bottom: 50px;
+}
+
+.bblm-header-sponsors .bblm-sponsors .bblmonsor {
+	margin: 10px;
+}
+
+.bblm-footer-sponsors {
+	clear: both;
+}
+
+.bblm-footer-sponsors .bblm-sponsors {
+	padding: 3em 0;
+}
+
+.bblm-template.bblm-template-tournament-winner {
+	color: inherit;
+}
+
+.bblm-template-tournament-bracket thead th {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.bblm-template-tournament-bracket td {
+	border: none;
+}
+
+.bblm-template-tournament-bracket .bblm-result {
+	padding: 2px 5px;
+	margin: 0 3px;
+}
+
+.bblm-template-tournament-bracket .bblm-event-venue {
+	font-weight: normal;
+}
+
+.single-bblm_player .entry-header .entry-title strong {
+	padding: 0 0.475em;
+	margin-right: 0.25em;
+	font-weight: normal;
+}
+
+@media screen and (min-width: 481px) {
+	.bblm-template-photo {
+		width: auto;
+		max-width: 50%;
+		margin: 0 20px 20px 0;
+		float: left;
+	}
+}
+
+@media screen and (min-width: 601px) {
+	.main-navigation ul {
+		margin: 0 0.625em;
+	}
+
+	.article-thumbnail {
+		margin-right: 20px;
+		float: left;
+	}
+
+	.bblm-template-logo {
+		margin: 0 0 1.25em 20px;
+		float: right;
+		clear: right;
+	}
+
+	.bblm-template-event-blocks .event-results,
+	.bblm-template-event-blocks .event-time {
+		font-size: 36px;
+	}
+
+	.bblm-template-event-calendar tbody td {
+		padding: 1.25em 0.675em;
+	}
+
+	.bblm-template-event-calendar tbody td a:before {
+			font-size: 1.25em;
+	}
+
+	.single-bblm_event .has-post-thumbnail .entry-header .entry-title {
+		margin: 0.5em 0;
+	}
+
+	.bblm-template-photo {
+		max-width: none;
+		width: 100%;
+		margin: 0 0 1.25em 0;
+		float: none;
+	}
+
+	.bblm-header-sponsors {
+		margin-bottom: 0;
+	}
+
+	.single-bblm_team .bblm-post-content {
+			clear: left;
+	}
+}
+
+@media screen and (min-width: 801px) {
+	.bblm-has-venue.bblm-has-results .content-area-full-width .bblm-section-content .bblm-template-event-details,
+	.bblm-has-venue.bblm-has-results .content-area-full-width .bblm-section-content .bblm-template-event-results {
+		float: left;
+		width: 70%;
+		padding-right: 10px;
+		clear: none;
+	}
+
+	.bblm-has-venue.bblm-has-results .content-area-full-width .bblm-section-content .bblm-template-event-venue {
+		float: right;
+		width: 30%;
+		padding-left: 10px;
+		clear: none;
+	}
+
+	.bblm-has-venue.bblm-has-results .content-area-full-width .bblm-section-content .bblm-template-event-venue .bblm-google-map {
+		height: 200px;
+	}
+
+	.bblm-event-performance-teams .bblm-template-event-performance-icons {
+		width: 50%;
+		float: left;
+		clear: left;
+		padding-right: 10px;
+	}
+
+	.bblm-event-performance-teams .bblm-template-event-performance-icons:nth-child(2n) {
+		float: right;
+		clear: right;
+		padding-right: 0;
+		padding-left: 10px;
+	}
+
+	.bblm-template-event-calendar tbody td {
+		padding: 1.75em 0.675em;
+	}
+
+	.bblm-template-event-calendar tbody td a:before {
+		font-size: 1.5em;
+	}
+
+	.bblm-template-photo {
+		width: auto;
+		max-width: 50%;
+		margin: 0 20px 20px 0;
+		float: left;
+	}
+}
+
+@media screen and (min-width: 1025px) {
+	.gallery-columns-3 dl {
+		max-width: 33.33%;
+	}
+
+	.gallery-columns-4 dl {
+		max-width: 25%;
+	}
+
+	.gallery-columns-5 dl {
+		max-width: 20%;
+	}
+
+	.gallery-columns-6 dl {
+		max-width: 16.66%;
+	}
+
+	.gallery-columns-7 dl {
+		max-width: 14.28%;
+	}
+
+	.gallery-columns-8 dl {
+		max-width: 12.5%;
+	}
+
+	.gallery-columns-9 dl {
+		max-width: 11.11%;
+	}
+
+	.widget_search .search-form .search-field {
+		width: 80%;
+	}
+
+	.widget_search .search-form .search-submit {
+		width: 20%;
+		margin-top: 0;
+	}
+
+	.bblm-template-event-calendar tbody td {
+		padding: 2.375em 0.675em;
+	}
+
+	.bblm-template-event-calendar tbody td a:before {
+			font-size: 2em;
+	}
+
+	.site-widgets .bblm-scoreboard-wrapper {
+		margin: 0 -35px;
+	}
+}
