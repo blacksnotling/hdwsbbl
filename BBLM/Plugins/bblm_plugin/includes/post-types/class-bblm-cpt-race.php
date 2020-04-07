@@ -151,7 +151,7 @@ class BBLM_CPT_Race {
    * @param wordpress $query
    * @return none
    */
-   public function display_race_icon( $ID, $size ) {
+   public static function display_race_icon( $ID, $size ) {
 
 		 switch ( $size ) {
 	 		case ( 'medium' == $size ):
