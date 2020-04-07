@@ -28,7 +28,7 @@
 
 					<div class="entry-content">
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, T.stad_id FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, T.r_id, T.stad_id FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		//stad //stadLink
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
@@ -38,14 +38,6 @@
 					$rosterlink = $wpdb->get_var($rosterlinksql);
 				}
 
-				//Determine if a custom logo is present
-				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
-				if (file_exists($filename)) {
-					$timg = "<img src=\"".home_url()."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
-				}
-				else {
-					$timg = "<img src=\"".home_url()."/images/races/race".$ti->r_id.".gif\" alt=\"".$ti->r_name." Logo\" />";
-				}
 		}
 ?>
 				<div class="bblm_details bblm_team_description">

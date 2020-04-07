@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -29,7 +29,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
     $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
 
     $parentpage = 0;
-    if ( is_single() ) {
+    if ( is_singular() ) {
       $parentpage = get_queried_object()->post_parent;
     }
 
@@ -88,7 +88,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         if ( $has_played ) {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
         }
-        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $ti->racelink . ' " title="Learn more about ' . esc_html( $ti->r_name ) .'">'.esc_html( $ti->r_name ) . '</a></li>';
+        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $ti->r_id ) . '</li>';
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';
