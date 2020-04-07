@@ -45,7 +45,7 @@ class BBLM_Meta_Race {
 		);
 		add_meta_box(
 			'race_stars',
-			__( 'Star Players Availible for this Race', 'bblm' ),
+			__( 'Star Players available for this Race', 'bblm' ),
 			array( $this, 'render_meta_boxes_stars' ),
 			'bblm_race',
 			'normal',

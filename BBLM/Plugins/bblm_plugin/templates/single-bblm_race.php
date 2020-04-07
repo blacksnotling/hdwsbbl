@@ -42,13 +42,13 @@
 
         $race = new BBLM_CPT_Race;
 
-        echo '<h3 class="bblm-table-caption">' . __( 'Positions available for Race', 'bblm' ) . '</h3>';
+        echo '<h3 class="bblm-table-caption">' . __( 'Positions available for this Race', 'bblm' ) . '</h3>';
         $race->display_race_positions( $race_id );
 
-        echo '<h3 class="bblm-table-caption">' . __( 'Star Players available for Race', 'bblm' ) . '</h3>';
+        echo '<h3 class="bblm-table-caption">' . __( 'Star Players available for this Race', 'bblm' ) . '</h3>';
         $race->display_stars_available( $race_id );
 
-        echo '<h3 class="bblm-table-caption">' . __( 'Teams belonging to this Race', 'bblm' ) . '</h3>';
+        echo '<h3 class="bblm-table-caption">' . __( 'Teams representing this Race', 'bblm' ) . '</h3>';
         $race->display_teams_representing( $race_id );
 
 
