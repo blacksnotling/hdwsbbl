@@ -277,9 +277,9 @@ class BBLM_Positions_List extends WP_List_Table {
 
 			}
 
-			// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+						// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
 		        // add_query_arg() return the current url
-		        wp_redirect( esc_url_raw(add_query_arg()) );
+		        wp_redirect( esc_url_raw( add_query_arg() ) );
 			exit;
 		}
 	}
@@ -467,7 +467,7 @@ class BBLM_Manage_Positions {
 			//we are editing a position
 
 			$bblm_isediting = 1;
-			echo '<h2>Edit Position</h2>';
+			echo '<h2>' . __( 'Edit Position', 'bblm') . '</h2>';
 
 			//retrieve the position details from the database and populate an array
 			$sql = "SELECT * FROM ".$wpdb->prefix."position where pos_id = ".absint( $_GET['pos_id'] );
@@ -577,7 +577,7 @@ class BBLM_Manage_Positions {
       $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`, `pos_limit`, `pos_ma`, `pos_st`, `pos_ag`, `pos_av`, `pos_skills`, `pos_cost`, `pos_freebooter`, `pos_status`) VALUES (\'\', \''.$bblm_pname.'\', \''.$bblm_race.'\', \''.$bblm_limit.'\', \''.$bblm_pma.'\', \''.$bblm_pst.'\', \''.$bblm_pag.'\', \''.$bblm_pav.'\', \''.$bblm_pskills.'\', \''.$bblm_pcost.'\', \'0\', \'1\')';
 
         $sucess = "";
-    	if (FALSE !== $wpdb->query($addsql)) {
+    	if ( FALSE !== $wpdb->query( $addsql ) ) {
     		$sucess = TRUE;
     	}
     	else {
@@ -587,11 +587,11 @@ class BBLM_Manage_Positions {
   <div id="updated" class="updated fade">
     <p>
       <?php
-      if ($sucess) {
-        print("Position was Added!");
+      if ( $sucess ) {
+        echo __( 'Position was added' , 'bblm' );
       }
       else {
-        print("Something went wrong");
+				echo __( 'Something went wrong', 'bblm' );
       }
       ?>
     </p>
@@ -629,7 +629,7 @@ class BBLM_Manage_Positions {
 			 $updatesql = 'UPDATE `'.$wpdb->prefix.'position` SET `pos_name` = \''.$bblm_pname.'\', `r_id` = \''.$bblm_race.'\', `pos_limit` = \''.$bblm_limit.'\', `pos_ma` = \''.$bblm_pma.'\', `pos_st` = \''.$bblm_pst.'\', `pos_ag` = \''.$bblm_pag.'\', `pos_av` = \''.$bblm_pav.'\', `pos_skills` = \''.$bblm_pskills.'\', `pos_cost` = \''.$bblm_pcost.'\', `pos_freebooter` = \''.$bblm_pfreebooter.'\', `pos_status` = \''.$bblm_pstatus.'\' WHERE `pos_id` = '.$bblm_ppid.';';
 
          $sucess = "";
-     	if (FALSE !== $wpdb->query($updatesql)) {
+     	if ( FALSE !== $wpdb->query( $updatesql ) ) {
      		$sucess = TRUE;
      	}
      	else {
@@ -639,11 +639,11 @@ class BBLM_Manage_Positions {
    <div id="updated" class="updated fade">
      <p>
        <?php
-       if ($sucess) {
-         print("Position was Updated!");
+       if ( $sucess ) {
+         echo __( 'Position was updated' , 'bblm' );
        }
        else {
-         print("Something went wrong");
+         echo __( 'Something went wrong', 'bblm' );
        }
        ?>
      </p>
