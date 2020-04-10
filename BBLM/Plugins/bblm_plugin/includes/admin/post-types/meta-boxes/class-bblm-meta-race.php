@@ -83,16 +83,34 @@ class BBLM_Meta_Race {
 		if ( $stars = $wpdb->get_results( $starssql ) ) {
 			$p = 1;
 
+			//Grab the stars currently assignedf to the race. If the page is new then a dummy empty array is used
+
+			if ( isset( $post->ID ) ) {
+				$starsinracesql = 'SELECT * FROM '.$wpdb->prefix.'race2star WHERE r_id = '.$post->ID;
+				$starsinrace = $wpdb->get_results( $starsinracesql);
+			}
+			else {
+				$starsinrace = array();
+			}
+
+
 			echo '<ul>';
 			foreach ($stars as $star) {
 				echo '<li>';
-				echo '<input type="checkbox" name="bblm_plyd' . $p . '" /> ';
+				echo '<input type="checkbox" name="bblm_plyd' . $p . '"';
+				if ( in_array_field( $star->p_id, 'p_id', $starsinrace ) ) {
+					echo ' checked';
+				}
+				echo '> ';
 				echo bblm_get_player_name( $star->PWPID );
 				echo ' <input type="hidden" name="bblm_spid' . $p . '" id="bblm_spid' . $p . '" value="' . $star->p_id . '">';
 				echo '</li>';
 				$p++;
 			}
 			echo '</ul>';
+?>
+			<input type="hidden" name="bblm_numofplayers" id="bblm_numofplayers" value="<?php echo $p-1; ?>">
+<?php
 		}
 
   }
@@ -103,6 +121,7 @@ class BBLM_Meta_Race {
  	*/
  	function save_meta_boxes( $post_id ) {
  		global $post;
+		global $wpdb;
 
  		// Verify nonce
  		if ( !isset( $_POST['race_rrcost'] ) || !wp_verify_nonce( $_POST['race_rrcost'], basename(__FILE__) ) ) {
@@ -124,6 +143,28 @@ class BBLM_Meta_Race {
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}
+		//Now we populate the race2star table in the database
+
+		//First we delete eveything for this race
+		$deletestarsql = 'DELETE FROM `'.$wpdb->prefix.'race2star` WHERE `r_id` = ' . $post->ID;
+		$wpdb->get_row( $deletestarsql );
+		
+		$p = 1;
+		$race2starsqla = array();
+		while ($p <= $_POST['bblm_numofplayers']){
+			//if  "on" result for a field then generate SQL
+			if (on == $_POST[ 'bblm_plyd'.$p]) {
+
+				$insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\'' . $post->ID . '\', \''.$_POST['bblm_spid'.$p].'\')';
+				$race2starsqla[$p] = $insertstarracesql;
+				echo '<p>'.$insertstarracesql.'</p>';
+			}
+			$p++;
+		}
+
+		foreach ($race2starsqla as $ps) {
+				$addstar2race = $wpdb->query($ps);
+		}
 
  	}
 

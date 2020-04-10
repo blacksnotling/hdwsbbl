@@ -151,3 +151,20 @@ function bblm_jm_report() {
 		}
 }
 add_action( 'wp_insert_post', 'bblm_add_comp_tax', 10, 3 );
+
+/**
+ * Allows searches through objects
+ */
+function in_array_field( $needle, $needle_field, $haystack, $strict = false ) {
+    if ( $strict ) {
+        foreach ( $haystack as $item )
+            if ( isset( $item->$needle_field ) && $item->$needle_field === $needle )
+                return true;
+    }
+    else {
+        foreach ( $haystack as $item )
+            if ( isset( $item->$needle_field ) && $item->$needle_field == $needle )
+                return true;
+    }
+    return false;
+}
