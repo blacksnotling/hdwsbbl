@@ -131,3 +131,19 @@ function bblm_get_stat_limit() {
 	return $bblm_stat_limit;
 
 } // end of bblm_get_stat_limit()
+
+/**
+ * Allows arrays to be searched recursivly
+ */
+function in_array_recursive($needle, $haystack) {
+
+    $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($haystack));
+
+    foreach($it AS $element) {
+        if($element == $needle) {
+            return true;
+        }
+    }
+
+    return false;
+} //end of in_array_recursive

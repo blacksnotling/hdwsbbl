@@ -319,19 +319,6 @@ function TimeAgoInWords($from_time, $include_seconds = false) {
   }
 }
 
-function in_array_recursive($needle, $haystack) {
-
-    $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($haystack));
-
-    foreach($it AS $element) {
-        if($element == $needle) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 /**
  * Template for comments and pingbacks.
  *
