@@ -60,7 +60,7 @@
 				</tr>
 			</table>
 <?php
-		$racelistsql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'race2star R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE P.ID = J.pid AND J.prefix = "r_" AND J.tid = R.r_id AND R.p_id = '.$pd->p_id.' ORDER BY P.post_title ASC';
+		$racelistsql = 'SELECT R.r_id FROM '.$wpdb->prefix.'race2star R WHERE R.p_id = '.$pd->p_id.' ORDER BY R.r_id ASC';
 		$racelist = $wpdb->get_results($racelistsql);
 
 		$is_first = 1;
@@ -70,7 +70,7 @@
 				echo ',';
 			}
 
-			echo ' <a href="'.$rl->guid.'" title="View more about '.$rl->post_title.' Blood Bowl Teams">'.$rl->post_title.'</a>';
+			echo ' ' . bblm_get_race_link( $rl->r_id );
 			$is_first = 0;
 		}
 		echo ".</p>\n";

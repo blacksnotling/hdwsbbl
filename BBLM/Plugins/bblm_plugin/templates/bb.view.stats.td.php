@@ -155,7 +155,7 @@
 				  ////////////////////////
 				 // Top Scoring Teams //
 				////////////////////////
-				$statsql = 'SELECT Z.WPID, SUM(T.tc_tdfor) AS VALUE, R.r_name, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z, '.$wpdb->prefix.'race R WHERE R.r_id = Z.r_id AND Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Z.WPID AS TWPID, SUM(T.tc_tdfor) AS VALUE, Z.r_id, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Scoring Teams");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -190,12 +190,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $period_alltime) {
-							print("	<td><strong><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"View more details on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></strong></td>\n");
+							print("	<td><strong>" . bblm_get_team_link( $ts->TWPID ) . "</strong></td>\n");
 							}
 							else {
-							print("	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"View more details on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n");
+							print("	<td>" . bblm_get_team_link( $ts->TWPID ) . "</td>\n");
 							}
-							print("	<td>".$ts->r_name."</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . bblm_get_team_name( $ts->r_id ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;

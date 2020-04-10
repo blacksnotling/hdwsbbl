@@ -248,13 +248,8 @@ function UpdateBankTv() {
 </script>
 
 <?php
-		$racesql = "SELECT r_id, r_name, r_rrcost FROM ".$wpdb->prefix."race WHERE r_id = ".$_POST['bblm_rid'];
-		if ($races = $wpdb->get_results($racesql)) {
-			foreach ($races as $race) {
-				$rid = $race->r_id;
-				$rrcost = $race->r_rrcost;
-			}
-		}
+		$rid = (int) $_POST['bblm_rid'];
+		$rrcost = BBLM_CPT_Race::get_reroll_cost( $rid );
 ?>
 
 	<table class="form-table">
@@ -319,15 +314,22 @@ else {
 	<tr valign="top">
 		<th scope="row"><label for="bblm_rid">Race</label></th>
 		<td><select name="bblm_rid" id="bblm_rid">
-<?php
-		$racesql = "SELECT R.r_id, R.r_name FROM ".$wpdb->prefix."race R, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P WHERE R.r_id = J.tid AND J.pid = P.ID AND J.prefix = 'r_' ORDER BY R.r_name ASC";
-			if ($races = $wpdb->get_results($racesql)) {
-				foreach ($races as $race) {
-					print("			<option value=\"$race->r_id\">".$race->r_name."</option>\n");
-				}
-			}
-?>
-		</select></td>
+			<?php
+					//Grabs a list of 'posts' from the Stadiums CPT
+					$oposts = get_posts(
+						array(
+							'post_type' => 'bblm_race',
+							'numberposts' => -1,
+							'orderby' => 'post_title',
+							'order' => 'ASC'
+						)
+					);
+					if( ! $oposts ) return;
+					foreach( $oposts as $o ) {
+						echo '<option value="' . $o->ID . '">' . bblm_get_race_name( $o->ID ) . '</option>';
+					}
+
+			?></select></td>
 	</tr>
 	</table>
 

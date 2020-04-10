@@ -53,7 +53,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       global $seasonsql;
 
     	//determine player race
-    	$racesql = 'SELECT B.guid, R.r_name, R.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' B WHERE R.r_id = J.tid AND J.prefix = \'r_\' AND J.pid = B.ID AND O.pos_id = P.pos_id AND O.r_id = R.r_id AND P.p_id = '.$pd->p_id;
+      $racesql = 'SELECT O.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.p_id = '.$pd->p_id;
     	$rd = $wpdb->get_row($racesql);
 
     	//determine debut season
@@ -90,11 +90,10 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
         echo '<li><strong>' . __( 'Team', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $pd->WPID ) . '" title="Read more on this team">' . esc_html( get_the_title( $pd->WPID ) ) . '</a></li>';
         echo '<li><strong>' . __( 'Position Number', 'bblm' ) . ':</strong> ' . $pd->p_num . '</li>';
 
-        $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned
-        if ( !empty( $race_check ) ) {
+        if ( ( '0' !== $rd->r_id ) && ( '91' !== $rd->r_id ) ) {
           //Mercs and Journeymen will not return a race ID as the race positions are not assigned to a race
           //Only display the players race if they are a pernament race position
-          echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $rd->guid . '" title="Learn more about ' . $rd->r_name . '">' . $rd->r_name . '</a></li>';
+          echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $rd->r_id ) . '</li>';
         }
         if ( $has_played ) {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->sea_id ) . '</li>';

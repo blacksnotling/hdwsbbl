@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.1
+ * @version   1.2
  */
 
 /**
@@ -236,3 +236,32 @@ function bblm_get_competition_format_name( $ID ) {
   return $output;
 
 }// end of bblm_get_competition_format_name
+
+/**
+ * Returns the name of a Race, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_race_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_season_name
+
+/**
+ * Returns the link of a Race, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_race_link( $ID ) {
+
+  $race_name = bblm_get_race_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $race_name . '" href="' . get_post_permalink( $ID ) . '">' . $race_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_season_link

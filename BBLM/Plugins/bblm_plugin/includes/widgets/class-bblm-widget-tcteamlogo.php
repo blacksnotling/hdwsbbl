@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCteamlogo extends WP_Widget {
@@ -38,10 +38,19 @@ class BBLM_Widget_TCteamlogo extends WP_Widget {
     if ( $parentoption == $parentpage ) {
 
       //pulling in the vars from the single-bblm_team template
-      global $timg;
+      global $ti;
 
       echo $args['before_widget'];
-      echo $timg;
+
+      //Determine if a custom logo is present
+      $filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
+      if (file_exists($filename)) {
+        echo "<img src=\"".home_url()."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
+      }
+      else {
+        BBLM_CPT_Race::display_race_icon( $ti->r_id, 'medium' );
+      }
+
       echo $args['after_widget'];
 
     } //end of if the widget should show

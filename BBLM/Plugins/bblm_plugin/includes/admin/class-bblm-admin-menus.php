@@ -64,6 +64,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-addbulk.php' );
 		new BBLM_Player_AddBulk();
 
+		//Create the 'Manage Positions Page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-positions.php' );
+		new BBLM_Manage_Positions();
+
 		//Add the 'assign teams to comp page' under the competitions CPT
 
 		add_submenu_page(
