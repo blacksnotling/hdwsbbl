@@ -198,14 +198,6 @@ class BBLM_Settings_Admin {
 						'helper' => __( 'Text entered here appears at the top of the Transfers page', 'bblm' ),
 					),
           array(
-        		'uid' => 'site_dir',
-        		'label' => __( 'Site Directory', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'text',
-        		'placeholder' => '',
-        		'helper' => __( 'The location of the wordpress install from the SERVER root WITHOUT Slashes. eg hdwsbbl', 'bblm' ),
-        	),
-          array(
         		'uid' => 'page_team',
         		'label' => __( 'Page # - Teams', 'bblm' ),
         		'section' => 'third_section',

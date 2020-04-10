@@ -39,9 +39,6 @@
 				$teamB = esc_html( get_the_title( $tB->WPID ) );
 
 				//Check for custom logo and if found set the var for use later on
-				$options = get_option('bblm_config');
-				$site_dir = htmlspecialchars($options['site_dir'], ENT_QUOTES);
-
 				//Team A
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tA->t_sname."_big.gif";
 				if (file_exists($filename)) {

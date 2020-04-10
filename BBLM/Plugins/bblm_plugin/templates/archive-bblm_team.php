@@ -84,11 +84,6 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		}
 		print("		<td>");
 
-		$options = get_option('bblm_config');
-		$site_dir = htmlspecialchars($options['site_dir'], ENT_QUOTES);
-
-
-		//$filename = $_SERVER['DOCUMENT_ROOT']."/".$site_dir."/images/teams/".$team->t_sname."_small.gif";
 		$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$team->t_sname."_small.gif";
 		if (file_exists($filename)) {
 			print("<img src=\"".home_url()."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
