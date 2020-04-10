@@ -22,28 +22,28 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
   }
 
   //The Widget Output in the front-end
-    public function widget( $args, $instance ) {
-      global $wpdb;
+  public function widget( $args, $instance ) {
+    global $wpdb;
 
-      $parentoptions = get_option( 'bblm_config' );
-      $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
-      $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
+    $parentoptions = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
 
-      $parentpage = 0;
-      if ( is_singular() ) {
-        $parentpage = get_queried_object()->post_parent;
+    $parentpage = 0;
+    if ( is_singular() ) {
+      $parentpage = get_queried_object()->post_parent;
+    }
+    $greatGrandparent = 0;
+    if ( $grandparent = get_post( $parentpage ) ) {
+      if( $grandparent->post_parent ){
+        $greatGrandparent = get_post( $grandparent->post_parent );
+        $greatGrandparent = $greatGrandparent->ID;
       }
-      $greatGrandparent = 0;
-      if ( $grandparent = get_post( $parentpage ) ) {
-        if( $grandparent->post_parent ){
-          $greatGrandparent = get_post( $grandparent->post_parent );
-          $greatGrandparent = $greatGrandparent->ID;
-        }
-      }
+    }
 
-      //Check we are on the correct post_type before we display the widget
-      //Checks to see if the parent of the page matches that in the bblm config
-      if ( ( $parentoption == $greatGrandparent ) && ( $parentpage != $staplayerteam ) ) {
+    //Check we are on the correct post_type before we display the widget
+    //Checks to see if the parent of the page matches that in the bblm config
+    if ( ( $parentoption == $greatGrandparent ) && ( $parentpage != $staplayerteam ) ) {
 
       //pulling in the vars from the single-bblm_comp template
       global $pd;
