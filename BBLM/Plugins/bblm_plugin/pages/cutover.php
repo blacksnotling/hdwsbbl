@@ -1132,6 +1132,12 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_comp_teamcomp" value="Update Teams in Comp" title="Update Teams in Comp"/></li>
 		</ul>
 
+		<h3>Other</h3>
+		<ul>
+			<li>Update the <em>t_hcoach</em> coloumn to length 50 in the *teams table</li>
+		</ul>
+
+		<h2>1.11 -> 1.12</h2>
 		<h3>Races</h3>
 		<ul>
 			<li>First take a copy of the text at the top of the Races page.</li>
@@ -1143,9 +1149,9 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_race_teams" value="Update Races in Teams" title="Update Teams in Race2star Table"/></li>
 		</ul>
 
-		<h3>Other</h3>
+		<h3>Theme - Crownstar</h3>
 		<ul>
-			<li>Update the <em>t_hcoach</em> coloumn to length 50 in the *teams table</li>
+			<li>Import Theme, set colours, and configure widgets</li>
 		</ul>
 
 </form>
