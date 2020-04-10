@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Template Loader
  *
  * @class 		BBLM_Template_Loader
- * @version		1.2
+ * @version		1.3
  * @package		BBowlLeagueMan/Templates
  * @category	Class
  * @author 		Blacksnotliung
@@ -63,6 +63,11 @@ class BBLM_Template_Loader {
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 			}
 			elseif ($post_type == "bblm_comp") {
+				$file = 'single-' . $post_type . '.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+			}
+			elseif ($post_type == "bblm_race") {
 				$file = 'single-' . $post_type . '.php';
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;

@@ -299,7 +299,7 @@
             <li> - <?php echo __( 'Leave the player name <strong>blank</strong> if you <strong>DON\'T</strong> want to add them', 'bblm'); ?></li>
           </ul>
 <?php
-            echo '<h3>' . __(  'Positions Availible', 'bblm' ) . '</h3>';
+            echo '<h3>' . __(  'Positions Available', 'bblm' ) . '</h3>';
 
             $teamplayertakensql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE r_id = '.$teamdetail->r_id.' AND pos_status = 1 ORDER by pos_limit DESC';
             $teamplayertaken = $wpdb->get_results( $teamplayertakensql );

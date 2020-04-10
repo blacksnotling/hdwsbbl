@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_CPT_Owner {
@@ -363,8 +363,8 @@ class BBLM_CPT_Owner {
        //quick check to make sure this owner has played any games
        if ( $games > 0 ) {
 
-         $gamestatsql = 'SELECT J.pid, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
-         $gamestatsql .= $wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C, '.$wpdb->prefix.'bb2wp J WHERE J.prefix = "r_" AND J.tid = C.r_id AND T.t_id = C.t_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY C.r_id ORDER BY C.r_id ASC'; //splitting the line for length reasons!
+         $gamestatsql = 'SELECT C.r_id, SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ';
+         $gamestatsql .= $wpdb->prefix.'team_comp T,'.$wpdb->prefix.'team C WHERE T.t_id = C.t_id AND T.tc_played > 0 AND C.ID = '.get_the_ID() . ' GROUP BY C.r_id ORDER BY C.r_id ASC'; //splitting the line for length reasons!
 
          if ( $gs = $wpdb->get_results( $gamestatsql ) ) {
 
@@ -372,7 +372,7 @@ class BBLM_CPT_Owner {
            foreach ($gs as $g) {
 
            $output .=  '<tr'. (($c = !$c)?' class="bblm_tbl_alt"':'') .'>
-                      <td><a href="'. get_post_permalink( $g->pid ). '" title="Learn more about ' .esc_html( get_the_title( $g->pid ) ).' ">' .esc_html( get_the_title( $g->pid ) ).'</a></td>
+                      <td>' . bblm_get_race_link( $g->r_id ) . '</td>
                       <td>'. $g->OP .'</td>
                       <td>'. $g->OW .'</td>
                       <td>'. $g->OL .'</td>

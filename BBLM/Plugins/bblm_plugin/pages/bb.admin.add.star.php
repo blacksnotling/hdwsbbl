@@ -123,18 +123,27 @@ if(isset($_POST['bblm_star_submit'])) {
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_plyd">Can play for</label></th>
-<?php
-		$namesql = 'SELECT * FROM `'.$wpdb->prefix.'race` WHERE r_show = 1 order by r_name';
-		if ($names = $wpdb->get_results($namesql)) {
-			//initiate var for count
-			$p = 1;
-			print("				<td>\n");
-			foreach ($names as $name) {
-				print("				<input type=\"checkbox\" name=\"bblm_plyd".$p."\"/> ".$name->r_name." <input type=\"hidden\" name=\"bblm_raceid".$p."\" id=\"bblm_raceid".$p."\" value=\"".$name->r_id."\"><br/>\n");
-				$p++;
-			}
-			print("</td>\n");
-		}
+				<?php
+						//Grabs a list of 'posts' from the Stadiums CPT
+						$oposts = get_posts(
+							array(
+								'post_type' => 'bblm_race',
+								'numberposts' => -1,
+								'orderby' => 'post_title',
+								'order' => 'ASC'
+							)
+						);
+						if( ! $oposts ) return;
+						echo '<td>';
+						echo '<ul>';
+						$p = 1;
+						foreach( $oposts as $o ) {
+							echo '<li><input type="checkbox" name="bblm_plyd' . $p . '"/> ' . bblm_get_race_name( $o->ID ) .' <input type="hidden" name="bblm_raceid' . $p . '" id="bblm_raceid' . $p . '" value="' . $o->ID .'"></li>';
+							$p++;
+						}
+						echo '</ul>';
+						echo '</td>';
+
 ?>
 			</tr>
 		</table>

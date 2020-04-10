@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.4
+ * @version		1.5
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -240,6 +240,40 @@ class BBLM_Post_types {
 				'menu_icon' 			=> 'dashicons-list-view',
 			)
 		); //end of bblm_comp
+		register_post_type( 'bblm_race',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Races', 'bblm' ),
+					'singular_name' 		=> __( 'Race', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Race', 'bblm' ),
+					'add_new' 			=> __( 'New Race', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Race', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Race', 'bblm' ),
+					'view_items' 			=> __( 'View Race', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Races', 'bblm' ),
+					'featured_image'		=> __( 'Race Icon', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Icon', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Icon', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Icon', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'races' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-universal-access-alt',
+			)
+		); //end of bblm_race
 	}
 
   /**
@@ -289,6 +323,7 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-award.php' );
 		include_once( 'post-types/class-bblm-cpt-team.php' );
 		include_once( 'post-types/class-bblm-cpt-season.php' );
+		include_once( 'post-types/class-bblm-cpt-race.php' );
 
  }
 
