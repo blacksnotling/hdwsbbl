@@ -98,10 +98,11 @@ else if ("edit" == $_GET['action']) {
 		 // Editing team Info //
 		//////////////////////////
 		$tid = $_GET['id'];
-		$teaminfosql = 'SELECT P.post_title, T.*, R.* FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R WHERE T.r_id = R.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_id = '.$tid.' LIMIT 1';
+		$teaminfosql = 'SELECT P.post_title, T.* FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_id = '.$tid.' LIMIT 1';
 		if ($t = $wpdb->get_row($teaminfosql)) {
 			$playervaluesql = 'SELECT SUM(P.p_cost_ng) FROM '.$wpdb->prefix.'player P WHERE P.p_status = 1 AND P.t_id = '.$tid;
 			$tpvalue = $wpdb->get_var($playervaluesql);
+			$rrcost = BBLM_CPT_Race::get_reroll_cost( $t->r_id );
 ?>
 		<h3>Edit Team Infomation - <?php print($t->post_title); ?></h3>
 		<form name="bblm_updatestats" method="post" id="post">
@@ -109,7 +110,7 @@ else if ("edit" == $_GET['action']) {
 
 <script type="text/javascript">
 function UpdateTv() {
-	var tot_rr = document.getElementById('bblm_trr').value * <?php print($t->r_rrcost); ?>;
+	var tot_rr = document.getElementById('bblm_trr').value * <?php  echo $rrcost; ?>;
 
 	var tot_ff = document.getElementById('bblm_tff').value * 10000;
 
@@ -140,7 +141,7 @@ function UpdateTv() {
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top">Race</th>
-				<td><?php print("$t->r_name"); ?></td>
+				<td><?php echo bblm_get_race_name( $t->r_id ); ?></td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
@@ -173,7 +174,7 @@ function UpdateTv() {
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_trr">Re-Rolls</label></th>
 				<td><input type="text" name="bblm_trr" size="2" tabindex="4" value="<?php print("$t->t_rr"); ?>" maxlength="1" id="bblm_trr"><br />
-				@ <?php print(number_format($t->r_rrcost)); ?>gp each - remember that they cost double when bought during a season</td>
+				@ <?php echo number_format( $rrcost ); ?> GP each - remember that they cost double when bought during a season</td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
@@ -299,7 +300,7 @@ else {
   ///////////////////////
  // List Active Teams //
 ///////////////////////
-	$teamsql = 'SELECT P.t_id, X.post_title, X.ID, X.guid, R.r_name, P.t_active, P.t_img FROM '.$wpdb->prefix.'team P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'race R WHERE P.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = X.ID AND R.r_id = P.r_id ORDER BY X.post_title';
+	$teamsql = 'SELECT P.t_id, X.post_title, X.ID, X.guid, P.r_id, P.t_active, P.t_img FROM '.$wpdb->prefix.'team P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE P.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = X.ID ORDER BY X.post_title';
 	if ($teams = $wpdb->get_results($teamsql)) {
 		$zebracount = 1;
 		print("<table class=\"widefat\">\n	<thead>\n		 <tr>\n		   		<th scope=\"row\">ID</th>\n		   <th scope=\"col\">Team Name</th>\n		   <th scope=\"col\">Edit Stats</th>\n		   <th scope=\"col\">Edit Players</th>\n		   <th scope=\"col\">Add Player</th>\n		   <th scope=\"col\">Captain</th>\n		   <th scope=\"col\">View</th>\n		 </tr>\n	</thead>\n	<tbody>\n");
@@ -316,7 +317,7 @@ else {
 				print("		   <td>".$t->t_id."</a></td>\n		   <td><a href=\"");
 
 				bloginfo('url');
-				print("/wp-admin/post.php?post=".$t->ID."&action=edit\">".$t->post_title."</a> - ".$t->r_name."</td>\n");
+				print("/wp-admin/post.php?post=".$t->ID."&action=edit\">".$t->post_title."</a> - " . bblm_get_race_name( $t->r_id ) . "</td>\n");
 
 				print("							<td><a href=\"");
 				bloginfo('url');

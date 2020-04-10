@@ -48,7 +48,7 @@
 					$tAimg = "<img src=\"".home_url()."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
 				}
 				else {
-					$tAimg = "<img src=\"".home_url()."/images/races/race".$tA->r_id.".gif\" alt=\"Race Logo\" />";
+          $tAimg = get_the_post_thumbnail( $tA->r_id, 'bblm-fit-medium' );
 				}
 				//Team B
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tB->t_sname."_big.gif";
@@ -56,7 +56,7 @@
 					$tBimg = "<img src=\"".home_url()."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
 				}
 				else {
-					$tBimg = "<img src=\"".home_url()."/images/races/race".$tB->r_id.".gif\" alt=\"Race Logo\" />";
+          $tBimg = get_the_post_thumbnail( $tB->r_id, 'bblm-fit-medium' );
 				}
 
 ?>

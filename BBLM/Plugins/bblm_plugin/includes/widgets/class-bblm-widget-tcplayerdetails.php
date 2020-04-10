@@ -53,7 +53,6 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       global $seasonsql;
 
     	//determine player race
-    	//$racesql = 'SELECT B.guid, R.r_name, R.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' B WHERE R.r_id = J.tid AND J.prefix = \'r_\' AND J.pid = B.ID AND O.pos_id = P.pos_id AND O.r_id = R.r_id AND P.p_id = '.$pd->p_id;
       $racesql = 'SELECT O.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.p_id = '.$pd->p_id;
     	$rd = $wpdb->get_row($racesql);
 

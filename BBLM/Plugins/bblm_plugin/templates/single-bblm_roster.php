@@ -100,11 +100,10 @@ a:hover, a:active {
 		<?php while (have_posts()) : the_post(); ?>
 
 <?php
-		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, T.stad_id, T.WPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L WHERE T.t_id = J.tid AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
+		$teaminfosql = 'SELECT T.*, J.tid AS teamid, T.r_id, T.stad_id, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
-				$team_name = esc_html( get_the_title( $ti->WPID ) );
-				$team_link = get_post_permalink( $ti->WPID );
+				$team_link = bblm_get_team_link( $ti->TWPID );
 
 			//determine Team Captain
 			$teamcap = 0;
@@ -113,7 +112,7 @@ a:hover, a:active {
 				$teamcap = $tcap->p_id;
 			}
 ?>
-		<h1>Roster for <a href="<?php print( $team_link ); ?>" title="Read more about <?php print( $team_name ); ?>"><?php print( $team_name ); ?></a></h1>
+		<h1>Roster for <?php echo $team_link; ?></h1>
 
 <?php
 		}
@@ -272,12 +271,12 @@ a:hover, a:active {
 	}
 	else {
 ?>
-  <td colspan="3" rowspan="7" class="bblm_tbl_logo"><img src="<?php print(home_url()); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
+  <td colspan="3" rowspan="7" class="bblm_tbl_logo"><?php BBLM_CPT_Race::display_race_icon( $ti->r_id, 'icon' ); ?></td>
 <?php
 	}
 ?>
   <th colspan="4" rowspan="2" class="bblm_tbl_title">Team Name:</th>
-  <td rowspan="2"><a href="<?php print( $team_link ); ?>" title="Read more about <?php print( $team_name ); ?>"><?php print( $team_name ); ?></a></td>
+  <td rowspan="2"><?php echo $team_link; ?></td>
   <th colspan="3" class="bblm_tbl_title">Re-Rolls:</th>
   <td><?php print($ti->t_rr); ?></td>
   <th class="bblm_tbl_enchance">X</th>
@@ -293,7 +292,7 @@ a:hover, a:active {
  </tr>
  <tr>
   <th colspan="4" rowspan="2" class="bblm_tbl_title">Race:</th>
-  <td rowspan="2"><a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></td>
+  <td rowspan="2"><?php echo bblm_get_race_name( $ti->r_id ); ?></td>
   <th colspan="3" class="bblm_tbl_title">Assistant Coaches:</th>
   <td><?php print($ti->t_ac); ?></td>
   <th class="bblm_tbl_enchance">X</th>
