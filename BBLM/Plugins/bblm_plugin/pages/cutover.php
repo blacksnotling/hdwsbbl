@@ -1138,9 +1138,23 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		</ul>
 
 		<h2>1.11 -> 1.12</h2>
+		<h3>Database Changes</h3>
+		<ul>
+			<li>Change the following coluns to BIGINT(20):
+			<ul>
+				<li>*positions: r_id</li>
+				<li>*race2star: r_id</li>
+				<li>*teams: r_id</li>
+			</ul></li>
+		</ul>
+		
+		<h3>League Settings</h3>
+		<ul>
+			<li>Update the settings page with text for the Match Results, Awards, and Races pages</li>
+		</ul>
+
 		<h3>Races</h3>
 		<ul>
-			<li>First take a copy of the text at the top of the Races page.</li>
 			<li><input type="submit" name="bblm_race_racecpt" value="Convert Race Post Types" title="Convert the Race Post Types"/></li>
 			<li>Now you can delete the Races Page and update the menus!</li>
 			<li>Upload all the images for the teams</li>

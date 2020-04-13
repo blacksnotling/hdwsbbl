@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.3
+ * @version   1.4
  */
 
 class BBLM_Settings_Admin {
@@ -196,6 +196,22 @@ class BBLM_Settings_Admin {
 						'placeholder' => 'Enter a description here',
 						'type' => 'textarea',
 						'helper' => __( 'Text entered here appears at the top of the Transfers page', 'bblm' ),
+					),
+					array(
+						'uid' => 'archive_match_text',
+						'label' => __( 'Match / Results Page Text', 'bblm' ),
+						'section' => 'second_section',
+						'placeholder' => 'Enter a description here',
+						'type' => 'textarea',
+						'helper' => __( 'Text entered here appears at the top of the Matches / Results page', 'bblm' ),
+					),
+					array(
+						'uid' => 'archive_award_text',
+						'label' => __( 'Awards Page Text', 'bblm' ),
+						'section' => 'second_section',
+						'placeholder' => 'Enter a description here',
+						'type' => 'textarea',
+						'helper' => __( 'Text entered here appears at the top of the Awards page', 'bblm' ),
 					),
           array(
         		'uid' => 'page_team',
