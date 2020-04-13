@@ -298,12 +298,12 @@ function crownstar_custom_colors() {
 	$colors['sponsors_background'] = get_option( 'crownstar_footer_sponsors_css_background', '#f4f4f4' );
 
 	// Defaults
-	if ( empty( $colors['primary'] ) ) $colors['primary'] = '#2b353e';
+	if ( empty( $colors['primary'] ) ) $colors['primary'] = '#163964';
 	if ( empty( $colors['background'] ) ) $colors['background'] = '#f4f4f4';
 	if ( empty( $colors['content'] ) ) $colors['content'] = '#222222';
 	if ( empty( $colors['text'] ) ) $colors['text'] = '#222222';
 	if ( empty( $colors['heading'] ) ) $colors['heading'] = '#ffffff';
-	if ( empty( $colors['link'] ) ) $colors['link'] = '#ba0000';
+	if ( empty( $colors['link'] ) ) $colors['link'] = '#d9101d';
 	if ( empty( $colors['content_background'] ) ) $colors['content_background'] = '#ffffff';
 
 	// Calculate colors

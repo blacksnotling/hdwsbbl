@@ -103,7 +103,7 @@ function crownstar_customize_register( $wp_customize ) {
      * Primary Color
      */
     $wp_customize->add_setting( 'crownstar[primary]', array(
-        'default'           => apply_filters( 'crownstar_default_primary_color', '#2b353e' ),
+        'default'           => apply_filters( 'crownstar_default_primary_color', '#163964' ),
         'sanitize_callback' => 'crownstar_sanitize_hex_color',
         'capability'        => 'edit_theme_options',
         'type'              => 'option',
@@ -119,7 +119,7 @@ function crownstar_customize_register( $wp_customize ) {
      * Link Color
      */
     $wp_customize->add_setting( 'crownstar[link]', array(
-        'default'           => apply_filters( 'crownstar_default_link_color', '#ba0000' ),
+        'default'           => apply_filters( 'crownstar_default_link_color', '#d9101d' ),
         'sanitize_callback' => 'crownstar_sanitize_hex_color',
         'capability'        => 'edit_theme_options',
         'type'              => 'option',

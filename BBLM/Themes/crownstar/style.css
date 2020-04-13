@@ -136,7 +136,7 @@ hr {
 /* Caption Color */
 caption {
     color: #fff;
-    background: #2b353e;
+    background: #163964;
     border-top: 8px solid #00a69c;
 }
 
@@ -239,7 +239,7 @@ body {
 
 /* Footer Color */
 .site-footer {
-    background: #2b353e;
+    background: #163964;
     color: #fff;
 }
 
@@ -289,7 +289,7 @@ a:hover {
 
 /* Menu Color */
 .main-navigation {
-    background: #2b353e;
+    background: #163964;
 }
 
 /* Menu Link Color */
@@ -582,7 +582,7 @@ a:hover .page-title:hover {
 }
 
 .bblm-heading {
-    background: #2b353e;
+    background: #163964;
     color: #fff;
 }
 
@@ -593,7 +593,7 @@ a:hover .page-title:hover {
 
 .bblm-table-caption {
     color: #fff;
-    background: #2b353e;
+    background: #163964;
     border-top: 8px solid #00a69c;
     padding: 0.625em 15px;
 }
@@ -722,7 +722,7 @@ a:hover .page-title:hover {
 }
 
 .bblm-template-gallery .gallery-caption {
-    background: #2b353e;
+    background: #163964;
 }
 
 .bblm-template-gallery .gallery-item strong {
