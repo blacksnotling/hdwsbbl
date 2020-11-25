@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.3
+ * @version   1.4
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -73,6 +73,10 @@ class BBLM_Admin_Menus {
 			'bblm_manage_league',
 			'bblm_plugin/pages/bb.admin.edit.comp_team.php'
 		);
+
+		//Create the 'Record match' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.match.php' );
+		new BBLM_Add_Match();
 
 	}
 
