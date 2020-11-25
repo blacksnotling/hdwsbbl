@@ -196,41 +196,21 @@ class BBLM_Add_Match {
 
 					//Mark Fixture and brackets as complete
 					if ( $bblm_submit_match['fixture'] > 0 ) {
-						//Update the fixture itself
-						$completefixturesql = 'UPDATE `'.$wpdb->prefix.'fixture` SET `f_complete` = \'1\' WHERE `f_id` = '.$bblm_submit_match['fixture'].' LIMIT 1';
-						$wpdb->query( $completefixturesql );
+
+						//Mark the fixture as complete
+						BBLM_Admin_CPT_Competition::update_fixture_complete( $bblm_submit_match['fixture'] );
 
 						//now we check to see if it was part of a tournament
 						$checkbracketssql = 'SELECT cb_order FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = '.$bblm_submit_match['fixture'];
 						$cb_order = $wpdb->get_var($checkbracketssql);
 
-						if (!empty($cb_order)) {
+						if ( !empty( $cb_order ) ) {
 							$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.$bblm_match_number.'\', `f_id` = \'0\', `cb_text` = \'' . esc_sql( sanitize_textarea_field( esc_textarea( get_the_title( $bblm_submit_tA['TWPID'] ) ) ) ) . '<strong>' . $bblm_submit_tA['td'] . '</strong><br />' . esc_sql( sanitize_textarea_field( esc_textarea( get_the_title( $bblm_submit_tB['TWPID'] ) ) ) ) . '<strong>' . $bblm_submit_tB['td'] . '</strong>\' WHERE `c_id` = \''.$bblm_submit_match['comp'].'\' AND `div_id` = \''.$bblm_submit_match['div'].'\' AND `cb_order` = '.$cb_order.' LIMIT 1';
 							$wpdb->query( $updatebracketsql );
 						}
 					} //end of if this match was based off a fixture
 
 					//Update the teams_comp records (including points)
-
-					//initialise variables
-					$comp = array();
-					$tAdeatails = array();
-					$tBdeatails = array();
-
-					//gather information about the competition
-					$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE WPID = ".$bblm_submit_match['comp'];
-					if ( $compd = $wpdb->get_row( $compdatasql ) ) {
-						$comp['counts'] = $compd->c_counts;
-						$comp['pW'] = $compd->c_pW;
-						$comp['pL'] = $compd->c_pL;
-						$comp['pD'] = $compd->c_pD;
-						$comp['ptd'] = $compd->c_ptd;
-						$comp['pcas'] = $compd->c_pcas;
-						$comp['round'] = $compd->c_pround;
-					}
-
-					$tAdiv = 0;
-					$tBdiv = 0;
 
 					//If cross devisional download the match results from match_team for the teams original devision
 					if ( 13 == $bblm_submit_match['div'] ) {
@@ -243,83 +223,8 @@ class BBLM_Add_Match {
 						$tBdiv = $bblm_submit_match['div'];
 					}
 
-					//Determine the current wins, Losses, draws and points
-					$teamAPerformancesql = "SELECT T.mt_result, COUNT(*) AS PLAYED, SUM(T.mt_td) AS TD, SUM(T.mt_cas) AS CAS, SUM(T.mt_int) AS totINT, SUM(T.mt_comp) AS totCOMP FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND t_id = " . $bblm_submit_tA['id'] . " AND M.c_id = " . $bblm_submit_match['comp'] . " AND M.div_id = " . $tAdiv . " GROUP BY T.mt_result ORDER BY T.mt_result";
-					$teamBPerformancesql = "SELECT T.mt_result, COUNT(*) AS PLAYED, SUM(T.mt_td) AS TD, SUM(T.mt_cas) AS CAS, SUM(T.mt_int) AS totINT, SUM(T.mt_comp) AS totCOMP FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND t_id = " . $bblm_submit_tB['id'] . " AND M.c_id = " . $bblm_submit_match['comp'] . " AND M.div_id = " . $tBdiv . " GROUP BY T.mt_result ORDER BY T.mt_result";
-
-					$tAdeatails['W'] = 0;
-					$tAdeatails['L'] = 0;
-					$tAdeatails['D'] = 0;
-
-					if ( $teamAPerformance = $wpdb->get_results( $teamAPerformancesql ) ) {
-						foreach ( $teamAPerformance as $tAp ) {
-							if ("W" == $tAp->mt_result ) {
-								$tAdeatails['W'] = (int) $tAp->PLAYED;
-							}
-							elseif ("L" == $tAp->mt_result ) {
-								$tAdeatails['L'] = (int) $tAp->PLAYED;
-							}
-							elseif ("D" == $tAp->mt_result ) {
-								$tAdeatails['D'] = (int) $tAp->PLAYED;
-							}
-							$tAdeatails['TD'] = $tAdeatails['TD'] + (int) $tAp->TD;
-							$tAdeatails['CAS'] = $tAdeatails['CAS'] + (int) $tAp->CAS;
-							$tAdeatails['INT'] = $tAdeatails['INT'] + (int) $tAp->totINT;
-							$tAdeatails['COMP'] = $tAdeatails['COMP'] + (int) $tAp->totCOMP;
-							$tAdeatails['PLD'] = $tAdeatails['PLD'] + (int) $tAp->PLAYED;
-						}
-					}
-
-					$tBdeatails['W'] = 0;
-					$tBdeatails['L'] = 0;
-					$tBdeatails['D'] = 0;
-
-					if ( $teamBPerformance = $wpdb->get_results( $teamBPerformancesql ) ) {
-						foreach ( $teamBPerformance as $tBp ) {
-							if ("W" == $tBp->mt_result ) {
-								$tBdeatails['W'] = (int) $tBp->PLAYED;
-							}
-							elseif ("L" == $tBp->mt_result ) {
-								$tBdeatails['L'] = (int) $tBp->PLAYED;
-							}
-							elseif ("D" == $tBp->mt_result ) {
-								$tBdeatails['D'] = (int) $tBp->PLAYED;
-							}
-							$tBdeatails['TD'] = $tBdeatails['TD'] + (int) $tBp->TD;
-							$tBdeatails['CAS'] = $tBdeatails['CAS'] + (int) $tBp->CAS;
-							$tBdeatails['INT'] = $tBdeatails['INT'] + (int) $tBp->totINT;
-							$tBdeatails['COMP'] = $tBdeatails['COMP'] + (int) $tBp->totCOMP;
-							$tBdeatails['PLD'] = $tBdeatails['PLD'] + (int) $tBp->PLAYED;
-						}
-					}
-
-					//Calcualte TD and CAS Against
-					$teamAagainst = "SELECT SUM(T.mt_td) AS totTD, SUM(T.mt_cas) AS totCAS FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND (M.m_teamA = " . $bblm_submit_tA['id'] . " OR M.m_teamB = " . $bblm_submit_tA['id'] . ") AND M.c_id = " . $bblm_submit_match['comp'] . " AND M.div_id = " . $tAdiv . " ORDER BY T.mt_result";
-					$teamBagainst = "SELECT SUM(T.mt_td) AS totTD, SUM(T.mt_cas) AS totCAS FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND (M.m_teamA = " . $bblm_submit_tB['id'] . " OR M.m_teamB = " . $bblm_submit_tB['id'] . ") AND M.c_id = " . $bblm_submit_match['comp'] . " AND M.div_id = " . $tBdiv . " ORDER BY T.mt_result";
-					if ( $tAaga = $wpdb->get_row( $teamAagainst ) ) {
-						$tAdeatails['TDa'] = $tAaga->totTD - $tAdeatails['TD'];
-						$tAdeatails['CASa'] = $tAaga->totCAS - $tAdeatails['CAS'];
-					}
-					if ( $tBaga = $wpdb->get_row( $teamBagainst ) ) {
-						$tBdeatails['TDa'] = $tBaga->totTD - $tBdeatails['TD'];
-						$tBdeatails['CASa'] = $tBaga->totCAS - $tBdeatails['CAS'];
-					}
-
-					//Determine the points values
-					$tAdeatails['points'] = ( $tAdeatails['W'] * $comp['pW'] ) + ( $tAdeatails['L'] * $comp['pL'] ) + ( $tAdeatails['D'] * $comp['pD'] ) + ( $tAdeatails['TD'] * $comp['ptd'] ) + ( $tAdeatails['CAS'] * $comp['pcas'] );
-					$tBdeatails['points'] = ( $tBdeatails['W'] * $comp['pW'] ) + ( $tBdeatails['L'] * $comp['pL'] ) + ( $tBdeatails['D'] * $comp['pD'] ) + ( $tBdeatails['TD'] * $comp['ptd'] ) + ( $tBdeatails['CAS'] * $comp['pcas'] );
-
-					//if the competition rounds the results then divide the points by number of games played
-					if ( $comp['round'] ) {
-						$tAdeatails['points'] = ceil( $tAdeatails['points'] / $tAdeatails['PLD'] );
-						$tBdeatails['points'] = ceil( $tBdeatails['points'] / $tBdeatails['PLD'] );
-					}
-
-					//update the team_comp record
-					$teamAupdatecomprecsql = "UPDATE ".$wpdb->prefix."team_comp SET `tc_played` = '" . $tAdeatails['PLD'] . "', `tc_W` = '" . $tAdeatails['W'] . "', `tc_L` = '" . $tAdeatails['L'] . "', `tc_D` = '" . $tAdeatails['D'] . "', `tc_tdfor` = '" . $tAdeatails['TD'] . "', `tc_tdagst` = '" . $tAdeatails['TDa'] . "', `tc_casfor` = '" . $tAdeatails['CAS'] . "', `tc_casagst` = '" . $tAdeatails['CASa'] . "', `tc_int` = '" . $tAdeatails['INT'] . "', `tc_comp` = '" . $tAdeatails['COMP'] . "', `tc_points` = '" . $tAdeatails['points'] . "' WHERE t_id = " . $bblm_submit_tA['id'] . " AND c_id = " . $bblm_submit_match['comp'] . " AND div_id = " . $tAdiv;
-					$teamBupdatecomprecsql = "UPDATE ".$wpdb->prefix."team_comp SET `tc_played` = '" . $tBdeatails['PLD'] . "', `tc_W` = '" . $tBdeatails['W'] . "', `tc_L` = '" . $tBdeatails['L'] . "', `tc_D` = '" . $tBdeatails['D'] . "', `tc_tdfor` = '" . $tBdeatails['TD'] . "', `tc_tdagst` = '" . $tBdeatails['TDa'] . "', `tc_casfor` = '" . $tBdeatails['CAS'] . "', `tc_casagst` = '" . $tBdeatails['CASa'] . "', `tc_int` = '" . $tBdeatails['INT'] . "', `tc_comp` = '" . $tBdeatails['COMP'] . "', `tc_points` = '" . $tBdeatails['points'] . "' WHERE t_id = " . $bblm_submit_tB['id'] . " AND c_id = " . $bblm_submit_match['comp'] . " AND div_id = " . $tBdiv;
-					$wpdb->query( $teamAupdatecomprecsql );
-					$wpdb->query( $teamBupdatecomprecsql );
+					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tA['id'], $bblm_submit_match['comp'], $tAdiv );
+					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tB['id'], $bblm_submit_match['comp'], $tBdiv );
 
 					//If we get to this point we have added a match to the database!
 					$sucess = TRUE;
