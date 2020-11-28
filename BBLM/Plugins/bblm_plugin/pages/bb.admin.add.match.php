@@ -46,7 +46,7 @@ class BBLM_Add_Match {
 
 ?>
 		<div class="wrap">
-			<h1 class="wp-heading-inline"><?php echo __( 'Record a match', 'bblm' ); ?></h1>
+			<h1 class="wp-heading-inline"><?php echo __( 'Record a Match', 'bblm' ); ?></h1>
 			<p><?php echo __( 'This page is used to record the details of a match that took place in the League.', 'bblm' ); ?></p>
 <?php
 
@@ -162,9 +162,7 @@ class BBLM_Add_Match {
 				$bblm_submit_tA['ff'] = $bblm_ff_options[$bblm_submit_tA['ff']];
 				$bblm_submit_tB['ff'] = $bblm_ff_options[$bblm_submit_tB['ff']];
 
-
-
-
+				//Databse submission
 				if ( $bblm_submission = wp_insert_post( $my_post ) ) {
 					add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_match.php');
 
@@ -638,7 +636,7 @@ class BBLM_Add_Match {
 								<td class="comment"><?php echo __( 'The weather during the match', 'bblm' ); ?></td>
 							</tr>
 							<tr>
-								<td><?php echo __( 'Fan Factor', 'bblm' ); ?></td>
+								<td><?php echo __( 'Change in Fan Factor', 'bblm' ); ?></td>
 								<td>
 									<select id="tAff" name="tAff">
 										<option value="0" selected=selected><?php echo __( 'No change', 'bblm' ); ?></option>
@@ -666,11 +664,11 @@ class BBLM_Add_Match {
 						</tbody>
 					</table>
 
-					<input type="hidden" name="bblm_comp" size="20" value="<?php echo $comp_id; ?>">
-					<input type="hidden" name="bblm_div" size="10" value="<?php echo $div_id; ?>">
+					<input type="hidden" name="bblm_comp" size="20" value="<?php echo $comp_id; ?>" />
+					<input type="hidden" name="bblm_div" size="10" value="<?php echo $div_id; ?>" />
 <?php
 					if ( $is_fixture ) {
-						echo '<input type="hidden" name="bblm_fid" size="10" value="' . $f_id . '">';
+						echo '<input type="hidden" name="bblm_fid" size="10" value="' . $f_id . '" />';
 					}
 					wp_nonce_field( basename( __FILE__ ), 'bblm_match_submission' );
 ?>

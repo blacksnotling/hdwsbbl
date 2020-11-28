@@ -78,6 +78,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.match.php' );
 		new BBLM_Add_Match();
 
+		//Create the 'Edit match' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.edit.match.php' );
+		new BBLM_Edit_Match();
+
 	}
 
 	/**
