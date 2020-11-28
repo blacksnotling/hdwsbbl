@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
 class BBLM_Admin {
@@ -24,7 +24,8 @@ class BBLM_Admin {
 
 		add_action( 'init', array( $this, 'includes' ) );
     add_action( 'dashboard_glance_items', array( $this, 'add_dashboard_counts' ) );
-		add_action('wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
+		add_action( 'admin_init', array( $this, 'add_admin_js' ) );
 
 	}
 
@@ -62,6 +63,15 @@ class BBLM_Admin {
      wp_add_dashboard_widget('bblm_jm_widget', 'Blood Bowl: Freebooter Report', 'bblm_jm_report' );
 
 		}
+
+		/**
+ 		* Registers any custom JavaScript files required in the admin pages
+ 		*/
+    function add_admin_js() {
+
+			wp_register_script( 'bblm_match_management', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.match.management.js' );
+
+ 		} //end of add_admin_js
 
 }
 

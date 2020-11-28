@@ -32,7 +32,6 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season'
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Generate Weekly Summary', 'Gen Summary', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.generate.summary.php');
 
 //Adds the subpages to the master heading - Match Management Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Match', 'Record Match', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Player Actions', 'Player Actions', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match_player.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Edit Match details', 'Edit Match', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.match.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.edit.match.php', 'Edit Match Trivia', 'Edit Match Trivia', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.match_trivia.php');
