@@ -574,6 +574,8 @@ class BBLM_Edit_Match {
 					$teamBacdivsql = "SELECT div_id FROM ".$wpdb->prefix."team_comp C WHERE C.t_id = " . $mB->t_id . " AND C.c_id = " . $m->c_id ." ORDER BY div_id DESC";
 					$tAadiv = $wpdb->get_var( $teamAacdivsql );
 					$tBadiv = $wpdb->get_var( $teamBacdivsql );
+					echo '<input type="hidden" name="tAcddiv" size="10" value="' . $tAadiv . '" />';
+					echo '<input type="hidden" name="tBcddiv" size="10" value="' . $tBadiv . '" />';
 				}
 ?>
 				<p class="submit">
@@ -708,7 +710,7 @@ class BBLM_Edit_Match {
  					<p>
  <?php
  				if ( $sucess ) {
- 					print("Match has been ppdated.");
+ 					print("Match has been updated.");
  				}
  				else {
  					print("Something went wrong! Please try again.");
