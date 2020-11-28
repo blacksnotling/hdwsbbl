@@ -15,7 +15,7 @@
 <ul>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_add_match" title="Record match details">Record details of a new match.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php" title="Record a players actions for a match">Record a players actions for a match.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Edit match details (report, comments and facts).</a></li>
+  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_edit_match" title="Edit match details">Edit the details of a match (report, comments and facts).</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.fixture.php" title="Add a new fixture">Add a fixture.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.fixture.php" title="Edit a fixture">Edit a fixture.</a></li>
 </ul>
