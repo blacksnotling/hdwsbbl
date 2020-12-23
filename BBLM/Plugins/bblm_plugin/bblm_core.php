@@ -20,7 +20,6 @@ function bblm_insert_admin_pages() {
 	//Addition of Top level admin pages
 
 	add_menu_page('League Admin', 'BB: League Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.welcome.php');
-	add_menu_page('Match Management', 'BB: Match Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.matchmanagement.php');
 	add_menu_page('Team Management', 'BB: Team Admin', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.core.teamm.php');
 
 	//Adds the subpages to the master heading - League Admin Pages
@@ -31,9 +30,6 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Competi
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season', 'Close Sea', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.season.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Generate Weekly Summary', 'Gen Summary', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.generate.summary.php');
 
-//Adds the subpages to the master heading - Match Management Pages
-add_submenu_page('bblm_plugin/pages/bb.admin.core.matchmanagement.php', 'Record Player Actions', 'Player Actions', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match_player.php');
-
 //Adds the subpages to the master heading - Team Management Pages
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Team', 'Add Team', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.team.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Teams', 'Manage Teams', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.team.php');
@@ -41,6 +37,7 @@ add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Player', 'Add
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.player.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.star.php');
 add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.report.jm.php');
+add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Record Player Actions', 'Player Actions', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.match_player.php');
 
 }
 add_action('admin_menu', 'bblm_insert_admin_pages', 11);
