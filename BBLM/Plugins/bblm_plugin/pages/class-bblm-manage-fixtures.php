@@ -230,15 +230,11 @@ class BBLM_Fixtures_List extends WP_List_Table {
 
 			else {
 				$delete_ids = esc_sql( $_POST['bulk-delete'] );
-				echo '<pre>';
-				print_r($delete_ids);
-				echo '</pre>';
 
 				// loop over the array of record IDs and deactivate them
 				$sucess = "";
 				foreach ( $delete_ids as $id ) {
 
-					//$deletesql = "UPDATE ".$wpdb->prefix."fixture SET `f_complete` = '1' WHERE f_id = " . $id;
 					if ( BBLM_Admin_CPT_Competition::update_fixture_complete( $id ) ) {
 						$sucess = TRUE;
 						do_action( 'bblm_post_submission' );
@@ -700,7 +696,7 @@ class BBLM_Manage_Fixtures {
 
 				$sucess = "";
 				foreach ($fixturesqla as $fs) {
-					if (FALSE !== $wpdb->query( $fs ) ) {
+					if ( FALSE !== $wpdb->query( $fs ) ) {
 						$sucess = TRUE;
 						do_action( 'bblm_post_submission' );
 					}
