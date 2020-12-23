@@ -160,8 +160,6 @@ class BBLM_Positions_List extends WP_List_Table {
 	 */
 	function column_name( $item ) {
 
-		$delete_nonce = wp_create_nonce( 'bblm_delete_position' );
-
 		$title = '<strong>' . $item['pos_name'] . '</a></strong>';
 
 		return $title;
@@ -243,48 +241,55 @@ class BBLM_Positions_List extends WP_List_Table {
 	}
 
 	public function process_bulk_action() {
-
-		//Detect when a bulk action is being triggered...
-		if ( 'delete' === $this->current_action() ) {
-
-			// In our file that handles the request, verify the nonce.
-			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
-
-			if ( ! wp_verify_nonce( $nonce, 'bblm_delete_position' ) ) {
-				return $post_id;
-			}
-			else {
-				self::delete_position( absint( $_GET['position'] ) );
-
-		                // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-		                // add_query_arg() return the current url
-		                wp_redirect( esc_url_raw(add_query_arg()) );
-				exit;
-			}
-
-		}
+		global $wpdb;
 
 		// If the delete bulk action is triggered
 		if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
 		     || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
 		) {
 
-			$delete_ids = esc_sql( $_POST['bulk-delete'] );
-
-			// loop over the array of record IDs and delete them
-			foreach ( $delete_ids as $id ) {
-				self::delete_position( $id );
-
+			//verify the nonce
+			if ( !wp_verify_nonce( $_POST['bblm_positions'], 'bblm_delete_position' ) ) {
+				return $post_id;
 			}
 
-						// esc_url_raw() is used to prevent converting ampersand in url to "#038;"
-		        // add_query_arg() return the current url
-		        wp_redirect( esc_url_raw( add_query_arg() ) );
-			exit;
-		}
-	}
+			else {
+				$delete_ids = esc_sql( $_POST['bulk-delete'] );
 
-}
+				// loop over the array of record IDs and deactivate them
+				$sucess = "";
+				foreach ( $delete_ids as $id ) {
+
+					$deletesql = "DELETE FROM ".$wpdb->prefix."position WHERE pos_id = " . $id;
+					if ( FALSE !== $wpdb->query( $deletesql ) ) {
+						$sucess = TRUE;
+						do_action( 'bblm_post_submission' );
+					}
+
+				}
+
+	?>
+				<div id="updated" class="notice notice-success">
+					<p>
+						<?php
+						if ( $sucess ) {
+							echo __( 'Position(s) was removed' , 'bblm' );
+						}
+						else {
+							echo __( 'Something went wrong', 'bblm' );
+						}
+						?>
+					</p>
+				</div>
+	<?php
+
+			} //end of else
+
+		} //end of if action set
+
+	} //end of process_bulk_action()
+
+	} //end of class
 
 /**
  *
@@ -400,7 +405,8 @@ class BBLM_Manage_Positions {
 
 							<form method="post" action="">
 <?php
-		          $this->positions_obj->prepare_items();
+							wp_nonce_field( 'bblm_delete_position', 'bblm_positions' );
+							$this->positions_obj->prepare_items();
 			        $this->positions_obj->display();
 ?>
 
