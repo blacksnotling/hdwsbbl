@@ -29,11 +29,11 @@ class BBLM_Admin_CPT_Match {
  	}
 
 	/**
-	 * Adds the following Javascript content to the add match, and edit match pages
+	 * Adds the following Javascript content to the add match, edit match, and fixtures pages
 	 */
 	public function match_auto_update( $hook_suffix ) {
 
-		if( in_array( $hook_suffix, array( 'blood-bowl_page_bblm_add_match', 'blood-bowl_page_bblm_edit_match' ) ) ) {
+		if( in_array( $hook_suffix, array( 'blood-bowl_page_bblm_add_match', 'blood-bowl_page_bblm_edit_match', 'blood-bowl_page_bblm_fixtures' ) ) ) {
 
 			//loads in the required javascript file
 			wp_enqueue_script( 'bblm_match_management' );

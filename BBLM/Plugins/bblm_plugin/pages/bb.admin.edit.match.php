@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Two classes
- * The first hanbdles the generation of the Positions table,
+ * The first hanbdles the generation of the Matches table,
  * THe Second inputs and displays the data and handles the form and POST / GET action
  *
  * @class 		BBLM_Match_list
@@ -77,7 +77,7 @@ class BBLM_Match_List extends WP_List_Table {
 	}
 
 
-	/** Text displayed when no Position data is available */
+	/** Text displayed when no Match data is available */
 	public function no_items() {
 
 		_e( 'No Matches avaliable.', 'bblm' );
@@ -252,7 +252,7 @@ class BBLM_Edit_Match {
 	static $instance;
 
 	// Matches WP_List_Table object
-	public $matches_obj;
+	public $match_obj;
 
 	// class constructor
 	public function __construct() {
@@ -338,8 +338,8 @@ class BBLM_Edit_Match {
 
 							<form method="post" action="">
 <?php
-		          $this->positions_obj->prepare_items();
-			        $this->positions_obj->display();
+		          $this->match_obj->prepare_items();
+			        $this->match_obj->display();
 ?>
 
 							</form>
@@ -367,7 +367,7 @@ class BBLM_Edit_Match {
 
 		add_screen_option( $option, $args );
 
-		$this->positions_obj = new BBLM_Match_List();
+		$this->match_obj = new BBLM_Match_List();
 	}
 
   /**
@@ -377,7 +377,7 @@ class BBLM_Edit_Match {
 		 global $wpdb;
 
 		 $bblm_isediting = 0;
-		 //ininalise array to hold the details of the position
+		 //ininalise array to hold the details of the Matches
 
 ?>
 		<div class="notice"><p><strong><?php echo __( 'You cannot edit the following via this page: TV, Treasury, Fan Factor', 'bblm' ); ?></strong></p></div>
@@ -387,7 +387,7 @@ class BBLM_Edit_Match {
 
 <?php
 		if ( 'edit' == $_GET['bblm_action'] && isset( $_GET['match'] ) ) {
-			//we are editing a position
+			//we are editing a Match
 
 			$bblm_isediting = 1;
 			$match_id = (int) $_GET['match'];
@@ -587,7 +587,7 @@ class BBLM_Edit_Match {
    } //end of function
 
 	 /**
- 	 * handles the submission of updates for an position
+ 	 * handles the submission of updates for an Match
 	 * Can only get here if bblm_match_edit was previously submitted
  	 */
     public function submit_handling_update() {
@@ -734,5 +734,5 @@ class BBLM_Edit_Match {
 }
 
 add_action( 'plugins_loaded', function () {
-	BBLM_Manage_Positions::get_instance();
+	BBLM_Edit_Match::get_instance();
 } );

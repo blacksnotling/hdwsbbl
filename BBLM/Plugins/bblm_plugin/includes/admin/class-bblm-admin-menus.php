@@ -86,6 +86,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.edit.match.php' );
 		new BBLM_Edit_Match();
 
+		//Create the 'Manage Fixtures'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-fixtures.php' );
+		new BBLM_Manage_Fixtures();
+
 	}
 
 	/**
