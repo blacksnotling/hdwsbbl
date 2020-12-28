@@ -70,6 +70,7 @@ class BBLM_Admin {
     function add_admin_js() {
 
 			wp_register_script( 'bblm_match_management', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.match.management.js' );
+			wp_register_script( 'bblm_player_changes', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.player.changes.js' );
 
  		} //end of add_admin_js
 
