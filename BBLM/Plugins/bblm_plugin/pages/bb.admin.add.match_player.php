@@ -79,13 +79,13 @@ class BBLM_Add_Match_Player {
 					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
 						if ( "on" == $_POST['bblm_pcng'.$p] ) {
 
-							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.$_POST['bblm_pma'.$p].'\', `p_st` = \''.$_POST['bblm_pst'.$p].'\', `p_ag` = \''.$_POST['bblm_pag'.$p].'\', `p_av` = \''.$_POST['bblm_pav'.$p].'\', `p_skills` = \''.$_POST['bblm_pskills'.$p].'\', `p_injuries` = \''.$_POST['bblm_pinjuries'.$p].'\', `p_cost` = \''.$_POST['bblm_pcost'.$p].'\'';
+							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 
 							if ( '1' !== $_POST['bblm_mng'.$p] ) {
-								$updatesql .= ', `p_cost_ng` = \''.$_POST['bblm_pcost'.$p].'\'';
+								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 							}
 
-							$updatesql .= ' WHERE `p_id` = '.$_POST['bblm_pid'.$p].' LIMIT 1';
+							$updatesql .= ' WHERE `p_id` = '. (int) $_POST['bblm_pid'.$p].' LIMIT 1';
 
 							$playersqla[$p] = $updatesql;
 
@@ -99,7 +99,7 @@ class BBLM_Add_Match_Player {
 
 				//Now we must set the match to complete
 				/*CREATE FUNCTION*/
-				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '.$_POST['bblm_mid'].' LIMIT 1';
+				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
 
 				//insert the string into the DB
 				foreach ($playersqla as $ps) {
@@ -108,8 +108,8 @@ class BBLM_Add_Match_Player {
 					}
 				}
 
-				bblm_update_tv( $_POST['bblm_teamA'] );
-				bblm_update_tv( $_POST['bblm_teamB'] );
+				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
+				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
 
 				if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
 					$sucess = TRUE;
@@ -169,7 +169,7 @@ class BBLM_Add_Match_Player {
 			<p><strong><?php echo __( 'Warning', 'bblm' ); ?></strong>: <?php echo __( 'This may take some time to process all the information! Please ', 'bblm' ); ?><strong><?php echo __( 'don\'t', 'bblm' ); ?></strong><?php echo __( ' hit submit multiple times.', 'bblm' ); ?></p>
 <?php
 			$ccounts = 0;
-			$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ".$_POST['bblm_mid'];
+			$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ". (int) $_POST['bblm_mid'];
 			if ($md = $wpdb->get_row($matchsql2)) {
 ?>
 			<h3><?php echo __( 'Match Reference', 'bblm' ); ?></h3>
@@ -219,7 +219,7 @@ class BBLM_Add_Match_Player {
 ?>
 
 			<form name="bblm_recordparticipation" method="post" id="post">
-				<input type="hidden" name="bblm_mid" size="3" value="<?php echo $_POST['bblm_mid']; ?>" />
+				<input type="hidden" name="bblm_mid" size="3" value="<?php echo  (int) $_POST['bblm_mid']; ?>" />
 				<input type="hidden" name="bblm_ccounts" size="3" value="<?php echo $ccounts; ?>" />
 				<input type="hidden" name="bblm_teamA" size="3" value="<?php echo $tAid; ?>" />
 				<input type="hidden" name="bblm_teamB" size="3" value="<?php echo $tBid; ?>" />
@@ -507,13 +507,13 @@ class BBLM_Add_Match_Player {
 			<p><strong><?php echo __( 'Warning', 'bblm' ); ?></strong>: <?php echo __( 'This may take some time to process all the information! Please ', 'bblm' ); ?><strong><?php echo __( 'don\'t', 'bblm' ); ?></strong><?php echo __( ' hit submit multiple times.', 'bblm' ); ?></p>
 
 			<form name="bblm_recordincreases" method="post" id="post">
-				<input type="hidden" name="bblm_mid" size="3" value="<?php echo $_POST['bblm_mid']; ?>" />
+				<input type="hidden" name="bblm_mid" size="3" value="<?php echo  (int) $_POST['bblm_mid']; ?>" />
 				<input type="hidden" name="bblm_ccounts" size="3" value="<?php echo $_POST['bblm_ccounts']; ?>" />
-				<input type="hidden" name="bblm_teamA" size="3" value="<?php echo $_POST['bblm_teamA']; ?>" />
-				<input type="hidden" name="bblm_teamB" size="3" value="<?php echo $_POST['bblm_teamB']; ?>" />
+				<input type="hidden" name="bblm_teamA" size="3" value="<?php echo  (int) $_POST['bblm_teamA']; ?>" />
+				<input type="hidden" name="bblm_teamB" size="3" value="<?php echo  (int) $_POST['bblm_teamB']; ?>" />
 
 <?php
-				$playersql = 'SELECT P.*, M.mp_inj, M.mp_inc, T.t_name FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.p_id = M.p_id AND m_id = '.$_POST['bblm_mid'].' AND M.t_id = T.t_id ORDER BY P.t_id, P.p_num';
+				$playersql = 'SELECT P.*, M.mp_inj, M.mp_inc, T.t_name FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.p_id = M.p_id AND m_id = '. (int) $_POST['bblm_mid'].' AND M.t_id = T.t_id ORDER BY P.t_id, P.p_num';
 				if ( $playerlist = $wpdb->get_results( $playersql ) ) {
 
 					//initiate var for count
@@ -711,7 +711,7 @@ class BBLM_Add_Match_Player {
 
 					if ("on" == $_POST['bblm_plyd'.$p]) {
 
-						$playerplayed[$p] = $_POST['bblm_pid'.$p];
+						$playerplayed[$p] =  (int) $_POST['bblm_pid'.$p];
 
 						//we only want a comma added for all but the first
 						if ( 1 !== $is_first_player ) {
@@ -744,12 +744,12 @@ class BBLM_Add_Match_Player {
 						}
 
 						//generate the SQL
-						$playermatchsql .= '(\''.$_POST['bblm_mid'].'\', \''.$_POST['bblm_pid'.$p].'\', \''.$_POST['bblm_tid'.$p].'\', \''.$_POST['bblm_td'.$p].'\', \''.$_POST['bblm_cas'.$p].'\', \''.$_POST['bblm_comp'.$p].'\', \''.$_POST['bblm_int'.$p].'\', \''.$_POST['bblm_mvp'.$p].'\', \''.$_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.$_POST['bblm_injury'.$p].'\', \''.$_POST['bblm_increase'.$p].'\', \''.$compcounts.'\')';
+						$playermatchsql .= '(\''. (int) $_POST['bblm_mid'].'\', \''. (int) $_POST['bblm_pid'.$p].'\', \''. (int) $_POST['bblm_tid'.$p].'\', \''. (int) $_POST['bblm_td'.$p].'\', \''. (int) $_POST['bblm_cas'.$p].'\', \''. (int) $_POST['bblm_comp'.$p].'\', \''. (int) $_POST['bblm_int'.$p].'\', \''. (int) $_POST['bblm_mvp'.$p].'\', \''. (int) $_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_injury'.$p] ) ).'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_increase'.$p] ) ).'\', \''.$compcounts.'\')';
 
 						//If the player is injured (exhibition or otherwise) then update the player table
 						$playerupdatesql = "";
 						if ( $mng[$p] )  {
-							$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''.$_POST['bblm_pid'.$p].'\' LIMIT 1';
+							$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''. (int) $_POST['bblm_pid'.$p].'\' LIMIT 1';
 						}
 
 						//once we have the sql generated, we can insert into the array to insert later on
@@ -771,7 +771,7 @@ class BBLM_Add_Match_Player {
 			} //end of while
 
 			//Generate SQL to update the match
-			$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '.$_POST['bblm_mid'].' LIMIT 1';
+			$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
 
 			$result = 0;
 			//Regardless of if the comp counts, we add the player records to the match_player table
@@ -789,8 +789,8 @@ class BBLM_Add_Match_Player {
 					}
 				}
 
-				bblm_update_tv( $_POST['bblm_teamA'] );
-				bblm_update_tv( $_POST['bblm_teamB'] );
+				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
+				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
 
 				$result = 1;
 				do_action( 'bblm_post_submission' );
@@ -807,7 +807,7 @@ class BBLM_Add_Match_Player {
 			else {
 				//update the match as complete
 				/*CREATE FUNCTION*/
-				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '.$_POST['bblm_mid'].' LIMIT 1';
+				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
 				if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
 					$result = 1;
 				}
