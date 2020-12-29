@@ -38,6 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/class-bblm-admin-cpt-comp.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-race.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-match.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-team.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-player.php' );
 
  }
 

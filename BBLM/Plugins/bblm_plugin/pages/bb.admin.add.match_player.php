@@ -97,10 +97,6 @@ class BBLM_Add_Match_Player {
 
 				} //end of player loop
 
-				//Now we must set the match to complete
-				/*CREATE FUNCTION*/
-				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
-
 				//insert the string into the DB
 				foreach ($playersqla as $ps) {
 					if (FALSE !== $wpdb->query($ps)) {
@@ -111,7 +107,8 @@ class BBLM_Add_Match_Player {
 				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
 				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
 
-				if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
+				//set the match to complete
+				if ( BBLM_Admin_CPT_Match::set_match_complete( (int) $_POST['bblm_mid'] ) ) {
 					$sucess = TRUE;
 				}
 
@@ -689,16 +686,6 @@ class BBLM_Add_Match_Player {
 			//define array to hold injured sql
 			$reactivatesql = array();
 
-			//before we begin the main loop, we re-activate all the players who missed the game
-			/*CREATE FUNCTION*/
-			$selectinjplayer = 'SELECT p_id FROM '.$wpdb->prefix.'player WHERE p_mng = 1 AND (t_id = '.(int) $_POST['bblm_teamA'].' or t_id = '. (int) $_POST['bblm_teamB'].')';
-
-			if ( $injplayer = $wpdb->get_results( $selectinjplayer ) ) {
-				foreach ( $injplayer as $ip ) {
-					$reactivatesql[] .= 'UPDATE `'.$wpdb->prefix.'player` SET `p_mng` = \'0\', `p_cost_ng` = p_cost  WHERE `p_id` = '.$ip->p_id.' LIMIT 1';
-				}
-			}
-
 			//Initialize var to capture first input
 			$is_first_player = 1;
 			$playerplayed = array(); //Records the list of players who took part
@@ -777,18 +764,18 @@ class BBLM_Add_Match_Player {
 			//Regardless of if the comp counts, we add the player records to the match_player table
 			if ( FALSE !== $wpdb->query( $playermatchsql ) ) {
 
-				/*CREATE FUNCTION*/
-				foreach ( $reactivatesql as $rs ) {
-					if ( FALSE !== $wpdb->query( $rs ) ) {
-						$result = 1;
-					}
-				}
+				//restore all the injured players (who missed the games) to the teams
+				BBLM_Admin_CPT_Team::reset_team_mng( (int) $_POST['bblm_teamA'] );
+				BBLM_Admin_CPT_Team::reset_team_mng( (int) $_POST['bblm_teamB'] );
+
+				//Set the newly injured players as injured
 				foreach ( $playerinj as $ps ) {
 					if ( FALSE !== $wpdb->query( $ps ) ) {
 						$result = 1;
 					}
 				}
 
+				//Update the TV
 				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
 				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
 
@@ -806,9 +793,7 @@ class BBLM_Add_Match_Player {
 			} //end of if comp counts
 			else {
 				//update the match as complete
-				/*CREATE FUNCTION*/
-				$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
-				if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
+				if ( BBLM_Admin_CPT_Match::set_match_complete( (int) $_POST['bblm_mid'] ) ) {
 					$result = 1;
 				}
 			}
