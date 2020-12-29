@@ -1145,9 +1145,17 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				<li>*positions: r_id</li>
 				<li>*race2star: r_id</li>
 				<li>*teams: r_id</li>
+				<li>*comp_brackets: m_id</li>
+				<li>*match_player: m_id</li>
+				<li>*match_team: m_id</li>
+				<li>*player_fate: m_id</li>
 			</ul></li>
+			<li>Add the following columns to the following tables:
+				<ul>
+					<li>WPID (BIGINT(20) to *_match</li>
+				</ul></li>
 		</ul>
-		
+
 		<h3>League Settings</h3>
 		<ul>
 			<li>Update the settings page with text for the Match Results, Awards, and Races pages</li>
@@ -1161,6 +1169,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_race_positions" value="Update Races in Positions" title="Update Races in Positions Table"/></li>
 			<li><input type="submit" name="bblm_race_race2star" value="Update Races in Race2star" title="Update Races in Race2star Table"/></li>
 			<li><input type="submit" name="bblm_race_teams" value="Update Races in Teams" title="Update Teams in Race2star Table"/></li>
+		</ul>
+
+		<h3>Matches</h3>
+		<ul>
+			<li>TBC</li>
 		</ul>
 
 		<h3>Theme - Crownstar</h3>

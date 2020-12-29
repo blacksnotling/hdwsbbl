@@ -265,3 +265,47 @@ function bblm_get_race_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_season_link
+
+/**
+ * Returns the name of a Match, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_match_name
+
+/**
+ * Returns the link of a Match, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_link( $ID ) {
+
+  $match_name = bblm_get_match_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $match_name . '" href="' . get_post_permalink( $ID ) . '">' . $match_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_link
+
+/**
+ * Returns the link of a Match as a date, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_link_date( $ID ) {
+
+  $match_date = get_match_date( $ID );
+  $output = "";
+
+  $output .= '<a title="View details of the match" href="' . get_post_permalink( $ID ) . '">' . $match_date . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_link_date

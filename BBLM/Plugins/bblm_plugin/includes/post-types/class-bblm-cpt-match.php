@@ -24,8 +24,6 @@ class BBLM_CPT_Match {
 
 	}
 
-
-
 /**
 * Dsiplays the Matches that have taken place at a specific stadium
 *
@@ -82,6 +80,23 @@ class BBLM_CPT_Match {
 	 }
 
  } //end of display_match_by_stadium
+
+/**
+ * Returns a date of a match alreqady formatted
+ *
+ * @param $ID the ID of the match (WPID)
+ * @return string the data of the match
+ */
+ public static function get_match_date( $ID ) {
+	 global $wpdb;
+
+	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J WHERE M.m_id = J.tid AND J.prefix=\'m_\' AND J.tid = '. $ID;
+
+	 $result = $wpdb->get_var( $sql );
+
+	 return date("d-m-25y", $result );
+
+ } //end of get_match_date
 
 } //end of class
 
