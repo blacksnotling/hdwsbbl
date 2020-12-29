@@ -33,10 +33,11 @@ class BBLM_Admin_CPT_Match {
 	 */
 	public function match_auto_update( $hook_suffix ) {
 
-		if( in_array( $hook_suffix, array( 'blood-bowl_page_bblm_add_match', 'blood-bowl_page_bblm_edit_match', 'blood-bowl_page_bblm_fixtures' ) ) ) {
+		if( in_array( $hook_suffix, array( 'blood-bowl_page_bblm_add_match', 'blood-bowl_page_bblm_edit_match', 'blood-bowl_page_bblm_fixtures', 'blood-bowl_page_bblm_add_match_player' ) ) ) {
 
 			//loads in the required javascript file
 			wp_enqueue_script( 'bblm_match_management' );
+			wp_enqueue_script( 'bblm_player_changes' );
 
 			//jQuery UI date picker file
 			wp_enqueue_script('jquery-ui-datepicker');
@@ -48,7 +49,24 @@ class BBLM_Admin_CPT_Match {
 
 	} //end of match_auto_update
 
+ /**
+	* Sets a match to complete
+	*
+	* @param int $ID the ID of the Match
+	* @return bool true (successfull), or False (Failure)
+	*/
+	public static function set_match_complete( $ID ) {
+		global $wpdb;
 
+		$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $ID .' LIMIT 1';
+		if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
+			return TRUE;
+		}
+		else {
+			return FALSE;
+		}
+
+	} //end of set_match_complete()
 
 } //end of class
 
