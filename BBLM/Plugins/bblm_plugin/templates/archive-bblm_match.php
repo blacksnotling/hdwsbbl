@@ -13,19 +13,19 @@ Template Name: List Resuts
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
 		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
 			<?php do_action( 'bblm_template_before_content' ); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 				<header class="page-header entry-header">
 
-					<h2 class="entry-title"><?php the_title(); ?></h2>
+					<h2 class="entry-title"><?php echo __( 'Match Results', 'bblm'); ?></h2>
+          <div class="archive-description"><?php echo bblm_echo_archive_desc( 'match' ) ?></div>
 
 				</header><!-- .page-header -->
 
 					<div class="entry-content">
 
-					<?php the_content(); ?>
+
 <?php if (!empty($_POST['bblm_flayout'])) {
 		$bblm_flayout = $_POST['bblm_flayout'];
 } else {
@@ -41,7 +41,7 @@ Template Name: List Resuts
 				</form>
 
 <?php
-				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, C.sea_id, M.c_id, D.div_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY ';
+				$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, M.WPID AS MWPID, C.sea_id, M.c_id, D.div_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.c_id = C.WPID ORDER BY ';
 				$layout = "";
 				//determine the required Layout
 				if (isset($_POST['bblm_flayout'])) {
@@ -131,7 +131,7 @@ Template Name: List Resuts
 								print("		<tr class=\"bblm_tbl_alt\">\n");
 							}
 							//print("<table>\n		 <tr>\n		   <th>Date</th>\n		   <th>Match</th>\n		   <th>Result</th>\n		   <th>Attendance</th>\n		 </tr>\n");
-							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		   <td><a href=\"".$m->guid."\" title=\"View the details of the match\">".$m->post_title."</a></td>\n		   <td>".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")</td>\n		   <td><em>".number_format($m->m_gate)."</em></td>\n		 </tr>\n");
+							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		   <td>".bblm_get_match_link( $m->MWPID )."</td>\n		   <td>".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")</td>\n		   <td><em>".number_format($m->m_gate)."</em></td>\n		 </tr>\n");
 							$zebracount++;
 						}
 						print("</table>\n");
@@ -191,7 +191,6 @@ Template Name: List Resuts
 </article><!-- .post-ID -->
 
 <?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 <?php do_action( 'bblm_template_after_posts' ); ?>

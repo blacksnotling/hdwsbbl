@@ -989,7 +989,275 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 													          }//end of if sql was successful
 
 													      } // end of if (isset($_POST['bblm_race_race2star'])) {
+																	/**
+																		*
+																		* UPDATING WP Posts TABLE FOR THE NEW Matches CPT
+																		*/
+																	 if (isset($_POST['bblm_match_matchcpt'])) {
 
+																		 $cuppostsql = "SELECT P.ID, R.m_id, P.post_title, P.post_name FROM ".$wpdb->prefix."match R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.m_id = J.tid AND P.ID = J.pid and J.prefix = 'm_' ORDER BY P.ID ASC";
+																			 if ($stadposts = $wpdb->get_results($cuppostsql)) {
+										//							        echo '<ul>';
+																				 foreach ($stadposts as $stad) {
+																					 $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_match' WHERE `".$wpdb->posts."`.`ID` = '".$stad->ID."';";
+											//						          print("<li>".$stadupdatesql."</li>");
+
+																	          if ( $wpdb->query($stadupdatesql) ) {
+																						 $result = true;
+
+																					 }
+																					 else {
+																						 $result = false;
+																					 }
+
+																				 } //end of foreach
+		//															          echo '</ul>';
+																				 if ( $result ) {
+																					 print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Matches Page! <strong>Now you can delete the Matches page!</strong></p></div>\n");
+																				 }
+																			 }//end of if sql was successful
+
+																	 } //end of if (isset($_POST['bblm_match_matchcpt']))
+																	 /**
+																		*
+																		* updating the matches db table with wpid
+																		*/
+																	 if (isset($_POST['bblm_match_tbupdate'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $playerdeetssql = "SELECT T.m_id, J.pid AS WPID FROM `".$wpdb->prefix."match` T, ".$wpdb->prefix."bb2wp J WHERE J.prefix = 'm_' AND J.tid = T.m_id";
+																		 //echo '<p>'.$playerdeetssql.'</p>';
+
+																		 //We check something was returned
+																		 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			 echo '<ul>';
+																			 //Then we loop through them
+																			 foreach ($playerdeets as $pdeet) {
+
+																				 //We use this value to update the team tables
+																				 $playerupsql = "UPDATE `".$wpdb->prefix."match` SET `WPID` = '".$pdeet->WPID."' WHERE `".$wpdb->prefix."match`.`m_id` = ".$pdeet->m_id;
+																				 echo '<li>' . $playerupsql . '</li>';
+
+																				 if ( $wpdb->query($playerupsql) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+																			 echo '</ul>';
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF Updateing Team Database table
+																	 /**
+																		*
+																		* updating the comp brackets db table for matches
+																		*/
+																	 if (isset($_POST['bblm_match_compbracket'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $playerdeetssql = "SELECT M.m_id AS mid, M.WPID AS MWPID, T.cb_id FROM `".$wpdb->prefix."match` M, `".$wpdb->prefix."comp_brackets` T WHERE M.m_id = T.m_id ORDER BY M.m_id";
+																		 //echo '<p>'.$playerdeetssql.'</p>';
+
+																		 //We check something was returned
+																		 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			 echo '<ul>';
+																			 //Then we loop through them
+																			 foreach ($playerdeets as $pdeet) {
+
+																				 //We use this value to update the team tables
+																				 $playerupsql = "UPDATE `".$wpdb->prefix."comp_brackets` SET `m_id` = '".$pdeet->MWPID."' WHERE cb_id = ".$pdeet->cb_id;
+																				 echo '<li>' . $playerupsql . '</li>';
+
+																				 if ( $wpdb->query($playerupsql) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+																			 echo '</ul>';
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF bblm_match_compbracket
+																	 /**
+																		*
+																		* updating the match playrr db table for matches
+																		*/
+																	 if (isset($_POST['bblm_match_matchplayer'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $playerdeetssql = "SELECT M.m_id AS mid, M.WPID AS MWPID, T.p_id FROM `".$wpdb->prefix."match` M, `".$wpdb->prefix."match_player` T WHERE M.m_id = T.m_id ORDER BY M.m_id";
+																		 //echo '<p>'.$playerdeetssql.'</p>';
+
+																		 //We check something was returned
+																		 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			 echo '<ul>';
+																			 //Then we loop through them
+																			 foreach ($playerdeets as $pdeet) {
+
+																				 //We use this value to update the team tables
+																				 $playerupsql = "UPDATE `".$wpdb->prefix."match_player` SET `m_id` = '".$pdeet->MWPID."' WHERE m_id = ".$pdeet->mid." AND p_id = ".$pdeet->p_id;
+																				 echo '<li>' . $playerupsql . '</li>';
+
+																				 if ( $wpdb->query($playerupsql) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+																			 echo '</ul>';
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF bblm_match_matchplayer
+																	 /**
+																		*
+																		* updating the match team db table for matches
+																		*/
+																	 if (isset($_POST['bblm_match_matchteam'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $playerdeetssql = "SELECT M.m_id AS mid, M.WPID AS MWPID, T.t_id FROM `".$wpdb->prefix."match` M, `".$wpdb->prefix."match_team` T WHERE M.m_id = T.m_id ORDER BY M.m_id DESC";
+																		 //echo '<p>'.$playerdeetssql.'</p>';
+
+																		 //We check something was returned
+																		 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			 echo '<ul>';
+																			 //Then we loop through them
+																			 foreach ($playerdeets as $pdeet) {
+
+																				 //We use this value to update the team tables
+																				 $playerupsql = "UPDATE `".$wpdb->prefix."match_team` SET `m_id` = '".$pdeet->MWPID."' WHERE m_id = ".$pdeet->mid." AND t_id = ".$pdeet->t_id;
+																				 echo '<li>' . $playerupsql . '</li>';
+
+																				 if ( $wpdb->query($playerupsql) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+																			 echo '</ul>';
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF bblm_match_matchteam
+																	 /**
+																		*
+																		* updating the player fate db table for matches
+																		*/
+																	 if (isset($_POST['bblm_match_playerfate'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $playerdeetssql = "SELECT M.m_id AS mid, M.WPID AS MWPID, T.p_id, T.f_id FROM `".$wpdb->prefix."match` M, `".$wpdb->prefix."player_fate` T WHERE M.m_id = T.m_id ORDER BY M.m_id DESC";
+																		 //echo '<p>'.$playerdeetssql.'</p>';
+
+																		 //We check something was returned
+																		 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			 echo '<ul>';
+																			 //Then we loop through them
+																			 foreach ($playerdeets as $pdeet) {
+
+																				 //We use this value to update the team tables
+																				 $playerupsql = "UPDATE `".$wpdb->prefix."player_fate` SET `m_id` = '".$pdeet->MWPID."' WHERE f_id = ".$pdeet->f_id." AND p_id = ".$pdeet->p_id;
+																				 echo '<li>' . $playerupsql . '</li>';
+
+																				 if ( $wpdb->query($playerupsql) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+																			 echo '</ul>';
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF bblm_match_playerfate
 
 /**
  *
@@ -1173,7 +1441,13 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 		<h3>Matches</h3>
 		<ul>
-			<li>TBC</li>
+			<li><input type="submit" name="bblm_match_matchcpt" value="Convert Match Post Types" title="Convert the Match Post Types"/></li>
+			<li><input type="submit" name="bblm_match_tbupdate" value="Update Match Table" title="Update Match Table"/></li>
+			<li>Now you can delete the Matches / Results Page and update the menus!</li>
+			<li><input type="submit" name="bblm_match_compbracket" value="Update Comp Brackets Table" title="Update Comp_Brackets Table"/></li>
+			<li><input type="submit" name="bblm_match_matchplayer" value="Update Match Player Table" title="Update Match Player Table"/></li>
+			<li><input type="submit" name="bblm_match_matchteam" value="Update Match Team Table" title="Update Match Team Table"/></li>
+			<li><input type="submit" name="bblm_match_playerfate" value="Update Player Fate Table" title="Update Player Fate Table"/></li>
 		</ul>
 
 		<h3>Theme - Crownstar</h3>

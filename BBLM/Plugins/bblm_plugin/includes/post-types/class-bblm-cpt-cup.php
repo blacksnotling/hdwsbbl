@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Cup {
@@ -114,7 +114,7 @@ class BBLM_CPT_Cup {
     global $post;
     global $wpdb;
 
-    $matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.series_id = ' . get_the_ID();
+    $matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.series_id = ' . get_the_ID();
     $matchnum = $wpdb->get_var( $matchnumsql );
 
     return $matchnum;

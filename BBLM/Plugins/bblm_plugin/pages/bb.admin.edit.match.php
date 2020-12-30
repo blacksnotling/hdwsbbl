@@ -45,7 +45,7 @@ class BBLM_Match_List extends WP_List_Table {
 
 		global $wpdb;
 
-		$sql = 'SELECT M.m_id, D.div_name, M.c_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, J.PID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_ID AND M.m_id = J.tid AND J.prefix=\'m_\'';
+		$sql = 'SELECT M.m_id, D.div_name, M.c_id, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_ID';
     if ( ( isset( $_REQUEST[ 'bblm_filter' ] ) ) && ( 0 !== absint( $_REQUEST[ 'bblm_filter' ] ) ) ) {
 
       $sql .= " AND c_id = ". absint( $_REQUEST[ 'bblm_filter' ] ) ;
@@ -100,7 +100,7 @@ class BBLM_Match_List extends WP_List_Table {
 			return date("d-m-Y (25y)", $item[ 'mdate' ] );
 
 			case 'name':
-			return get_the_title( $item[ 'PID' ] );
+			return get_the_title( $item[ 'MWPID' ] );
 
 			case 'comp':
 			return bblm_get_competition_name( $item[ 'c_id' ] );
@@ -144,7 +144,7 @@ class BBLM_Match_List extends WP_List_Table {
 
 		$delete_nonce = wp_create_nonce( 'bblm_delete_match' );
 
-		$title = '<strong>' . get_the_title( $item[ 'PID' ] ) . '</a></strong>';
+		$title = '<strong>' . get_the_title( $item[ 'MWPID' ] ) . '</a></strong>';
 
 		return $title;
 	}
@@ -393,11 +393,12 @@ class BBLM_Edit_Match {
 			$match_id = (int) $_GET['match'];
 
 			//retrieve the match and team details from the database and populate an array
-			$matchsql = "SELECT M.m_id, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamA, M.m_teamB, M.stad_id, M.c_id, D.div_id, D.div_name, M.weather_id, M.weather_id2, M.m_trivia FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."division D WHERE M.div_id = D.div_id AND M.m_id = ".$match_id;
+			$matchsql = "SELECT M.m_id, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamA, M.m_teamB, M.stad_id, M.c_id, D.div_id, D.div_name, M.weather_id, M.weather_id2, M.m_trivia, M.WPID AS MWPID FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."division D WHERE M.div_id = D.div_id AND M.m_id = ".$match_id;
 			$m = $wpdb->get_row( $matchsql );
-			$teamAsql = "SELECT M.*, T.WPID AS TWPID FROM ".$wpdb->prefix."match_team M, ".$wpdb->prefix."team T WHERE M.t_id = T.t_id AND M.m_id = ".$match_id." AND M.t_id = ".$m->m_teamA;
+			$MWPID = $m->MWPID;
+			$teamAsql = "SELECT M.*, T.WPID AS TWPID FROM ".$wpdb->prefix."match_team M, ".$wpdb->prefix."team T WHERE M.t_id = T.t_id AND M.m_id = ".$MWPID." AND M.t_id = ".$m->m_teamA;
 			$mA = $wpdb->get_row( $teamAsql );
-			$teamBsql = "SELECT M.*, T.WPID AS TWPID FROM ".$wpdb->prefix."match_team M, ".$wpdb->prefix."team T WHERE M.t_id = T.t_id AND M.m_id = ".$match_id." AND M.t_id = ".$m->m_teamB;
+			$teamBsql = "SELECT M.*, T.WPID AS TWPID FROM ".$wpdb->prefix."match_team M, ".$wpdb->prefix."team T WHERE M.t_id = T.t_id AND M.m_id = ".$MWPID." AND M.t_id = ".$m->m_teamB;
 			$mB = $wpdb->get_row( $teamBsql );
 
 
@@ -563,6 +564,7 @@ class BBLM_Edit_Match {
 				</table>
 
 				<input type="hidden" name="bblm_mid" size="20" value="<?php echo $m->m_id; ?>" />
+				<input type="hidden" name="bblm_wpid" size="20" value="<?php echo $m->MWPID; ?>" />
 				<input type="hidden" name="bblm_comp" size="20" value="<?php echo $m->c_id; ?>" />
 				<input type="hidden" name="bblm_div" size="10" value="<?php echo $m->div_id; ?>" />
 				<input type="hidden" name="bblm_mid" value="<?php echo $m->m_id; ?>" />
@@ -635,6 +637,7 @@ class BBLM_Edit_Match {
 				}
 
 				$bblm_submit_match['id'] = (int) $_POST['bblm_mid'];
+				$bblm_submit_match['wpid'] = (int) $_POST['bblm_wpid'];
 				$bblm_submit_match['date'] = sanitize_text_field( esc_textarea( $_POST['mdate'] ) ) . " 12:00:00";
 				$bblm_submit_match['comp'] = (int) $_POST['bblm_comp'];
 				$bblm_submit_match['div'] = (int) $_POST['bblm_div'];
@@ -690,8 +693,8 @@ class BBLM_Edit_Match {
 				$matchupdatesql = "UPDATE ".$wpdb->prefix."match SET `m_teamAtd` = '" . $bblm_submit_tA['td'] . "', `m_teamBtd` = '" . $bblm_submit_tB['td'] . "', `m_teamAcas` = '" . $bblm_submit_tA['cas'] . "', `m_teamBcas` = '" . $bblm_submit_tB['cas'] . "', `m_tottd` = '" . $bblm_submit_match['td'] . "', `m_totint` = '" . $bblm_submit_match['int']  . "', `m_totcomp` = '" . $bblm_submit_match['completions'] . "', `weather_id` = '" . $bblm_submit_match['weather1'] . "', `weather_id2` = '" . $bblm_submit_match['weather1'] . "', `m_trivia` = '" . $bblm_submit_match['trivia'] . "', `stad_id` = '" . $bblm_submit_match['stad'] . "' WHERE m_id = " . $bblm_submit_match['id'];
 
 				//Update the match records for each of the teams
-				$teamAmatchupdatesql = "UPDATE ".$wpdb->prefix."match_team SET `mt_td` = '" . $bblm_submit_tA['td'] . "', `mt_cas` = '" . $bblm_submit_tA['cas'] . "', `mt_int` = '" . $bblm_submit_tA['int'] . "', `mt_comp` = '" . $bblm_submit_tA['comp'] . "', `mt_winnings` = '" . $bblm_submit_tA['winning'] . "', `mt_att` = '" . $bblm_submit_tA['att'] . "', `mt_ff` = '" . $bblm_submit_tA['ff'] . "', `mt_result` = '" . $bblm_submit_tA['result'] . "', `mt_comment` = '" . $bblm_submit_tA['comment'] . "' WHERE m_id = " . $bblm_submit_match['id'] . " AND t_id = " . $bblm_submit_tA['id'];
-				$teamBmatchupdatesql = "UPDATE ".$wpdb->prefix."match_team SET `mt_td` = '" . $bblm_submit_tB['td'] . "', `mt_cas` = '" . $bblm_submit_tB['cas'] . "', `mt_int` = '" . $bblm_submit_tB['int'] . "', `mt_comp` = '" . $bblm_submit_tB['comp'] . "', `mt_winnings` = '" . $bblm_submit_tB['winning'] . "', `mt_att` = '" . $bblm_submit_tB['att'] . "', `mt_ff` = '" . $bblm_submit_tB['ff'] . "', `mt_result` = '" . $bblm_submit_tB['result'] . "', `mt_comment` = '" . $bblm_submit_tB['comment'] . "' WHERE m_id = " . $bblm_submit_match['id'] . " AND t_id = " . $bblm_submit_tB['id'];
+				$teamAmatchupdatesql = "UPDATE ".$wpdb->prefix."match_team SET `mt_td` = '" . $bblm_submit_tA['td'] . "', `mt_cas` = '" . $bblm_submit_tA['cas'] . "', `mt_int` = '" . $bblm_submit_tA['int'] . "', `mt_comp` = '" . $bblm_submit_tA['comp'] . "', `mt_winnings` = '" . $bblm_submit_tA['winning'] . "', `mt_att` = '" . $bblm_submit_tA['att'] . "', `mt_ff` = '" . $bblm_submit_tA['ff'] . "', `mt_result` = '" . $bblm_submit_tA['result'] . "', `mt_comment` = '" . $bblm_submit_tA['comment'] . "' WHERE m_id = " . $bblm_submit_match['wpid'] . " AND t_id = " . $bblm_submit_tA['id'];
+				$teamBmatchupdatesql = "UPDATE ".$wpdb->prefix."match_team SET `mt_td` = '" . $bblm_submit_tB['td'] . "', `mt_cas` = '" . $bblm_submit_tB['cas'] . "', `mt_int` = '" . $bblm_submit_tB['int'] . "', `mt_comp` = '" . $bblm_submit_tB['comp'] . "', `mt_winnings` = '" . $bblm_submit_tB['winning'] . "', `mt_att` = '" . $bblm_submit_tB['att'] . "', `mt_ff` = '" . $bblm_submit_tB['ff'] . "', `mt_result` = '" . $bblm_submit_tB['result'] . "', `mt_comment` = '" . $bblm_submit_tB['comment'] . "' WHERE m_id = " . $bblm_submit_match['wpid'] . " AND t_id = " . $bblm_submit_tB['id'];
 
 				//Updates the Database
 				$wpdb->query( $matchupdatesql );

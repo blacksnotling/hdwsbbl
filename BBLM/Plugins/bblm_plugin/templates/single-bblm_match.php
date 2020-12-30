@@ -25,14 +25,14 @@
 
 <?php
 			//Match Information
-			$matchsql = 'SELECT M.*, UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J WHERE M.m_id = J.tid AND J.pid = '.$post->ID.' LIMIT 1';
+			$matchsql = 'SELECT M.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '.$post->ID.' LIMIT 1';
 			if ($m = $wpdb->get_row($matchsql)) {
 
 				//TeamA Information
-				$teamAsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
+				$teamAsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
 				$tA = $wpdb->get_row($teamAsql);
 				//Team B Information
-				$teamBsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
+				$teamBsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
 				$tB = $wpdb->get_row($teamBsql);
 
 				$teamA = esc_html( get_the_title( $tA->WPID ) );

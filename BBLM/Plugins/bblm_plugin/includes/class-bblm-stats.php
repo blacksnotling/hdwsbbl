@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.2
+ * @version		1.3
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -70,19 +70,19 @@ if ( ! defined( 'ABSPATH' ) ) {
         if ( $post_type == "bblm_comp" ) {
 
 					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.WPID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND X.c_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
 
 				}
 				else if ( $post_type == "bblm_season" ) {
 
 					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.sea_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() . ' GROUP BY P.p_id ORDER BY VALUE DESC';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.WPID AND X.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.sea_id = '.$ID.' AND T.t_id != '. bblm_get_star_player_team() . ' GROUP BY P.p_id ORDER BY VALUE DESC';
 
 				}
 				if ( $post_type == "bblm_cup" ) {
 
 					$statsql .= 'FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'position R ';
-					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.m_id AND X.c_id = C.WPID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$ID.' AND T.t_id != '.bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
+					$statsql .= 'WHERE P.pos_id = R.pos_id AND M.m_id = X.WPID AND X.c_id = C.WPID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa['item'].' > 0 AND C.series_id = '.$ID.' AND T.t_id != '.bblm_get_star_player_team() .' GROUP BY P.p_id ORDER BY VALUE DESC';
 				}
 
         if ( $limit > 0 ) {
@@ -132,19 +132,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( $post_type == "bblm_comp" ) {
 
 				$statsql .= ' FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T';
-				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$ID .' AND T.t_id != ' . bblm_get_star_player_team();
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = '.$ID .' AND T.t_id != ' . bblm_get_star_player_team();
 
 			}
 			else if ( $post_type == "bblm_season" ) {
 
 				$statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
-				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
 
 			}
 			else if ( $post_type == "bblm_cup" ) {
 
 				$statsql .= ' FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C';
-				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.series_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
+				$statsql .= ' WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.series_id = '.$ID.' AND T.t_id != ' . bblm_get_star_player_team();
 
 			}
 
@@ -245,33 +245,33 @@ if ( ! defined( 'ABSPATH' ) ) {
         //The queries to generate the stats
         $matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.series_id = ' . $itemid;
         //Counts the Dead. Note: THis does not check for c_counts = 1 as the cups page will show all matches within the cup
-        $deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND F.m_id = M.m_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.series_id = ' . $itemid;
+        $deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND F.m_id = M.WPID AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND C.series_id = ' . $itemid;
         $compnumsql = 'SELECT COUNT(*) AS ccount FROM '.$wpdb->prefix.'comp WHERE series_id = '.$itemid;
-        $playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.WPID = M.c_id AND M.m_id = P.m_id AND C.series_id = '.$itemid.' GROUP BY C.series_id';
+        $playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.WPID = M.c_id AND M.WPID = P.m_id AND C.series_id = '.$itemid.' GROUP BY C.series_id';
         $teamnumsql = 'SELECT COUNT(DISTINCT P.t_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team_comp P WHERE P.c_id = C.WPID AND C.series_id = '.$itemid.' GROUP BY C.series_id';
 
-        $biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
-        $biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+        $biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+        $biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.series_id = '.$itemid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 
       } //end of ( $post_type == "bblm_cup" )
 			else if ( $post_type == "bblm_season" ) {
 
 				$seasonactive = BBLM_CPT_Season::is_season_active( $itemid );
 
-				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND C.sea_id = ' . $itemid;
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid;
 				$matchnum = $wpdb->get_var( $matchnumsql );
 
 				//The queries to generate the stats
 				$matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid;
 				//Counts the Dead. Note: THis does not check for c_counts = 1 as the cups page will show all matches within the cup
-				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.WPID AND  C.c_counts = 1 AND C.sea_id = ' . $itemid;
+				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.WPID AND M.c_id = C.WPID AND  C.c_counts = 1 AND C.sea_id = ' . $itemid;
 				$compnumsql = 'SELECT COUNT(*) AS compnum FROM '.$wpdb->prefix.'comp WHERE c_counts = 1 AND sea_id = '.$itemid;
 				$cupnumsql = 'SELECT COUNT(DISTINCT(C.series_id)) AS cupnum FROM '.$wpdb->prefix.'comp C WHERE C.c_counts = 1 AND C.sea_id = ' . $itemid;
-				$playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.WPID = M.c_id AND M.m_id = P.m_id AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' GROUP BY C.sea_id';
+				$playermnumsql = 'SELECT COUNT(DISTINCT P.p_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_player P WHERE C.WPID = M.c_id AND M.WPID = P.m_id AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' GROUP BY C.sea_id';
 				$teamnumsql = 'SELECT COUNT(DISTINCT P.t_id) AS value FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team_comp P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.c_id = C.WPID AND C.c_counts = 1 AND C.sea_id = ' . $itemid . ' GROUP BY C.sea_id';
 
-				$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND ((M.div_id = 1 OR M.div_id = 2 OR M.div_id = 3)) AND C.sea_id = ' . $itemid . ' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
-				$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.sea_id = ' . $itemid . ' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+				$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND ((M.div_id = 1 OR M.div_id = 2 OR M.div_id = 3)) AND C.sea_id = ' . $itemid . ' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+				$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.sea_id = ' . $itemid . ' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 
 			} //end of else if ( $post_type == "bblm_season" )
 
@@ -325,10 +325,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
         $output .= '<ul>';
         if ( $bcn = $wpdb->get_row( $biggestattendcenonfinalsql ) ) {
-          $output .= '<li>The Highest recorded attendance (not a Final or Semi-Final) is <strong>' . number_format( $bcn->VALUE ) . ' fans</strong> in the match between <strong>' . $bcn->MATCHT . '</strong> on ' . date( "d.m.25y", $bcn->MDATE ) . '</li>';
+          $output .= '<li>The Highest recorded attendance (not a Final or Semi-Final) is <strong>' . number_format( $bcn->VALUE ) . ' fans</strong> in the match between <strong>' . bblm_get_match_link_score( $bcn->MWPID, 0 ) . '</strong> on ' . date( "d.m.25y", $bcn->MDATE ) . '</li>';
         }
         if ( $bc = $wpdb->get_row($biggestattendcesql ) ) {
-          $output .= '<li>The Highest recorded attendance (Final or Semi-Final) is <strong>' . number_format( $bc->VALUE ) . ' fans</strong> in the match between <strong>' . $bc->MATCHT . '</strong> on ' . date( "d.m.25y" , $bc->MDATE ) . '</li>';
+          $output .= '<li>The Highest recorded attendance (Final or Semi-Final) is <strong>' . number_format( $bc->VALUE ) . ' fans</strong> in the match between <strong>' . bblm_get_match_link_score( $bc->MWPID, 0 ) . '</strong> on ' . date( "d.m.25y" , $bc->MDATE ) . '</li>';
         }
         $output .= '</ul>';
 

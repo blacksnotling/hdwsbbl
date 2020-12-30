@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCplayerdetails extends WP_Widget {
@@ -57,7 +57,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$rd = $wpdb->get_row($racesql);
 
     	//determine debut season
-    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
+    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
     	$sd = $wpdb->get_row($seasondebutsql);
 
     	//grab list of other players on the team
@@ -65,7 +65,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$otherplayers = $wpdb->get_results($otherplayerssql);
 
     	//SQL for chapsionships won. like above but restricted to Winner Only!
-    	$playerchampionshipssql = 'SELECT A.a_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID ';
+    	$playerchampionshipssql = 'SELECT A.a_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.WPID = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID ';
       $playerchampionshipssql .= 'AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 
       echo $args['before_widget'];

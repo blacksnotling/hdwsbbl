@@ -35,7 +35,7 @@ class BBLM_CPT_Match {
    global $post;
    global $wpdb;
 
-	 $recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, D.div_name, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
+	 $recentmatchsql = 'SELECT M.WPID AS MWPID, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, D.div_name, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
 	 if ( $recmatch = $wpdb->get_results( $recentmatchsql ) ) {
 		 $zebracount = 1;
 
@@ -61,7 +61,7 @@ class BBLM_CPT_Match {
 				 echo '<tr class="bblm_tbl_alt">';
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
-			 echo '<td><a href="' . $rm->guid . '" title="Read the full match report">' . $rm->post_title . '</a></td>';
+			 echo '<td>' . bblm_get_match_link( $rm->MWPID ) . '</td>';
 			 echo '<td>' . bblm_get_competition_name( $rm->c_id ) . ' (' . $rm->div_name . ')</td>';
 			 echo '<td>' . number_format( $rm->m_gate ) . '</td>';
 			 echo '</tr>';
@@ -90,11 +90,11 @@ class BBLM_CPT_Match {
  public static function get_match_date( $ID ) {
 	 global $wpdb;
 
-	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J WHERE M.m_id = J.tid AND J.prefix=\'m_\' AND J.tid = '. $ID;
+	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '. $ID;
 
 	 $result = $wpdb->get_var( $sql );
 
-	 return date("d-m-25y", $result );
+	 return date("d.m.y", $result );
 
  } //end of get_match_date
 
