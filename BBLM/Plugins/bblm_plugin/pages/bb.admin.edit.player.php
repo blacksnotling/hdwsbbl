@@ -447,7 +447,7 @@ else if ("edit" == $_GET['action']) {
 					<td><input type="text" name="bblm_pinc<?php print($count); ?>" size="10" value="<?php print($pm->mp_inc); ?>" id="bblm_pinc"></td>
 					<td><input type="text" name="bblm_pinj<?php print($count); ?>" size="10" value="<?php print($pm->mp_inj); ?>" id="bblm_pinj"></td>
 					<td><input type="checkbox" name="bblm_pchng<?php print($count); ?>"></td>
-					<td><?php echo bblm_get_match_link( $pm->MWPID ); ?><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->MWPID); ?>" id="bblm_mid" maxlength="5"></td>
+					<td><?php echo bblm_get_match_link_score( $pm->MWPID, 0 ); ?><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->MWPID); ?>" id="bblm_mid" maxlength="5"></td>
 				</tr>
 <?php
 				$count++;

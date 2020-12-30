@@ -142,7 +142,7 @@ class BBLM_Add_Match_Player {
 						$matchsql = "SELECT M.m_id, M.WPID AS MWPID, M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
 						if ($matches = $wpdb->get_results($matchsql)) {
 							foreach ($matches as $match) {
-								echo '<option value="' . $match->MWPID . '">' . bblm_get_competition_name( $match->c_id ) . ' - ' . bblm_get_match_name( $match->MWPID ) . ' (' . $match->m_teamAtd . ' vs ' . $match->m_teamBtd . ')</option>';
+								echo '<option value="' . $match->MWPID . '">' . bblm_get_competition_name( $match->c_id ) . ' - ' . bblm_get_match_name_score( $match->MWPID, 0 ) . '</option>';
 							}
 						}
 ?>
