@@ -29,14 +29,14 @@
 			if ($m = $wpdb->get_row($matchsql)) {
 
 				//TeamA Information
-				$teamAsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
+				$teamAsql = 'SELECT M.*, T.WPID AS TWPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
 				$tA = $wpdb->get_row($teamAsql);
 				//Team B Information
-				$teamBsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
+				$teamBsql = 'SELECT M.*, T.WPID AS TWPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
 				$tB = $wpdb->get_row($teamBsql);
 
-				$teamA = esc_html( get_the_title( $tA->WPID ) );
-				$teamB = esc_html( get_the_title( $tB->WPID ) );
+				$teamA = bblm_get_team_name( $tA->TWPID );
+				$teamB = bblm_get_team_name( $tB->TWPID );
 
 				//Check for custom logo and if found set the var for use later on
 				//Team A
@@ -58,7 +58,7 @@
 
 ?>
 			<header class="entry-header">
-				<h2 class="entry-title"><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on this team"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on this team"><?php print( $teamB ); ?></a></h2>
+				<h2 class="entry-title"><?php echo bblm_get_team_link( $tA->TWPID ); ?> vs <?php echo bblm_get_team_link( $tB->TWPID ); ?></h2>
 			</header><!-- .entry-header -->
 
 			<div class="entry-content">
@@ -153,7 +153,7 @@
 				$tbmvp="";
 				$playeractions="";
 
-				$taplayersql = 'SELECT M.*, S.guid, S.post_title, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = '.$m->m_id.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
+        $taplayersql = 'SELECT M.*, S.guid, S.post_title, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
 				if ($taplayer = $wpdb->get_results($taplayersql)) {
 					//as we have players, initialize arrays to hold injuries and increases
 					$tainj = array();
@@ -206,7 +206,7 @@
 						<td>&nbsp;</td>
 						<td>
 <?php
-				$tbplayersql = 'SELECT M.*, S.guid, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = '.$m->m_id.' AND M.t_id = '.$m->m_teamB.' ORDER BY Q.p_num ASC';
+        $tbplayersql = 'SELECT M.*, S.guid, S.post_title, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamB.' ORDER BY Q.p_num ASC';
 				if ($taplayer = $wpdb->get_results($tbplayersql)) {
 					//as we have players, initialize arrays to hold injuries and increases
 					$tbinj = array();

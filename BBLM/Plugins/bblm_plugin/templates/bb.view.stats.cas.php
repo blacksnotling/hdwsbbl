@@ -41,9 +41,9 @@
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
 		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, X.pos_name, T.WPID, A.c_id AS CWPID FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 12 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_cas AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_cas > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_cas AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_cas > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_cas AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C  WHERE M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_cas > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_cas AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C  WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_cas > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
@@ -221,7 +221,7 @@
 				  /////////////////////////
 				 // Top Killing Players //
 				/////////////////////////
-				$statsql = 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, T.WPID, P.p_status, T.t_active FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, T.WPID, P.p_status, T.t_active FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Most Deadly Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");
@@ -275,7 +275,7 @@
 				  ///////////////////////
 				 // Top Killing Teams //
 				///////////////////////
-				$statsql = 'SELECT COUNT(*) AS VALUE , T.WPID AS TWPID, T.t_active, T.r_id FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
+				$statsql = 'SELECT COUNT(*) AS VALUE , T.WPID AS TWPID, T.t_active, T.r_id FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
 				print("<h4>Most Deadly Teams");
 				if (0 == $period_alltime) {
 					print(" (Active)");

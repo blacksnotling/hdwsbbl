@@ -231,7 +231,7 @@ class BBLM_Add_Match {
 					<p>
 <?php
 				if ( $sucess ) {
-					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
+					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_add_match_player\" title=\"Enter the player actions for the match\">player actions for the match</a>");
 				}
 				else {
 					print("Something went wrong! Please try again.");

@@ -39,21 +39,21 @@
 		/*-- Misc -- */
 		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.WPID, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.t_id != '.$bblm_star_team.' ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
 		$mep = $wpdb->get_row($mostexpplayersql);
-		$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+		$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 		$bc = $wpdb->get_row($biggestattendcesql);
-		$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
+		$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 		$bcn = $wpdb->get_row($biggestattendcenonfinalsql);
-		$lowestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.m_gate > 0 ORDER BY M.m_gate ASC, MDATE ASC LIMIT 1';
+		$lowestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_gate > 0 ORDER BY M.m_gate ASC, MDATE ASC LIMIT 1';
 		$lc = $wpdb->get_row($lowestattendcesql);
-		$highesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE DESC, MDATE ASC LIMIT 0, 30 ';
+		$highesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE DESC, MDATE ASC LIMIT 0, 30 ';
 		$htv = $wpdb->get_row($highesttvsql);
-		$lowesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE ASC, MDATE ASC LIMIT 0, 30 ';
+		$lowesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE ASC, MDATE ASC LIMIT 0, 30 ';
 		$ltv = $wpdb->get_row($lowesttvsql);
 		$teammostplayerssql = 'SELECT COUNT(*) AS VALUE, T.WPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND T.t_id != '.$bblm_star_team.' GROUP BY P.t_id ORDER BY VALUE DESC, P.t_id ASC LIMIT 1';
 		$tmp = $wpdb->get_row($teammostplayerssql);
 
 		//Bits for the Player Career
-		$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID';
+		$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1';
 		$matchnum = $wpdb->get_var($matchnumsql);
 		$matchrecsql = 'SELECT COUNT(*) FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND M.mp_counts = 1';
 		$matchrec = $wpdb->get_var($matchrecsql);
@@ -65,9 +65,9 @@
 
 		<ul>
 			<li><strong>Most Expensive Player</strong>: <?php print(number_format($mep->VALUE)); ?>gp (<a href="<?php print($mep->PLAYERLink); ?>" title="Learn more about this player"><?php print($mep->PLAYER); ?></a> - <?php print(  esc_html( $mep->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mep->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $mep->WPID ) )  ); ?></a>)</li>
-			<li><strong>Highest Recorded Attendance (Final or Semi-Final)</strong>: <?php print(number_format($bc->VALUE)); ?> fans (<a href="<?php print($bc->MATCHLink); ?>" title="Read the full report of this match"><?php print($bc->MATCHT); ?></a>)</li>
- 			<li><strong>Highest Recorded Attendance</strong>: <?php print(number_format($bcn->VALUE)); ?> fans (<a href="<?php print($bcn->MATCHLink); ?>" title="Read the full report of this match"><?php print($bcn->MATCHT); ?></a>)</li>
- 			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<a href="<?php print($lc->MATCHLink); ?>" title="Read the full report of this match"><?php print($lc->MATCHT); ?></a>)</li>
+			<li><strong>Highest Recorded Attendance (Final or Semi-Final)</strong>: <?php print(number_format($bc->VALUE)); ?> fans (<?php echo bblm_get_match_link_score( $bc->MWPID ) ?>)</li>
+ 			<li><strong>Highest Recorded Attendance</strong>: <?php print(number_format($bcn->VALUE)); ?> fans (<?php echo bblm_get_match_link_score( $bcn->MWPID ) ?>)</li>
+ 			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<?php echo  bblm_get_match_link_score( $lc->MWPID ) ?>)</li>
 			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $htv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $htv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
 			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $ltv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $ltv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
 			<li><strong>Largest Recorded Transfer</strong>: <?php $trans->display_player_transfer_record(); ?> </li>
@@ -86,7 +86,7 @@
 		 $mxps = $wpdb->get_row($mostxplayerseasonsql);
 		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_spp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_spp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
@@ -106,9 +106,9 @@
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
 		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_comp AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_comp AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_comp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_comp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
@@ -131,9 +131,9 @@
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
 		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_int AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_int AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_int AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_int AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>

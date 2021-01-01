@@ -170,7 +170,7 @@
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
-			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.m_id AND Q.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.WPID AND Q.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
 			if ($playercomp = $wpdb->get_results($playercompsql)) {
 				$zebracount = 1;
 				foreach ($playercomp as $pc) {
@@ -200,7 +200,7 @@
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
 <?php
-					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.m_id AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.WPID AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 					if ($playersea = $wpdb->get_results($playerseasql)) {
 					$zebracount = 1;
 						foreach ($playersea as $pc) {
@@ -234,7 +234,7 @@
 				</thead>
 				<tbody>
 <?php
-  $playermatchsql = 'SELECT P.*, J.pid AS MID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND J.prefix = \'m_\' AND J.tid = M.m_id AND M.m_id = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
+      $playermatchsql = 'SELECT P.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
 			if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
 			$zebracount = 1;
       foreach ( $playermatch as $pm ) {
@@ -251,7 +251,7 @@
           echo '<tr class="bblm_tbl_alt">';
         }
         echo '<td>';
-        echo '<a href="' . get_post_permalink( $pm->MID ) . '" title="View the match in more detail">' . date( 'd.m.y' , $pm->mdate ) . '</a>';
+        echo bblm_get_match_link_date( $pm->MWPID );
         echo '</td>';
         if ( $pm->TAid == $pm->t_id ) {
           echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';
