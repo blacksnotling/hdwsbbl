@@ -40,12 +40,15 @@ class BBLM_CPT_Match {
 		 $zebracount = 1;
 
 		 echo '<table class="bblm_table">';
+		 echo '<thead>';
 		 echo '<tr>';
 		 echo '<th>' . __( 'Date', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Match', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Competition', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Attendance', 'bblm' ) . '</th>';
 		 echo '</tr>';
+		 echo '</thead>';
+		 echo '<tbody>';
 
 		 foreach ( $recmatch as $rm ) {
 			 if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
@@ -69,7 +72,7 @@ class BBLM_CPT_Match {
 			 $zebracount++;
 		 }
 
-		 echo '</table>';
+		 echo '</tbody></table>';
 
 	 }
 	 else {

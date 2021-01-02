@@ -139,11 +139,14 @@
 ?>
 			<h3><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
 		<table class="bblm_table">
-			<tr>
-				<th><?php echo $teamA;?></th>
-				<th>VS</th>
-				<th><?php echo $teamB;?></th>
-			</tr>
+      <thead>
+  			<tr>
+  				<th><?php echo $teamA;?></th>
+  				<th>VS</th>
+  				<th><?php echo $teamB;?></th>
+  			</tr>
+      </thead>
+      <tbody>
 			<tr>
 				<td>
 <?php
@@ -403,6 +406,7 @@
 						<th class="bblm_tottux"><?php echo __( 'Comments', 'bblm' ); ?></th>
 						<td><?php echo stripslashes( $tB->mt_comment );?></td>
 					</tr>
+          <tbody>
 				</table>
 <?php
 		} //end of if match SQL
