@@ -123,10 +123,6 @@ class BBLM_Add_Match {
 					$bblm_submit_match['compcounts'] = 1;
 				}
 
-				//get page # for parent from DB (pre custom post type)
-				$options = get_option( 'bblm_config' );
-				$bblm_submit_match['parent'] = htmlspecialchars( $options[ 'page_match' ], ENT_QUOTES );
-
 				///Match Calculations
 				$bblm_submit_match['td'] = $bblm_submit_tA['td'] + $bblm_submit_tB['td'];
 				$bblm_submit_match['cas'] = $bblm_submit_tA['cas'] + $bblm_submit_tB['cas'];
@@ -153,8 +149,7 @@ class BBLM_Add_Match {
 					'post_type' => 'bblm_match',
 					'post_status' => 'publish',
 					'comment_status' => 'closed',
-					'ping_status' => 'closed',
-					'post_parent' => $bblm_submit_match['parent']
+					'ping_status' => 'closed'
 				);
 
 				//Calculate change in FF

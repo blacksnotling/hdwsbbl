@@ -222,14 +222,6 @@ class BBLM_Settings_Admin {
             'helper' => __( 'The Wordpress Page ID "Teams" Page.', 'bblm' ),
         	),
           array(
-        		'uid' => 'page_match',
-        		'label' => __( 'Page # - Match / Results', 'bblm' ),
-        		'section' => 'third_section',
-        		'type' => 'number',
-            'placeholder' => '',
-            'helper' => __( 'The Wordpress Page ID "results" Page.', 'bblm' ),
-        	),
-          array(
         		'uid' => 'page_stars',
         		'label' => __( 'Page # - Star Players', 'bblm' ),
         		'section' => 'third_section',
