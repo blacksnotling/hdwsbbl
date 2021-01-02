@@ -301,6 +301,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
 		$sucess = TRUE;
+		bblm_update_tv( (int) $_POST['bblm_tid'] );
 		do_action( 'bblm_post_submission' );
 	}
 ?>
@@ -384,6 +385,7 @@ else if ("edit" == $_GET['action']) {
 			<dd><textarea name="bblm_pinj" cols="60" rows="3"><?php print($p->p_injuries); ?></textarea></dd>
 		</dl>
 		<input type="hidden" name="bblm_pid" size="5" value="<?php print($pid); ?>" id="bblm_pid" maxlength="5">
+		<input type="hidden" name="bblm_tid" size="5" value="<?php print($p->t_id); ?>" id="bblm_tid" maxlength="5">
 		<p class="submit">
 		<input type="submit" name="bblm_stat_update" value="Update Player" title="Update Player"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($p->t_id); ?>" title="Cancel this and select another player">Cancel</a>
 		</p>
