@@ -117,27 +117,26 @@ if (isset($_POST['bblm_create_brackets'])) {
 						else {
 							$match_id = $_POST['bblm_match-'.$div_id.'-'.$p];
 							$fixture_id = 0;
-							if (x == $match_id) {
+							if ('x' == $match_id) {
 								$match_text = "To Be Determined";
 							}
 							else {
-								//$matchsql = 'SELECT T.t_name AS TA, M.m_teamAtd, R.t_name as TB, M.m_teamBtd FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = '.$match_id.' ORDER BY M.div_id DESC';
-								$matchsql = 'SELECT M.m_teamAtd, M.m_teamBtd, T.t_name AS TA, T.t_id AS TAid, O.guid AS TAlink, R.t_name AS TB, R.t_id AS TBid, V.guid AS TBlink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'bb2wp P, '.$wpdb->posts.' O WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = '.$match_id.' AND R.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND T.t_id = P.tid AND P.prefix = \'t_\' AND P.pid = O.ID ORDER BY M.div_id DESC';
+								$matchsql = 'SELECT M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd, T.WPID AS TAWPID, R.WPID AS TBWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.WPID = '.$match_id.' ORDER BY M.div_id DESC';
 								$md = $wpdb->get_row($matchsql, ARRAY_A);
 								//check to see if either team_id matches the default TBD and build the link string.
-								if ($bblm_tbd_team == $md[TAid]) {
-									$tAlink = $md[TA];
+								if ($bblm_tbd_team == $md['m_teamAtd']) {
+									$tAlink = 'To be Determined';
 								}
 								else {
-									$tAlink = "<a href=\"".$md[TAlink]."\" title=\"View more information on this team\">".$md[TA]."</a>";
+									$tAlink = bblm_get_team_link( $md['TAWPID'] );
 								}
-								if ($bblm_tbd_team == $md[TBid]) {
-									$tBlink = $md[TB];
+								if ($bblm_tbd_team == $md['m_teamBtd']) {
+									$tAlink = 'To be Determined';
 								}
 								else {
-									$tBlink = "<a href=\"".$md[TBlink]."\" title=\"View more information on this team\">".$md[TB]."</a>";
+									$tBlink = bblm_get_team_link( $md['TBWPID'] );
 								}
-								$match_text = $tAlink." <strong>".$md[m_teamAtd]."</strong><br />".$tBlink." <strong>".$md[m_teamBtd]."</strong>";
+								$match_text = $tAlink." <strong>".$md['m_teamAtd']."</strong><br />".$tBlink." <strong>".$md['m_teamBtd']."</strong>";
 								$match_text = esc_sql( $match_text );
 							}
 						}
@@ -211,7 +210,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 			}
 		}
 
-		$matchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS mdate, T.WPID AS TA, M.m_teamAtd, R.WPID as TB, M.m_teamBtd, M.div_id from '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.c_id = '.$comp_id.' ORDER BY M.div_id DESC';
+		$matchsql = 'SELECT M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_teamAtd, M.m_teamBtd, M.div_id from '.$wpdb->prefix.'match M WHERE M.c_id = '.$comp_id.' ORDER BY M.div_id DESC';
 		$matches = $wpdb->get_results($matchsql, ARRAY_A);
 		if (empty($matches)) {
 			$matchlist = "<option value=\"x\">No matches have been played, Please select a fixture</option>\n";
@@ -220,7 +219,7 @@ else if (isset($_POST['bblm_comp_select'])) {
 			//generate output into a static string
 			$matchlist = "<option value=\"0\">Not Appliccable</option>\n";
 			foreach ($matches as $m) {
-					$matchlist .= "<option value=\"".$m['m_id']."\">".date("d.m.Y", $m['mdate'])." - ".bblm_get_team_name( $m['TA'] )." (".$m['m_teamAtd'].") vs ".bblm_get_team_name( $m['TB'] )." (".$m['m_teamBtd'].")</option>\n";
+					$matchlist .= "<option value=\"".$m['MWPID']."\">".date("d.m.Y", $m['mdate'])." - ".bblm_get_match_name( $m['MWPID'] )." (".$m['m_teamAtd']." - ".$m['m_teamBtd'].")</option>\n";
 			}
 		}
 		//if there are no fixtures and no matches then instruct the user to go and set some up
@@ -313,7 +312,7 @@ else {
 
 	</fieldset>
 	<p class="submit">
-	<input type="submit" name="bblm_comp_select" value="Continue" title="Continue with selection"/>
+	<input type="submit" name="bblm_comp_select" value="Continue" title="Continue with selection" class="button-primary"/>
 	</p>
 	</form>
 <?php

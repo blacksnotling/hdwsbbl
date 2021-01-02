@@ -150,7 +150,7 @@ class BBLM_Add_Match {
 				$my_post = array(
 					'post_title' => $bblm_submit_match['title'],
 					'post_content' => $bblm_submit_match['content'],
-					'post_type' => 'page',
+					'post_type' => 'bblm_match',
 					'post_status' => 'publish',
 					'comment_status' => 'closed',
 					'ping_status' => 'closed',
@@ -167,16 +167,13 @@ class BBLM_Add_Match {
 					add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_match.php');
 
 					//Insert the match into the database table
-					$matchaddsql = 'INSERT INTO `'.$wpdb->prefix.'match` (`m_id`, `c_id`, `div_id`, `m_date`, `m_gate`, `m_teamA`, `m_teamB`, `m_teamAtd`, `m_teamBtd`, `m_teamAcas`, `m_teamBcas`, `m_tottd`, `m_totcas`, `m_totint`, `m_totcomp`, `weather_id`, `weather_id2`, `m_trivia`, `m_complete`, `stad_id`, `m_counts`) VALUES (\'\', \''.$bblm_submit_match['comp'].'\', \''.$bblm_submit_match['div'].'\', \''.$bblm_submit_match['date'].'\', \''.$bblm_submit_match['gate'].'\', \''.$bblm_submit_tA['id'].'\', \''.$bblm_submit_tB['id'].'\', \''.$bblm_submit_tA['td'].'\', \''.$bblm_submit_tB['td'].'\', \''.$bblm_submit_tA['cas'].'\', \''.$bblm_submit_tB['cas'].'\', \''.$bblm_submit_match['td'].'\', \''.$bblm_submit_match['cas'].'\', \''.$bblm_submit_match['int'].'\', \''.$bblm_submit_match['completions'].'\', \''.$bblm_submit_match['weather1'].'\', \''.$bblm_submit_match['weather2'].'\', \''.$bblm_submit_match['trivia'].'\', \'0\', \''.$bblm_submit_match['stad'].'\', \''.$bblm_submit_match['compcounts'].'\')';
+					$matchaddsql = 'INSERT INTO `'.$wpdb->prefix.'match` (`m_id`, `c_id`, `div_id`, `m_date`, `m_gate`, `m_teamA`, `m_teamB`, `m_teamAtd`, `m_teamBtd`, `m_teamAcas`, `m_teamBcas`, `m_tottd`, `m_totcas`, `m_totint`, `m_totcomp`, `weather_id`, `weather_id2`, `m_trivia`, `m_complete`, `stad_id`, `m_counts`, `WPID`) VALUES (\'\', \''.$bblm_submit_match['comp'].'\', \''.$bblm_submit_match['div'].'\', \''.$bblm_submit_match['date'].'\', \''.$bblm_submit_match['gate'].'\', \''.$bblm_submit_tA['id'].'\', \''.$bblm_submit_tB['id'].'\', \''.$bblm_submit_tA['td'].'\', \''.$bblm_submit_tB['td'].'\', \''.$bblm_submit_tA['cas'].'\', \''.$bblm_submit_tB['cas'].'\', \''.$bblm_submit_match['td'].'\', \''.$bblm_submit_match['cas'].'\', \''.$bblm_submit_match['int'].'\', \''.$bblm_submit_match['completions'].'\', \''.$bblm_submit_match['weather1'].'\', \''.$bblm_submit_match['weather2'].'\', \''.$bblm_submit_match['trivia'].'\', \'0\', \''.$bblm_submit_match['stad'].'\', \''.$bblm_submit_match['compcounts'].'\', \''.$bblm_submission.'\')';
 
 					$wpdb->query( $matchaddsql );
 					$bblm_match_number = $wpdb->insert_id;
 
-					$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$bblm_match_number.'\', \''.$bblm_submission.'\', \'m_\')';
-					$wpdb->query( $bblmmappingsql );
-
 					//Insert a record of the match for each team
-					$matchteamsql = 'INSERT INTO `'.$wpdb->prefix.'match_team` (`m_id`, `t_id`, `mt_td`, `mt_cas`, `mt_int`, `mt_comp`, `mt_winnings`, `mt_att`, `mt_ff`, `mt_result`, `mt_tv`, `mt_comment`) VALUES (\''.$bblm_match_number.'\', \''.$bblm_submit_tA['id'].'\', \''.$bblm_submit_tA['td'].'\', \''.$bblm_submit_tA['cas'].'\', \''.$bblm_submit_tA['int'].'\', \''.$bblm_submit_tA['comp'].'\', \''.$bblm_submit_tA['att'].'\', \''.$bblm_submit_tA['winning'].'\', \''.$bblm_submit_tA['ff'].'\', \''.$bblm_submit_tA['result'].'\', \''.$bblm_submit_tA['tv'].'\', \''.$bblm_submit_tA['comment'].'\'), (\''.$bblm_match_number.'\', \''.$bblm_submit_tB['id'].'\', \''.$bblm_submit_tB['td'].'\', \''.$bblm_submit_tB['cas'].'\', \''.$bblm_submit_tB['int'].'\', \''.$bblm_submit_tB['comp'].'\', \''.$bblm_submit_tB['att'].'\', \''.$bblm_submit_tB['winning'].'\', \''.$bblm_submit_tB['ff'].'\', \''.$bblm_submit_tB['result'].'\', \''.$bblm_submit_tB['tv'].'\', \''.$bblm_submit_tB['comment'].'\')';
+					$matchteamsql = 'INSERT INTO `'.$wpdb->prefix.'match_team` (`m_id`, `t_id`, `mt_td`, `mt_cas`, `mt_int`, `mt_comp`, `mt_winnings`, `mt_att`, `mt_ff`, `mt_result`, `mt_tv`, `mt_comment`) VALUES (\''.$bblm_submission.'\', \''.$bblm_submit_tA['id'].'\', \''.$bblm_submit_tA['td'].'\', \''.$bblm_submit_tA['cas'].'\', \''.$bblm_submit_tA['int'].'\', \''.$bblm_submit_tA['comp'].'\', \''.$bblm_submit_tA['att'].'\', \''.$bblm_submit_tA['winning'].'\', \''.$bblm_submit_tA['ff'].'\', \''.$bblm_submit_tA['result'].'\', \''.$bblm_submit_tA['tv'].'\', \''.$bblm_submit_tA['comment'].'\'), (\''.$bblm_submission.'\', \''.$bblm_submit_tB['id'].'\', \''.$bblm_submit_tB['td'].'\', \''.$bblm_submit_tB['cas'].'\', \''.$bblm_submit_tB['int'].'\', \''.$bblm_submit_tB['comp'].'\', \''.$bblm_submit_tB['att'].'\', \''.$bblm_submit_tB['winning'].'\', \''.$bblm_submit_tB['ff'].'\', \''.$bblm_submit_tB['result'].'\', \''.$bblm_submit_tB['tv'].'\', \''.$bblm_submit_tB['comment'].'\')';
 
 					$wpdb->query( $matchteamsql );
 
@@ -199,11 +196,11 @@ class BBLM_Add_Match {
 						BBLM_Admin_CPT_Competition::update_fixture_complete( $bblm_submit_match['fixture'] );
 
 						//now we check to see if it was part of a tournament
-						$checkbracketssql = 'SELECT cb_order FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = '.$bblm_submit_match['fixture'];
-						$cb_order = $wpdb->get_var($checkbracketssql);
+						$checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = '.$bblm_submit_match['fixture'];
+						$cb_id = $wpdb->get_var($checkbracketssql);
 
-						if ( !empty( $cb_order ) ) {
-							$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.$bblm_match_number.'\', `f_id` = \'0\', `cb_text` = \'' . esc_sql( sanitize_textarea_field( esc_textarea( get_the_title( $bblm_submit_tA['TWPID'] ) ) ) ) . '<strong>' . $bblm_submit_tA['td'] . '</strong><br />' . esc_sql( sanitize_textarea_field( esc_textarea( get_the_title( $bblm_submit_tB['TWPID'] ) ) ) ) . '<strong>' . $bblm_submit_tB['td'] . '</strong>\' WHERE `c_id` = \''.$bblm_submit_match['comp'].'\' AND `div_id` = \''.$bblm_submit_match['div'].'\' AND `cb_order` = '.$cb_order.' LIMIT 1';
+						if ( !empty( $cb_id ) ) {
+							$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.$bblm_submission.'\', `f_id` = \'0\', `cb_text` = \'' . bblm_get_team_link( $bblm_submit_tA['TWPID'] )  . ' <strong>' . $bblm_submit_tA['td'] . '</strong><br />' . bblm_get_team_link( $bblm_submit_tB['TWPID'] ) . ' <strong>' . $bblm_submit_tB['td'] . '</strong>\' WHERE `cb_id` = \''.$cb_id.'\' LIMIT 1';
 							$wpdb->query( $updatebracketsql );
 						}
 					} //end of if this match was based off a fixture
@@ -234,7 +231,7 @@ class BBLM_Add_Match {
 					<p>
 <?php
 				if ( $sucess ) {
-					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
+					print("Match has been recorded. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the match page\">View page</a> or enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_add_match_player\" title=\"Enter the player actions for the match\">player actions for the match</a>");
 				}
 				else {
 					print("Something went wrong! Please try again.");

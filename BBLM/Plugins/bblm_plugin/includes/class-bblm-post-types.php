@@ -274,6 +274,36 @@ class BBLM_Post_types {
 				'menu_icon' 			=> 'dashicons-universal-access-alt',
 			)
 		); //end of bblm_race
+		register_post_type( 'bblm_match',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Matches', 'bblm' ),
+					'singular_name' 		=> __( 'Match', 'bblm' ),
+					'add_new_item' 			=> __( 'New Match', 'bblm' ),
+					'add_new' 			=> __( 'New Match', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Match', 'bblm' ),
+					'new_item' 				=> __( 'New Match', 'bblm' ),
+					'view_item' 			=> __( 'View Match', 'bblm' ),
+					'view_items' 			=> __( 'View Match', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Matches found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No matches found.', 'bblm' ),
+					'all_items' 			=> __( 'Matches', 'bblm' ),
+				),
+				'public' 				=> true,
+				'description' 				=> 'true',
+				'show_ui' 				=> false, //hide from the admin side
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'matches' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Match
 	}
 
   /**

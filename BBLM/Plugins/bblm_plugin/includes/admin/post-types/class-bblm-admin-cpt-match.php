@@ -52,13 +52,13 @@ class BBLM_Admin_CPT_Match {
  /**
 	* Sets a match to complete
 	*
-	* @param int $ID the ID of the Match
+	* @param int $ID the ID of the Match (WPID)
 	* @return bool true (successfull), or False (Failure)
 	*/
 	public static function set_match_complete( $ID ) {
 		global $wpdb;
 
-		$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $ID .' LIMIT 1';
+		$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `WPID` = '. (int) $ID .' LIMIT 1';
 		if ( FALSE !== $wpdb->query( $updatematchsql ) ) {
 			return TRUE;
 		}

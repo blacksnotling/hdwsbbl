@@ -265,3 +265,100 @@ function bblm_get_race_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_season_link
+
+/**
+ * Returns the name of a Match, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_name( $ID ) {
+
+  $output = "";
+
+  $output .= esc_html( get_the_title( $ID ) );
+
+  return $output;
+
+}// end of bblm_get_match_name
+
+/**
+ * Returns the link of a Match, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_link( $ID ) {
+
+  $match_name = bblm_get_match_name( $ID );
+  $output = "";
+
+  $output .= '<a title="Read more about ' . $match_name . '" href="' . get_post_permalink( $ID ) . '">' . $match_name . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_link
+
+/**
+ * Returns the link of a Match as a date, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_link_date( $ID ) {
+
+  $match_date = BBLM_CPT_Match::get_match_date( $ID );
+  $output = "";
+
+  $output .= '<a title="View details of the match" href="' . get_post_permalink( $ID ) . '">' . $match_date . '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_link_date
+
+/**
+ * Returns the title of a Match with score, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_name_score( $ID, $formatted = 1 ) {
+	global $wpdb;
+
+	$output = "";
+
+  $matchsql = 'SELECT M.m_teamAtd, M.m_teamBtd, T.WPID AS TAWPID, R.WPID AS TBWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.WPID = '. $ID;
+	if ( $match = $wpdb->get_row ( $matchsql ) ) {
+
+		if ( $formatted ) {
+
+			$output .= bblm_get_team_name( $match->TAWPID ) . ' <strong>' . $match->m_teamAtd . '</strong> vs ' . bblm_get_team_name( $match->TBWPID ) . ' <strong>' . $match->m_teamBtd . '</strong>';
+
+		}
+		else {
+
+			$output .= bblm_get_team_name( $match->TAWPID ) . ' ' . $match->m_teamAtd . ' vs ' . bblm_get_team_name( $match->TBWPID ) . ' ' . $match->m_teamBtd;
+
+		}
+
+
+	}
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_name_score
+
+/**
+ * Returns the link of a Match with score, properly escaped and formatted
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_match_link_score( $ID, $formatted = 1 ) {
+
+	if ( $formatted ) {
+		$match = bblm_get_match_name_score( $ID, 1 );
+	}
+	else {
+
+		$match = bblm_get_match_name_score( $ID, 0 );
+
+	}
+	$output = "";
+
+	$output .= '<a title="View details of the match" href="' . get_post_permalink( $ID ) . '">' . $match . '</a>';
+
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_match_link_score

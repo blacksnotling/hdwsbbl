@@ -344,11 +344,11 @@
 
 		if ($has_played) {
 ?>
-				<h3>Recent Matches</h3>
+				<h3><?php echo __('Recent Matches','bblm'); ?></h3>
 <?php
-				$matchssql = 'SELECT M.m_id, S.post_title AS Mtitle, S.guid AS Mlink, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
-				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'bb2wp A, '.$wpdb->posts.' S, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID';
-				$matchssql .= ' AND N.m_id = M.m_id AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.m_id = A.tid AND A.prefix = \'m_\' AND A.pid = S.ID AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
+				$matchssql = 'SELECT M.m_id, M.WPID AS MWPID, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
+				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID';
+				$matchssql .= ' AND N.m_id = M.WPID AND M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND N.t_id = '.$tid.' ORDER BY M.m_date DESC';
 
 				if ($matchs = $wpdb->get_results($matchssql)) {
 				$zebracount = 1;
@@ -372,7 +372,7 @@
 							print("		<tr class=\"bblm_tbl_alt\">\n");
 							$alt = TRUE;
 						}
-						print("		   <td><a href=\"".$ms->Mlink."\" title=\"View full details of ".$ms->Mtitle."\">".date("d.m.y", $ms->mdate)."</a></td>\n		   <td class=\"bblm_tbl_matchop\">");
+						print("		   <td>". bblm_get_match_link_date( $ms->MWPID ) ."</td>\n		   <td class=\"bblm_tbl_matchop\">");
 
 						if ($tid == $ms->m_teamA) {
 							$team_name = esc_html( get_the_title( $ms->tBid ) );

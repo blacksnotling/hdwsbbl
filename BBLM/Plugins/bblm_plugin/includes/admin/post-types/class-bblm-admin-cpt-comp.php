@@ -267,7 +267,7 @@ class BBLM_Admin_CPT_Competition {
 				}
 
 				//Determine the current wins, Losses, draws and points
-				$teamAPerformancesql = "SELECT T.mt_result, COUNT(*) AS PLAYED, SUM(T.mt_td) AS TD, SUM(T.mt_cas) AS CAS, SUM(T.mt_int) AS totINT, SUM(T.mt_comp) AS totCOMP FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND t_id = " . $teamID . " AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) GROUP BY T.mt_result ORDER BY T.mt_result";
+				$teamAPerformancesql = "SELECT T.mt_result, COUNT(*) AS PLAYED, SUM(T.mt_td) AS TD, SUM(T.mt_cas) AS CAS, SUM(T.mt_int) AS totINT, SUM(T.mt_comp) AS totCOMP FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.WPID AND t_id = " . $teamID . " AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) GROUP BY T.mt_result ORDER BY T.mt_result";
 
 				$tdeatails['W'] = 0;
 				$tdeatails['L'] = 0;
@@ -293,7 +293,7 @@ class BBLM_Admin_CPT_Competition {
 				}
 
 				//Calcualte TD and CAS Against
-				$teamAagainst = "SELECT SUM(T.mt_td) AS totTD, SUM(T.mt_cas) AS totCAS FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.m_id AND (M.m_teamA = " . $teamID . " OR M.m_teamB = " . $teamID . ") AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) ORDER BY T.mt_result";
+				$teamAagainst = "SELECT SUM(T.mt_td) AS totTD, SUM(T.mt_cas) AS totCAS FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.WPID AND (M.m_teamA = " . $teamID . " OR M.m_teamB = " . $teamID . ") AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) ORDER BY T.mt_result";
 				if ( $tAaga = $wpdb->get_row( $teamAagainst ) ) {
 					$tdeatails['TDa'] = $tAaga->totTD - $tdeatails['TD'];
 					$tdeatails['CASa'] = $tAaga->totCAS - $tdeatails['CAS'];

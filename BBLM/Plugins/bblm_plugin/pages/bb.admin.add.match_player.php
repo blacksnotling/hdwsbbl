@@ -139,10 +139,10 @@ class BBLM_Add_Match_Player {
 						<th scope="row"><label for="bblm_mid" >Match: </label></th>
 						<td><select name="bblm_mid" id="bblm_mid">
 <?php
-						$matchsql = "SELECT M.m_id, M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q WHERE M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
+						$matchsql = "SELECT M.m_id, M.WPID AS MWPID, M.m_date, T.WPID AS tA, Q.WPID AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
 						if ($matches = $wpdb->get_results($matchsql)) {
 							foreach ($matches as $match) {
-								echo '<option value="' . $match->m_id . '">' . bblm_get_competition_name( $match->c_id ) . ' - ' . bblm_get_team_name( $match->tA ) . ' ' . $match->m_teamAtd . ' vs ' . $match->m_teamBtd . ' ' . bblm_get_team_name( $match->tB ) . '</option>';
+								echo '<option value="' . $match->MWPID . '">' . bblm_get_competition_name( $match->c_id ) . ' - ' . bblm_get_match_name_score( $match->MWPID, 0 ) . '</option>';
 							}
 						}
 ?>
@@ -166,8 +166,8 @@ class BBLM_Add_Match_Player {
 			<p><strong><?php echo __( 'Warning', 'bblm' ); ?></strong>: <?php echo __( 'This may take some time to process all the information! Please ', 'bblm' ); ?><strong><?php echo __( 'don\'t', 'bblm' ); ?></strong><?php echo __( ' hit submit multiple times.', 'bblm' ); ?></p>
 <?php
 			$ccounts = 0;
-			$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.m_id AND A.t_id = M.m_teamA AND B.m_id = M.m_id AND B.t_id = M.m_teamB AND M.m_id = ". (int) $_POST['bblm_mid'];
-			if ($md = $wpdb->get_row($matchsql2)) {
+			$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.WPID AND A.t_id = M.m_teamA AND B.m_id = M.WPID AND B.t_id = M.m_teamB AND M.WPID = ". (int) $_POST['bblm_mid'];
+			if ( $md = $wpdb->get_row( $matchsql2 ) ) {
 ?>
 			<h3><?php echo __( 'Match Reference', 'bblm' ); ?></h3>
 			<table cellspacing="0" class="widefat" style="width:360px;">
@@ -756,9 +756,6 @@ class BBLM_Add_Match_Player {
 				$p++;
 
 			} //end of while
-
-			//Generate SQL to update the match
-			$updatematchsql = 'UPDATE `'.$wpdb->prefix.'match` SET `m_complete` = \'1\' WHERE `m_id` = '. (int) $_POST['bblm_mid'].' LIMIT 1';
 
 			$result = 0;
 			//Regardless of if the comp counts, we add the player records to the match_player table

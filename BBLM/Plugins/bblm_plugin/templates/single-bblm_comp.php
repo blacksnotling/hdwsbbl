@@ -232,55 +232,53 @@
 			 // Matches //
 			/////////////
 			$match_present = 0;
-			print("<h3>Matches</h3>\n");
-			$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = '.$cid.' AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY M.m_date DESC';
-			if ($match = $wpdb->get_results($matchsql)) {
+      echo '<h3>' . __('Matches','bblm' ) . '</h3>';
+      $matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.WPID AS MWPID, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match M WHERE M.c_id = '.$cid.' ORDER BY M.m_date DESC';
+			if ( $match = $wpdb->get_results( $matchsql ) ) {
 				//We have matches so we can proceed
-
-				$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND (M.div_id = 1 OR M.div_id = 2 OR M.div_id = 3) AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
-				$biggestattendcenonfinalsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, P.post_title AS MATCHT, P.guid AS MATCHLink FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND M.div_id != 1 AND M.div_id != 2 AND M.div_id != 3 AND C.c_id = '.$cid.' ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 ?>
-					<ul>
+          <table class="bblm_table bblm_expandable">
+            <thead>
+              <tr>
+                <th class="bblm_tbl_matchdate"><?php echo __( 'Date','bblm' ); ?></th>
+                <th class="bblm_tbl_matchname"><?php echo __( 'Match','bblm' ); ?></th>
+                <th class="bblm_tbl_matchresult"><?php echo __( 'Result','bblm' ); ?></th>
+                <th class="bblm_tbl_matchgate"><?php echo __( 'Gate','bblm' ); ?></th>
+              </tr>
+            </thead>
+            <tbody>
 <?php
-					if ($bcn = $wpdb->get_row($biggestattendcenonfinalsql)) {
-?>
-						<li>The Highest recorded attendance (not a Final or Semi-Final) is <strong><?php print(number_format($bcn->VALUE)); ?> fans</strong> in the match between <strong><?php print($bcn->MATCHT); ?></strong> on <?php print(date("d.m.25y", $bcn->MDATE)); ?></li>
-<?php
-					}
-					if ($bc = $wpdb->get_row($biggestattendcesql)) {
-?>
-						<li>The Highest recorded attendance (Final or Semi-Final) is <strong><?php print(number_format($bc->VALUE)); ?> fans</strong> in the match between <strong><?php print($bc->MATCHT); ?></strong> on <?php print(date("d.m.25y", $bc->MDATE)); ?></li>
-<?php
-					}
-?>
-
-					</ul>
-<?php
-				print("<table class=\"bblm_tablle bblm_expandable\">\n	<thead>\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   <th class=\"bblm_tbl_matchresult\">Result</th>\n		   <th class=\"bblm_tbl_matchgate\">Gate</th>\n		 </tr>\n	</thead>\n	<tbody>");
 				$zebracount = 1;
-				foreach ($match as $md) {
-					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("		<tr class=\"bblm_tbl_hide\">\n");
+				foreach ( $match as $md ) {
+					if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
+						echo '<tr class="bblm_tbl_hide">';
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
-						print("		<tr>\n");
+						echo '<tr>';
 					}
-					else if (10 < $zebracount) {
-						print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
+					else if ( 10 < $zebracount ) {
+            echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
 					}
 					else {
-						print("		<tr class=\"bblm_tbl_alt\">\n");
+            echo '<tr class="bblm_tbl_alt">';
 					}
-					print("		   <td>".date("d.m.y", $md->mdate)."</td>\n		   <td><a href=\"".$md->guid."\" title=\"View the details of the match\">".$md->post_title."</a></td>\n		   <td>".$md->m_teamAtd." - ".$md->m_teamBtd." (".$md->m_teamAcas." - ".$md->m_teamBcas.")</td>\n		   <td><em>".number_format($md->m_gate)."</em></td>\n		 </tr>\n");
+?>
+                <td><?php echo date("d.m.y", $md->mdate); ?></td>
+                <td><?php echo bblm_get_match_link( $md->MWPID ); ?></a></td>
+                <td><?php echo $md->m_teamAtd." - ".$md->m_teamBtd." (".$md->m_teamAcas." - ".$md->m_teamBcas.")"; ?></td>
+                <td><em><?php echo number_format( $md->m_gate ); ?></em></td>
+              </tr>
+<?php
 					$zebracount++;
 				}
-				print("	</tbody>\n	</table>\n");
+				echo '</tbody></table>';
 				//set a flag so we know that a game has been played (therefore it has begun, list stats etc).
 				$match_present = 1;
 			} //end of if match SQL
 			else {
 				//There are no matches to display
-				print("	<div class=\"bblm_info\">\n		<p>No Matches have taken place in this competition yet. Stay tuned for further updates.</p>	</div>.\n");
+				print("<p></p>	</div>.\n");
+        echo '<div class="bblm_info"><p>' . __( 'No Matches have taken place in this competition yet. Stay tuned for further updates.', 'bblm' ) . '</p></div>';
 			} //end of matches
 
 			  //////////////

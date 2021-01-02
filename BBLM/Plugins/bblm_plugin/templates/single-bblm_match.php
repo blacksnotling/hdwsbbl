@@ -25,18 +25,18 @@
 
 <?php
 			//Match Information
-			$matchsql = 'SELECT M.*, UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J WHERE M.m_id = J.tid AND J.pid = '.$post->ID.' LIMIT 1';
+			$matchsql = 'SELECT M.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '.$post->ID.' LIMIT 1';
 			if ($m = $wpdb->get_row($matchsql)) {
 
 				//TeamA Information
-				$teamAsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
+				$teamAsql = 'SELECT M.*, T.WPID AS TWPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamA.' LIMIT 1';
 				$tA = $wpdb->get_row($teamAsql);
 				//Team B Information
-				$teamBsql = 'SELECT M.*, T.WPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->m_id.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
+				$teamBsql = 'SELECT M.*, T.WPID AS TWPID, T.t_sname, T.r_id FROM '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'team T WHERE M.t_id = T.t_id AND M.m_id = '.$m->MWPID.' AND T.t_id = '.$m->m_teamB.' LIMIT 1';
 				$tB = $wpdb->get_row($teamBsql);
 
-				$teamA = esc_html( get_the_title( $tA->WPID ) );
-				$teamB = esc_html( get_the_title( $tB->WPID ) );
+				$teamA = bblm_get_team_name( $tA->TWPID );
+				$teamB = bblm_get_team_name( $tB->TWPID );
 
 				//Check for custom logo and if found set the var for use later on
 				//Team A
@@ -58,7 +58,7 @@
 
 ?>
 			<header class="entry-header">
-				<h2 class="entry-title"><a href="<?php print( get_post_permalink( $tA->WPID ) ); ?>" title="Read more on this team"><?php print( $teamA ); ?></a> vs <a href="<?php print( get_post_permalink( $tB->WPID ) ); ?>" title="Read more on this team"><?php print( $teamB ); ?></a></h2>
+				<h2 class="entry-title"><?php echo bblm_get_team_link( $tA->TWPID ); ?> vs <?php echo bblm_get_team_link( $tB->TWPID ); ?></h2>
 			</header><!-- .entry-header -->
 
 			<div class="entry-content">
@@ -66,56 +66,56 @@
 				<table class="bblm_table">
 					<thead>
 						<tr>
-							<th class="bblm_tbl_name"><?php print( $teamA );?></th>
+							<th class="bblm_tbl_name"><?php echo $teamA;?></th>
 							<th class="bblm_tbl_name">VS</th>
-							<th class="bblm_tbl_name"><?php print( $teamB );?></th>
+							<th class="bblm_tbl_name"><?php echo $teamB;?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><strong><?php print($tAimg);?></strong></td>
+							<td><strong><?php echo $tAimg;?></strong></td>
 							<th>&nbsp;</th>
-							<td><strong><?php print($tBimg);?></strong></td>
+							<td><strong><?php echo $tBimg;?></strong></td>
 						</tr>
 						<tr>
-							<td class="bblm_score"><strong><?php print($tA->mt_td);?></strong></td>
-							<th class="bblm_tottux">Score</th>
-							<td class="bblm_score"><strong><?php print($tB->mt_td);?></strong></td>
+							<td class="bblm_score"><strong><?php echo $tA->mt_td;?></strong></td>
+							<th class="bblm_tottux"><?php echo __( 'Score', 'bblm' ); ?></th>
+							<td class="bblm_score"><strong><?php echo $tB->mt_td;?></strong></td>
 						</tr>
 						<tr>
-							<td><?php print($tA->mt_cas);?></td>
-							<th class="bblm_tottux">Casulties</th>
-							<td><?php print($tB->mt_cas);?></td>
+							<td><?php echo $tA->mt_cas;?></td>
+							<th class="bblm_tottux"><?php echo __( 'Casualities', 'bblm' ); ?></th>
+							<td><?php echo $tB->mt_cas;?></td>
 						</tr>
 						<tr>
-							<td><?php print($tA->mt_comp);?></td>
-							<th class="bblm_tottux">Completions</th>
-							<td><?php print($tB->mt_comp);?></td>
+							<td><?php echo $tA->mt_comp;?></td>
+							<th class="bblm_tottux"><?php echo __( 'Completions', 'bblm' ); ?></th>
+							<td><?php echo $tB->mt_comp;?></td>
 						</tr>
 						<tr>
-							<td><?php print($tA->mt_int);?></td>
-							<th class="bblm_tottux">Inteceptions</th>
-							<td><?php print($tB->mt_int);?></td>
+							<td><?php echo $tA->mt_int;?></td>
+							<th class="bblm_tottux"><?php echo __( 'Interceptions', 'bblm' ); ?></th>
+							<td><?php echo $tB->mt_int;?></td>
 						</tr>
 						<tr>
-							<td class="bblm_tv"><?php print(number_format($tA->mt_tv));?>gp</td>
-							<th class="bblm_tottux">Team Value</th>
-							<td class="bblm_tv"><?php print(number_format($tB->mt_tv));?>gp</td>
+							<td class="bblm_tv"><?php echo number_format( $tA->mt_tv );?>gp</td>
+							<th class="bblm_tottux"><?php echo __( 'Team Value', 'bblm' ); ?></th>
+							<td class="bblm_tv"><?php echo number_format( $tB->mt_tv );?>gp</td>
 						</tr>
 						<tr>
-							<td><?php print(number_format($tA->mt_winnings));?></td>
-							<th class="bblm_tottux">Fans</th>
-							<td><?php print(number_format($tB->mt_winnings));?></td>
+							<td><?php echo number_format( $tA->mt_winnings );?></td>
+							<th class="bblm_tottux"><?php echo __( 'Fans', 'bblm' ); ?></th>
+							<td><?php echo number_format( $tB->mt_winnings );?></td>
 						</tr>
 						<tr>
-							<td><?php print(number_format($tA->mt_att));?> gp</td>
-							<th class="bblm_tottux">Winnings</th>
-							<td><?php print(number_format($tB->mt_att));?> gp</td>
+							<td><?php echo number_format( $tA->mt_att );?> gp</td>
+							<th class="bblm_tottux"><?php echo __( 'Winnings', 'bblm' ); ?></th>
+							<td><?php echo number_format( $tB->mt_att );?> gp</td>
 						</tr>
 						<tr>
-							<td><?php print($tA->mt_ff);?></td>
-							<th class="bblm_tottux">FF Change</th>
-							<td><?php print($tB->mt_ff);?></td>
+							<td><?php echo $tA->mt_ff;?></td>
+							<th class="bblm_tottux"><?php echo __( 'FF Change', 'bblm' ); ?></th>
+							<td><?php echo $tB->mt_ff;?></td>
 						</tr>
 					</tbody>
 				</table>
@@ -128,22 +128,25 @@
 
 <?php
 				//Display match Trivia if something is present
-				if ("" !== $m->m_trivia) {
+				if ( "" !== $m->m_trivia ) {
 ?>
 					<h3><?php echo __( 'Match Trivia', 'bblm' ); ?></h3>
 					<div class="bblm_details bblm_match_trivia">
-						<p><?php echo esc_html($m->m_trivia); ?></p>
+						<p><?php echo  $m->m_trivia; ?></p>
 					</div>
 <?php
 } // end of if ("" !== $m->m_trivia) {
 ?>
 			<h3><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
 		<table class="bblm_table">
-			<tr>
-				<th><?php print( $teamA );?></th>
-				<th>&nbsp;</th>
-				<th><?php print( $teamB );?></th>
-			</tr>
+      <thead>
+  			<tr>
+  				<th><?php echo $teamA;?></th>
+  				<th>VS</th>
+  				<th><?php echo $teamB;?></th>
+  			</tr>
+      </thead>
+      <tbody>
 			<tr>
 				<td>
 <?php
@@ -153,42 +156,65 @@
 				$tbmvp="";
 				$playeractions="";
 
-				$taplayersql = 'SELECT M.*, S.guid, S.post_title, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = '.$m->m_id.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
-				if ($taplayer = $wpdb->get_results($taplayersql)) {
+        $taplayersql = 'SELECT M.*, Q.p_num, Q.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q WHERE Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
+				if ( $taplayer = $wpdb->get_results( $taplayersql ) ) {
 					//as we have players, initialize arrays to hold injuries and increases
 					$tainj = array();
 					$tainc = array();
 					$zebracount = 1;
-					print("<table class=\"bblm_table\">\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
-					foreach ($taplayer as $tap) {
-						if (1 == $tap->mp_mvp) {
+?>
+          <table class="bblm_table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th><?php echo __('Player', 'bblm' ); ?></th>
+                <th><?php echo __('TD', 'bblm' ); ?></th>
+                <th><?php echo __('CAS', 'bblm' ); ?></th>
+                <th><?php echo __('COMP', 'bblm' ); ?></th>
+                <th><?php echo __('INT', 'bblm' ); ?></th>
+                <th><?php echo __('SPP', 'bblm' ); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+<?php
+					foreach ( $taplayer as $tap ) {
+						if ( 1 == $tap->mp_mvp ) {
 							//if this player has the MVP record it for later
 							//first it checks to see if an MVP has already been record for this team (in the event of a concession, there will be two for a team)
-							if ("" == $tamvp) {
+							if ( "" == $tamvp ) {
 								$tamvp = "#".$tap->p_num;
 							}
 							else {
 								$tamvp .=" and #".$tap->p_num;
 							}
 						}
-						if ("none" !== $tap->mp_inj) {
+						if ( "none" !== $tap->mp_inj ) {
 						//if this player has an injury record it for later
-							$tainj[] = "#".$tap->p_num." - ".$tap->p_name." - ".$tap->mp_inj;
+							$tainj[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inj;
 						}
-						if ("none" !== $tap->mp_inc) {
+						if ( "none" !== $tap->mp_inc ) {
 						//if this player has an injury record it for later
-							$tainc[] = "#".$tap->p_num." - ".$tap->p_name." - ".$tap->mp_inc;
+							$tainc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
-						if ($zebracount % 2) {
-							print("	<tr>\n");
+						if ( $zebracount % 2 ) {
+              echo '<tr>';
 						}
 						else {
-							print("	<tr class=\"bblm_tbl_alt\">\n");
+              echo '<tr class="bblm_tbl_alt">';
 						}
-						print ("		<td>".$tap->p_num."</td>\n		<td><a href=\"".$tap->guid."\" title=\"View the details of ".$tap->post_title."\">".$tap->post_title."</a></td>\n		<td>".$tap->mp_td."</td>\n		<td>".$tap->mp_cas."</td>\n		<td>".$tap->mp_comp."</td>\n		<td>".$tap->mp_int."</td>\n		<td><strong>".$tap->mp_spp."</strong></td>\n	</tr>\n");
+?>
+            <td><?php echo $tap->p_num; ?></td>
+            <td><?php echo bblm_get_player_link( $tap->PWPID ); ?></td>
+            <td><?php echo $tap->mp_td; ?></td>
+            <td><?php echo $tap->mp_cas; ?></td>
+            <td><?php echo $tap->mp_comp; ?></td>
+            <td><?php echo $tap->mp_int; ?></td>
+            <td><strong><?php echo $tap->mp_spp; ?></strong></td>
+          </tr>
+<?php
 						$zebracount++;
 					}
-					print("</table>");
+          echo '</tbody></table>';
 					//set flag to show some player actions have been recorded
 					$playeractions = 1;
 					//final check of the recorded MVP. If it is blank then set the default value to show that none was assigned (which is different to not recorded)
@@ -197,7 +223,7 @@
 					}
 				}
 				else {
-					print("No Player actions have been recorded for this game");
+          echo __( 'No Player actions have been recorded for this game', 'bblm' );
 					$tanp = 1;
 					$tamvp = "Not recorded";
 				}
@@ -206,13 +232,27 @@
 						<td>&nbsp;</td>
 						<td>
 <?php
-				$tbplayersql = 'SELECT M.*, S.guid, Q.p_name, Q.p_num FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player Q, '.$wpdb->prefix.'bb2wp R, '.$wpdb->posts.' S WHERE Q.p_id = R.tid AND R.prefix = \'p_\' AND R.pid = S.ID AND Q.p_id = M.p_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = '.$m->m_id.' AND M.t_id = '.$m->m_teamB.' ORDER BY Q.p_num ASC';
-				if ($taplayer = $wpdb->get_results($tbplayersql)) {
+        $tbplayersql = 'SELECT M.*, Q.p_num, Q.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q WHERE Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamB.' ORDER BY Q.p_num ASC';
+				if ( $taplayer = $wpdb->get_results( $tbplayersql ) ) {
 					//as we have players, initialize arrays to hold injuries and increases
 					$tbinj = array();
 					$tbinc = array();
 					$zebracount = 1;
-					print("<table class=\"bblm_table\">\n	<tr>\n		<th>#</th>\n		<th>Player</th>		<th>TD</th>\n		<th>CAS</th>\n		<th>COMP</th>\n		<th>INT</th>\n		<th>SPP</th>\n	</tr>\n");
+?>
+          <table class="bblm_table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th><?php echo __('Player', 'bblm' ); ?></th>
+                <th><?php echo __('TD', 'bblm' ); ?></th>
+                <th><?php echo __('CAS', 'bblm' ); ?></th>
+                <th><?php echo __('COMP', 'bblm' ); ?></th>
+                <th><?php echo __('INT', 'bblm' ); ?></th>
+                <th><?php echo __('SPP', 'bblm' ); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+<?php
 					foreach ($taplayer as $tap) {
 						if (1 == $tap->mp_mvp) {
 							//if this player has the MVP record it for later
@@ -226,22 +266,31 @@
 						}
 						if ("none" !== $tap->mp_inj) {
 						//if this player has an injury record it for later
-							$tbinj[] = "#".$tap->p_num." - ".$tap->p_name." - ".$tap->mp_inj;
+							$tbinj[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inj;
 						}
 						if ("none" !== $tap->mp_inc) {
 						//if this player has an injury record it for later
-							$tbinc[] = "#".$tap->p_num." - ".$tap->p_name." - ".$tap->mp_inc;
+							$tbinc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ($zebracount % 2) {
-							print("	<tr>\n");
+              echo '<tr>';
 						}
 						else {
-							print("	<tr class=\"bblm_tbl_alt\">\n");
+              echo '<tr class="bblm_tbl_alt">';
 						}
-						print ("		<td>".$tap->p_num."</td>\n		<td><a href=\"".$tap->guid."\" title=\"View the details of ".$tap->p_name."\">".$tap->p_name."</a></td>\n		<td>".$tap->mp_td."</td>\n		<td>".$tap->mp_cas."</td>\n		<td>".$tap->mp_comp."</td>\n		<td>".$tap->mp_int."</td>\n		<td><strong>".$tap->mp_spp."</strong></td>\n	</tr>\n");
+?>
+            <td><?php echo $tap->p_num; ?></td>
+            <td><?php echo bblm_get_player_link( $tap->PWPID ); ?></td>
+            <td><?php echo $tap->mp_td; ?></td>
+            <td><?php echo $tap->mp_cas; ?></td>
+            <td><?php echo $tap->mp_comp; ?></td>
+            <td><?php echo $tap->mp_int; ?></td>
+            <td><strong><?php echo $tap->mp_spp; ?></strong></td>
+          </tr>
+<?php
 						$zebracount++;
 					}
-					print("</table>");
+          echo '</tbody></table>';
 					//set flag to show some player actions have been recorded
 					$playeractions = 1;
 					//final check of the recorded MVP. If it is blank then set the default value to show that none was assigned (which is different to not recorded)
@@ -250,7 +299,7 @@
 					}
 				}
 				else {
-					print("No Player actions have been recorded for this game");
+					echo __( 'No Player actions have been recorded for this game', 'bblm' );
 					$tbnp = 1;
 					$tbmvp = "Not recorded";
 				}
@@ -258,59 +307,51 @@
 						</td>
 					</tr>
 					<tr>
-						<td>
-<?php
-						print($tamvp);
-?>
-						</td>
-						<th class="bblm_tottux">MVP</th>
-						<td>
-<?php
-						print($tbmvp);
-?>
-						</td>
+						<td><?php echo $tamvp; ?></td>
+						<th class="bblm_tottux"><?php echo __( 'MVP', 'bblm' ); ?></th>
+						<td><?php echo $tbmvp; ?></td>
 					</tr>
 					<tr>
 						<td>
 						<?php
-						if (isset($tainj)) {
-							if (0 !== count($tainj)) {
+						if ( isset( $tainj ) ) {
+							if ( 0 !== count( $tainj ) ) {
 								//If players where inj, we have details
-								print("<ul>\n");
-								foreach ($tainj as $taijured) {
-									print("<li>".$taijured."</li>");
+								echo '<ul>';
+								foreach ( $tainj as $taijured ) {
+                  echo '<li>' . $taijured . '</li>';
 								}
-								print("<ul>");
+								echo '</ul>';
 							}
 							else {
-								print("None");
+								echo 'None';
 							}
 						}
 						else {
 							//we have no player actions recorded
-							print("Not Recorded");
+							echo 'Not Recorded';
 						}
 						?>
 						</td>
-						<th class="bblm_tottux">Inj</th>
+						<th class="bblm_tottux"><?php echo __( 'Inj', 'bblm' ); ?></th>
 						<td>
 						<?php
-						if (isset($tbinj)) {
-							if (0 !== count($tbinj)) {
+						if ( isset( $tbinj ) ) {
+							if ( 0 !== count( $tbinj ) ) {
 								//If players where inj, we have details
-								print("<ul>\n");
-								foreach ($tbinj as $tbijured) {
-									print("<li>".$tbijured."</li>");
+								echo '<ul>';
+								foreach ( $tbinj as $tbijured ) {
+									echo '<li>' . $tbijured . '</li>';
 								}
-								print("<ul>");
+								echo '</ul>';
 							}
 							else {
-								print("None");
+								echo 'None';
 							}
 						}
 						else {
 							//we have no player actions recorded
-							print("Not Recorded");
+							echo 'Not Recorded';
 						}
 						?>
 						</td>
@@ -318,53 +359,54 @@
 					<tr>
 						<td>
 						<?php
-						if (isset($tainc)) {
-							if (0 !== count($tainc)) {
+						if ( isset( $tainc ) ) {
+							if ( 0 !== count( $tainc ) ) {
 								//If players where inj, we have details
-								print("<ul>\n");
-								foreach ($tainc as $taiinc) {
-									print("<li>".$taiinc."</li>\n");
+								echo '<ul>';
+								foreach ( $tainc as $taiinc ) {
+                  echo '<li>' . $taiinc . '</li>';
 								}
-								print("</ul>\n");
+								echo '</ul>';
 							}
 							else {
-								print("None");
+								echo 'None';
 							}
 						}
 						else {
 							//we have no player actions recorded
-							print("Not Recorded");
+							echo 'Not Recorded';
 						}
 						?>
 						</td>
-						<th class="bblm_tottux">Inc</th>
+						<th class="bblm_tottux"><?php echo __( 'Inc', 'bblm' ); ?></th>
 						<td>
 						<?php
-						if (isset($tbinc)) {
-							if (0 !== count($tbinc)) {
+						if ( isset( $tbinc ) ) {
+							if ( 0 !== count( $tbinc ) ) {
 								//If players where inj, we have details
-								print("<ul>\n");
-								foreach ($tbinc as $tbiinc) {
-									print("<li>".$tbiinc."</li>\n");
+								echo '<ul>';
+								foreach ( $tbinc as $tbiinc ) {
+									echo '<li>' . $tbiinc . '</li>';
 								}
-								print("</ul>\n");
+								echo '</ul>';
 							}
 							else {
-								print("None");
+								echo 'None';
 							}
 						}
 						else {
 							//we have no player actions recorded
-							print("Not Recorded");
+							echo 'Not Recorded';
 						}
 						?>
 						</td>
 					</tr>
 					<tr>
-						<td><?php print(stripslashes($tA->mt_comment));?></td>
-						<th class="bblm_tottux">Comms</th>
-						<td><?php print(stripslashes($tB->mt_comment));?></td>
+						<td><?php echo stripslashes( $tA->mt_comment );?></td>
+						<th class="bblm_tottux"><?php echo __( 'Comments', 'bblm' ); ?></th>
+						<td><?php echo stripslashes( $tB->mt_comment );?></td>
 					</tr>
+          <tbody>
 				</table>
 <?php
 		} //end of if match SQL
