@@ -567,7 +567,6 @@ class BBLM_Edit_Match {
 				<input type="hidden" name="bblm_wpid" size="20" value="<?php echo $m->MWPID; ?>" />
 				<input type="hidden" name="bblm_comp" size="20" value="<?php echo $m->c_id; ?>" />
 				<input type="hidden" name="bblm_div" size="10" value="<?php echo $m->div_id; ?>" />
-				<input type="hidden" name="bblm_mid" value="<?php echo $m->m_id; ?>" />
 <?php
 				//make sure we capture the original divisions of this is a cross division game
 				if ( 13 == $m->div_id ) {
