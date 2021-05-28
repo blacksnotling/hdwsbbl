@@ -26,6 +26,7 @@ class BBLM_Admin {
     add_action( 'dashboard_glance_items', array( $this, 'add_dashboard_counts' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
 		add_action( 'admin_init', array( $this, 'add_admin_js' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'bblm_include_adminstyle' ) );
 
 	}
 
@@ -74,6 +75,16 @@ class BBLM_Admin {
 
  		} //end of add_admin_js
 
-}
+		/**
+		 * Includes any CSS or Javascript required by the plugin. These will load
+		 * on any Admin pages pages.
+		 */
+		 function bblm_include_adminstyle() {
+
+			 wp_enqueue_style( 'bblm_admin_styles', plugin_dir_url( __FILE__ ) . '../../includes/CSS/admin.css' );
+
+		 } //end of bblm_include_adminstyle()
+
+} //end of class
 
 return new BBLM_Admin();

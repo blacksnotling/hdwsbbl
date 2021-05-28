@@ -78,6 +78,10 @@ class BBLM_Admin_Menus {
 			'bblm_plugin/pages/bb.admin.edit.comp_team.php'
 		);
 
+		//Create the 'Manage Tournament Brackets' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-brackets.php' );
+		new BBLM_Manage_Brackets();
+
 		//Create the 'Record match' page
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.match.php' );
 		new BBLM_Add_Match();

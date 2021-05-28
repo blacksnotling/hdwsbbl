@@ -1,0 +1,14 @@
+/*
+ *
+ * CSS used by the plugin on the admin screens.
+ * Version 1.0
+ *
+*/
+
+/***** Competition Brackets *****/
+table.bblm_brackets {
+	border: 1px solid #333;
+}
+table.bblm_brackets td {
+	border: 1px solid #333;
+}
