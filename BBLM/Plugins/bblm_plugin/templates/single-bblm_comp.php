@@ -59,14 +59,17 @@
 <?php
 			if ( $meta['comp_showstandings'][0] ) {
         echo '<h3>' . __( 'Standings', 'bblm') . '</h3>';
-				//Check to see the type of the league
-				if ( 3 == $meta['comp_format'][0] ) {
-					//We have a tournament
-          BBLM_CPT_Comp::display_comp_brackets( $cid );
+				//Check to see if this competition has a tournament element
+        $checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE c_id = ' . $cid;
+        $cb_id = $wpdb->get_var( $checkbracketssql );
 
-				} //end of if tourney
-				else {
-					//We have something other than a tournament. Begin normal printout
+        if ( !empty( $cb_id ) ) {
+          BBLM_CPT_Comp::display_comp_brackets( $cid );
+        }
+
+				if ( 3 != $meta['comp_format'][0] ) {
+
+					//If the competition tyoe is not just a knock out tournament, then display the league table
 					//May need to split this in the future, depending on league requirements
 					$standingssql = 'SELECT T.WPID, C.*, D.div_name, D.div_id, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND C.c_id = '.$cid.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC, C.tc_tdfor DESC, C.tc_casfor DESC, T.t_name ASC';
 					if ($standings = $wpdb->get_results($standingssql)) {
