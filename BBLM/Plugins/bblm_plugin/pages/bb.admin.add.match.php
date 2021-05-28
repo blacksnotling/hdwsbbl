@@ -191,12 +191,11 @@ class BBLM_Add_Match {
 						BBLM_Admin_CPT_Competition::update_fixture_complete( $bblm_submit_match['fixture'] );
 
 						//now we check to see if it was part of a tournament
-						$checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = '.$bblm_submit_match['fixture'];
-						$cb_id = $wpdb->get_var($checkbracketssql);
+						$checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = ' . $bblm_submit_match['fixture'];
+						$cb_id = $wpdb->get_var( $checkbracketssql );
 
 						if ( !empty( $cb_id ) ) {
-							$updatebracketsql = 'UPDATE `'.$wpdb->prefix.'comp_brackets` SET `m_id` = \''.$bblm_submission.'\', `f_id` = \'0\', `cb_text` = \'' . bblm_get_team_link( $bblm_submit_tA['TWPID'] )  . ' <strong>' . $bblm_submit_tA['td'] . '</strong><br />' . bblm_get_team_link( $bblm_submit_tB['TWPID'] ) . ' <strong>' . $bblm_submit_tB['td'] . '</strong>\' WHERE `cb_id` = \''.$cb_id.'\' LIMIT 1';
-							$wpdb->query( $updatebracketsql );
+							BBLM_Admin_CPT_Competition::update_bracket_text( $cb_id, $bblm_submission, 0 );
 						}
 					} //end of if this match was based off a fixture
 
