@@ -318,6 +318,69 @@ class BBLM_Admin_CPT_Competition {
 
 			} //end of update_team_standings
 
+			/*
+			 * Updates the text of a tournament bracket after a match or fixture has been completed.
+			 * Assumes input has already been sanitised
+			 */
+			 public static function update_bracket_text( $ID, $match, $fixture ) {
+				 global $wpdb;
+
+				 $match_text = "";
+
+				 //Generate the text for the bracket
+				 //Check for "To Be Determined".
+				 if ( ( "X" === $fixture ) && ( "X" !== $match ) ) {
+					 $match_text = "To Be Determined";
+					 $fixture = 0;
+					 $match = 0;
+				 }
+				 //check for BYES
+				 else if ( ( "X" !== $fixture ) && ( "X" === $match ) ) {
+					 $match_text = "&nbsp;";
+					 $fixture = 0;
+					 $match = 0;
+				 }
+				 //If this is a match record update generate the text
+				 else if ( 0 < (int) $match ) {
+					 $match_text = bblm_get_match_link_score( $match, 2 );
+					 $fixture = 0;
+				 }
+				 //otherewise we must have a fixture, update the text
+				 else if ( 0 < (int) $fixture ) {
+					 $fixturesql = 'SELECT F.f_teamA AS TA, F.f_teamB AS TB, T.WPID AS tAWPID, Y.WPID AS tBWPID FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y WHERE F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND F.f_id = '. $fixture;
+					 $bblm_tbd_team = bblm_get_tbd_team();
+
+					 if ( $fixtures = $wpdb->get_row( $fixturesql ) ) {
+
+						 if ( $bblm_tbd_team == $fixtures->TA ) {
+							 $match_text .= __( 'To Be Determined', 'bblm' );
+						 }
+						 else {
+							 $match_text .= bblm_get_team_name( $fixtures->tAWPID );
+						 }
+						 $match_text .= " vs <br/>";
+						 if ($bblm_tbd_team == $fixtures->TB) {
+							 $match_text .= __( 'To Be Determined', 'bblm' );
+						 }
+						 else {
+							 $match_text .= bblm_get_team_name( $fixtures->tBWPID );
+						 }
+
+					 } //end of if fixture exists
+
+				 } //end of else is fixture
+				 $match_text = esc_sql( $match_text );
+				 $updatesql = 'UPDATE '.$wpdb->prefix.'comp_brackets SET `m_id` = \''.$match.'\', `f_id` = \''.$fixture.'\', `cb_text` = \''.$match_text.'\' WHERE `cb_id` = '.$ID.' LIMIT 1';
+
+				 if ( $wpdb->query( $updatesql ) ) {
+					 return true;
+				 }
+				 else {
+					 return false;
+				 }
+
+			 } //end of update_bracket_text
+
 } //end of class
 
 new BBLM_Admin_CPT_Competition();

@@ -322,13 +322,17 @@ function bblm_get_match_name_score( $ID, $formatted = 1 ) {
   $matchsql = 'SELECT M.m_teamAtd, M.m_teamBtd, T.WPID AS TAWPID, R.WPID AS TBWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE M.m_teamA = T.t_id AND M.m_teamB = R.t_id AND M.WPID = '. $ID;
 	if ( $match = $wpdb->get_row ( $matchsql ) ) {
 
-		if ( $formatted ) {
-
+		if ( 1 == $formatted ) {
+			//normal formatting
 			$output .= bblm_get_team_name( $match->TAWPID ) . ' <strong>' . $match->m_teamAtd . '</strong> vs ' . bblm_get_team_name( $match->TBWPID ) . ' <strong>' . $match->m_teamBtd . '</strong>';
 
 		}
+		else if ( 2 == $formatted ) {
+			//tournament bracket formatting
+			$output .= bblm_get_team_name( $match->TAWPID ) . ' <strong>' . $match->m_teamAtd . '</strong><br />' . bblm_get_team_name( $match->TBWPID ) . ' <strong>' . $match->m_teamBtd . '</strong>';
+		}
 		else {
-
+			//no formatting
 			$output .= bblm_get_team_name( $match->TAWPID ) . ' ' . $match->m_teamAtd . ' vs ' . bblm_get_team_name( $match->TBWPID ) . ' ' . $match->m_teamBtd;
 
 		}
@@ -346,11 +350,18 @@ function bblm_get_match_name_score( $ID, $formatted = 1 ) {
  */
 function bblm_get_match_link_score( $ID, $formatted = 1 ) {
 
-	if ( $formatted ) {
+	if ( 1 == $formatted ) {
+		//standard formatting
 		$match = bblm_get_match_name_score( $ID, 1 );
+
+	}
+	else if ( 2 == $formatted ) {
+		//tournament bracket formatting
+		$match = bblm_get_match_name_score( $ID, 2 );
+
 	}
 	else {
-
+		//no formatting
 		$match = bblm_get_match_name_score( $ID, 0 );
 
 	}
