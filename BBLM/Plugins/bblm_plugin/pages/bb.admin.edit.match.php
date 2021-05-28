@@ -703,6 +703,15 @@ class BBLM_Edit_Match {
 				BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tA['id'], $bblm_submit_match['comp'], $tAdiv );
 				BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tB['id'], $bblm_submit_match['comp'], $tBdiv );
 
+				//Check to see if this match is part of a tournament
+				$checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE m_id = ' . $bblm_submit_match['wpid'];
+				$cb_id = $wpdb->get_var( $checkbracketssql );
+
+				if ( !empty( $cb_id ) ) {
+					BBLM_Admin_CPT_Competition::update_bracket_text( $cb_id, $bblm_submit_match['wpid'], 0 );
+				}
+
+
 				//If we get to this point we have added a match to the database!
 				$sucess = TRUE;
 				do_action( 'bblm_post_submission' );

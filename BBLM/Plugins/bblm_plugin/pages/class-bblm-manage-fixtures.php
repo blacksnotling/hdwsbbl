@@ -690,6 +690,14 @@ class BBLM_Manage_Fixtures {
 					if ("on" == $_POST['bblm_fadd'.$p]) {
 						$updatesql = 'UPDATE `'.$wpdb->prefix.'fixture` SET `f_date` = \''.$_POST['fdate'.$p].' 12:00:01\', `f_teamA` = \'' . (int) $_POST['bblm_teamA'.$p] . '\', `f_teamB` = \'' . (int) $_POST['bblm_teamB'.$p] . '\' WHERE `f_id` = ' . (int) $_POST['fid'.$p] . ' LIMIT 1';
 						$fixturesqla[$p] = $updatesql;
+
+						//Check to see if this fixture is part of a tournament
+						$checkbracketssql = 'SELECT cb_id FROM '.$wpdb->prefix.'comp_brackets WHERE f_id = ' . (int) $_POST['fid'.$p];
+						$cb_id = $wpdb->get_var( $checkbracketssql );
+
+						if ( !empty( $cb_id ) ) {
+							BBLM_Admin_CPT_Competition::update_bracket_text( $cb_id, 0, (int) $_POST['fid'.$p] );
+						}
 					}
 					$p++;
 				}
@@ -698,7 +706,6 @@ class BBLM_Manage_Fixtures {
 				foreach ($fixturesqla as $fs) {
 					if ( FALSE !== $wpdb->query( $fs ) ) {
 						$sucess = TRUE;
-						do_action( 'bblm_post_submission' );
 					}
 				}
 
@@ -708,6 +715,8 @@ class BBLM_Manage_Fixtures {
 <?php
 				if ( $sucess ) {
 					echo __( 'Fixture was updated' , 'bblm' );
+					//We only want to call this once to avoid excessive loads
+					do_action( 'bblm_post_submission' );
 				}
 				else {
 					echo __( 'Something went wrong', 'bblm' );
