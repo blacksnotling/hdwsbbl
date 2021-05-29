@@ -24,9 +24,11 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
   //The Widget Output in the front-end
   public function widget( $args, $instance ) {
     global $wpdb;
+    global $post;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
+    $option = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $option[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $option[ 'page_stars' ], ENT_QUOTES );
 
     $parentpage = 0;
     if ( is_singular() ) {
@@ -36,7 +38,8 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
+    //and that this isn't the star player page
+    if ( ( $parentoption == $parentpage ) && ( $post->ID != (int) $staplayerteam ) ) {
 
       //pulling in the vars from the single-bblm_team template
       global $tid;

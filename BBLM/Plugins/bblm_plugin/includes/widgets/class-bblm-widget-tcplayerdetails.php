@@ -25,9 +25,9 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoptions = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
+    $options = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $options[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $options[ 'page_stars' ], ENT_QUOTES );
 
     $parentpage = 0;
     if ( is_singular() ) {
