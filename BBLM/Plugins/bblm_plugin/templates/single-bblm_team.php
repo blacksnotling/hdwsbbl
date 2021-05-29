@@ -168,6 +168,63 @@
 				echo '</table>';
 			}
 
+      echo '<h3>'.__('Performance by Championship Cup','bblm').'</h3>';
+      $cupsql = 'SELECT C.series_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND tc_played > 0 AND C.c_counts = 1 AND T.t_id = '.$tid.' GROUP BY C.series_id ORDER BY C.series_id DESC';
+			if ( $seah = $wpdb->get_results( $cupsql ) ) {
+				$zebracount = 1;
+?>
+				<table class="bblm_table bblm_sortable">
+					<thead>
+						<tr>
+							<th class="bblm_tbl_title"><?php echo __( 'Championsip Cup', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'W', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'L', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'D', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'TF', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'TA', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'CF', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'CA', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm'); ?></th>
+							<th class="bblm_tbl_stat"><?php echo __( '%', 'bblm'); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+<?php
+				foreach ( $seah as $sh ) {
+					if ( $zebracount % 2 ) {
+						echo '<tr>';
+					}
+					else {
+						echo '<tr class="bblm_tbl_alt">';
+					}
+					echo '<td>' . bblm_get_cup_link( $sh->series_id ) . '</td>';
+					echo '<td>' . $sh->PLD . '</td>';
+					echo '<td>' . $sh->win . '</td>';
+					echo '<td>' . $sh->lose . '</td>';
+					echo '<td>' . $sh->draw . '</td>';
+					echo '<td>' . $sh->TDf . '</td>';
+					echo '<td>' . $sh->TDa . '</td>';
+					echo '<td>' . $sh->CASf . '</td>';
+					echo '<td>' . $sh->CASa . '</td>';
+					echo '<td>' . $sh->COMP . '</td>';
+					echo '<td>' . $sh->cINT . '</td>';
+
+					if ( $sh->PLD >0 ) {
+						echo '<td>' . number_format( ( $sh->win / $sh->PLD ) * 100 ) . '</td>';
+					}
+					else {
+						echo '<td>' . __( 'N/A' , 'bblm' ) . '</td>';
+					}
+					echo '</tr>';
+
+					$zebracount++;
+				}
+				echo '</tbody>';
+				echo '</table>';
+			}
+
 ?>
 				<h3>Performance by Competition</h3>
 
