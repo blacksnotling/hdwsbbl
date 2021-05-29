@@ -14,16 +14,16 @@
 	});
 
 	// Trigger layout section.
-	$('body').on('click', '[id$="accordion-section-rookie_layout"]', function() {
-		$('[id$="accordion-section-rookie_layout"] #customize-control-crownstar_content_width input').change();
+	$('body').on('click', '[id$="accordion-section-crownstar_layout"]', function() {
+		$('[id$="accordion-section-crownstar_layout"] #customize-control-crownstar_content_width input').change();
 	});
 	// Update content width display
-	$('body').on('change', '[id$="accordion-section-rookie_layout"] #customize-control-crownstar_content_width input', function() {
-		$el = $('[id$="accordion-section-rookie_layout"] #customize-control-crownstar_content_width .customize-control-description');
+	$('body').on('change', '[id$="accordion-section-crownstar_layout"] #customize-control-crownstar_content_width input', function() {
+		$el = $('[id$="accordion-section-crownstar_layout"] #customize-control-crownstar_content_width .customize-control-description');
 		$el.css('float', 'right').find('span').html($(this).val()+'px').css('line-height', '24px');
 	});
-	$('body').on('mouseup', '[id$="accordion-section-rookie_layout"] #customize-control-crownstar_content_width .customize-control-description a', function() {
-		$input = $('[id$="accordion-section-rookie_layout"] #customize-control-crownstar_content_width input');
+	$('body').on('mouseup', '[id$="accordion-section-crownstar_layout"] #customize-control-crownstar_content_width .customize-control-description a', function() {
+		$input = $('[id$="accordion-section-crownstar_layout"] #customize-control-crownstar_content_width input');
 		console.log($input);
 		if ( '#minus' === $(this).attr('href') ) {
 			$input.val(function( index, val) {
