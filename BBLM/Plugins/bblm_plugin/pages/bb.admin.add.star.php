@@ -64,7 +64,7 @@ if(isset($_POST['bblm_star_submit'])) {
 			//if  "on" result for a field then generate SQL
 			if (on == $_POST['bblm_plyd'.$p]) {
 
-				$insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\''.$_POST[bblm_raceid.$p].'\', \''.$bblm_player_id.'\')';
+				$insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\''.$_POST['bblm_raceid'.$p].'\', \''.$bblm_player_id.'\')';
 				$race2starsqla[$p] = $insertstarracesql;
 			}
 			$p++;
