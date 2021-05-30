@@ -260,11 +260,9 @@ function crownstar_entry_meta() {
 		$categories_list = get_the_category_list( ' ' );
 		if ( $categories_list ) {
 			?>
-			<div class="entry-meta">
-				<div class="entry-category-links">
+				<div class="entry-category-links"> Filed under:
 					<?php echo $categories_list; ?>
 				</div><!-- .entry-category-links -->
-			</div><!-- .entry-meta -->
 			<?php
 		}
 	}
@@ -283,9 +281,12 @@ function crownstar_entry_footer() {
 		if ( $tags_list ) {
 			?>
 			<footer class="entry-footer">
-				<div class="entry-tag-links">
-					<?php echo $tags_list; ?>
-				</div><!-- .entry-tag-links -->
+				<div class="entry-meta">
+				<?php crownstar_entry_meta(); ?>
+					<div class="entry-tag-links"> and tagged: 
+						<?php echo $tags_list; ?>
+					</div><!-- .entry-tag-links -->
+				</div><!-- .entry-meta -->
 			</footer><!-- .entry-footer -->
 			<?php
 		}

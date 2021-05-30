@@ -19,7 +19,6 @@
 
 			<div class="entry-details">
 				<?php do_action( 'crownstar_before_entry_details' ); ?>
-				<?php crownstar_entry_meta(); ?>
 				<?php crownstar_entry_date(); ?>
 				<?php do_action( 'crownstar_entry_details' ); ?>
 			</div>
