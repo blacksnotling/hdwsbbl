@@ -13,13 +13,14 @@
  */
 ?>
 <?php get_header(); ?>
- <?php do_action( 'bblm_template_before_posts' ); ?>
- <?php if (have_posts()) : ?>
-	 <?php do_action( 'bblm_template_before_loop' ); ?>
-	 <?php while (have_posts()) : the_post(); ?>
-		 <?php do_action( 'bblm_template_before_content' ); ?>
-
-		 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<div id="primary" class="content-area content-area-right-sidebar">
+  <main id="main" class="site-main" role="main">
+  <?php do_action( 'bblm_template_before_posts' ); ?>
+	<?php if (have_posts()) : ?>
+    <?php do_action( 'bblm_template_before_loop' ); ?>
+		<?php while (have_posts()) : the_post(); ?>
+      <?php do_action( 'bblm_template_before_content' ); ?>
+      <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 					<header class="entry-header">
 						<h2 class="entry-title"><?php the_title(); ?></h2>
@@ -85,10 +86,10 @@
 								}
 								//cross division hardcode
 								if (14 == $stand->div_id) {
-									print("<h3>** New World Confrence (NWC) **</h3>");
+                  echo '<h3>' . __( '** New World Confrence (NWC) **', 'bblm') . '</h3>';
 								}
 								if (16 == $stand->div_id) {
-									print("<h3>** Old World Confrence (OWC) **</h3>");
+                  echo '<h3>' . __( '** Old World Confrence (OWC) **', 'bblm') . '</h3>';
 								}
 								//end cross division hard code
 								print("<h4>".$stand->div_name."</h4>\n<table class=\"bblm_table\">\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
@@ -108,7 +109,7 @@
 						}
 						print("</table>\n");
 ?>
-				<h4>Key</h4>
+        <h4><?php echo __( 'Key','bblm'); ?></h4>
 				<ul class="bblm_expandablekey">
 					<li><strong>P</strong>: Number of games Played</li>
 					<li><strong>TF</strong>: Number of Touchdowns scored by the team</li>
@@ -123,7 +124,8 @@
 			}
 			else {
 				//The comp is set to NOT display the standings. as a result we display a list of teams
-				print("<h3>Participents</h3>\n<p>Not all the participents for this Competition have been announced. So far the following teams have confirmed that they will be taking part:</p>");
+        echo '<h3>' . __( 'Participents','bblm') . '<h3>';
+        echo '<p>' . __('Not all the participents for this Competition have been announced. So far the following teams have confirmed that they will be taking part:','bblm' ) . '</p>';
 				$participentssql = 'SELECT DISTINCT(P.post_title), P.guid FROM '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE T.t_show = 1 AND T.t_id = C.t_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$cid.' ORDER BY P.post_title ASC';
 				if ($participents = $wpdb->get_results($participentssql)) {
 						print("<ul>\n");
@@ -192,7 +194,7 @@
 			//////////////
 			$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_id AS TA, M.t_id AS TB, V.post_title AS TAname, O.post_title AS TBname, V.guid AS TAlink, O.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' O, '.$wpdb->prefix.'division D WHERE D.div_id = F.div_id AND T.t_id = F.f_teamA AND M.t_id = F.f_teamB AND T.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND M.t_id = N.tid AND N.prefix = \'t_\' AND N.pid = O.ID AND F.f_complete = 0 AND F.c_id = '.$cid.' ORDER BY F.f_date ASC, F.div_id DESC';
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
-				print("<h3>Upcoming Fixtures</h3>\n");
+        echo '<h3>' . __( 'Upcoming Fixtures', 'bblm') . '</h3>';
 				print("<table class=\"bblm_table bblm_expandable\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
 
 				$is_first = 0;
@@ -201,10 +203,6 @@
 
 				//grab the ID of the "tbd" team
 				$bblm_tbd_team = bblm_get_tbd_team();
-
-				//print("  <table>\n		 <tr>\n		   <th>Date</th>\n		   <th>Match</th>\n		   </tr>\n");
-
-
 
 				foreach ($fixtures as $fd) {
 					if (($zebracount % 2) && (10 < $zebracount)) {
@@ -247,7 +245,7 @@
 				  ///////////
 				 // Team //
 				///////////
-				print("<h3>Team Statistics</h3>\n");
+        echo '<h3>' . __( 'Team Statistics', 'bblm') . '</h3>';
 				$teamstatssql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.c_id = '.$cid.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
@@ -345,11 +343,13 @@
 
 </div><!-- .entry-content -->
 </article>
+
 <?php do_action( 'bblm_template_after_content' ); ?>
 <?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
-
 <?php do_action( 'bblm_template_after_posts' ); ?>
+</main><!-- #main -->
+</div><!-- #primary -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

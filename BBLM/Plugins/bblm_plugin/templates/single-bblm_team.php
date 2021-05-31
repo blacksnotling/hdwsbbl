@@ -53,7 +53,7 @@
 
 				if ( !empty( $ohs ) ) { //Need something better - IE a result has been returned
 ?>
-				<h3>Career Statistics for <?php the_title(); ?></h3>
+        <h3><?php echo __( 'Career Statistics for ', 'bblm' ) . the_title(); ?></h3>
 				<table class="bblm_table">
 					<tr>
 						<th class="bblm_tbl_title">Team</th>
@@ -100,7 +100,7 @@
 ?>
 				</table>
 
-				<h4>Key</h4>
+        <h4><?php echo __( 'Key', 'bblm' ); ?></h4>
 				<ul class="bblm_expandablekey">
 					<li><strong>P</strong>: Number of games Played</li>
 					<li><strong>TF</strong>: Number of Touchdowns scored by the team</li>
@@ -110,7 +110,7 @@
 					<li><strong>%</strong>: Teams win percentage (including Draws)</li>
 				</ul>
 
-				<h3>Performance by Season</h3>
+        <h3><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
 <?php
 			$seasonsql = 'SELECT C.sea_id, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND tc_played > 0 AND C.c_counts = 1 AND T.t_id = '.$tid.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
@@ -176,7 +176,7 @@
 				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
-							<th class="bblm_tbl_title"><?php echo __( 'Championsip Cup', 'bblm'); ?></th>
+							<th class="bblm_tbl_title"><?php echo __( 'Championship Cup', 'bblm'); ?></th>
 							<th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm'); ?></th>
 							<th class="bblm_tbl_stat"><?php echo __( 'W', 'bblm'); ?></th>
 							<th class="bblm_tbl_stat"><?php echo __( 'L', 'bblm'); ?></th>
@@ -226,7 +226,7 @@
 			}
 
 ?>
-				<h3>Performance by Competition</h3>
+				<h3><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
 
 <?php
 			$matchhsql = 'SELECT C.WPID AS CWPID, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND tc_played > 0 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
@@ -259,7 +259,7 @@
 
 
 
-			<h3>Players</h3>
+			<h3><?php echo __( 'Players', 'bblm' ); ?></h3>
 <?php
 
 			//Initialise variables
@@ -308,7 +308,8 @@
 
 				$starplayerssql = 'SELECT P.post_title, P.guid, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player X WHERE P.ID = J.pid AND J.prefix = "p_" AND J.tid = X.p_id AND M.p_id = X.p_id AND X.t_id = '.$bblm_star_team.' AND M.t_id = '.$tid.' GROUP BY M.p_id ORDER BY P.post_title ASC';
 				if ($starplayers = $wpdb->get_results($starplayerssql)) {
-					print("			<h4>Star Players hired</h4>\n			<ul>\n");
+          echo '<h4>' . __('Star Players hired','bblm' ) . '</h4>';
+          echo '<ul>';
 					foreach ($starplayers as $spv) {
 						print("				<li><a href=\"".$spv->guid."\" title=\"View the details of this Star Player\">".$spv->post_title."</a>");
 						if (1 < $spv->VISITS) {
@@ -460,7 +461,7 @@
 ?>
 
 
-				<h3 id="awardsfull">Awards list in full</h3>
+				<h3 id="awardsfull"><?php echo __( 'Awards list in full', 'bblm' ); ?></h3>
 <?php
 				//Initialise variables
 				$ccfail = 0;
@@ -471,7 +472,7 @@
 				if ($champs = $wpdb->get_results($championshipssql)) {
 					$has_cups = 1;
 					$zebracount = 1;
-					print("<h4>Championships</h4>\n");
+          echo '<h4>' . __('Championships','bblm' ) . '</h4>';
 					print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr>\n");
 					foreach ($champs as $cc) {
 						if ($zebracount % 2) {
@@ -527,7 +528,7 @@
 				$compawardssql = 'SELECT A.a_name, B.c_id AS CWPID, B.atc_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND B.t_id = '.$tid.' ORDER BY A.a_id ASC';
 				if ($cawards = $wpdb->get_results($compawardssql)) {
 					$zebracount = 1;
-					print("<h4>Awards from Competitions</h4>\n");
+					<h4><?php echo __( 'Awards from Compeitions', 'bblm'); ?></h4>
 					print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 					foreach ($cawards as $ca) {
 						if ($zebracount % 2) {

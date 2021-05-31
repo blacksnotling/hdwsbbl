@@ -78,8 +78,8 @@
 
 
 
-		<h3>Performance related Stats</h3>
-		<h4>Star Player Point Related</h4>
+		<h3><?php echo __( 'Performance related Stats','bblm'); ?></h3>
+    <h3><?php echo __( 'Star Player Point Related','bblm'); ?></h3>
 <?php
 		 /*-- SPP -- */
 		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PLAYER, T.WPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
@@ -95,7 +95,7 @@
 			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
-		<h4>Completion Related</h4>
+		<h4><?php echo __( 'Completion Related','bblm'); ?></h4>
 <?php
 		 /*-- COMPLETIONS -- */
 		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
@@ -120,7 +120,7 @@
 			<li><strong>Most Passes completed in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
 		</ul>
 
-		<h4>Interception Related</h4>
+    <h4><?php echo __( 'Interception Related','bblm'); ?></h4>
 <?php
 		 /*-- Interceptions -- */
 		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
@@ -147,7 +147,7 @@
 
 
 
-			<h3>Statistics tables</h3>
+			<h3><?php echo __( 'Statistics tables','bblm' ); ?></h3>
 <?php
 				  ///////////////////////////////
 				 // Filtering of Stats tables //
@@ -188,7 +188,7 @@
 				 // Best Passing Players //
 				/////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_comp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Best Passing Players");
+        echo '<h4>' . __('Best Passing Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -242,7 +242,7 @@
 				 // Top Interceptors Players //
 				//////////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_int) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Intercepting Players");
+        echo '<h4>' . __('Top Intercepting Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -296,7 +296,7 @@
 				 // MVPs Players //
 				//////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_mvp) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_mvp > 0  AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Most Valued Players");
+        echo '<h4>' . __('Most Valued Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}

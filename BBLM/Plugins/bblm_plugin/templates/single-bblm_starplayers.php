@@ -81,7 +81,7 @@
 		if ($s = $wpdb->get_row($careerstatssql)) {
 			//The Star has played a match so continue
 ?>
-			<h3>League Statistics</h3>
+      <h3><?php echo __( 'League Statistics','bblm' ); ?></h3>
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Career Total</th>
@@ -144,7 +144,7 @@
 			if ($killer = $wpdb->get_results($killersql)) {
 				//If the player has killed people
 ?>
-			<h3>Killer!</h3>
+      <h3><?php echo __( 'Killer!','bblm' ); ?></h3>
 			<p>This player has killed another player in the course of their career. They have killed the following players:</p>
 			<ul>
 <?php
@@ -285,7 +285,7 @@
   </tbody>
 </table>
 
-			<h3>Recent Matches</h3>
+      <h3><?php echo __( 'Recent Matches','bblm' ); ?></h3>
 			<table class="bblm_table bblm_sortable bblm_expandable">
 				<thead>
 				<tr>

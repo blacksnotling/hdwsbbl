@@ -58,7 +58,7 @@
 
 
 
-			<h3>Statistics tables</h3>
+      <h3><?php echo __( 'Statistics tables','bblm'); ?></h3>
 <?php
 				  ///////////////////////////////
 				 // Filtering of Stats tables //
@@ -102,7 +102,7 @@
 				 // Top Scoring Players //
 				/////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_td) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Scoring Players");
+        echo '<h4>' . __('Top Scoring Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -156,7 +156,7 @@
 				 // Top Scoring Teams //
 				////////////////////////
 				$statsql = 'SELECT Z.WPID AS TWPID, SUM(T.tc_tdfor) AS VALUE, Z.r_id, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Scoring Teams");
+        echo '<h4>' . __('Top Scoring Teams','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
