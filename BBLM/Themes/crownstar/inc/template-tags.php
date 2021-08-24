@@ -30,9 +30,9 @@ if ( ! function_exists( 'crownstar_header_branding' ) ) :
  */
 function crownstar_header_branding( $options = array() ) {
 	?>
-	<div class="site-branding<?php if ( ! isset( $options['logo_url'] ) && ! $options['display_header_text'] ) { ?> site-branding-empty<?php } ?>">
+	<div class="site-branding<?php if ( empty( $options['logo_url'] ) && ! $options['display_header_text'] ) { ?> site-branding-empty<?php } ?>">
 		<div class="site-identity">
-			<?php if ( isset( $options['logo_url'] ) ) { ?>
+			<?php if ( ! empty( $options['logo_url'] ) ) { ?>
 			<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><img src="<?php echo $options['logo_url']; ?>" alt="<?php bloginfo( 'name' ); ?>"></a>
 			<?php } ?>
 			<?php if ( $options['display_header_text'] ) { ?>
@@ -60,11 +60,11 @@ function crownstar_header_banner() {
 }
 endif;
 
-if ( ! function_exists( 'rookie_header_menu' ) ) :
+if ( ! function_exists( 'crownstar_header_menu' ) ) :
 /**
  * Display header menu section.
  */
-function rookie_header_menu( $options = array() ) {
+function crownstar_header_menu( $options = array() ) {
 	?>
 	<div class="site-menu">
 		<nav id="site-navigation" class="main-navigation" role="navigation">
@@ -135,7 +135,7 @@ function crownstar_header_area() {
 				} elseif ( 'branding' == $section ) {
 					crownstar_header_branding( $options );
 				} elseif ( 'menu' == $section ) {
-					rookie_header_menu( $options );
+					crownstar_header_menu( $options );
 				} else {
 					do_action( 'crownstar_header_area_section_' . $section, $options );
 				}
@@ -256,15 +256,13 @@ if ( ! function_exists( 'crownstar_entry_meta' ) ) :
  */
 function crownstar_entry_meta() {
 	// Hide category and tag text for pages.
-	if ( 'post' == get_post_type() && rookie_categorized_blog() ) {
+	if ( 'post' == get_post_type() && crownstar_categorized_blog() ) {
 		$categories_list = get_the_category_list( ' ' );
 		if ( $categories_list ) {
 			?>
-			<div class="entry-meta">
-				<div class="entry-category-links">
+				<div class="entry-category-links"> Filed under:
 					<?php echo $categories_list; ?>
 				</div><!-- .entry-category-links -->
-			</div><!-- .entry-meta -->
 			<?php
 		}
 	}
@@ -283,9 +281,12 @@ function crownstar_entry_footer() {
 		if ( $tags_list ) {
 			?>
 			<footer class="entry-footer">
-				<div class="entry-tag-links">
-					<?php echo $tags_list; ?>
-				</div><!-- .entry-tag-links -->
+				<div class="entry-meta">
+				<?php crownstar_entry_meta(); ?>
+					<div class="entry-tag-links"> and tagged: 
+						<?php echo $tags_list; ?>
+					</div><!-- .entry-tag-links -->
+				</div><!-- .entry-meta -->
 			</footer><!-- .entry-footer -->
 			<?php
 		}
@@ -385,14 +386,14 @@ function the_archive_description( $before = '', $after = '' ) {
 }
 endif;
 
-if ( ! function_exists( 'rookie_categorized_blog' ) ) :
+if ( ! function_exists( 'crownstar_categorized_blog' ) ) :
 /**
  * Returns true if a blog has more than 1 category.
  *
  * @return bool
  */
-function rookie_categorized_blog() {
-	if ( false === ( $all_the_cool_cats = get_transient( 'rookie_categories' ) ) ) {
+function crownstar_categorized_blog() {
+	if ( false === ( $all_the_cool_cats = get_transient( 'crownstar_categories' ) ) ) {
 		// Create an array of all the categories that are attached to posts.
 		$all_the_cool_cats = get_categories( array(
 			'fields'     => 'ids',
@@ -405,30 +406,30 @@ function rookie_categorized_blog() {
 		// Count the number of categories that are attached to the posts.
 		$all_the_cool_cats = count( $all_the_cool_cats );
 
-		set_transient( 'rookie_categories', $all_the_cool_cats );
+		set_transient( 'crownstar_categories', $all_the_cool_cats );
 	}
 
 	if ( $all_the_cool_cats > 1 ) {
-		// This blog has more than 1 category so rookie_categorized_blog should return true.
+		// This blog has more than 1 category so crownstar_categorized_blog should return true.
 		return true;
 	} else {
-		// This blog has only 1 category so rookie_categorized_blog should return false.
+		// This blog has only 1 category so crownstar_categorized_blog should return false.
 		return false;
 	}
 }
 endif;
 
-if ( ! function_exists( 'rookie_category_transient_flusher' ) ) :
+if ( ! function_exists( 'crownstar_category_transient_flusher' ) ) :
 /**
- * Flush out the transients used in rookie_categorized_blog.
+ * Flush out the transients used in crownstar_categorized_blog.
  */
-function rookie_category_transient_flusher() {
+function crownstar_category_transient_flusher() {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
 	// Like, beat it. Dig?
-	delete_transient( 'rookie_categories' );
+	delete_transient( 'crownstar_categories' );
 }
-add_action( 'edit_category', 'rookie_category_transient_flusher' );
-add_action( 'save_post',     'rookie_category_transient_flusher' );
+add_action( 'edit_category', 'crownstar_category_transient_flusher' );
+add_action( 'save_post',     'crownstar_category_transient_flusher' );
 endif;

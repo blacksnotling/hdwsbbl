@@ -68,7 +68,7 @@
  			<p>Not all players have an illustrious career. Here is a list of players who died on the debut:</p> -->
 
 
-			<h3>Statistics tables</h3>
+			<h3><?php echo __( 'Statistics tables','bblm' ); ?></h3>
 <?php
 				  ///////////////////////////////
 				 // Filtering of Stats tables //
@@ -114,7 +114,7 @@
 				 // Most VIcious Players //
 				//////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_cas) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_cas > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Most Vicious Players");
+        echo '<h4>' . __('Most Vicious Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -168,7 +168,7 @@
 				 // Most Vicious Teams //
 				////////////////////////
 				$statsql = 'SELECT Z.WPID AS TWPID, SUM(T.tc_casfor) AS VALUE, Z.r_id, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Most Vicious Teams");
+        echo '<h4>' . __('Most Vicious Teams','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -222,7 +222,7 @@
 				 // Top Killing Players //
 				/////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, COUNT(*) AS VALUE , E.pos_name, T.WPID, P.p_status, T.t_active FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Most Deadly Players");
+        echo '<h4>' . __('Most Deadly Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -276,7 +276,7 @@
 				 // Top Killing Teams //
 				///////////////////////
 				$statsql = 'SELECT COUNT(*) AS VALUE , T.WPID AS TWPID, T.t_active, T.r_id FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND P.p_id = F.pf_killer AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 '.$statsqlmodt2.'GROUP BY T.t_id ORDER BY VALUE DESC, T.t_id ASC LIMIT '.$stat_limit;
-				print("<h4>Most Deadly Teams");
+        echo '<h4>' . __('Most Deadly Teams','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}

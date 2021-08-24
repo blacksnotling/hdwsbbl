@@ -73,7 +73,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 			$is_first_status = 0;
 		}
 		if ($is_first_status) {
-			print("<h4>".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h4 class=\"bblm-table-caption\">".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_status = 0;
 		}
 		if ($zebracount % 2) {

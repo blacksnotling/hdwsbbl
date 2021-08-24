@@ -112,7 +112,7 @@ a:hover, a:active {
 				$teamcap = $tcap->p_id;
 			}
 ?>
-		<h1>Roster for <?php echo $team_link; ?></h1>
+		<h1><?php echo __( 'Roster for ','bblm' ) . $team_link; ?></h1>
 
 <?php
 		}

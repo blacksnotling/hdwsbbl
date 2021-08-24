@@ -137,7 +137,7 @@
 <?php
 } // end of if ("" !== $m->m_trivia) {
 ?>
-			<h3><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
+			<h3 class="bblm-table-caption"><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
 		<table class="bblm_table">
       <thead>
   			<tr>

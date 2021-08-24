@@ -113,7 +113,8 @@
 						//If the player is inactive, see if they were killed.
 						$fatesql = 'SELECT pf_killer, f_id, pf_desc FROM `'.$wpdb->prefix.'player_fate` WHERE ( f_id = 1 OR f_id = 6 OR f_id = 7 ) AND p_id = '.$pd->p_id.' LIMIT 1';
 						if ($fate = $wpdb->get_row($fatesql)) {
-							print("						<h3>Obituary</h3>\n							<p>This player is Dead! They were killed by ");
+              echo '<h3>' . __( 'Obituary', 'bblm') . '</h3>';
+              echo '<p>'. __( 'This player is Dead! They were killed by ','bblm' );
 							if ("0" == $fate->pf_killer) {
 								print("an unkown player.</p>\n");
 							}
@@ -169,7 +170,7 @@
 						$trans->display_player_transfer_history();
 	?>
 
-						<h3><?php echo __( 'Player Statistics', 'bblm' ); ?></h3>
+						<h3 class="bblm-table-caption"><?php echo __( 'Player Statistics', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 	 							<tr>
@@ -208,7 +209,7 @@
 							</tbody>
 						</table>
 
-            <h3><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -251,7 +252,7 @@
 						</tbody>
 					</table>
 
-          <h3><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+          <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
           <table class="bblm_table">
             <thead>
               <tr>
@@ -294,7 +295,7 @@
           </tbody>
         </table>
 
-						<h3><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+						<h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -336,7 +337,7 @@
 							</tbody>
 						</table>
 
-					<h3><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
+					<h3 class="bblm-table-caption"><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
 						<table class="bblm_table bblm_sortable bblm_expandable">
 							<thead>
 								<tr>
@@ -463,7 +464,7 @@
 						if ($champs = $wpdb->get_results($championshipssql)) {
 							$has_cups = 1;
 							$zebracount = 1;
-							print("<h4>Championships</h4>\n");
+              echo '<h4>' . __('Championships','bblm' ) . '</h4>';
 							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr>\n");
 							foreach ($champs as $cc) {
 								if ($zebracount % 2) {
@@ -484,7 +485,7 @@
 						$seasonsql = 'SELECT A.a_name, B.sea_id, B.aps_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B WHERE A.a_id = B.a_id AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($sawards = $wpdb->get_results($seasonsql)) {
 							$zebracount = 1;
-							print("<h4>Awards from Seasons</h4>\n");
+              echo '<h4>' . __('Awards from Seasons','bblm' ) . '</h4>';
 							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 							foreach ($sawards as $sa) {
 								if ($zebracount % 2) {
@@ -506,7 +507,7 @@
 						$compawardssql = 'SELECT A.a_name, B.apc_value, B.c_id AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($cawards = $wpdb->get_results($compawardssql)) {
 							$zebracount = 1;
-							print("<h4>Awards from Competitions</h4>\n");
+							echo '<h4>' . __('Awards from Competitions','bblm' ) . '</h4>';
 							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
 							foreach ($cawards as $ca) {
 								if ($zebracount % 2) {

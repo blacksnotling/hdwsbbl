@@ -20,7 +20,7 @@
                 $has_played = $own->get_number_games();
           if ( ( $has_team > 0 ) && ( $has_played > 0 ) ) { ?>
 
-            <h3><?php echo __( 'Career Performance', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Career Performance', 'bblm'); ?></h3>
             <table class="bblm_table">
               <thead>
               <tr>
@@ -48,7 +48,7 @@
 
             <?php $own->individual_stat_desc(); ?>
 
-            <h3><?php echo __( 'Their Teams', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Their Teams', 'bblm'); ?></h3>
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -71,7 +71,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'Races Used', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Races Used', 'bblm'); ?></h3>
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -94,7 +94,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'Season Performance', 'bblm'); ?>S</h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Season Performance', 'bblm'); ?>S</h3>
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -117,7 +117,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'Competition Performance', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Competition Performance', 'bblm'); ?></h3>
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -140,7 +140,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'Championship Cup Performance', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Championship Cup Performance', 'bblm'); ?></h3>
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -163,7 +163,7 @@
               </tbody>
             </table>
 
-            <h3><?php echo __( 'Top Players They Coached', 'bblm'); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Top Players They Coached', 'bblm'); ?></h3>
             <table class="bblm_table bblm_expandable">
               <thead>
                 <tr>
