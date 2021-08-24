@@ -24,7 +24,7 @@
 						<?php the_content(); ?>
 					</div>
 
-					<h3><?php echo __( 'Recent Matches in this stadium', 'bblm'); ?></h3>
+					<h3 class="bblm-table-caption"><?php echo __( 'Recent Matches in this stadium', 'bblm'); ?></h3>
 					<?php $match->display_match_by_stadium(); ?>
 
 				</div><!-- .entry-content -->

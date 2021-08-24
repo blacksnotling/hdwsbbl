@@ -14,7 +14,7 @@
 		</header><!-- .page-header -->
 
     <div class="entry-content">
-
+      <h3 class="bblm-table-caption"><?php echo __('The Championship Cups', 'bblm') ?></h3>
 			<?php bblm_template_display_cup_listing(); ?>
 
     </div><!-- .entry-content -->

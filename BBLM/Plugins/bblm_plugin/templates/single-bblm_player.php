@@ -170,7 +170,7 @@
 						$trans->display_player_transfer_history();
 	?>
 
-						<h3><?php echo __( 'Player Statistics', 'bblm' ); ?></h3>
+						<h3 class="bblm-table-caption"><?php echo __( 'Player Statistics', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 	 							<tr>
@@ -209,7 +209,7 @@
 							</tbody>
 						</table>
 
-            <h3><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+            <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -252,7 +252,7 @@
 						</tbody>
 					</table>
 
-          <h3><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+          <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
           <table class="bblm_table">
             <thead>
               <tr>
@@ -295,7 +295,7 @@
           </tbody>
         </table>
 
-						<h3><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+						<h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -337,7 +337,7 @@
 							</tbody>
 						</table>
 
-					<h3><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
+					<h3 class="bblm-table-caption"><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
 						<table class="bblm_table bblm_sortable bblm_expandable">
 							<thead>
 								<tr>

@@ -40,7 +40,7 @@
 					echo '<h3>' . __( 'Competitions this season', 'bblm') . '</h3>';
 					$bblm_comp->display_comp_list_with_stats();
 
-					echo '<h3>' . __( 'Team Statistics for this season', 'bblm') . '</h3>';
+					echo '<h3 class="bblm-table-caption">' . __( 'Team Statistics for this season', 'bblm') . '</h3>';
 					$bblm_team->display_team_list_with_stats();
 
 					echo '<h3>' . __( 'Player Statistics for this Season', 'bblm' ) . '</h3>';

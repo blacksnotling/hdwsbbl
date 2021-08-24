@@ -70,7 +70,7 @@
 					<li>Earn a total of <strong><?php print($sppnum); ?></strong> Star Player Points.</li>
 				</ul>
 
-        <h3><?php echo bblm_get_league_name() . __( ' Cup Winners','bblm'); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo bblm_get_league_name() . __( ' Cup Winners','bblm'); ?></h3>
 <?php
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
@@ -90,7 +90,7 @@
 				}
 ?>
 
-        <h3><?php echo __( 'Statistics Breakdown by Season','bblm'); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Season','bblm'); ?></h3>
 <?php
 				$seasonsql = 'SELECT C.sea_id, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
@@ -124,7 +124,7 @@
 
 				}
 ?>
-        <h3><?php echo __( 'Statistics Breakdown by Compeition','bblm'); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Compeition','bblm'); ?></h3>
 <?php
 				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
 				if ($compstats = $wpdb->get_results($compsql)) {
@@ -145,7 +145,7 @@
 				}
 ?>
 
-        <h3><?php echo __( 'Statistics Breakdown by Teams','bblm'); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Teams','bblm'); ?></h3>
 				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
@@ -194,7 +194,7 @@
 				</table>
 
         <h3><?php echo __( 'Detailed Statistics Breakdown','bblm'); ?></h3>
-				<p><?php echo __( 'This page only covers the high level statistics.The following links will take you through to more detailed pages.','bblm' )</p>
+				<p><?php echo __( 'This page only covers the high level statistics. The following links will take you through to more detailed pages.','bblm' ); ?></p>
 				<div id="statslinkscontainer">
 					<ol id="statslinks">
 						<li><a href="<?php echo home_url(); ?>/stats/td/" title="View more Touchdown related Statistics">Touchdown Statistics</a></li>

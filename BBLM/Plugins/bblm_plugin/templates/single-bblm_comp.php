@@ -140,7 +140,7 @@
 			 // Matches //
 			/////////////
 			$match_present = 0;
-      echo '<h3>' . __('Matches','bblm' ) . '</h3>';
+      echo '<h3 class="bblm-table-caption">' . __('Matches','bblm' ) . '</h3>';
       $matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.WPID AS MWPID, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match M WHERE M.c_id = '.$cid.' ORDER BY M.m_date DESC';
 			if ( $match = $wpdb->get_results( $matchsql ) ) {
 				//We have matches so we can proceed
@@ -194,7 +194,7 @@
 			//////////////
 			$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_id AS TA, M.t_id AS TB, V.post_title AS TAname, O.post_title AS TBname, V.guid AS TAlink, O.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' O, '.$wpdb->prefix.'division D WHERE D.div_id = F.div_id AND T.t_id = F.f_teamA AND M.t_id = F.f_teamB AND T.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND M.t_id = N.tid AND N.prefix = \'t_\' AND N.pid = O.ID AND F.f_complete = 0 AND F.c_id = '.$cid.' ORDER BY F.f_date ASC, F.div_id DESC';
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
-        echo '<h3>' . __( 'Upcoming Fixtures', 'bblm') . '</h3>';
+        echo '<h3 class="bblm-table-caption">' . __( 'Upcoming Fixtures', 'bblm') . '</h3>';
 				print("<table class=\"bblm_table bblm_expandable\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
 
 				$is_first = 0;
@@ -245,7 +245,7 @@
 				  ///////////
 				 // Team //
 				///////////
-        echo '<h3>' . __( 'Team Statistics', 'bblm') . '</h3>';
+        echo '<h3 class="bblm-table-caption">' . __( 'Team Statistics', 'bblm') . '</h3>';
 				$teamstatssql = 'SELECT Z.WPID, SUM(T.tc_played) AS TP, SUM(T.tc_W) AS TW, SUM(T.tc_L) AS TL, SUM(T.tc_D) AS TD, SUM(T.tc_tdfor) AS TDF, SUM(T.tc_tdagst) AS TDA, SUM(T.tc_casfor) AS TCF, SUM(T.tc_casagst) AS TCA, SUM(T.tc_INT) AS TI, SUM(T.tc_comp) AS TC FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND T.c_id = '.$cid.' GROUP BY T.t_id ORDER BY Z.t_name ASC';
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
