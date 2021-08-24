@@ -1455,6 +1455,21 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>Import Theme, set colours, and configure widgets</li>
 		</ul>
 
+		<h2>V1.12 -> V1.13 (New Edition Update)</h2>
+
+		<h3>Passing Statistic</h3>
+		<p>Add the folloiwing column to the *positions database table</p>
+		<ul>
+			<li>pos_pa</li>
+			<li>
+				<ul>
+					<li>After pos_ag</li>
+					<li>int (2)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+
 </form>
 
 </div>

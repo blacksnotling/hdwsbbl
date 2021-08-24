@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.0
+ * @version   1.1
  */
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -114,6 +114,7 @@ class BBLM_Positions_List extends WP_List_Table {
       case 'pos_ma':
       case 'pos_st':
       case 'pos_ag':
+			case 'pos_pa':
       case 'pos_av':
       case 'pos_skills':
 				return $item[ $column_name ];
@@ -180,6 +181,7 @@ class BBLM_Positions_List extends WP_List_Table {
 			'pos_ma'    => __( 'MA', 'bblm' ),
       'pos_st'    => __( 'ST', 'bblm' ),
       'pos_ag'    => __( 'AG', 'bblm' ),
+			'pos_pa'    => __( 'PA', 'bblm' ),
       'pos_av'    => __( 'AV', 'bblm' ),
       'pos_skills'    => __( 'Skills', 'bblm' ),
       'pos_cost'    => __( 'Cost', 'bblm' ),
@@ -454,6 +456,7 @@ class BBLM_Manage_Positions {
 			 'pos_ma' => '',
 			 'pos_st' => '',
 			 'pos_ag' => '',
+			 'pos_pa' => '',
 			 'pos_av' => '',
 			 'pos_skills' => '',
 			 'pos_cost' => '',
@@ -518,8 +521,9 @@ class BBLM_Manage_Positions {
              <td><label for="bblm_plimit"><?php echo __( 'Limit', 'bblm' ); ?>: </label>0 - <input type="text" name="bblm_plimit" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_limit' ] ) { echo '0'; } else { echo $pos[0][ 'pos_limit' ]; } ?>" id="bblm_plimit"></td>
              <td><label for="bblm_pma"><?php echo __( 'MA', 'bblm' ); ?>: </label><input type="text" name="bblm_pma" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ma' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ma' ]; } ?>" id="bblm_pma"></td>
              <td><label for="bblm_pst"><?php echo __( 'ST', 'bblm' ); ?>: </label><input type="text" name="bblm_pst" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_st' ] ) { echo '4'; } else { echo $pos[0][ 'pos_st' ]; } ?>" id="bblm_pst"></td>
-             <td><label for="bblm_pag"><?php echo __( 'AG', 'bblm' ); ?>: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ag' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ag' ]; } ?>" id="bblm_pag"></td>
-             <td><label for="bblm_pav"><?php echo __( 'AV', 'bblm' ); ?>: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_av' ] ) { echo '4'; } else { echo $pos[0][ 'pos_av' ]; } ?>" id="bblm_pav"></td>
+             <td><label for="bblm_pag"><?php echo __( 'AG', 'bblm' ); ?>: </label><input type="text" name="bblm_pag" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_ag' ] ) { echo '4'; } else { echo $pos[0][ 'pos_ag' ]; } ?>" id="bblm_pag">+</td>
+						 <td><label for="bblm_ppa"><?php echo __( 'PA', 'bblm' ); ?>: </label><input type="text" name="bblm_ppa" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_pa' ] ) { echo '4'; } else { echo $pos[0][ 'pos_pa' ]; } ?>" id="bblm_ppa">+</td>
+             <td><label for="bblm_pav"><?php echo __( 'AV', 'bblm' ); ?>: </label><input type="text" name="bblm_pav" size="3" maxlength="2" value="<?php if ( '' == $pos[0][ 'pos_av' ] ) { echo '4'; } else { echo $pos[0][ 'pos_av' ]; } ?>" id="bblm_pav">+</td>
            </tr>
            <tr>
              <td colspan="5"><label for="bblm_pskills"><?php echo __( 'Skills', 'bblm' ); ?>: </label><textarea name="pskills" cols="100" rows="3"><?php if ( '' == $pos[0][ 'pos_skills' ] ) { echo 'none'; } else { echo $pos[0][ 'pos_skills' ]; } ?></textarea></td>
@@ -577,10 +581,11 @@ class BBLM_Manage_Positions {
       $bblm_pma = (int) $_POST['bblm_pma'];
       $bblm_pst = (int) $_POST['bblm_pst'];
       $bblm_pag = (int) $_POST['bblm_pag'];
+			$bblm_ppa = (int) $_POST['bblm_ppa'];
       $bblm_pav = (int) $_POST['bblm_pav'];
       $bblm_pcost = (int) str_replace(',', '', $_POST['bblm_pcost'] );
 
-      $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`, `pos_limit`, `pos_ma`, `pos_st`, `pos_ag`, `pos_av`, `pos_skills`, `pos_cost`, `pos_freebooter`, `pos_status`) VALUES (\'\', \''.$bblm_pname.'\', \''.$bblm_race.'\', \''.$bblm_limit.'\', \''.$bblm_pma.'\', \''.$bblm_pst.'\', \''.$bblm_pag.'\', \''.$bblm_pav.'\', \''.$bblm_pskills.'\', \''.$bblm_pcost.'\', \'0\', \'1\')';
+      $addsql = 'INSERT INTO `'.$wpdb->prefix.'position` (`pos_id`, `pos_name`, `r_id`, `pos_limit`, `pos_ma`, `pos_st`, `pos_ag`, `pos_pa`, `pos_av`, `pos_skills`, `pos_cost`, `pos_freebooter`, `pos_status`) VALUES (\'\', \''.$bblm_pname.'\', \''.$bblm_race.'\', \''.$bblm_limit.'\', \''.$bblm_pma.'\', \''.$bblm_pst.'\', \''.$bblm_pag.'\', \''.$bblm_ppa.'\', \''.$bblm_pav.'\', \''.$bblm_pskills.'\', \''.$bblm_pcost.'\', \'0\', \'1\')';
 
         $sucess = "";
     	if ( FALSE !== $wpdb->query( $addsql ) ) {
@@ -627,12 +632,13 @@ class BBLM_Manage_Positions {
        $bblm_pma = (int) $_POST['bblm_pma'];
        $bblm_pst = (int) $_POST['bblm_pst'];
        $bblm_pag = (int) $_POST['bblm_pag'];
+			 $bblm_ppa = (int) $_POST['bblm_ppa'];
        $bblm_pav = (int) $_POST['bblm_pav'];
        $bblm_pcost = (int) str_replace(',', '', $_POST['bblm_pcost'] );
 			 $bblm_pfreebooter = (int) $_POST['bblm_pfreebooter'];
 			 $bblm_pstatus = (int) $_POST['bblm_pstatus'];
 
-			 $updatesql = 'UPDATE `'.$wpdb->prefix.'position` SET `pos_name` = \''.$bblm_pname.'\', `r_id` = \''.$bblm_race.'\', `pos_limit` = \''.$bblm_limit.'\', `pos_ma` = \''.$bblm_pma.'\', `pos_st` = \''.$bblm_pst.'\', `pos_ag` = \''.$bblm_pag.'\', `pos_av` = \''.$bblm_pav.'\', `pos_skills` = \''.$bblm_pskills.'\', `pos_cost` = \''.$bblm_pcost.'\', `pos_freebooter` = \''.$bblm_pfreebooter.'\', `pos_status` = \''.$bblm_pstatus.'\' WHERE `pos_id` = '.$bblm_ppid.';';
+			 $updatesql = 'UPDATE `'.$wpdb->prefix.'position` SET `pos_name` = \''.$bblm_pname.'\', `r_id` = \''.$bblm_race.'\', `pos_limit` = \''.$bblm_limit.'\', `pos_ma` = \''.$bblm_pma.'\', `pos_st` = \''.$bblm_pst.'\', `pos_ag` = \''.$bblm_pag.'\', `pos_pa` = \''.$bblm_ppa.'\', `pos_av` = \''.$bblm_pav.'\', `pos_skills` = \''.$bblm_pskills.'\', `pos_cost` = \''.$bblm_pcost.'\', `pos_freebooter` = \''.$bblm_pfreebooter.'\', `pos_status` = \''.$bblm_pstatus.'\' WHERE `pos_id` = '.$bblm_ppid.';';
 
          $sucess = "";
      	if ( FALSE !== $wpdb->query( $updatesql ) ) {

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_CPT_Race {
@@ -190,6 +190,7 @@ class BBLM_CPT_Race {
 						<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 						<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 						<th><?php echo __( 'Cost', 'bblm' ); ?></th>
@@ -209,8 +210,9 @@ class BBLM_CPT_Race {
 						<td>0 - <?php echo $pos->pos_limit; ?></td>
 						<td><?php echo $pos->pos_ma; ?></td>
 						<td><?php echo $pos->pos_st; ?></td>
-						<td><?php echo $pos->pos_ag; ?></td>
-						<td><?php echo $pos->pos_av; ?></td>
+						<td><?php echo $pos->pos_ag; ?>+</td>
+						<td><?php echo $pos->pos_pa; ?>+</td>
+						<td><?php echo $pos->pos_av; ?>+</td>
 						<td class="bblm_tbl_skills"><?php echo $pos->pos_skills; ?></td>
 						<td><?php echo number_format( $pos->pos_cost ); ?> GP</td>
 					</tr>
@@ -248,6 +250,7 @@ class BBLM_CPT_Race {
 								<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 								<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 								<th><?php echo __( 'Cost', 'bblm' ); ?></th>
@@ -268,8 +271,9 @@ class BBLM_CPT_Race {
 								<td><?php echo bblm_get_player_link( $star->PWPID ); ?></td>
 								<td><?php echo $star->p_ma; ?></td>
 								<td><?php echo $star->p_st; ?></td>
-								<td><?php echo $star->p_ag; ?></td>
-								<td><?php echo $star->p_av; ?></td>
+								<td><?php echo $star->p_ag; ?>+</td>
+								<td><?php echo $star->p_pa; ?>+</td>
+								<td><?php echo $star->p_av; ?>+</td>
 								<td class="bblm_tbl_skills"><?php echo $star->p_skills; ?></td>
 								<td><?php number_format( $star->p_cost ); ?> GP</td>
 							</tr>
