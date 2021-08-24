@@ -33,7 +33,7 @@
 				<?php the_content(); ?>
 
 <?php
-				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID';
+				$matchnumsql = 'SELECT COUNT(*) AS MATCHNUM FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1';
 				$matchnum = $wpdb->get_var($matchnumsql);
 				$compnum = wp_count_posts( 'bblm_comp')->publish;
 				$cupnum = wp_count_posts( 'bblm_cup')->publish; //Determine number of 'Published' Championship Cups
@@ -45,7 +45,7 @@
 				$seanum = $countseanum->publish;
 				$sppnumsql = 'SELECT SUM(M.p_spp) AS sppnum FROM '.$wpdb->prefix.'player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team T WHERE T.t_id = M.t_id AND M.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND M.p_spp > 0';
 				$sppnum = $wpdb->get_var($sppnumsql);
-				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1';
+				$deathnumsql = 'SELECT COUNT(F.f_id) AS DEAD FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1';
 				$deathnum = $wpdb->get_var($deathnumsql);
 
 				$matchstatssql = 'SELECT SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1';
@@ -58,8 +58,7 @@
 					}
 				}
 ?>
-
-				<h3>Overall Statistics</h3>
+        <h3><?php echo __( 'Overall Statistics','bblm'); ?></h3>
 
 				<p>Since the <strong><?php echo bblm_get_league_name(); ?>'s</strong> inception, <strong><?php print($playernum); ?></strong> Players in <strong><?php print($teamnum); ?></strong> Teams have played <strong><?php print($matchnum); ?></strong> Matches in <strong><?php print($compnum); ?></strong> Competitions for <strong><?php print($cupnum); ?></strong> Championship Cups over <strong><?php print($seanum); ?></strong> Seasons. In total they have managed to:</p>
 				<ul>
@@ -71,7 +70,7 @@
 					<li>Earn a total of <strong><?php print($sppnum); ?></strong> Star Player Points.</li>
 				</ul>
 
-				<h3><?php echo bblm_get_league_name(); ?> Cup Winners</h3>
+        <h3 class="bblm-table-caption"><?php echo bblm_get_league_name() . __( ' Cup Winners','bblm'); ?></h3>
 <?php
 				$championssql = 'SELECT COUNT(A.a_name) AS ANUM, P.post_title, P.guid FROM '.$wpdb->prefix.'awards_team_comp T, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = 1 AND A.a_id = T.a_id GROUP BY T.t_id ORDER BY ANUM DESC, P.post_title ASC';
 				if ($champions = $wpdb->get_results($championssql)) {
@@ -91,11 +90,9 @@
 				}
 ?>
 
-
-
-				<h3>Statistics Breakdown by Season</h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Season','bblm'); ?></h3>
 <?php
-				$seasonsql = 'SELECT C.sea_id, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+				$seasonsql = 'SELECT C.sea_id, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
 ?>
 					<table class="bblm_table bblm_sortable">
@@ -127,9 +124,9 @@
 
 				}
 ?>
-				<h3>Statistics Breakdown by Competition</h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Compeition','bblm'); ?></h3>
 <?php
-				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id)AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
+				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
 				if ($compstats = $wpdb->get_results($compsql)) {
 					print("<table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_stat\">TD</th>\n		<th class=\"bblm_tbl_stat\">CAS</th>\n		<th class=\"bblm_tbl_stat\">COMP</th>\n		<th class=\"bblm_tbl_stat\">INT</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 					$zebracount = 1;
@@ -148,7 +145,7 @@
 				}
 ?>
 
-				<h3>Statistics Breakdown by Teams</h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Teams','bblm'); ?></h3>
 				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
@@ -196,9 +193,8 @@
 				</tbody>
 				</table>
 
-
-				<h3>Detailed Statistics Breakdown</h3>
-				<p>This page only covers the high level statistics.The following links will take you through to more detailed pages.</p>
+        <h3><?php echo __( 'Detailed Statistics Breakdown','bblm'); ?></h3>
+				<p><?php echo __( 'This page only covers the high level statistics. The following links will take you through to more detailed pages.','bblm' ); ?></p>
 				<div id="statslinkscontainer">
 					<ol id="statslinks">
 						<li><a href="<?php echo home_url(); ?>/stats/td/" title="View more Touchdown related Statistics">Touchdown Statistics</a></li>
@@ -212,7 +208,7 @@
 
 
 
-				<h3>Statistics Breakdown by Players</h3>
+        <h3><?php echo __( 'Statistics Breakdown by Players','bblm'); ?></h3>
 <?php
         $stat_limit = bblm_get_stat_limit();
 				$bblm_star_team = bblm_get_star_player_team();
@@ -221,7 +217,7 @@
 				 // Active Top Players //
 				////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Players (Active)</h4>\n");
+        echo '<h4>' . __('Top Players (Active)','bblm' ) . '</h4>';
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
@@ -262,7 +258,8 @@
 				 // All time Top Players //
 				//////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
+        echo '<h4>' . __('Top Players (All Time)','bblm' ) . '</h4>';
+        echo '<p>' . __('Players who are <strong>highlighted</strong> are still active in the League.','bblm' ) . '</p>';
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;

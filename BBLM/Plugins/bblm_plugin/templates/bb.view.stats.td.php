@@ -42,9 +42,9 @@
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
 		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 11 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_td AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_td AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_td AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.m_id AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_td AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
@@ -58,7 +58,7 @@
 
 
 
-			<h3>Statistics tables</h3>
+      <h3><?php echo __( 'Statistics tables','bblm'); ?></h3>
 <?php
 				  ///////////////////////////////
 				 // Filtering of Stats tables //
@@ -102,7 +102,7 @@
 				 // Top Scoring Players //
 				/////////////////////////
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_td) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Scoring Players");
+        echo '<h4>' . __('Top Scoring Players','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -155,8 +155,8 @@
 				  ////////////////////////
 				 // Top Scoring Teams //
 				////////////////////////
-				$statsql = 'SELECT Z.WPID, SUM(T.tc_tdfor) AS VALUE, R.r_name, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z, '.$wpdb->prefix.'race R WHERE R.r_id = Z.r_id AND Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-				print("<h4>Top Scoring Teams");
+				$statsql = 'SELECT Z.WPID AS TWPID, SUM(T.tc_tdfor) AS VALUE, Z.r_id, Z.t_active FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'team Z WHERE Z.t_id = T.t_id AND Z.t_show = 1 AND C.WPID = T.c_id AND C.c_counts = 1 '.$statsqlmodt.'GROUP BY T.t_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+        echo '<h4>' . __('Top Scoring Teams','bblm' );
 				if (0 == $period_alltime) {
 					print(" (Active)");
 				}
@@ -190,12 +190,12 @@
 								print("	<td><strong>".$zebracount."</strong></td>\n");
 							}
 							if ($ts->t_active && $period_alltime) {
-							print("	<td><strong><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"View more details on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></strong></td>\n");
+							print("	<td><strong>" . bblm_get_team_link( $ts->TWPID ) . "</strong></td>\n");
 							}
 							else {
-							print("	<td><a href=\"" . get_post_permalink( $ts->WPID ) . "\" title=\"View more details on this team\">" . esc_html( get_the_title( $ts->WPID ) ) . "</a></td>\n");
+							print("	<td>" . bblm_get_team_link( $ts->TWPID ) . "</td>\n");
 							}
-							print("	<td>".$ts->r_name."</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
+							print("	<td>" . bblm_get_team_name( $ts->r_id ) . "</td>\n	<td>".$ts->VALUE."</td>\n	</tr>\n");
 							$prevvalue = $ts->VALUE;
 						}
 						$zebracount++;

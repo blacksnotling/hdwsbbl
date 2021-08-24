@@ -24,8 +24,6 @@ class BBLM_CPT_Match {
 
 	}
 
-
-
 /**
 * Dsiplays the Matches that have taken place at a specific stadium
 *
@@ -37,17 +35,20 @@ class BBLM_CPT_Match {
    global $post;
    global $wpdb;
 
-	 $recentmatchsql = 'SELECT P.guid, P.post_title, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, D.div_name, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
+	 $recentmatchsql = 'SELECT M.WPID AS MWPID, M.m_gate, UNIX_TIMESTAMP(M.m_date) AS mdate, D.div_name, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'division D WHERE M.div_id = D.div_id AND M.stad_id = '. get_the_ID() .' ORDER BY M.m_date DESC';
 	 if ( $recmatch = $wpdb->get_results( $recentmatchsql ) ) {
 		 $zebracount = 1;
 
 		 echo '<table class="bblm_table">';
+		 echo '<thead>';
 		 echo '<tr>';
 		 echo '<th>' . __( 'Date', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Match', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Competition', 'bblm' ) . '</th>';
 		 echo '<th>' . __( 'Attendance', 'bblm' ) . '</th>';
 		 echo '</tr>';
+		 echo '</thead>';
+		 echo '<tbody>';
 
 		 foreach ( $recmatch as $rm ) {
 			 if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
@@ -63,7 +64,7 @@ class BBLM_CPT_Match {
 				 echo '<tr class="bblm_tbl_alt">';
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
-			 echo '<td><a href="' . $rm->guid . '" title="Read the full match report">' . $rm->post_title . '</a></td>';
+			 echo '<td>' . bblm_get_match_link( $rm->MWPID ) . '</td>';
 			 echo '<td>' . bblm_get_competition_name( $rm->c_id ) . ' (' . $rm->div_name . ')</td>';
 			 echo '<td>' . number_format( $rm->m_gate ) . '</td>';
 			 echo '</tr>';
@@ -71,7 +72,7 @@ class BBLM_CPT_Match {
 			 $zebracount++;
 		 }
 
-		 echo '</table>';
+		 echo '</tbody></table>';
 
 	 }
 	 else {
@@ -82,6 +83,23 @@ class BBLM_CPT_Match {
 	 }
 
  } //end of display_match_by_stadium
+
+/**
+ * Returns a date of a match alreqady formatted
+ *
+ * @param $ID the ID of the match (WPID)
+ * @return string the data of the match
+ */
+ public static function get_match_date( $ID ) {
+	 global $wpdb;
+
+	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '. $ID;
+
+	 $result = $wpdb->get_var( $sql );
+
+	 return date("d.m.y", $result );
+
+ } //end of get_match_date
 
 } //end of class
 

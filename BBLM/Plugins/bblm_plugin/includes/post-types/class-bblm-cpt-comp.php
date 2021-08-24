@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Comp {
@@ -276,6 +276,135 @@ class BBLM_CPT_Comp {
 
  		} //end of does_comp_count()
 
+		/**
+		* Returns the number of teams in the competition
+		*
+		* @param $ID //the number of teams in the comp
+		* @return INT
+		*/
+		public static function get_number_of_teams( $ID ) {
+			global $wpdb;
+
+			$ID = (int) $ID;
+			$numteams = 0;
+
+			$sql = 'SELECT COUNT(*) AS NUMTEAMS FROM '.$wpdb->prefix.'team_comp WHERE c_id = ' . $ID;
+			if ( $numteamscount = $wpdb->get_var( $sql ) ) {
+				$numteams = $numteamscount;
+			}
+
+			return $numteams;
+
+		} //end of get_number_of_teams()
+
+		/**
+		 * Outputs the tournament brackets for this competition
+		 *
+		 * @param $ID //may be called from a non-competition page
+		 * @return HTML
+		 */
+		 public static function display_comp_brackets( $ID ) {
+			 global $wpdb;
+
+			 $ID = (int) $ID;
+
+			 $bracketssql = 'SELECT C.cb_text, D.div_name FROM '.$wpdb->prefix.'comp_brackets C, '.$wpdb->prefix.'division D WHERE C.div_id = D.div_id AND C.c_id = '.$ID.' ORDER BY C.div_ID DESC, cb_order ASC';
+			 $brackets = $wpdb->get_results( $bracketssql, ARRAY_N );
+			 //determine number of games (which determines the layout to be used
+			 $numgames = count( $brackets );
+			 if ( 7 == $numgames ) {
+?>
+		 <table class="bblm_table bblm_brackets">
+			 <tr>
+				 <th><?php echo $brackets[0][1]; ?></th>
+				 <th><?php echo $brackets[4][1]; ?></th>
+				 <th><?php echo $brackets[6][1]; ?></th>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[0][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[4][0]; ?></td>
+				 <td rowspan="4"><?php echo $brackets[6][0]; ?></td>
+						 </tr>
+						 <tr>
+				 <td><?php echo $brackets[1][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[2][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[5][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[3][0]; ?></td>
+			 </tr>
+		 </table>
+<?php
+			 } //end of if 7 games
+			 else if ( 3 == $numgames ) {
+?>
+		 <table class="bblm_table bblm_brackets">
+			 <tr>
+				 <th><?php echo $brackets[0][1]; ?></th>
+				 <th><?php echo $brackets[2][1]; ?></th>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[0][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[2][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[1][0]; ?></td>
+			 </tr>
+		 </table>
+<?php
+			 } //end of else if 3 games
+								 else if ( 15 == $numgames ) {
+			 ?>
+
+		 <table class="bblm_table bblm_brackets">
+			 <tr>
+				 <th><?php echo $brackets[0][1]; ?></th>
+				 <th><?php echo $brackets[8][1]; ?></th>
+				 <th><?php echo $brackets[12][1]; ?></th>
+				 <th><?php echo $brackets[14][1]; ?></th>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[0][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[8][0]; ?></td>
+				 <td rowspan="4"><?php echo $brackets[12][0]; ?></td>
+				 <td rowspan="8"><?php echo $brackets[14][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[1][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[2][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[9][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[3][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[4][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[10][0]; ?></td>
+				 <td rowspan="4"><?php echo $brackets[13][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[5][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[6][0]; ?></td>
+				 <td rowspan="2"><?php echo $brackets[11][0]; ?></td>
+			 </tr>
+			 <tr>
+				 <td><?php echo $brackets[7][0]; ?></td>
+			 </tr>
+		 </table>
+<?php
+			 } //end of else if 15 games
+			 else {
+				 //something has gone wrong
+				 echo '<p>' . __( 'Please bear with us - a Goblin has got into the machinery', 'bblm') . '</p>';
+			 } //end of else if
+
+		 }
 
 } //end of class
 

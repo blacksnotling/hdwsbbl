@@ -1,25 +1,18 @@
 <?php
-/*
-*	Filename: bb.admin.core.welcome.php
-*	Version: 1.0
-*	Description: A generic welcome page to the BBLM section of the admin section.
-*/
-/* -- Change History --
-20080420 - 0.1b - Creation of initial file with some generic welcome text.
-20080421 - 0.2b - Added Link to add.fixture
-20080723 - 0.3b - added link to edit fixture
-20080730 - 1.0 - bump to Version 1 for public release.
+/**
+ * BBowlLeagueMan Match Management Menu Page
+ *
+ * A generic welcome page to the match management section of the BBLM Plugin.
+ *
+ * @author 		Blacksnotling
+ * @category 	Core
+ * @package 	BBowlLeagueMan/Pages
+ */
+//Check the file is not being accessed directly
+if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 
-*/
 ?>
 <div class="wrap">
-<h2>Match Management Pages</h2>
-<p>From these pages you can perform match related actions such as record a new match, recprd players actions and edit match details.</p>
-<ul>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match.php" title="Record match details">Record details of a match.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php" title="Record a players actions for a match">Record a players actions for a match.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Edit match details (report, comments and facts).</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.fixture.php" title="Add a new fixture">Add a fixture.</a></li>
-  <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.fixture.php" title="Edit a fixture">Edit a fixture.</a></li>
-</ul>
+ <h2>Obsolete!</h2>
+   <p>You have come here in error. This file is not in use and will be deleted in a future version.</p>
 </div>

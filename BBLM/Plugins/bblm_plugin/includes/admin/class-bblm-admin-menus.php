@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.3
+ * @version   1.4
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -64,6 +64,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-player-addbulk.php' );
 		new BBLM_Player_AddBulk();
 
+		//Create the 'Manage Positions Page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-positions.php' );
+		new BBLM_Manage_Positions();
+
 		//Add the 'assign teams to comp page' under the competitions CPT
 
 		add_submenu_page(
@@ -73,6 +77,26 @@ class BBLM_Admin_Menus {
 			'bblm_manage_league',
 			'bblm_plugin/pages/bb.admin.edit.comp_team.php'
 		);
+
+		//Create the 'Manage Tournament Brackets' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-brackets.php' );
+		new BBLM_Manage_Brackets();
+
+		//Create the 'Record match' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.match.php' );
+		new BBLM_Add_Match();
+
+		//Create the 'Edit match' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.edit.match.php' );
+		new BBLM_Edit_Match();
+
+		//Create the 'Add Player Actions' page
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.match_player.php' );
+		new BBLM_Add_Match_Player();
+
+		//Create the 'Manage Fixtures'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-fixtures.php' );
+		new BBLM_Manage_Fixtures();
 
 	}
 

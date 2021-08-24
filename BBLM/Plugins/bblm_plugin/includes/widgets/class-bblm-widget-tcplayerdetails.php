@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCplayerdetails extends WP_Widget {
@@ -25,9 +25,9 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoptions = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoptions[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $parentoptions[ 'page_stars' ], ENT_QUOTES );
+    $options = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $options[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $options[ 'page_stars' ], ENT_QUOTES );
 
     $parentpage = 0;
     if ( is_singular() ) {
@@ -53,11 +53,11 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       global $seasonsql;
 
     	//determine player race
-    	$racesql = 'SELECT B.guid, R.r_name, R.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' B WHERE R.r_id = J.tid AND J.prefix = \'r_\' AND J.pid = B.ID AND O.pos_id = P.pos_id AND O.r_id = R.r_id AND P.p_id = '.$pd->p_id;
+      $racesql = 'SELECT O.r_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.p_id = '.$pd->p_id;
     	$rd = $wpdb->get_row($racesql);
 
     	//determine debut season
-    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.m_id AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
+    	$seasondebutsql = 'SELECT C.sea_id FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = '.$pd->p_id.' ORDER BY C.sea_id ASC LIMIT 1';
     	$sd = $wpdb->get_row($seasondebutsql);
 
     	//grab list of other players on the team
@@ -65,7 +65,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
     	$otherplayers = $wpdb->get_results($otherplayerssql);
 
     	//SQL for chapsionships won. like above but restricted to Winner Only!
-    	$playerchampionshipssql = 'SELECT A.a_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID ';
+    	$playerchampionshipssql = 'SELECT A.a_name, C.WPID AS CWPID FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.WPID = Z.m_id AND V.c_id = C.WPID AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.WPID ';
       $playerchampionshipssql .= 'AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 
       echo $args['before_widget'];
@@ -90,11 +90,10 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
         echo '<li><strong>' . __( 'Team', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $pd->WPID ) . '" title="Read more on this team">' . esc_html( get_the_title( $pd->WPID ) ) . '</a></li>';
         echo '<li><strong>' . __( 'Position Number', 'bblm' ) . ':</strong> ' . $pd->p_num . '</li>';
 
-        $race_check = (array)$rd; //cast the object to an array so we can check to see if something was returned
-        if ( !empty( $race_check ) ) {
+        if ( ( '0' !== $rd->r_id ) && ( '91' !== $rd->r_id ) ) {
           //Mercs and Journeymen will not return a race ID as the race positions are not assigned to a race
           //Only display the players race if they are a pernament race position
-          echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $rd->guid . '" title="Learn more about ' . $rd->r_name . '">' . $rd->r_name . '</a></li>';
+          echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $rd->r_id ) . '</li>';
         }
         if ( $has_played ) {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->sea_id ) . '</li>';

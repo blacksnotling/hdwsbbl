@@ -1,13 +1,13 @@
 <?php
 /**
- * SportsPress Conditional Functions
+ * BBLM Conditional Functions
  *
  * Functions for determining the current query/page.
  *
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version		1.2
+ * @version		1.2.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly

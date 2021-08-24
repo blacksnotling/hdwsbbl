@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -24,9 +24,11 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
   //The Widget Output in the front-end
   public function widget( $args, $instance ) {
     global $wpdb;
+    global $post;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
+    $option = get_option( 'bblm_config' );
+    $parentoption = htmlspecialchars( $option[ 'page_team' ], ENT_QUOTES );
+    $staplayerteam = htmlspecialchars( $option[ 'page_stars' ], ENT_QUOTES );
 
     $parentpage = 0;
     if ( is_singular() ) {
@@ -36,7 +38,8 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
+    //and that this isn't the star player page
+    if ( ( $parentoption == $parentpage ) && ( $post->ID != (int) $staplayerteam ) ) {
 
       //pulling in the vars from the single-bblm_team template
       global $tid;
@@ -47,7 +50,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
       global $champs;
 
       //Current match form
-      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
+      $formsql = 'SELECT R.mt_result FROM '.$wpdb->prefix.'match_team R, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.WPID = R.m_id AND R.t_id = '.$tid.' ORDER BY m_date DESC LIMIT 5';
       $currentform = "";
       if ( $form = $wpdb->get_results( $formsql ) ) {
         foreach ( $form as $tf ) {
@@ -60,7 +63,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
       //determine debut season
       if ( $has_played ) {
-        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.WPID = M.c_id AND C.c_counts = 1 AND M.m_id = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
+        $seasondebutsql = 'SELECT C.sea_id AS season FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE C.WPID = M.c_id AND C.c_counts = 1 AND M.WPID = T.m_id AND T.t_id = '.$tid.' ORDER BY M.m_date ASC LIMIT 1';
         $sd = $wpdb->get_row( $seasondebutsql );
       }
 
@@ -88,7 +91,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         if ( $has_played ) {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
         }
-        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> <a href="' . $ti->racelink . ' " title="Learn more about ' . esc_html( $ti->r_name ) .'">'.esc_html( $ti->r_name ) . '</a></li>';
+        echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $ti->r_id ) . '</li>';
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';

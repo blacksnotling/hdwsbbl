@@ -42,8 +42,9 @@ Template Name: List Fixtures
 				</form>
 <?php
 				//Initial SQL
-				$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS mdate, C.WPID AS CWPID, D.div_name, X.post_title AS TA, X.guid AS TAlink, Z.post_title AS TB, Z.guid AS TBlink, T.t_id AS TAid, R.t_id AS TBid, F.f_id FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp W, '.$wpdb->posts.' X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE T.t_id = W.tid AND W.prefix = \'t_\' AND W.pid = X.ID AND R.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = Z.ID AND F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.WPID AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY ';
 				$layout = "";
+        $fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS mdate, C.WPID AS CWPID, D.div_name, T.t_id AS TAid, T.WPID AS TATWPID, R.t_id AS TBid, R.WPID AS TBTWPID, F.f_id FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.WPID AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY ';
+        $layout = "";
 				//determine the required Layout
 					switch ($bblm_flayout) {
 						case ("bycomp" == $bblm_flayout):
@@ -112,17 +113,17 @@ Template Name: List Fixtures
 							}
 							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		<td>");
 							if ($bblm_tbd_team == $m->TAid) {
-								print($m->TA);
+								echo bblm_get_team_name( $m->TATWPID );
 							}
 							else {
-								print("<a href=\"".$m->TAlink."\" title=\"Learn more about ".$m->TA."\">".$m->TA."</a>");
+								echo bblm_get_team_link( $m->TATWPID );
 							}
 							print(" vs ");
 							if ($bblm_tbd_team == $m->TBid) {
-								print($m->TB);
+                echo __( 'To Be Determined', 'bblm' );
 							}
 							else {
-								print("<a href=\"".$m->TBlink."\" title=\"Learn more about ".$m->TB."\">".$m->TB."</a>");
+								echo bblm_get_team_link( $m->TBTWPID );
 							}
 
 							print("</td>\n	</tr>\n");
@@ -158,17 +159,18 @@ Template Name: List Fixtures
 						<td>
 <?php
 							if ($bblm_tbd_team == $m->TAid) {
-								print($m->TA);
+								echo bblm_get_team_name( $m->TATWPID );
 							}
 							else {
-								print("<a href=\"".$m->TAlink."\" title=\"Learn more about ".$m->TA."\">".$m->TA."</a>");
+                echo bblm_get_team_link( $m->TATWPID );
 							}
 							print(" vs ");
 							if ($bblm_tbd_team == $m->TBid) {
-								print($m->TB);
+								//echo bblm_get_team_name( $m->TBTWPID );
+                echo __( 'To Be Determined', 'bblm' );
 							}
 							else {
-								print("<a href=\"".$m->TBlink."\" title=\"Learn more about ".$m->TB."\">".$m->TB."</a>");
+								echo bblm_get_team_link( $m->TBTWPID );
 							}
 ?>
 						</td>

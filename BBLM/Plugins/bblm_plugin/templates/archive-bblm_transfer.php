@@ -42,7 +42,7 @@
           }
           $is_notfirst = false;
 
-          echo '<h3><a title="Read more about this Season" href="' . get_post_permalink( $post->bblm_transfer_season ) . '">' . esc_html( get_the_title( $post->bblm_transfer_season ) ) . '</a></h3>';
+          echo '<h3>' . bblm_get_season_link( $post->bblm_transfer_season ) . '</h3>';
           echo '<ul>';
           $lastseason = $post->bblm_transfer_season;
         }

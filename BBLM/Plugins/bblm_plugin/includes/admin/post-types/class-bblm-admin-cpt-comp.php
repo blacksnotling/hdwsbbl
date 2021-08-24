@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Admin_CPT_Competition {
@@ -224,6 +224,162 @@ class BBLM_Admin_CPT_Competition {
 			}
 
 		} //end of update_comp_table
+
+		/*
+		 * Marks a fixture as being complete by updating the *fixture table
+		 * Assumes input has already been sanitised
+		 */
+		 public static function update_fixture_complete( $ID ) {
+			 global $wpdb;
+
+			 $completefixturesql = 'UPDATE `'.$wpdb->prefix.'fixture` SET `f_complete` = \'1\' WHERE `f_id` = ' . $ID . ' LIMIT 1';
+			 if ( $wpdb->query( $completefixturesql ) ) {
+				 return true;
+			 }
+			 else {
+				 return false;
+			 }
+
+		 } //end of update_fixture_complete
+
+		 /*
+			* Updates the standings for a team in a competition
+			* takes in the t_ID of the team and competition
+			* Assumes input has already been sanitised
+			*/
+			public static function update_team_standings( $teamID, $compID, $divID ) {
+				global $wpdb;
+
+				//initialise variables
+				$comp = array();
+				$tdeatails = array();
+
+				//gather information about the competition
+				$compdatasql = "SELECT c_counts, c_pW, c_pL, c_pD, c_ptd, c_pcas, c_pround FROM ".$wpdb->prefix."comp WHERE WPID = " . $compID;
+				if ( $compd = $wpdb->get_row( $compdatasql ) ) {
+					$comp['counts'] = $compd->c_counts;
+					$comp['pW'] = $compd->c_pW;
+					$comp['pL'] = $compd->c_pL;
+					$comp['pD'] = $compd->c_pD;
+					$comp['ptd'] = $compd->c_ptd;
+					$comp['pcas'] = $compd->c_pcas;
+					$comp['round'] = $compd->c_pround;
+				}
+
+				//Determine the current wins, Losses, draws and points
+				$teamAPerformancesql = "SELECT T.mt_result, COUNT(*) AS PLAYED, SUM(T.mt_td) AS TD, SUM(T.mt_cas) AS CAS, SUM(T.mt_int) AS totINT, SUM(T.mt_comp) AS totCOMP FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.WPID AND t_id = " . $teamID . " AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) GROUP BY T.mt_result ORDER BY T.mt_result";
+
+				$tdeatails['W'] = 0;
+				$tdeatails['L'] = 0;
+				$tdeatails['D'] = 0;
+
+				if ( $teamAPerformance = $wpdb->get_results( $teamAPerformancesql ) ) {
+					foreach ( $teamAPerformance as $tAp ) {
+						if ("W" == $tAp->mt_result ) {
+							$tdeatails['W'] = (int) $tAp->PLAYED;
+						}
+						elseif ("L" == $tAp->mt_result ) {
+							$tdeatails['L'] = (int) $tAp->PLAYED;
+						}
+						elseif ("D" == $tAp->mt_result ) {
+							$tdeatails['D'] = (int) $tAp->PLAYED;
+						}
+						$tdeatails['TD'] = $tdeatails['TD'] + (int) $tAp->TD;
+						$tdeatails['CAS'] = $tdeatails['CAS'] + (int) $tAp->CAS;
+						$tdeatails['INT'] = $tdeatails['INT'] + (int) $tAp->totINT;
+						$tdeatails['COMP'] = $tdeatails['COMP'] + (int) $tAp->totCOMP;
+						$tdeatails['PLD'] = $tdeatails['PLD'] + (int) $tAp->PLAYED;
+					}
+				}
+
+				//Calcualte TD and CAS Against
+				$teamAagainst = "SELECT SUM(T.mt_td) AS totTD, SUM(T.mt_cas) AS totCAS FROM ".$wpdb->prefix."match_team T, ".$wpdb->prefix."match M WHERE T.m_id = M.WPID AND (M.m_teamA = " . $teamID . " OR M.m_teamB = " . $teamID . ") AND M.c_id = " . $compID . " AND ( M.div_id = " . $divID . " OR M.div_id = '13' ) ORDER BY T.mt_result";
+				if ( $tAaga = $wpdb->get_row( $teamAagainst ) ) {
+					$tdeatails['TDa'] = $tAaga->totTD - $tdeatails['TD'];
+					$tdeatails['CASa'] = $tAaga->totCAS - $tdeatails['CAS'];
+				}
+
+				//Determine the points values
+				$tdeatails['points'] = ( $tdeatails['W'] * $comp['pW'] ) + ( $tdeatails['L'] * $comp['pL'] ) + ( $tdeatails['D'] * $comp['pD'] ) + ( $tdeatails['TD'] * $comp['ptd'] ) + ( $tdeatails['CAS'] * $comp['pcas'] );
+
+				//if the competition rounds the results then divide the points by number of games played
+				if ( $comp['round'] ) {
+					$tdeatails['points'] = ceil( $tdeatails['points'] / $tdeatails['PLD'] );
+				}
+
+				//update the team_comp record
+				$teamAupdatecomprecsql = "UPDATE ".$wpdb->prefix."team_comp SET `tc_played` = '" . $tdeatails['PLD'] . "', `tc_W` = '" . $tdeatails['W'] . "', `tc_L` = '" . $tdeatails['L'] . "', `tc_D` = '" . $tdeatails['D'] . "', `tc_tdfor` = '" . $tdeatails['TD'] . "', `tc_tdagst` = '" . $tdeatails['TDa'] . "', `tc_casfor` = '" . $tdeatails['CAS'] . "', `tc_casagst` = '" . $tdeatails['CASa'] . "', `tc_int` = '" . $tdeatails['INT'] . "', `tc_comp` = '" . $tdeatails['COMP'] . "', `tc_points` = '" . $tdeatails['points'] . "' WHERE t_id = " . $teamID . " AND c_id = " . $compID . " AND div_id = " . $divID;
+				if ( $wpdb->query( $teamAupdatecomprecsql ) ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+
+			} //end of update_team_standings
+
+			/*
+			 * Updates the text of a tournament bracket after a match or fixture has been completed.
+			 * Assumes input has already been sanitised
+			 */
+			 public static function update_bracket_text( $ID, $match, $fixture ) {
+				 global $wpdb;
+
+				 $match_text = "";
+
+				 //Generate the text for the bracket
+				 //Check for "To Be Determined".
+				 if ( ( "X" === $fixture ) && ( "X" !== $match ) ) {
+					 $match_text = "To Be Determined";
+					 $fixture = 0;
+					 $match = 0;
+				 }
+				 //check for BYES
+				 else if ( ( "X" !== $fixture ) && ( "X" === $match ) ) {
+					 $match_text = "&nbsp;";
+					 $fixture = 0;
+					 $match = 0;
+				 }
+				 //If this is a match record update generate the text
+				 else if ( 0 < (int) $match ) {
+					 $match_text = bblm_get_match_link_score( $match, 2 );
+					 $fixture = 0;
+				 }
+				 //otherewise we must have a fixture, update the text
+				 else if ( 0 < (int) $fixture ) {
+					 $fixturesql = 'SELECT F.f_teamA AS TA, F.f_teamB AS TB, T.WPID AS tAWPID, Y.WPID AS tBWPID FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y WHERE F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND F.f_id = '. $fixture;
+					 $bblm_tbd_team = bblm_get_tbd_team();
+
+					 if ( $fixtures = $wpdb->get_row( $fixturesql ) ) {
+
+						 if ( $bblm_tbd_team == $fixtures->TA ) {
+							 $match_text .= __( 'To Be Determined', 'bblm' );
+						 }
+						 else {
+							 $match_text .= bblm_get_team_name( $fixtures->tAWPID );
+						 }
+						 $match_text .= " vs <br/>";
+						 if ($bblm_tbd_team == $fixtures->TB) {
+							 $match_text .= __( 'To Be Determined', 'bblm' );
+						 }
+						 else {
+							 $match_text .= bblm_get_team_name( $fixtures->tBWPID );
+						 }
+
+					 } //end of if fixture exists
+
+				 } //end of else is fixture
+				 $match_text = esc_sql( $match_text );
+				 $updatesql = 'UPDATE '.$wpdb->prefix.'comp_brackets SET `m_id` = \''.$match.'\', `f_id` = \''.$fixture.'\', `cb_text` = \''.$match_text.'\' WHERE `cb_id` = '.$ID.' LIMIT 1';
+
+				 if ( $wpdb->query( $updatesql ) ) {
+					 return true;
+				 }
+				 else {
+					 return false;
+				 }
+
+			 } //end of update_bracket_text
 
 } //end of class
 

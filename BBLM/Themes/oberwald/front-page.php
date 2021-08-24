@@ -76,7 +76,7 @@
 				<!-- start of #fragment-3 content -->
 					<h2>Recent Results</h2>
 	<?php
-					$matchsql = 'SELECT M.m_gate, M.m_teamAtd, M.m_teamBtd, P.guid, P.post_title, C.WPID AS CWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY M.m_date DESC LIMIT 6';
+					$matchsql = 'SELECT M.m_gate, M.m_teamAtd, M.m_teamBtd, M.WPID AS MWPID, C.WPID AS CWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 ORDER BY M.m_date DESC LIMIT 6';
 					if ($matches = $wpdb->get_results($matchsql)) {
 						print("<table class=\"bblm_table\">\n	<tr>\n		<th>Match</th>\n		<th>Score</th>\n		<th>Competition</th>\n		<th>Gate</th>\n	</tr>\n");
 						$zebracount = 1;
@@ -87,7 +87,7 @@
 							else {
 								print("	<tr class=\"bblm_tbl_alt\">\n");
 							}
-							print("		<td><a href=\"".$match->guid."\" title=\"View the match in detail\">".$match->post_title."</a></td>\n		<td>".$match->m_teamAtd." - ".$match->m_teamBtd."</td>\n		<td>" . bblm_get_competition_link( $match->CWPID ) . "</td>\n		<td>".number_format($match->m_gate)."</td>\n	</tr>\n");
+							echo '<td>' . bblm_get_match_link( $match->MWPID ) . '</td><td>' . $match->m_teamAtd . ' - ' . $match->m_teamBtd . '</td><td>' . bblm_get_competition_link( $match->CWPID ) . '</td><td>' . number_format( $match->m_gate ) . '</td></tr>';
 							$zebracount++;
 						}
 						print("</table>\n");

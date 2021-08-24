@@ -3,11 +3,11 @@
 Plugin Name: HDWSBBL Plugin
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: HDWSBBL specific features that should not go in the BBLM plugin, or in a theme. Requires the BBLM plugin
-Version: 1.0
+Version: 1.1
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
-Tested up to: 4.9.8
+Tested up to: 5.6
 
 Text Domain: hdwsbbl
 
@@ -23,3 +23,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 include_once( 'includes/class-hdwsbbl-widgets.php' );			// Loads the Widgets
+include_once( 'includes/hdwsbbl-template-functions.php' );			// Loads the templating functions

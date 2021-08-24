@@ -301,6 +301,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
 		$sucess = TRUE;
+		bblm_update_tv( (int) $_POST['bblm_tid'] );
 		do_action( 'bblm_post_submission' );
 	}
 ?>
@@ -384,6 +385,7 @@ else if ("edit" == $_GET['action']) {
 			<dd><textarea name="bblm_pinj" cols="60" rows="3"><?php print($p->p_injuries); ?></textarea></dd>
 		</dl>
 		<input type="hidden" name="bblm_pid" size="5" value="<?php print($pid); ?>" id="bblm_pid" maxlength="5">
+		<input type="hidden" name="bblm_tid" size="5" value="<?php print($p->t_id); ?>" id="bblm_tid" maxlength="5">
 		<p class="submit">
 		<input type="submit" name="bblm_stat_update" value="Update Player" title="Update Player"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($p->t_id); ?>" title="Cancel this and select another player">Cancel</a>
 		</p>
@@ -401,7 +403,7 @@ else if ("edit" == $_GET['action']) {
 		//////////////////////////
 		$pid = $_GET['id'];
 
-		$playermatchsql = 'SELECT M.*, P.p_name, P.t_id, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, Z.guid FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.WPID = X.c_id AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.m_id AND X.m_id = Y.tid AND Y.prefix = \'m_\' AND Y.pid = Z.ID AND M.p_id = '.$pid.' ORDER BY X.m_date DESC';
+		$playermatchsql = 'SELECT M.*, P.p_name, P.t_id, UNIX_TIMESTAMP(X.m_date) AS mdate, G.post_title AS TA, T.t_id AS TAid, G.guid AS TAlink, B.post_title AS TB, B.guid AS TBlink, R.t_id AS TBid, X.WPID AS MWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp F, '.$wpdb->posts.' G, '.$wpdb->prefix.'bb2wp V, '.$wpdb->posts.' B WHERE T.t_id = F.tid AND F.prefix = \'t_\' AND F.pid = G.ID AND R.t_id = V.tid AND V.prefix = \'t_\' AND V.pid = B.ID AND C.WPID = X.c_id AND X.m_teamA = T.t_id AND X.m_teamB = R.t_id AND M.p_id = P.p_id AND M.m_id = X.WPID AND M.p_id = '.$pid.' ORDER BY X.m_date DESC';
 		if ($playermatch = $wpdb->get_results($playermatchsql)) {
 			$count = 1;
 ?>
@@ -447,7 +449,7 @@ else if ("edit" == $_GET['action']) {
 					<td><input type="text" name="bblm_pinc<?php print($count); ?>" size="10" value="<?php print($pm->mp_inc); ?>" id="bblm_pinc"></td>
 					<td><input type="text" name="bblm_pinj<?php print($count); ?>" size="10" value="<?php print($pm->mp_inj); ?>" id="bblm_pinj"></td>
 					<td><input type="checkbox" name="bblm_pchng<?php print($count); ?>"></td>
-					<td><a href="<?php print($pm->guid); ?>" title="View the match in more detail">View</a><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->m_id); ?>" id="bblm_mid" maxlength="5"></td>
+					<td><?php echo bblm_get_match_link_score( $pm->MWPID, 0 ); ?><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->MWPID); ?>" id="bblm_mid" maxlength="5"></td>
 				</tr>
 <?php
 				$count++;
@@ -723,10 +725,10 @@ else if ("edit" == $_GET['action']) {
 			<select name="bblm_fmatch" id="bblm_fmatch">
 				<option value="0" selected="selected">N/A</option>
 <?php
-			$lastmatchsql = 'SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, P.post_title, M.m_teamAtd, M.m_teamBtd, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_team X WHERE M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID AND M.m_id = X.m_id AND X.t_id = '.$t_id.' ORDER BY M.m_date DESC LIMIT 8';
+			$lastmatchsql = 'SELECT M.m_id, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamAtd, M.m_teamBtd, M.c_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'match_team X WHERE M.WPID = X.m_id AND X.t_id = '.$t_id.' ORDER BY M.m_date DESC LIMIT 8';
 			if ($lastmatch = $wpdb->get_results($lastmatchsql)) {
 				foreach ($lastmatch as $lm) {
-					print("<option value=\"$lm->m_id\">".date("d.m.Y", $lm->MDATE)." - ".$lm->post_title." (".$lm->m_teamAtd." - ".$lm->m_teamBtd.")</option>\n");
+					print("<option value=\"$lm->MWPID\">".date("d.m.Y", $lm->MDATE)." - ".bblm_get_match_name( $lm->MWPID )." (".$lm->m_teamAtd." - ".$lm->m_teamBtd.")</option>\n");
 				}
 			}
 ?>

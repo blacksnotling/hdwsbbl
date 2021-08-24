@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCmatchdetails extends WP_Widget {
@@ -25,32 +25,30 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_match' ], ENT_QUOTES );
-
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
+    if ( (is_single() ) && ( $compid = get_queried_object() ) ) {
+      $matchid = get_queried_object()->ID;
+    }
+    else {
+      $matchid = 0;
     }
 
     //Check we are on the correct poat_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
+    if ( ( is_single() ) && ( get_post_type( $matchid ) == 'bblm_match' ) ) {
 
-      //pulling in the vars from the single-bblm_comp template
+      //pulling in the vars from the single-bblm_match template
       global $m;
       global $playeractions;
 
 
       //Gathering data for the sidebar
       //Top players in match
-      $topplayerssql = 'SELECT P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 5';
+      $topplayerssql = 'SELECT P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 5';
 
       //scorers
-      $topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$m->m_id.' ORDER BY value DESC LIMIT 10';
+      $topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 10';
 
       $compsql = 'SELECT C.WPID AS CWPID, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE D.div_id = '.$m->div_id.' AND C.WPID = '.$m->c_id.' LIMIT 1';
-      $comp = $wpdb->get_row($compsql);
+      $comp = $wpdb->get_row( $compsql );
 
       echo $args['before_widget'];
 

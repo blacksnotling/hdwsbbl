@@ -36,13 +36,13 @@
 
 					$bblm_stats->display_stats_breakdown();
 
-					echo '<h3>' . __( 'Winners of this Championship Cup', 'bblm' ) . '</h3>';
+					echo '<h3 class="bblm-table-caption">' . __( 'Winners of this Championship Cup', 'bblm' ) . '</h3>';
 					$bblm_award->display_cup_winners();
 
-					echo '<h3>' . __( 'Competitions for this Championship Cup', 'bblm' ) . '</h3>';
+					echo '<h3 class="bblm-table-caption">' . __( 'Competitions for this Championship Cup', 'bblm' ) . '</h3>';
 					$bblm_comp->display_comp_list_with_stats();
 
-					echo '<h3>' . __( 'Team Statistics for this Championship Cup', 'bblm' ) . '</h3>';
+					echo '<h3 class="bblm-table-caption">' . __( 'Team Statistics for this Championship Cup', 'bblm' ) . '</h3>';
 					$bblm_team->display_team_list_with_stats();
 
 					echo '<h3>' . __( 'Player Statistics for this Championship Cup', 'bblm' ) . '</h3>';

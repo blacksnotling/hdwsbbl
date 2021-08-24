@@ -60,7 +60,7 @@
 				</tr>
 			</table>
 <?php
-		$racelistsql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'race2star R, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE P.ID = J.pid AND J.prefix = "r_" AND J.tid = R.r_id AND R.p_id = '.$pd->p_id.' ORDER BY P.post_title ASC';
+		$racelistsql = 'SELECT R.r_id FROM '.$wpdb->prefix.'race2star R WHERE R.p_id = '.$pd->p_id.' ORDER BY R.r_id ASC';
 		$racelist = $wpdb->get_results($racelistsql);
 
 		$is_first = 1;
@@ -70,7 +70,7 @@
 				echo ',';
 			}
 
-			echo ' <a href="'.$rl->guid.'" title="View more about '.$rl->post_title.' Blood Bowl Teams">'.$rl->post_title.'</a>';
+			echo ' ' . bblm_get_race_link( $rl->r_id );
 			$is_first = 0;
 		}
 		echo ".</p>\n";
@@ -81,7 +81,7 @@
 		if ($s = $wpdb->get_row($careerstatssql)) {
 			//The Star has played a match so continue
 ?>
-			<h3>League Statistics</h3>
+      <h3 class="bblm-table-caption"><?php echo __( 'League Statistics','bblm' ); ?></h3>
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Career Total</th>
@@ -111,7 +111,7 @@
 			if ($stats = $wpdb->get_results($statssql)) {
 				$zebracount = 1;
 ?>
-
+      <h3 class="bblm-table-caption"><?php echo __( 'Team Breakdown','bblm' ); ?></h3>
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Playing for</th>
@@ -144,7 +144,7 @@
 			if ($killer = $wpdb->get_results($killersql)) {
 				//If the player has killed people
 ?>
-			<h3>Killer!</h3>
+      <h3><?php echo __( 'Killer!','bblm' ); ?></h3>
 			<p>This player has killed another player in the course of their career. They have killed the following players:</p>
 			<ul>
 <?php
@@ -157,67 +157,135 @@
 			}
 
 ?>
-			<h3>Breakdown by Competition</h3>
-			<table class="bblm_table">
-				<tr>
-					<th class="bblm_tbl_title">Competition</th>
-					<th class="bblm_tbl_stat">Pld</th>
-					<th class="bblm_tbl_stat">TD</th>
-					<th class="bblm_tbl_stat">CAS</th>
-					<th class="bblm_tbl_stat">INT</th>
-					<th class="bblm_tbl_stat">COMP</th>
-					<th class="bblm_tbl_stat">MVP</th>
-					<th class="bblm_tbl_stat">SPP</th>
-				</tr>
+    <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+    <table class="bblm_table">
+      <thead>
+        <tr>
+          <th class="bblm_tbl_title"><?php echo __( 'Season', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'MVP', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'SPP', 'bblm' ); ?></th>
+        </tr>
+      </thead>
+      <tbody>
 <?php
-			$playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.m_id AND Q.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
-			if ($playercomp = $wpdb->get_results($playercompsql)) {
-				$zebracount = 1;
-				foreach ($playercomp as $pc) {
-					if ($zebracount % 2) {
-						print("				<tr>\n");
-					}
-					else {
-						print("				<tr class=\"bblm_tbl_alt\">\n");
-					}
-					print("				<td>" . bblm_get_competition_link( $pc->CWPID ) . "</td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
-					$zebracount++;
-				}
-			}
-			print("			</table>\n");
-?>
+   $playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.WPID AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
+   if ( $playersea = $wpdb->get_results( $playerseasql ) ) {
+     $zebracount = 1;
+     foreach ( $playersea as $pc ) {
+       if ( $zebracount % 2 ) {
+         echo '<tr>';
+       }
+       else {
+         echo '<tr class="bblm_tbl_alt">';
+       }
+       echo '<td>' . bblm_get_season_link( $pc->sea_id ) . '</td>';
+       echo '<td>' . $pc->GAMES . '</td>';
+       echo '<td>' . $pc->TD . '</td>';
+       echo '<td>' . $pc->CAS . '</td>';
+       echo '<td>' . $pc->MINT . '</td>';
+       echo '<td>' . $pc->COMP . '</td>';
+       echo '<td>' . $pc->MVP . '</td>';
+       echo '<td>' . $pc->SPP . '</td>';
+       echo '</tr>';
 
-			<h3>Breakdown by Season</h3>
-			<table class="bblm_table">
-				<tr>
-					<th class="bblm_tbl_title">Season</th>
-					<th class="bblm_tbl_stat">P</th>
-					<th class="bblm_tbl_stat">TD</th>
-					<th class="bblm_tbl_stat">CAS</th>
-					<th class="bblm_tbl_stat">INT</th>
-					<th class="bblm_tbl_stat">COMP</th>
-					<th class="bblm_tbl_stat">MVP</th>
-					<th class="bblm_tbl_stat">SPP</th>
-				</tr>
+       $zebracount++;
+     }
+   }
+?>
+  </tbody>
+  </table>
+
+  <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+  <table class="bblm_table">
+    <thead>
+      <tr>
+        <th class="bblm_tbl_title"><?php echo __( 'Championsip Cup', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'MVP', 'bblm' ); ?></th>
+        <th class="bblm_tbl_stat"><?php echo __( 'SPP', 'bblm' ); ?></th>
+      </tr>
+    </thead>
+    <tbody>
 <?php
-					$playerseasql = 'SELECT C.sea_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.m_id AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.sea_id ORDER BY C.sea_id DESC';
-					if ($playersea = $wpdb->get_results($playerseasql)) {
-					$zebracount = 1;
-						foreach ($playersea as $pc) {
-							if ($zebracount % 2) {
-								print("				<tr>\n");
-							}
-							else {
-								print("				<tr class=\"bblm_tbl_alt\">\n");
-							}
-							print("					<td>" . bblm_get_season_link( $pc->sea_id ) . "</td>\n					<td>".$pc->GAMES."</td>\n					<td>".$pc->TD."</td>\n					<td>".$pc->CAS."</td>\n					<td>".$pc->MINT."</td>\n					<td>".$pc->COMP."</td>\n					<td>".$pc->MVP."</td>\n					<td>".$pc->SPP."</td>\n				</tr>\n");
-							$zebracount++;
-						}
-					}
-					print("			</table>\n");
-?>
+    $playerseasql = 'SELECT C.series_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE C.c_counts = 1 AND M.m_id = Q.WPID AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.series_id ORDER BY C.series_id DESC';
+    if ( $playersea = $wpdb->get_results( $playerseasql ) ) {
+      $zebracount = 1;
+      foreach ( $playersea as $pc ) {
+        if ( $zebracount % 2 ) {
+          echo '<tr>';
+        }
+        else {
+          echo '<tr class="bblm_tbl_alt">';
+        }
+        echo '<td>' . bblm_get_cup_link( $pc->series_id ) . '</td>';
+        echo '<td>' . $pc->GAMES . '</td>';
+        echo '<td>' . $pc->TD . '</td>';
+        echo '<td>' . $pc->CAS . '</td>';
+        echo '<td>' . $pc->MINT . '</td>';
+        echo '<td>' . $pc->COMP . '</td>';
+        echo '<td>' . $pc->MVP . '</td>';
+        echo '<td>' . $pc->SPP . '</td>';
+        echo '</tr>';
 
-			<h3>Recent Matches</h3>
+        $zebracount++;
+      }
+    }
+?>
+    </tbody>
+    </table>
+
+    <h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+    <table class="bblm_table">
+      <thead>
+        <tr>
+          <th class="bblm_tbl_title"><?php echo __( 'Competition', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'P', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'TD', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'CAS', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'INT', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'COMP', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'MVP', 'bblm' ); ?></th>
+          <th class="bblm_tbl_stat"><?php echo __( 'SPP', 'bblm' ); ?></th>
+        </tr>
+      </thead>
+      <tbody>
+<?php
+    $playercompsql = 'SELECT COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP, C.WPID AS CWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match Q WHERE M.m_id = Q.WPID AND Q.c_id = C.WPID AND M.p_id = P.p_id AND M.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY C.c_id DESC';
+    if ( $playercomp = $wpdb->get_results( $playercompsql ) ) {
+      $zebracount = 1;
+      foreach ( $playercomp as $pc ) {
+        if ( $zebracount % 2 ) {
+          echo '<tr>';
+        }
+        else {
+          echo '<tr class="bblm_tbl_alt">';
+        }
+        echo '<td>' . bblm_get_competition_link( $pc->CWPID  ) . '</td>';
+        echo '<td>' . $pc->GAMES . '</td>';
+        echo '<td>' . $pc->TD . '</td>';
+        echo '<td>' . $pc->CAS . '</td>';
+        echo '<td>' . $pc->MINT . '</td>';
+        echo '<td>' . $pc->COMP . '</td>';
+        echo '<td>' . $pc->MVP . '</td>';
+        echo '<td>' . $pc->SPP . '</td>';
+        echo '</tr>';
+        $zebracount++;
+      }
+    }
+?>
+  </tbody>
+</table>
+
+      <h3 class="bblm-table-caption"><?php echo __( 'Recent Matches','bblm' ); ?></h3>
 			<table class="bblm_table bblm_sortable bblm_expandable">
 				<thead>
 				<tr>
@@ -234,7 +302,7 @@
 				</thead>
 				<tbody>
 <?php
-  $playermatchsql = 'SELECT P.*, J.pid AS MID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND J.prefix = \'m_\' AND J.tid = M.m_id AND M.m_id = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
+      $playermatchsql = 'SELECT P.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
 			if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
 			$zebracount = 1;
       foreach ( $playermatch as $pm ) {
@@ -251,7 +319,7 @@
           echo '<tr class="bblm_tbl_alt">';
         }
         echo '<td>';
-        echo '<a href="' . get_post_permalink( $pm->MID ) . '" title="View the match in more detail">' . date( 'd.m.y' , $pm->mdate ) . '</a>';
+        echo bblm_get_match_link_date( $pm->MWPID );
         echo '</td>';
         if ( $pm->TAid == $pm->t_id ) {
           echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
 class BBLM_Admin {
@@ -24,7 +24,9 @@ class BBLM_Admin {
 
 		add_action( 'init', array( $this, 'includes' ) );
     add_action( 'dashboard_glance_items', array( $this, 'add_dashboard_counts' ) );
-		add_action('wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_freebooter_report' ) );
+		add_action( 'admin_init', array( $this, 'add_admin_js' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'bblm_include_adminstyle' ) );
 
 	}
 
@@ -48,7 +50,7 @@ class BBLM_Admin {
    function add_dashboard_counts() {
 
      $glancer = new Gamajo_Dashboard_Glancer;
-     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp' );
+     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp', 'bblm_race', 'bblm_match' );
      $glancer->add( $my_post_types, array( 'publish' ) );
 
    }
@@ -63,6 +65,26 @@ class BBLM_Admin {
 
 		}
 
-}
+		/**
+ 		* Registers any custom JavaScript files required in the admin pages
+ 		*/
+    function add_admin_js() {
+
+			wp_register_script( 'bblm_match_management', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.match.management.js' );
+			wp_register_script( 'bblm_player_changes', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.player.changes.js' );
+
+ 		} //end of add_admin_js
+
+		/**
+		 * Includes any CSS or Javascript required by the plugin. These will load
+		 * on any Admin pages pages.
+		 */
+		 function bblm_include_adminstyle() {
+
+			 wp_enqueue_style( 'bblm_admin_styles', plugin_dir_url( __FILE__ ) . '../../includes/CSS/admin.css' );
+
+		 } //end of bblm_include_adminstyle()
+
+} //end of class
 
 return new BBLM_Admin();
