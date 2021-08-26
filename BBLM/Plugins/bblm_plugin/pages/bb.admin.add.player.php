@@ -78,6 +78,7 @@ if (isset($_POST['bblm_team_add'])) {
 			$bblm_posma = $posd->pos_ma;
 			$bblm_posst = $posd->pos_st;
 			$bblm_posag = $posd->pos_ag;
+			$bblm_pospa = $posd->pos_pa;
 			$bblm_posav = $posd->pos_av;
 			$bblm_posskills = $posd->pos_skills;
 			$bblm_poscost = $posd->pos_cost;
@@ -148,7 +149,7 @@ if (isset($_POST['bblm_team_add'])) {
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
 
-		$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
+		$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_pospa.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
 
 		//Insert into the Player table
 		$wpdb->query($playersql);
@@ -293,6 +294,7 @@ $positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE r_id = '.$team_rac
 		<th>MA</th>
 		<th>ST</th>
 		<th>AG</th>
+		<th>PA</th>
 		<th>AV</th>
 		<th>Skills</th>
 		<th>Cost</th>
@@ -307,8 +309,9 @@ $positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE r_id = '.$team_rac
 		<td>0 - <?php print($pos->pos_limit); ?></td>
 		<td><?php print($pos->pos_ma); ?></td>
 		<td><?php print($pos->pos_st); ?></td>
-		<td><?php print($pos->pos_ag); ?></td>
-		<td><?php print($pos->pos_av); ?></td>
+		<td><?php print($pos->pos_ag); ?>+</td>
+		<td><?php print($pos->pos_pa); ?>+</td>
+		<td><?php print($pos->pos_av); ?>+</td>
 		<td><?php print($pos->pos_skills); ?></td>
 		<td><?php if ($pos->pos_cost > $team_bank) { print(number_format($pos->pos_cost)."<strong>*</strong>"); } else { print(number_format($pos->pos_cost)); } ?> gp</td>
 	</tr>

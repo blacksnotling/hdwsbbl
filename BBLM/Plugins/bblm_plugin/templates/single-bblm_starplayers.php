@@ -25,7 +25,7 @@
 			/*
 			Gather Information for page
 			*/
-			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
+			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -45,6 +45,7 @@
 					<th class="bblm_tbl_stat">MA</th>
 					<th class="bblm_tbl_stat">ST</th>
 					<th class="bblm_tbl_stat">AG</th>
+          <th class="bblm_tbl_stat">PA</th>
 					<th class="bblm_tbl_stat">AV</th>
 					<th>Skills</th>
 					<th>Cost per match</th>
@@ -53,8 +54,9 @@
 					<td>Star Player</td>
 					<td><?php echo $pd->p_ma; ?></td>
 					<td><?php echo $pd->p_st; ?></td>
-					<td><?php echo $pd->p_ag; ?></td>
-					<td><?php echo $pd->p_av; ?></td>
+					<td><?php echo $pd->p_ag; ?>+</td>
+          <td><?php echo $pd->p_pa; ?>+</td>
+					<td><?php echo $pd->p_av; ?>+</td>
 					<td class="bblm_tbl_skills"><?php  echo $pd->p_skills; ?></td>
 					<td><?php  echo number_format($pd->p_cost); ?>gp</td>
 				</tr>

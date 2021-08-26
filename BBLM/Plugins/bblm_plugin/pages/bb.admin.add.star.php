@@ -44,7 +44,7 @@ if(isset($_POST['bblm_star_submit'])) {
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_starplayers.php');
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$bblm_team_star.'\', \''.$posnum.'\', \''.wp_filter_nohtml_kses($_POST['bblm_pname']).'\', \'00\', \''.$_POST['bblm_pma'].'\', \''.$_POST['bblm_pst'].'\', \''.$_POST['bblm_pag'].'\', \''.$_POST['bblm_pav'].'\', \'0\', \''.$_POST['bblm_pskills'].'\', \'0\', \'none\', \''.$_POST['bblm_pcost'].'\', \''.$_POST['bblm_pcost'].'\', \'1\', \'\', \'0\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$bblm_team_star.'\', \''.$posnum.'\', \''.wp_filter_nohtml_kses($_POST['bblm_pname']).'\', \'00\', \''.$_POST['bblm_pma'].'\', \''.$_POST['bblm_pst'].'\', \''.$_POST['bblm_pag'].'\', \''.$_POST['bblm_ppa'].'\', \''.$_POST['bblm_pav'].'\', \'0\', \''.$_POST['bblm_pskills'].'\', \'0\', \'none\', \''.$_POST['bblm_pcost'].'\', \''.$_POST['bblm_pcost'].'\', \'1\', \'\', \'0\')';
 		$wpdb->query($bblmdatasql);
 
 		//Store the player ID (p_id)
@@ -107,11 +107,15 @@ if(isset($_POST['bblm_star_submit'])) {
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_pag">AG</label></th>
-				<td><input type="text" name="bblm_pag" size="2" value="4" maxlength="1" id="bblm_pag" class="small-text"/></td>
+				<td><input type="text" name="bblm_pag" size="2" value="4" maxlength="1" id="bblm_pag" class="small-text"/>+</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_ppa">PA</label></th>
+				<td><input type="text" name="bblm_ppa" size="2" value="4" maxlength="1" id="bblm_ppa" class="small-text"/>+</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_pav">AV</label></th>
-				<td><input type="text" name="bblm_pav" size="2" value="8" maxlength="2" id="bblm_pav" class="small-text"/></td>
+				<td><input type="text" name="bblm_pav" size="2" value="8" maxlength="2" id="bblm_pav" class="small-text"/>+</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row"><label for="bblm_pcost">Cost</label></th>

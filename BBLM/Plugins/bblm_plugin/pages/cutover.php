@@ -1469,6 +1469,17 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				</ul>
 			</li>
 		</ul>
+		<p>Add the folloiwing column to the *player database table</p>
+		<ul>
+			<li>p_pa</li>
+			<li>
+				<ul>
+					<li>After pos_ag</li>
+					<li>int (2)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
 
 </form>
 
