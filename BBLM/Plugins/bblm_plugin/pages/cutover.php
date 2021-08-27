@@ -1259,6 +1259,188 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 																	 } // END OF bblm_match_playerfate
 
+																	 if (isset($_POST['bblm_legacy_comp_meta'])) {
+																		 $result = false;
+
+																		 //First we grab a list of the current users
+																		 $comppostsql = "SELECT P.ID FROM ".$wpdb->posts." P WHERE P.post_type = 'bblm_comp'";
+																		 //echo '<p>'.$comppostsql.'</p>';
+
+																		 //We check something was returned
+																		 if ($comppost = $wpdb->get_results($comppostsql)) {
+
+																			 //Then we loop through them
+																			 foreach ($comppost as $pdeet) {
+
+																				 if ( add_post_meta( $pdeet->ID, 'comp_legacy', '1', true ) ) {
+																					 $result = true;
+																				 }
+																				 else {
+
+																					 //Updating the team table failed!
+																					 $result = false;
+
+																				 }
+
+																			 }
+
+
+																		 }
+
+																		 //Update the DB table to with the new values
+
+																		 if ( $result ) {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>The Meta has been added</p></div>\n");
+																		 }
+																		 else {
+																			 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		 }
+
+																	 } // END OF bblm_legacy_comp_meta
+																	 /*
+																	 * updating the player legacy flag
+																	 */
+																	if (isset($_POST['bblm_legacy_player_flag'])) {
+																		$result = false;
+
+																		//First we grab a list of the current users
+																		$playerdeetssql = "SELECT P.p_id FROM `".$wpdb->prefix."player` P  WHERE t_id != 52";
+																		//echo '<p>'.$playerdeetssql.'</p>';
+
+																		//We check something was returned
+																		if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																			//echo '<ul>';
+																			//Then we loop through them
+																			foreach ($playerdeets as $pdeet) {
+
+																				//We use this value to update the team tables
+																				$playerupsql = "UPDATE `".$wpdb->prefix."player` SET `p_legacy` = '1' WHERE p_id = ".$pdeet->p_id;
+																				//echo '<li>' . $playerupsql . '</li>';
+
+																				if ( $wpdb->query($playerupsql) ) {
+																					$result = true;
+																				}
+																				else {
+
+																					//Updating the team table failed!
+																					$result = false;
+
+																				}
+
+																			}
+																			//echo '</ul>';
+
+
+																		}
+
+																		//Update the DB table to with the new values
+
+																		if ( $result ) {
+																			print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																		}
+																		else {
+																			print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																		}
+
+																	} // END OF bblm_legacy_player_flag
+
+																	/*
+																	* updating the team legacy flag
+																	*/
+																 if (isset($_POST['bblm_legacy_team_flag'])) {
+																	 $result = false;
+
+																	 //First we grab a list of the current users
+																	 $playerdeetssql = "SELECT T.t_id FROM `".$wpdb->prefix."team` T";
+																	 //echo '<p>'.$playerdeetssql.'</p>';
+
+																	 //We check something was returned
+																	 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																		 //echo '<ul>';
+																		 //Then we loop through them
+																		 foreach ($playerdeets as $pdeet) {
+
+																			 //We use this value to update the team tables
+																			 $playerupsql = "UPDATE `".$wpdb->prefix."team` SET `t_legacy` = '1' WHERE t_id = ".$pdeet->t_id;
+																			 //echo '<li>' . $playerupsql . '</li>';
+
+																			 if ( $wpdb->query($playerupsql) ) {
+																				 $result = true;
+																			 }
+																			 else {
+
+																				 //Updating the team table failed!
+																				 $result = false;
+
+																			 }
+
+																		 }
+																		 //echo '</ul>';
+
+
+																	 }
+
+																	 //Update the DB table to with the new values
+
+																	 if ( $result ) {
+																		 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																	 }
+																	 else {
+																		 print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																	 }
+
+																 } // END OF bblm_legacy_team_flag
+
+																 /*
+																 * updating the match legacy flag
+																 */
+																if (isset($_POST['bblm_legacy_match_flag'])) {
+																	$result = false;
+
+																	//First we grab a list of the current users
+																	$playerdeetssql = "SELECT M.m_id FROM `".$wpdb->prefix."match` M";
+																	//echo '<p>'.$playerdeetssql.'</p>';
+
+																	//We check something was returned
+																	if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																		//echo '<ul>';
+																		//Then we loop through them
+																		foreach ($playerdeets as $pdeet) {
+
+																			//We use this value to update the team tables
+																			$playerupsql = "UPDATE `".$wpdb->prefix."match` SET `m_legacy` = '1' WHERE m_id = ".$pdeet->m_id;
+																			//echo '<li>' . $playerupsql . '</li>';
+
+																			if ( $wpdb->query($playerupsql) ) {
+																				$result = true;
+																			}
+																			else {
+
+																				//Updating the team table failed!
+																				$result = false;
+
+																			}
+
+																		}
+																		//echo '</ul>';
+
+
+																	}
+
+																	//Update the DB table to with the new values
+
+																	if ( $result ) {
+																		print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																	}
+																	else {
+																		print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																	}
+
+																} // END OF bblm_legacy_match_flag
+
 /**
  *
  * MAIN PAGE CONTENT FOLLOWS
@@ -1458,7 +1640,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<h2>V1.12 -> V1.13 (New Edition Update)</h2>
 
 		<h3>Passing Statistic</h3>
-		<p>Add the folloiwing column to the *positions database table</p>
+		<p>Add the following column to the *positions database table</p>
 		<ul>
 			<li>pos_pa</li>
 			<li>
@@ -1469,7 +1651,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				</ul>
 			</li>
 		</ul>
-		<p>Add the folloiwing column to the *player database table</p>
+		<p>Add the following column to the *player database table</p>
 		<ul>
 			<li>p_pa</li>
 			<li>
@@ -1480,6 +1662,44 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				</ul>
 			</li>
 		</ul>
+		<h3>Legacy marker for objects</h3>
+		<p>Add meta field to competition: <input type="submit" name="bblm_legacy_comp_meta" value="Add Competition Meta" title="Add Competition Meta"/></p>
+		<p>Add the following column to the *player database table</p>
+		<ul>
+			<li>p_legacy</li>
+			<li>
+				<ul>
+					<li>At the end</li>
+					<li>int (1)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+		<p><input type="submit" name="bblm_legacy_player_flag" value="Set the Legacy flag for Players" title="Set the Legacy flag for Players"/></p>
+		<p>Add the following column to the *team database table</p>
+		<ul>
+			<li>t_legacy</li>
+			<li>
+				<ul>
+					<li>At the end</li>
+					<li>int (1)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+		<p><input type="submit" name="bblm_legacy_team_flag" value="Set the Legacy flag for Teams" title="Set the Legacy flag for Teams"/></p>
+		<p>Add the following column to the *match database table</p>
+		<ul>
+			<li>m_legacy</li>
+			<li>
+				<ul>
+					<li>At the end</li>
+					<li>int (1)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+		<p><input type="submit" name="bblm_legacy_match_flag" value="Set the Legacy flag for Matches" title="Set the Legacy flag for matches"/></p>
 
 </form>
 

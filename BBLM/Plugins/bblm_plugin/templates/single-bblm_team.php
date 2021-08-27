@@ -39,11 +39,15 @@
 				}
 
 		}
+    if ( $ti->t_legacy ) {
+      bblm_display_legacy_notice( "Team" );
+    }
 ?>
 				<div class="bblm_details bblm_team_description">
 					<?php the_content(); ?>
 				</div>
 <?php
+
 			//Set default value to flag if the team has played a game or not
 			$has_played = 1;
 
@@ -53,7 +57,7 @@
 
 				if ( !empty( $ohs ) ) { //Need something better - IE a result has been returned
 ?>
-        <h3 class="bblm-table-caption"><?php echo __( 'Career Statistics for ', 'bblm' ) . the_title(); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Career Statistics for ', 'bblm' ) . get_the_title(); ?></h3>
 				<table class="bblm_table">
 					<tr>
 						<th class="bblm_tbl_title">Team</th>

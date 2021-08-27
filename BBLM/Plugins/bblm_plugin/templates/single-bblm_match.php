@@ -63,6 +63,12 @@
 
 			<div class="entry-content">
 
+<?php
+        if ( $m->m_legacy ) {
+          bblm_display_legacy_notice( "Match" );
+        }
+?>
+
 				<table class="bblm_table">
 					<thead>
 						<tr>

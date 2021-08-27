@@ -76,6 +76,11 @@
 			</header><!-- .entry-header -->
 
 				<div class="entry-content">
+<?php
+          if ( $pd->p_legacy ) {
+            bblm_display_legacy_notice( "Player" );
+          }
+?>
 
 					<table class="bblm_table">
 						<thead>

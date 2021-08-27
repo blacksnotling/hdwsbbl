@@ -25,7 +25,7 @@
 			/*
 			Gather Information for page
 			*/
-			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
+			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_spp, P.p_skills, P.p_cost, P.p_legacy FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -39,6 +39,12 @@
 	<div class="bblm_details">
 		<?php the_content(); ?>
 		</div>
+
+<?php if ( $pd->p_legacy ) {
+  bblm_display_legacy_notice( "Star Player" );
+}
+?>
+
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_name">Position</th>

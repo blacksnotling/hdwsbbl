@@ -11,8 +11,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.2
+ * @version   1.3
  */
+
+ /**
+  * Outputs a message informing that the object in question is from a previous ruleset
+  * Takes in the object in question
+  */
+ function bblm_display_legacy_notice( $legacy_item ) {
+
+	 $legacy_item = sanitize_text_field( $legacy_item );
+
+   $output = "";
+
+	 $output .= '<div class="bblm_details bblm_legacy-notice"><p>' . __('This ', 'bblm') . $legacy_item .  __(' was part of the league under a previous ruleset.','bblm' ) . '</p></div>';
+
+   echo $output;
+
+ }// end of bblm_get_team_name
 
 /**
  * Returns the name of a team, properly escaped and formatted
