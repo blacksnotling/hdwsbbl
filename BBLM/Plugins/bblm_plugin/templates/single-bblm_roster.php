@@ -111,6 +111,8 @@ a:hover, a:active {
 			if ($tcap = $wpdb->get_row($teamcaptainsql)) {
 				$teamcap = $tcap->p_id;
 			}
+
+			$rr_cost = (int) BBLM_CPT_Race::get_reroll_cost( $ti->teamid );
 ?>
 		<h1><?php echo __( 'Roster for ','bblm' ) . $team_link; ?></h1>
 
@@ -280,8 +282,8 @@ a:hover, a:active {
   <th colspan="3" class="bblm_tbl_title">Re-Rolls:</th>
   <td><?php print($ti->t_rr); ?></td>
   <th class="bblm_tbl_enchance">X</th>
-  <th class="bblm_tbl_enchance" colspan="2"><?php print(number_format($ti->r_rrcost)); ?>gp</th>
-  <td class="bblm_tbl_value"><?php print(number_format($ti->t_rr*$ti->r_rrcost)); ?>gp</td>
+  <th class="bblm_tbl_enchance" colspan="2"><?php echo number_format( $rr_cost ); ?>gp</th>
+  <td class="bblm_tbl_value"><?php echo number_format( $ti->t_rr*$rr_cost ); ?>gp</td>
  </tr>
  <tr>
   <th colspan="3" class="bblm_tbl_title">Dedicated Fans:</th>
