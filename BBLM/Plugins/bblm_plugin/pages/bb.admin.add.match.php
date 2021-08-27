@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version 	2.0
+ * @version 	2.0.1
  */
 //Check the file is not being accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -152,7 +152,7 @@ class BBLM_Add_Match {
 					'ping_status' => 'closed'
 				);
 
-				//Calculate change in FF
+				//Calculate change in FF / Dedicated Fans
 				$bblm_ff_options = array('0','-1','+1');
 				$bblm_submit_tA['ff'] = $bblm_ff_options[$bblm_submit_tA['ff']];
 				$bblm_submit_tB['ff'] = $bblm_ff_options[$bblm_submit_tB['ff']];
@@ -174,7 +174,7 @@ class BBLM_Add_Match {
 
 					// Update teams (FF and bank)
 
-					//Calculate values of the Fan Factor changes
+					//Calculate values of the Dedicated Fans changes
 					$teamA_ffinc = $bblm_submit_tA['ff']*10000;
 					$teamB_ffinc = $bblm_submit_tB['ff']*10000;
 
@@ -627,7 +627,7 @@ class BBLM_Add_Match {
 								<td class="comment"><?php echo __( 'The weather during the match', 'bblm' ); ?></td>
 							</tr>
 							<tr>
-								<td><?php echo __( 'Change in Fan Factor', 'bblm' ); ?></td>
+								<td><?php echo __( 'Change in Dedicated Fans', 'bblm' ); ?></td>
 								<td>
 									<select id="tAff" name="tAff">
 										<option value="0" selected=selected><?php echo __( 'No change', 'bblm' ); ?></option>
@@ -643,7 +643,7 @@ class BBLM_Add_Match {
 										<option value="2"><?php echo __( 'Plus One (+1)', 'bblm' ); ?></option>
 									</select>
 								</td>
-								<td class="comment"><?php echo __( 'The change in FF (if any).', 'bblm' ); ?></td>
+								<td class="comment"><?php echo __( 'The change in Dedicated Fans (if any).', 'bblm' ); ?></td>
 							</tr>
 							<tr>
 								<td><?php echo __( 'Coach Comments', 'bblm' ); ?></td>

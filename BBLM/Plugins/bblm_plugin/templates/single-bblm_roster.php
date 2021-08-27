@@ -284,7 +284,7 @@ a:hover, a:active {
   <td class="bblm_tbl_value"><?php print(number_format($ti->t_rr*$ti->r_rrcost)); ?>gp</td>
  </tr>
  <tr>
-  <th colspan="3" class="bblm_tbl_title">Fan Factor:</th>
+  <th colspan="3" class="bblm_tbl_title">Dedicated Fans:</th>
   <td><?php print($ti->t_ff); ?></td>
   <th class="bblm_tbl_enchance">X</th>
   <td colspan="2">10,000gp</td>

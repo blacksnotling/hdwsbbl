@@ -259,7 +259,7 @@ function UpdateBankTv() {
 		@ <?php print($rrcost); ?> each</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
+		<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 		  <td><input type="text" name="bblm_tff" size="2" value="0" maxlength="2" id="bblm_tff" class="small-text"/><br />
 		  @ 10,000 each</td>
 	</tr>

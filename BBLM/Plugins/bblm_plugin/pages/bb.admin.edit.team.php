@@ -177,7 +177,7 @@ function UpdateTv() {
 				@ <?php echo number_format( $rrcost ); ?> GP each - remember that they cost double when bought during a season</td>
 			</tr>
 			<tr class="form-field form-required">
-				<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
+				<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 				  <td><input type="text" name="bblm_tff" size="2" tabindex="5" value="<?php print("$t->t_ff"); ?>" maxlength="2" id="bblm_tff"><br />
 				  @ 10,000 each</td>
 			</tr>
