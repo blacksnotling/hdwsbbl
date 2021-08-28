@@ -3,7 +3,7 @@
 Plugin Name: HDWSBBL Plugin
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: HDWSBBL specific features that should not go in the BBLM plugin, or in a theme. Requires the BBLM plugin
-Version: 1.1
+Version: 1.2
 Author: Blacksnotling
 Author URI: https://github.com/blacksnotling
 Requires at least: 4.7
