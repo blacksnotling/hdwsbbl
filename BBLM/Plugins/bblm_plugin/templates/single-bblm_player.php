@@ -31,6 +31,8 @@
 
 			} //end of if playersql
 
+      $legacy = 0;
+
 				switch ( $pspp ) {
 					case 0:
 				    	$plevel = "Rookie";
@@ -78,6 +80,7 @@
 				<div class="entry-content">
 <?php
           if ( $pd->p_legacy ) {
+            $legacy = 1;
             bblm_display_legacy_notice( "Player" );
           }
 ?>
@@ -89,7 +92,13 @@
 								<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+<?php
+                if ( !$legacy ) {
+?>
                 <th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+<?php
+                }
+?>
 								<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 								<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 								<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
@@ -101,9 +110,21 @@
 								<td><?php echo esc_html( $pd->pos_name ); ?></td>
 								<td><?php echo $pd->p_ma; ?></td>
 								<td><?php echo $pd->p_st; ?></td>
-								<td><?php echo $pd->p_ag; ?>+</td>
+<?php
+                  if ( $legacy ) {
+?>
+                <td><?php echo $pd->p_ag; ?></td>
+                <td><?php echo $pd->p_av; ?></td>
+<?php
+                  }
+                  else {
+?>
+  							<td><?php echo $pd->p_ag; ?>+</td>
                 <td><?php echo $pd->p_pa; ?>+</td>
 								<td><?php echo $pd->p_av; ?>+</td>
+<?php
+                  }
+?>
 								<td class="bblm_tbl_skills"><?php echo $pd->p_skills; ?></td>
 								<td><?php echo $pd->p_injuries; ?></td>
 								<td><?php echo number_format( $pd->p_cost ); ?>gp</td>

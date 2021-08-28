@@ -188,6 +188,20 @@ class BBLM_CPT_Race {
 
     }// end of get_special_rules
 
+		/**
+		 * Returns the status (active / retired) of the Race
+		 *
+		 * @param wordpress $query
+		 * @return int $rr_cost cost of reroll
+		 */
+		 public static function get_race_status( $ID ) {
+
+			$rstatus = get_post_meta( $ID, 'race_rstatus', true );
+
+			 return $rstatus;
+
+		 }// end of et_race_status
+
 	/**
    * OUTPUTS the race icon to a set size
    *
@@ -224,6 +238,7 @@ class BBLM_CPT_Race {
 			$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = ' . $ID . ' ORDER by pos_cost ASC';
 			if ( $positions = $wpdb->get_results( $positionsql ) ) {
 				$zebracount = 1;
+				$legacy = $this->get_race_status( $ID );
 ?>
 			<table class="bblm_table bblm-tbl-scrollable">
 				<thead>
@@ -233,7 +248,13 @@ class BBLM_CPT_Race {
 						<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+<?php
+				if ( $legacy ) {
+?>
 						<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+<?php
+				}
+?>
 						<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 						<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 						<th><?php echo __( 'Cost', 'bblm' ); ?></th>
@@ -253,9 +274,21 @@ class BBLM_CPT_Race {
 						<td>0 - <?php echo $pos->pos_limit; ?></td>
 						<td><?php echo $pos->pos_ma; ?></td>
 						<td><?php echo $pos->pos_st; ?></td>
+<?php
+					if ( !$legacy ) {
+?>
+						<td><?php echo $pos->pos_ag; ?></td>
+						<td><?php echo $pos->pos_av; ?></td>
+<?php
+					}
+					else {
+?>
 						<td><?php echo $pos->pos_ag; ?>+</td>
 						<td><?php echo $pos->pos_pa; ?>+</td>
 						<td><?php echo $pos->pos_av; ?>+</td>
+<?php
+					}
+?>
 						<td class="bblm_tbl_skills"><?php echo $pos->pos_skills; ?></td>
 						<td><?php echo number_format( $pos->pos_cost ); ?> GP</td>
 					</tr>
