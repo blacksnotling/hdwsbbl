@@ -174,6 +174,20 @@ class BBLM_CPT_Race {
 
    }// end of get_reroll_cost()
 
+	 /**
+    * Returns the Special Rules for a race
+    *
+    * @param wordpress $query
+    * @return int $rr_cost cost of reroll
+    */
+    public static function get_special_rules( $ID ) {
+
+ 		 $rr_cost = get_post_meta( $ID, 'race_srules', true );
+
+      return $rr_cost;
+
+    }// end of get_special_rules
+
 	/**
    * OUTPUTS the race icon to a set size
    *
