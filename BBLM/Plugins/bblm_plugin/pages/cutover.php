@@ -1857,6 +1857,13 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			</li>
 		</ul>
 		<p><input type="submit" name="bblm_player_spp_update" value="Update SPP for legacy players" title="Update SPP for legacy players"/></p>
+		<p>Add the following column to the *match_player database table</p>
+		<ul>
+			<li>mp_ttm, mp_ktm, mp_etm, mp_def, mp_ptn, mp_foul</li>
+			<li>All at the end</li>
+			<li>int (1) except mp_foul (2)</li>
+			<li>default: 0</li>			
+		</ul>
 
 
 </form>
