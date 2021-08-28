@@ -296,7 +296,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 	print("<hr />");*/
 
 	//Generate SQL
-	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_pa` = \''.$_POST['bblm_ppa'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
+	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_pa` = \''.$_POST['bblm_ppa'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_cspp` = \''.$_POST['bblm_pcspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_tr` = \''.$_POST['bblm_tr'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
 	//print("<p>".$pstatupdatesql."</p>");
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
@@ -352,11 +352,12 @@ else if ("edit" == $_GET['action']) {
 				<th><label for="bblm_pag">AG</label></th>
 				<th><label for="bblm_pag">PA</label></th>
 				<th><label for="bblm_pav">AV</label></th>
-				<th><label for="bblm_psp">SPP</label></th>
-				<th>SPP (from DB)</th>
+				<th><label for="bblm_psp">Total SPP</label></th>
+				<th><label for="bblm_pcspp">SPP for Skills</label></th>
 				<th><label for="bblm_pcost">Cost</label></th>
 				<th><label for="bblm_pcostng">Cost NG</label></th>
 				<th><label for="bblm_mng">MNG?</label></th>
+				<th><label for="bblm_tr">Temp Retired?</label></th>
 				<th><label for="bblm_status">Status</label></th>
 			</tr>
 			</thead>
@@ -371,10 +372,11 @@ else if ("edit" == $_GET['action']) {
 				<td><input type="text" name="bblm_ppa" size="2" value="<?php print($p->p_pa); ?>" id="bblm_ppa" maxlength="2">+</td>
 				<td><input type="text" name="bblm_pav" size="2" value="<?php print($p->p_av); ?>" id="bblm_pav" maxlength="2">+</td>
 				<td><input type="text" name="bblm_pspp" size="2" value="<?php print($p->p_spp); ?>" id="bblm_pspp" maxlength="3"></td>
-				<td><?php print($psppfdb); ?></td>
+				<td><input type="text" name="bblm_pcspp" size="2" value="<?php print($p->p_cspp); ?>" id="bblm_pcspp" maxlength="3"></td>
 				<td><input type="text" name="bblm_pcost" size="5" value="<?php print($p->p_cost); ?>" id="bblm_pcost" maxlength="7"></td>
 				<td><input type="text" name="bblm_pcostng" size="5" value="<?php print($p->p_cost_ng); ?>" id="bblm_costng" maxlength="7"></td>
 				<td><input type="text" name="bblm_mng" size="2" value="<?php print($p->p_mng); ?>" id="bblm_pmng" maxlength="1"></td>
+				<td><input type="text" name="bblm_tr" size="2" value="<?php print($p->p_tr); ?>" id="bblm_tr" maxlength="1"></td>
 				<td><input type="text" name="bblm_status" size="2" value="<?php print($p->p_status); ?>" id="bblm_pstatus" maxlength="1"></td>
 			</tr>
 			</tbody>

@@ -1510,6 +1510,52 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																 }
 
 															 } // END OF bblm_team_ctv
+															 /*
+															 * Update SPP of players
+															 */
+															if (isset($_POST['bblm_player_spp_update'])) {
+																$result = false;
+
+																//First we grab a list of the current users
+																$playerdeetssql = "SELECT P.p_id, P.p_spp FROM `".$wpdb->prefix."player` P  WHERE t_id != 52";
+
+																//We check something was returned
+																if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																	//echo '<ul>';
+																	//Then we loop through them
+																	foreach ($playerdeets as $pdeet) {
+
+																		//We use this value to update the team tables
+																		$playerupsql = "UPDATE `".$wpdb->prefix."player` SET `p_cspp` = '" . $pdeet->p_spp . "' WHERE p_id = ".$pdeet->p_id;
+																		//echo '<li>' . $playerupsql . '</li>';
+
+																		if ( $wpdb->query($playerupsql) ) {
+																			$result = true;
+																		}
+																		else {
+
+																			//Updating the team table failed!
+																			$result = false;
+
+																		}
+
+																	}
+																	//echo '</ul>';
+
+
+																}
+
+																//Update the DB table to with the new values
+
+																if ( $result ) {
+																	print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																}
+																else {
+																	print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																}
+
+															} // END OF bblm_player_spp_update
 
 /**
  *
@@ -1789,6 +1835,28 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			</li>
 		</ul>
 		<p><input type="submit" name="bblm_team_ctv" value="Set all teams Current Team Value" title="Set all teams Current Team Value"/></p>
+
+		<h3>New Player characteristics</h3>
+		<p>Add the following column to the *player database table</p>
+		<ul>
+			<li>p_tr</li>
+			<li>
+				<ul>
+					<li>at the end</li>
+					<li>int (1)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+			<li>p_cspp</li>
+			<li>
+				<ul>
+					<li>after p_spp</li>
+					<li>int (3)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+		<p><input type="submit" name="bblm_player_spp_update" value="Update SPP for legacy players" title="Update SPP for legacy players"/></p>
 
 
 </form>
