@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version 	2.0.1
+ * @version 	2.1
  */
 //Check the file is not being accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -215,6 +215,9 @@ class BBLM_Add_Match {
 					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tA['id'], $bblm_submit_match['comp'], $tAdiv );
 					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tB['id'], $bblm_submit_match['comp'], $tBdiv );
 
+					bblm_update_tv( $bblm_submit_tA['id'] );
+					bblm_update_tv( $bblm_submit_tB['id'] );
+
 					//If we get to this point we have added a match to the database!
 					$sucess = TRUE;
 					do_action( 'bblm_post_submission' );
@@ -335,7 +338,7 @@ class BBLM_Add_Match {
 			if ( "F" == $_POST['bblm_mtype'] ) {
 
 				//We are using a fixture to base the match record off
-				$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.WPID AS TA, R.WPID AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
+				$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.WPID AS TA, R.WPID AS TB, T.t_ctv AS TAtv, R.t_ctv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
 
  				//check the fixture exists
 				if ( $fixturedetail = $wpdb->get_results( $fixturedetailsql ) ) {

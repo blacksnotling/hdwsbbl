@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Admin
- * @version   1.3
+ * @version   1.4
  */
 
  /**
@@ -26,16 +26,16 @@ function bblm_update_tv($tid) {
 	$tpvalue = $wpdb->get_var($playervaluesql);
 
 	//Calcuate worth of rest of team (re-rolls, Assistant Coaches etc).
-	$teamextravaluesql = 'SELECT T.t_rr, T.t_ff, T.t_cl, T.t_ac, T.t_apoc, T.r_id FROM '.$wpdb->prefix.'team T WHERE T.t_id = '.$tid;
+	$teamextravaluesql = 'SELECT T.t_rr, T.t_cl, T.t_ac, T.t_apoc, T.r_id FROM '.$wpdb->prefix.'team T WHERE T.t_id = '.$tid;
 	$tev = $wpdb->get_row($teamextravaluesql);
 	$rrcost = BBLM_CPT_Race::get_reroll_cost( $tev->r_id );
-	$tevalue = ( $rrcost * $tev->t_rr ) + ( $tev->t_ff * 10000 ) + ( $tev->t_cl * 10000 ) + ( $tev->t_ac * 10000 ) + ( $tev->t_apoc * 50000 );
+	$tevalue = ( $rrcost * $tev->t_rr ) + ( $tev->t_cl * 10000 ) + ( $tev->t_ac * 10000 ) + ( $tev->t_apoc * 50000 );
 
 	//Add the two together
 	$newtv = $tpvalue+$tevalue;
 
 	//Generate SQL
-	$sql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = \''.$newtv.'\' WHERE `t_id` = '.$tid.' LIMIT 1';
+	$sql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = \''.$newtv.'\', `t_ctv` = \''.$newtv.'\' WHERE `t_id` = '.$tid.' LIMIT 1';
 
   //Execute SQL
 	if ( FALSE !== $wpdb->query($sql) ) {

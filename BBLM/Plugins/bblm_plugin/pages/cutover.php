@@ -1479,6 +1479,37 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																	}
 
 																} // END OF bblm_race_status_meta
+																/*
+																* Updating all teams Current Team Value
+																*/
+															 if (isset($_POST['bblm_team_ctv'])) {
+																 $result = false;
+
+																 //First we grab a list of the current users
+																 $playerdeetssql = "SELECT T.t_id FROM `".$wpdb->prefix."team` T";
+																 //echo '<p>'.$playerdeetssql.'</p>';
+
+																 //We check something was returned
+																 if ($playerdeets = $wpdb->get_results($playerdeetssql)) {
+
+																	 //Then we loop through them
+																	 foreach ($playerdeets as $pdeet) {
+
+																		 //We use this value to update the team tables
+																		 bblm_update_tv( $pdeet->t_id );
+																		 //echo '<li>' . $playerupsql . '</li>';
+
+																			 $result = true;
+
+																	 }
+
+																 }
+
+																 if ( $result ) {
+																	 print("<div id=\"updated\" class=\"updated fade\"><p>The Database Has been updated!</p></div>\n");
+																 }
+
+															 } // END OF bblm_team_ctv
 
 /**
  *
@@ -1727,6 +1758,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			</li>
 		</ul>
 		<p><input type="submit" name="bblm_legacy_team_flag" value="Set the Legacy flag for Teams" title="Set the Legacy flag for Teams"/></p>
+		<p>Make sure you set the legacy flag for the TBD team back to 0</p>
 		<p>Add the following column to the *match database table</p>
 		<ul>
 			<li>m_legacy</li>
@@ -1741,8 +1773,22 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<p><input type="submit" name="bblm_legacy_match_flag" value="Set the Legacy flag for Matches" title="Set the Legacy flag for matches"/></p>
 
 		<h3>Set all races as active</h3>
-		<p>Add meta field to competition: <input type="submit" name="bblm_race_status_meta" value="Set all Races as active" title="Set all Races as active"/></p>
+		<p><input type="submit" name="bblm_race_status_meta" value="Set all Races as active" title="Set all Races as active"/></p>
 		<p>Remember to go and retire the races that are no longer availiblke</p>
+
+		<h3>Current Team Value</h3>
+		<p>Add the following column to the *team database table</p>
+		<ul>
+			<li>t_ctv</li>
+			<li>
+				<ul>
+					<li>after t_tv</li>
+					<li>bigint (20)</li>
+					<li>default: 0</li>
+				</ul>
+			</li>
+		</ul>
+		<p><input type="submit" name="bblm_team_ctv" value="Set all teams Current Team Value" title="Set all teams Current Team Value"/></p>
 
 
 </form>

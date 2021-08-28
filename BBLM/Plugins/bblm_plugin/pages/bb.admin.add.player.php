@@ -160,6 +160,8 @@ if (isset($_POST['bblm_team_add'])) {
 		//Update the team
 		$wpdb->query($teamupdatesql);
 
+		bblm_update_tv( (int) $_POST['bblm_tid'] );
+
 		$success = 1;
 		$addattempt = 1;
 		do_action( 'bblm_post_submission' );
