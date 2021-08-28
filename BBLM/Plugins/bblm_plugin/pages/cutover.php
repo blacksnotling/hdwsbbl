@@ -1441,6 +1441,45 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 																} // END OF bblm_legacy_match_flag
 
+																if (isset($_POST['bblm_race_status_meta'])) {
+																	$result = false;
+
+																	//First we grab a list of the current users
+																	$comppostsql = "SELECT P.ID FROM ".$wpdb->posts." P WHERE P.post_type = 'bblm_race'";
+																	//echo '<p>'.$comppostsql.'</p>';
+
+																	//We check something was returned
+																	if ($comppost = $wpdb->get_results($comppostsql)) {
+
+																		//Then we loop through them
+																		foreach ($comppost as $pdeet) {
+
+																			if ( add_post_meta( $pdeet->ID, 'race_rstatus', '1', true ) ) {
+																				$result = true;
+																			}
+																			else {
+
+																				//Updating the team table failed!
+																				$result = false;
+
+																			}
+
+																		}
+
+
+																	}
+
+																	//Update the DB table to with the new values
+
+																	if ( $result ) {
+																		print("<div id=\"updated\" class=\"updated fade\"><p>The Meta has been added</p></div>\n");
+																	}
+																	else {
+																		print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong!</p></div>");
+																	}
+
+																} // END OF bblm_race_status_meta
+
 /**
  *
  * MAIN PAGE CONTENT FOLLOWS
@@ -1700,6 +1739,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			</li>
 		</ul>
 		<p><input type="submit" name="bblm_legacy_match_flag" value="Set the Legacy flag for Matches" title="Set the Legacy flag for matches"/></p>
+
+		<h3>Set all races as active</h3>
+		<p>Add meta field to competition: <input type="submit" name="bblm_race_status_meta" value="Set all Races as active" title="Set all Races as active"/></p>
+		<p>Remember to go and retire the races that are no longer availiblke</p>
+
 
 </form>
 

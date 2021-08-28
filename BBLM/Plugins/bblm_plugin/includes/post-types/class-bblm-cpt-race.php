@@ -52,24 +52,16 @@ class BBLM_CPT_Race {
   * @return none
   */
   public static function get_race_listing() {
-?>
-    <table class="bblm_table">
-      <thead>
-        <tr>
-					<th><?php echo __( 'Icon', 'bblm' ); ?></th>
-          <th><?php echo __( 'Race Name', 'bblm' ); ?></th>
-          <th><?php echo __( '# Teams', 'bblm' ); ?></th>
-        </tr>
-      </thead>
-      <tbody>
 
-<?php
     //Grabs a list of 'posts' from the bblm_cup CPT
     $cpostsarg = array(
       'post_type' => 'bblm_race',
       'numberposts' => -1,
-      'orderby' => 'post_title',
-      'order' => 'ASC',
+			'meta_key' => 'race_rstatus',
+      'orderby' => array(
+				'meta_value' => 'DESC',
+				'post_title' => 'ASC',
+			),
 			'meta_query' => array(
 				array(
 					'key'     => 'race_hide',
@@ -80,8 +72,45 @@ class BBLM_CPT_Race {
     if ( $cposts = get_posts( $cpostsarg ) ) {
       $zebracount = 1;
       $race = new BBLM_CPT_Race;
+			$rstatus = 0;
+			$is_first = 1;
+			$current_status = 0;
 
       foreach( $cposts as $c ) {
+
+				if ($c->race_rstatus !== $rstatus) {
+					$rstatus = $c->race_rstatus;
+					if (1 !== $is_first) {
+						echo '</tbody>';
+						echo '</table>';
+						$zebracount = 1;
+					}
+					$is_first = 1;
+				}
+
+				if (1 == $rstatus) {
+					$status_title = "Available Races";
+				}
+				else {
+					$status_title = "Inactive Races";
+				}
+
+
+				if ( $is_first  ) {
+?>
+					<h3 class="bblm-table-caption"><?php echo $status_title; ?></h3>
+					<table class="bblm_table">
+						<thead>
+							<tr>
+								<th><?php echo __( 'Icon', 'bblm' ); ?></th>
+								<th><?php echo __( 'Race Name', 'bblm' ); ?></th>
+								<th><?php echo __( '# Teams', 'bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+<?php
+					$is_first = 0;
+				}
 
         if ($zebracount % 2) {
           echo '<tr>';
@@ -103,7 +132,7 @@ class BBLM_CPT_Race {
     } //end of if
     else {
 
-      echo '<p>' . __( 'No Championship cups have been created for this league', 'bblm' ) . '</p>';
+      echo '<p>' . __( 'No Races have been created for this league', 'bblm' ) . '</p>';
 
     } //end of else
 

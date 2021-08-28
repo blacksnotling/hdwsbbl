@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * For front end functions reloated to the CPT see the includes/post-types directory
  *
  * @class 		BBLM_Meta_Race
- * @version		1.0
+ * @version		1.1
  * @package		BBowlLeagueMan/Admin/CPT/Meta_Boxes
  * @category	Class
  * @author 		blacksnotling
@@ -44,6 +44,14 @@ class BBLM_Meta_Race {
 			'high'
 		);
 		add_meta_box(
+			'race_rstatus',
+			__( 'Race Status', 'bblm' ),
+			array( $this, 'render_meta_boxes_rstatus' ),
+			'bblm_race',
+			'side',
+			'high'
+		);
+		add_meta_box(
 			'race_stars',
 			__( 'Star Players available for this Race', 'bblm' ),
 			array( $this, 'render_meta_boxes_stars' ),
@@ -71,6 +79,24 @@ class BBLM_Meta_Race {
 <?php
 
  }
+
+ /**
+  * The HTML for the Race Status Meta Box
+  *
+  */
+  function render_meta_boxes_rstatus( $post ) {
+
+    $meta = get_post_custom( $post->ID );
+		$rstatus = ! isset( $meta['race_rstatus'][0] ) ? '1' : $meta['race_rstatus'][0];
+    wp_nonce_field( basename( __FILE__ ), 'race_rstatus' );
+ ?>
+ <select name="race_rstatusddown" id="race_rstatusddown">
+	 <option value="1"<?php selected( $rstatus, 1 ) ?>>Available</option>
+	 <option value="0"<?php selected( $rstatus, 0 ) ?>>No longer available</option>
+ </select>
+ <?php
+
+  }
 
  /**
   * The HTML for the Star Players Meta Box(s)
@@ -140,6 +166,7 @@ class BBLM_Meta_Race {
  			return $post_id;
  		}
  		$meta['race_rrcost'] = ( isset( $_POST['race_rr'] ) ? esc_textarea( $_POST['race_rr'] ) : '' );
+		$meta['race_rstatus'] = ( isset( $_POST['race_rstatusddown'] ) ? (int) $_POST['race_rstatusddown'] : '' );
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}
@@ -148,7 +175,7 @@ class BBLM_Meta_Race {
 		//First we delete eveything for this race
 		$deletestarsql = 'DELETE FROM `'.$wpdb->prefix.'race2star` WHERE `r_id` = ' . $post->ID;
 		$wpdb->get_row( $deletestarsql );
-		
+
 		$p = 1;
 		$race2starsqla = array();
 		while ($p <= $_POST['bblm_numofplayers']){
