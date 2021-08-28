@@ -315,7 +315,7 @@ class BBLM_CPT_Race {
  	  public function display_stars_available( $ID ) {
  			global $wpdb;
 
-			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'player X WHERE X.p_id = S.p_id AND S.r_id = ' . $ID . ' AND X.p_status = 1 ORDER BY X.p_name ASC';
+			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_id = S.p_id AND S.r_id = ' . $ID . ' AND X.p_status = 1 ORDER BY X.p_name ASC';
 			if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
 				$zebracount = 1;
 ?>
