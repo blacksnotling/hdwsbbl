@@ -53,6 +53,10 @@ if(isset($_POST['bblm_star_submit'])) {
 		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$bblm_player_id.'\', \''.$bblm_submission.'\', \'p_\')';
 		$wpdb->query($bblmmappingsql);
 
+		//Update the stars WPID value
+		$playerupdatesql = 'UPDATE  `'.$wpdb->prefix.'player` SET  `WPID` =  "'.$bblm_submission.'" WHERE  `p_id` ='.$bblm_player_id;
+		$wpdb->query( $playerupdatesql );
+
 		$success = 1;
 		$addattempt = 1;
 		do_action( 'bblm_post_submission' );
