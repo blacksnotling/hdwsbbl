@@ -79,7 +79,7 @@ class BBLM_Add_Match_Player {
 					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
 						if ( "on" == $_POST['bblm_pcng'.$p] ) {
 
-							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
+							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 
 							if ( '1' !== $_POST['bblm_mng'.$p] ) {
 								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
@@ -570,8 +570,9 @@ class BBLM_Add_Match_Player {
 							<th><?php echo __( 'MA', 'bblm' ); ?></th>
 							<th><?php echo __( 'ST', 'bblm' ); ?></th>
 							<th><?php echo __( 'AG', 'bblm' ); ?></th>
+              <th><?php echo __( 'PA', 'bblm' ); ?></th>
 							<th><?php echo __( 'AV', 'bblm' ); ?></th>
-							<th><?php echo __( 'SPP', 'bblm' ); ?></th>
+							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'COST', 'bblm' ); ?></th>
 							<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 							<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
@@ -605,8 +606,9 @@ class BBLM_Add_Match_Player {
 						echo '<td>' . $pl->p_name . '</td>';
 						echo '<td><input type="text" name="bblm_pma'.$p.'" size="3" value="'.$pl->p_ma.'" maxlength="2" /></td>';
 						echo '<td><input type="text" name="bblm_pst'.$p.'" size="3" value="'.$pl->p_st.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" /></td>';
+						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" />+</td>';
+            echo '<td><input type="text" name="bblm_ppa'.$p.'" size="3" value="'.$pl->p_pa.'" maxlength="2" />+</td>';
+						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" />+</td>';
 						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_spp.'" maxlength="2" /></td>';
 						echo '<td><input type="text" name="bblm_pcost'.$p.'" size="7" value="'.$pl->p_cost.'" maxlength="7"';
 						if ( $incmade ) {
@@ -656,23 +658,35 @@ class BBLM_Add_Match_Player {
 							</thead>
 							<tbody>
 								<tr>
-									<td>20,000</td>
-									<td><?php echo __( 'New Skill', 'bblm' ); ?></td>
+									<td>10,000</td>
+									<td><?php echo __( 'Randomly selected Primary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td>30,000</td>
-									<td><?php echo __( 'Double Skill', 'bblm' ); ?></td>
+									<td>20,000</td>
+									<td><?php echo __( 'Chosen Primary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr>
-									<td>30,000</td>
-									<td>+MA <?php echo __( 'or', 'bblm' ); ?> +AV</td>
+									<td>20,000</td>
+									<td><?php echo __( 'Randomly selected Secondary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr class="alternate">
 									<td>40,000</td>
-									<td>+AG</td>
+									<td><?php echo __( 'Chosen Secondary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr>
-									<td>50,000</td>
+									<td>10,000</td>
+									<td>+AV</td>
+								</tr>
+                <tr class="alternate">
+                  <td>20,000</td>
+                  <td>+MA <?php echo __( 'OR', 'bblm' ); ?> +PA</td>
+                </tr>
+                <tr>
+                  <td>40,000</td>
+                  <td>+AG</td>
+                </tr>
+                <tr class="alternate">
+									<td>80,000</td>
 									<td>+ST</td>
 								</tr>
 							</tbody>
