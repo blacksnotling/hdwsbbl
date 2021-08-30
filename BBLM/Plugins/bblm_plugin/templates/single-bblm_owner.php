@@ -21,6 +21,7 @@
           if ( ( $has_team > 0 ) && ( $has_played > 0 ) ) { ?>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Career Performance', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table">
               <thead>
               <tr>
@@ -45,10 +46,12 @@
               </tr>
               </tbody>
             </table>
+          </div>
 
             <?php $own->individual_stat_desc(); ?>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Their Teams', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -70,8 +73,10 @@
                 <?php $own->team_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Races Used', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -93,8 +98,10 @@
                 <?php $own->race_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Season Performance', 'bblm'); ?>S</h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -116,8 +123,10 @@
                 <?php $own->season_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Competition Performance', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -139,8 +148,10 @@
                 <?php $own->comp_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Championship Cup Performance', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_sortable">
               <thead>
               <tr>
@@ -162,8 +173,10 @@
                 <?php $own->cup_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Top Players They Coached', 'bblm'); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
             <table class="bblm_table bblm_expandable">
               <thead>
                 <tr>
@@ -178,6 +191,7 @@
             <?php $own->player_stat_tbl_row() ?>
               </tbody>
             </table>
+          </div>
 
             <h3><?php echo __( 'Star Players Hired', 'bblm'); ?></h3>
             <?php $own->star_stat_tbl_row() ?>

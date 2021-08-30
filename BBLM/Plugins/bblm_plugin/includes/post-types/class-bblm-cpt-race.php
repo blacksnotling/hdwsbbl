@@ -240,6 +240,7 @@ class BBLM_CPT_Race {
 				$zebracount = 1;
 				$legacy = $this->get_race_status( $ID );
 ?>
+			<div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm-tbl-scrollable">
 				<thead>
 					<tr>
@@ -298,6 +299,7 @@ class BBLM_CPT_Race {
 ?>
 						</tbody>
 					</table>
+				</div>
 <?php
 			}
 			else {
@@ -319,6 +321,7 @@ class BBLM_CPT_Race {
 			if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
 				$zebracount = 1;
 ?>
+					<div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table bblm-tbl-scrollable">
 						<thead>
 							<tr>
@@ -359,6 +362,7 @@ class BBLM_CPT_Race {
 ?>
 						</tbody>
 					</table>
+				</div>
 <?php
 			}
 

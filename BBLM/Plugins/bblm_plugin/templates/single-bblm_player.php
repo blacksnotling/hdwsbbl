@@ -84,7 +84,7 @@
             bblm_display_legacy_notice( "Player" );
           }
 ?>
-
+          <div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table">
 						<thead>
 							<tr>
@@ -131,6 +131,7 @@
 							</tr>
 						</tbody>
 					</table>
+        </div>
 
 					<div class="bblm_details bblm_player_description">
 						<?php the_content(); ?>
@@ -197,8 +198,8 @@
 						$trans = new BBLM_CPT_Transfer;
 						$trans->display_player_transfer_history();
 	?>
-
 						<h3 class="bblm-table-caption"><?php echo __( 'Player Statistics', 'bblm' ); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
 						<table class="bblm_table">
 							<thead>
 	 							<tr>
@@ -236,8 +237,10 @@
 	?>
 							</tbody>
 						</table>
+          </div>
 
             <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -279,8 +282,10 @@
 ?>
 						</tbody>
 					</table>
+        </div>
 
           <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+          <div role="region" aria-labelledby="Caption01" tabindex="0">
           <table class="bblm_table">
             <thead>
               <tr>
@@ -322,8 +327,10 @@
 ?>
           </tbody>
         </table>
+      </div>
 
 						<h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+            <div role="region" aria-labelledby="Caption01" tabindex="0">
 						<table class="bblm_table">
 							<thead>
 								<tr>
@@ -364,13 +371,14 @@
 ?>
 							</tbody>
 						</table>
+          </div>
 
 					<h3 class="bblm-table-caption"><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
+          <div role="region" aria-labelledby="Caption01" tabindex="0">
 						<table class="bblm_table bblm_sortable bblm_expandable">
 							<thead>
 								<tr>
-									<th><?php echo __( 'Date', 'bblm' ); ?></th>
-									<th><?php echo __( 'Opponant', 'bblm' ); ?></th>
+									<th><?php echo __( 'Vs', 'bblm' ); ?></th>
 									<th><?php echo __( 'TD', 'bblm' ); ?></th>
 									<th><?php echo __( 'CAS', 'bblm' ); ?></th>
 									<th><?php echo __( 'INT', 'bblm' ); ?></th>
@@ -400,12 +408,11 @@
 								else {
 									echo '<tr class="bblm_tbl_alt">';
 								}
-                echo '<td>'. bblm_get_match_link_date( $pm->MWPID ) .'</td>';
 								if ( $pm->TAid == $pd->t_id ) {
-                  echo '<td>' . bblm_get_team_link( $pm->TB ) . '</td>';
+                  echo '<td>' . bblm_get_team_link( $pm->TB ) . '<br />' . bblm_get_match_link_date( $pm->MWPID ) . '</td>';
 								}
 								else {
-									echo '<td>' . bblm_get_team_link( $pm->TA ) . '</td>';
+									echo '<td>' . bblm_get_team_link( $pm->TA ) . '<br />' . bblm_get_match_link_date( $pm->MWPID ) . '</td>';
 								}
 								echo '<td>';
 								if ( 0 == $pm->mp_td ) {
@@ -485,6 +492,7 @@
 ?>
 							</tbody>
 						</table>
+          </div>
 
 						<h3><?php echo __( 'Awards list in full', 'bblm' ); ?></h3>
 <?php

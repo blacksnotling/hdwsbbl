@@ -84,7 +84,7 @@
 							//print the end of a table tag unless this was the first table
 							if ($lastdiv !== $stand->div_name) {
 								if (!TRUE == $is_first_div) {
-									print("</table>\n");
+									print("</table></div>\n");
 									$zebracount = 1;
 								}
 								//cross division hardcode
@@ -95,7 +95,7 @@
                   echo '<h3>' . __( '** Old World Confrence (OWC) **', 'bblm') . '</h3>';
 								}
 								//end cross division hard code
-								print("<h4>".$stand->div_name."</h4>\n<table class=\"bblm_table\">\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
+								print("<h4>".$stand->div_name."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\"><table class=\"bblm_table\">\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
 							}
 							$lastdiv = $stand->div_name;
 							if ($zebracount % 2) {
@@ -110,7 +110,7 @@
 							$is_first_div = 0;
 							$zebracount++;
 						}
-						print("</table>\n");
+						print("</table></div>\n");
 ?>
         <h4><?php echo __( 'Key','bblm'); ?></h4>
 				<ul class="bblm_expandablekey">
@@ -253,6 +253,7 @@
 				if ($teamstats = $wpdb->get_results($teamstatssql)) {
 					$zebracount = 1;
 ?>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
@@ -304,7 +305,9 @@
 <?php
 						$zebracount++;
 					}
-					print("	</tbody>\n</table>\n");
+          echo '</tbody>';
+          echo '</table>';
+          echo '</div>';
 				} //end of if team-stats SQL
 
 				///////////////////////////

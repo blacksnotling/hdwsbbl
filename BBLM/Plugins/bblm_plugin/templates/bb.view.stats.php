@@ -95,6 +95,7 @@
 				$seasonsql = 'SELECT C.sea_id, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.sea_id ORDER BY C.sea_id DESC';
 				if ( $seasonstats = $wpdb->get_results( $seasonsql ) ) {
 ?>
+          <div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table bblm_sortable">
 						<thead>
 							<tr>
@@ -121,10 +122,12 @@
 					}
 					echo '</tbody>';
 					echo '</table>';
+          echo '</div>';
 
 				}
 ?>
         <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Compeition','bblm'); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 <?php
 				$compsql = 'SELECT C.WPID AS CWPID, COUNT(m_id) AS NUMMAT, SUM(M.m_tottd) AS TD, SUM(M.m_totcas) AS CAS, SUM(M.m_totcomp) AS COMP, SUM(M.m_totint) AS MINT FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 GROUP BY C.c_id ORDER BY C.c_sdate DESC';
 				if ($compstats = $wpdb->get_results($compsql)) {
@@ -140,12 +143,13 @@
 						print("		<td>" . bblm_get_competition_link( $ss->CWPID ) . "</td>\n		<td>".$ss->NUMMAT."</td>\n		<td>".$ss->TD."</td>\n		<td>".$ss->CAS."</td>\n		<td>".$ss->COMP."</td>\n		<td>".$ss->MINT."</td>\n	</tr>\n");
 						$zebracount++;
 					}
-					print("	</tbody>\n</table>\n");
+					print("	</tbody>\n</table>\n</div>");
 
 				}
 ?>
 
         <h3 class="bblm-table-caption"><?php echo __( 'Statistics Breakdown by Teams','bblm'); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 				<table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
@@ -192,6 +196,7 @@
 ?>
 				</tbody>
 				</table>
+      </div>
 
         <h3><?php echo __( 'Detailed Statistics Breakdown','bblm'); ?></h3>
 				<p><?php echo __( 'This page only covers the high level statistics. The following links will take you through to more detailed pages.','bblm' ); ?></p>
@@ -219,6 +224,7 @@
 				$statsql = 'SELECT P.WPID AS PID, T.WPID, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
         echo '<h4>' . __('Top Players (Active)','bblm' ) . '</h4>';
 				if ($topstats = $wpdb->get_results($statsql)) {
+          echo '<div role="region" aria-labelledby="Caption01" tabindex="0">';
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
@@ -248,7 +254,7 @@
 						}
 						$zebracount++;
 					}
-					print("</table>\n");
+					print("</table></div>\n");
 				}
 				else {
 					print("	<div class=\"bblm_info\">\n		<p>No active players have scored any Star Player Points!</p>\n	</div>\n");
@@ -261,6 +267,7 @@
         echo '<h4>' . __('Top Players (All Time)','bblm' ) . '</h4>';
         echo '<p>' . __('Players who are <strong>highlighted</strong> are still active in the League.','bblm' ) . '</p>';
 				if ($topstats = $wpdb->get_results($statsql)) {
+          echo '<div role="region" aria-labelledby="Caption01" tabindex="0">';
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">SPP</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
@@ -297,7 +304,7 @@
 						}
 						$zebracount++;
 					}
-					print("</table>\n");
+					print("</table>\n</div>");
 				}
 				else {
 					print("	<div class=\"bblm_info\">\n		<p>Nobody has scored any Star Player Points!</p>\n	</div>\n");
