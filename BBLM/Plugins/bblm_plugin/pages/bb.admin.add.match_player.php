@@ -426,49 +426,58 @@ class BBLM_Add_Match_Player {
 
 				<h3><?php echo __( 'Increase Reference', 'bblm' ); ?></h3>
 
-				<table cellspacing="0" class="widefat" style="width:360px;">
+				<table cellspacing="0" class="widefat">
 					<thead>
 						<tr>
-							<th><?php echo __( 'SPPS', 'bblm' ); ?></th>
-							<th><?php echo __( 'Title', 'bblm' ); ?></th>
-							<th><?php echo __( 'Increases', 'bblm' ); ?></th>
+							<th><?php echo __( 'Advancements Table', 'bblm' ); ?></th>
+							<th><?php echo __( 'Randomly select a Primary Skill', 'bblm' ); ?></th>
+							<th><?php echo __( 'Choose a Primary Skill or randomly select a Secondary Skill', 'bblm' ); ?></th>
+              <th><?php echo __( 'Choose a Secondary Skill', 'bblm' ); ?></th>
+              <th><?php echo __( 'Randomly select a Characteristic Improvement', 'bblm' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><?php echo __( '0 - 5', 'bblm' ); ?></td>
-							<td><?php echo __( 'Rookie', 'bblm' ); ?></td>
-							<td><?php echo __( 'None', 'bblm' ); ?></td>
+							<td><?php echo __( 'Experienced (first advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '3 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '6 - 15', 'bblm' ); ?></td>
-							<td><?php echo __( 'Experienced', 'bblm' ); ?></td>
-							<td><?php echo __( 'One', 'bblm' ); ?></td>
+              <td><?php echo __( 'Veteran (second advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '4 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '14 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '20 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr>
-							<td><?php echo __( '16 - 30', 'bblm' ); ?></td>
-							<td><?php echo __( 'Veteran', 'bblm' ); ?></td>
-							<td><?php echo __( 'Two', 'bblm' ); ?></td>
+              <td><?php echo __( 'Emerging Star (third advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '24 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '31 - 50', 'bblm' ); ?></td>
-							<td><?php echo __( 'Emerging Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Three', 'bblm' ); ?></td>
+              <td><?php echo __( 'Star (fourth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '16 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '22 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '28 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr>
-							<td><?php echo __( '51 - 75', 'bblm' ); ?></td>
-							<td><?php echo __( 'Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Four', 'bblm' ); ?></td>
+              <td><?php echo __( 'Super Star (fifth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '10 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '26 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '32 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '76 - 175', 'bblm' ); ?></td>
-							<td><?php echo __( 'Super Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Five', 'bblm' ); ?></td>
-						</tr>
-						<tr>
-							<td><?php echo __( '175+', 'bblm' ); ?></td>
-							<td><?php echo __( 'Legend', 'bblm' ); ?></td>
-							<td><?php echo __( 'Six', 'bblm' ); ?></td>
+              <td><?php echo __( 'Legend (sixth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '15 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '30 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '40 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '50 SPP', 'bblm' ); ?></td>
 						</tr>
 					</tbody>
 				</table>
@@ -646,6 +655,64 @@ class BBLM_Add_Match_Player {
 							<p class="submit"><input type="submit" name="bblm_player_increase" tabindex="4" value="Submit Player Changes" title="Submit Player Changes"/ class="button-primary" /></p>
 							<?php wp_nonce_field( basename( __FILE__ ), 'bblm_player_changes' ); ?>
 						</form>
+
+            <h3><?php echo __( 'Increase Reference', 'bblm' ); ?></h3>
+
+    				<table cellspacing="0" class="widefat">
+    					<thead>
+    						<tr>
+    							<th><?php echo __( 'Advancements Table', 'bblm' ); ?></th>
+    							<th><?php echo __( 'Randomly select a Primary Skill', 'bblm' ); ?></th>
+    							<th><?php echo __( 'Choose a Primary Skill or randomly select a Secondary Skill', 'bblm' ); ?></th>
+                  <th><?php echo __( 'Choose a Secondary Skill', 'bblm' ); ?></th>
+                  <th><?php echo __( 'Randomly select a Characteristic Improvement', 'bblm' ); ?></th>
+    						</tr>
+    					</thead>
+    					<tbody>
+    						<tr>
+    							<td><?php echo __( 'Experienced (first advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '3 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Veteran (second advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '4 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '14 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr>
+                  <td><?php echo __( 'Emerging Star (third advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '24 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Star (fourth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '16 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '22 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '28 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr>
+                  <td><?php echo __( 'Super Star (fifth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '10 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '26 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '32 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Legend (sixth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '15 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '30 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '40 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '50 SPP', 'bblm' ); ?></td>
+    						</tr>
+    					</tbody>
+    				</table>
 
 						<h3><?php echo __( 'Cost Reference', 'bblm' ); ?></h3>
 
