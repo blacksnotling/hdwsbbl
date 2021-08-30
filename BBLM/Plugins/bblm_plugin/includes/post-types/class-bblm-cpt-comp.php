@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_CPT_Comp {
@@ -314,6 +314,7 @@ class BBLM_CPT_Comp {
 			 $numgames = count( $brackets );
 			 if ( 7 == $numgames ) {
 ?>
+		<h3 class="bblm-table-caption"><?php echo __( 'Tournament Standings', 'bblm' ); ?></h3>
 		 <table class="bblm_table bblm_brackets">
 			 <tr>
 				 <th><?php echo $brackets[0][1]; ?></th>
