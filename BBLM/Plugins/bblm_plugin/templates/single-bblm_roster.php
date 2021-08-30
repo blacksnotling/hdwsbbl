@@ -25,6 +25,7 @@ html * {
 	margin:0;
 	padding:0;
 }
+@media screen {
 body {
 	font-size: 0.8em;
 }
@@ -97,6 +98,26 @@ a, a:link, a:visited {
 a:hover, a:active {
 	color: #d9101d;
 	text-decoration: underline;
+}
+} /* end of media screen */
+@media print {
+	#footer {
+		display: none;
+	}
+	#maincontent {
+		width: 100%;
+	}
+	body {
+		font-size: 0.7em;
+	}
+	td.bblm_tbl_image {
+		vertical-align: middle;
+	}
+	.bblm_tbl_skills {
+		text-align:left;
+		font-size: smaller;
+	}
+
 }
 </style>
 </head>
