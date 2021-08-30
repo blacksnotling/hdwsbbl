@@ -79,7 +79,7 @@ class BBLM_Add_Match_Player {
 					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
 						if ( "on" == $_POST['bblm_pcng'.$p] ) {
 
-							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
+							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_cspp` = \''.(int) $_POST['bblm_pspp'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 
 							if ( '1' !== $_POST['bblm_mng'.$p] ) {
 								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
@@ -312,7 +312,7 @@ class BBLM_Add_Match_Player {
 <?php
 					}
 ?>
-							<td><input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="<?php echo $pl->p_cspp; ?>" /><?php echo $pl->p_spp; ?></td>
+							<td><input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="<?php echo $pl->p_cspp; ?>" /><?php echo $pl->p_cspp; ?></td>
 							<td><input type="checkbox" name="bblm_plyd<?php echo $p; ?>" checked="checked" /></td>
 							<td><input type="checkbox" name="mng<?php echo $p; ?>" /></td>
               <td><input type="checkbox" name="ptr<?php echo $p; ?>" /></td>
@@ -618,7 +618,7 @@ class BBLM_Add_Match_Player {
 						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" />+</td>';
             echo '<td><input type="text" name="bblm_ppa'.$p.'" size="3" value="'.$pl->p_pa.'" maxlength="2" />+</td>';
 						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" />+</td>';
-						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_spp.'" maxlength="2" /></td>';
+						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_cspp.'" maxlength="2" /></td>';
 						echo '<td><input type="text" name="bblm_pcost'.$p.'" size="7" value="'.$pl->p_cost.'" maxlength="7"';
 						if ( $incmade ) {
 							echo ' style="background-color:#5EFB6E"';
@@ -917,7 +917,7 @@ class BBLM_Add_Match_Player {
 					//Update the players career SPP
 					bblm_update_player( $pssp[0], $compcounts );
           //Update the players current Spp
-          $currentsppsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cspp` = \''.$pssp['spp'].'\' WHERE `p_id` = \''.$pssp[0].'\' LIMIT 1';
+          $currentsppsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cspp` = `p_cspp`+\''.$pssp['spp'].'\' WHERE `p_id` = \''.$pssp[0].'\' LIMIT 1';
           $wpdb->query( $currentsppsql );
 
 				}
