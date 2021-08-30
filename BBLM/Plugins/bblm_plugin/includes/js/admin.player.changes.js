@@ -7,7 +7,8 @@ function UpdateSPP(theId) {
   var tot_int = document.getElementById('bblm_int' + theId).value * 2;
   var tot_def = document.getElementById('bblm_def' + theId).value * 1;
   var tot_mvp = document.getElementById('bblm_mvp' + theId).value * 4;
-  var tot_spp = tot_td + tot_cas + tot_comp + tot_int + tot_mvp + tot_ttm + tot_def;
+  var tot_ptn = document.getElementById('bblm_ptn' + theId).value;
+  var tot_spp = tot_td + tot_cas + tot_comp + tot_int + tot_mvp + tot_ttm + tot_def + tot_ptn;
   document.getElementById('bblm_spp'+ theId).value = tot_spp;
 
   /*		Highlight and fill Increase Box		*/
