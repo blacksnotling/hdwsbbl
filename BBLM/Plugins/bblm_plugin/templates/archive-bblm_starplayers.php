@@ -84,7 +84,8 @@
 			if ($starplayerlist = $wpdb->get_results($starplayerlistsql)) {
 				//If any Star Players are found
 ?>
-				<h3 class="bblm-table-caption"><?php echo __( 'The Stars', 'bblm' ); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
+        <h3 class="bblm-table-caption"><?php echo __( 'The Stars', 'bblm' ); ?></h3>
 				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
@@ -124,6 +125,7 @@
 ?>
 					</tbody>
 				</table>
+      </div>
 
 <?php
 			} //End of if any Star Players are found

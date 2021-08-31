@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.1.1
  */
 
 class BBLM_CPT_Team {
@@ -73,6 +73,7 @@ class BBLM_CPT_Team {
 		if ($teamstats = $wpdb->get_results($teamistingsql)) {
 			$zebracount = 1;
 		?>
+			<div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm_sortable">
 			<thead>
 				<tr>
@@ -123,6 +124,7 @@ class BBLM_CPT_Team {
 			} //end of foreach
 			echo '</tbody>';
 			echo '</table>';
+			echo '</div>';
 		}
 		else {
 

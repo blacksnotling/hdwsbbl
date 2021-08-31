@@ -47,7 +47,8 @@
 }
 ?>
 
-			<table class="bblm_table">
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+      <table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_name">Position</th>
 					<th class="bblm_tbl_stat">MA</th>
@@ -87,6 +88,7 @@
 					<td><?php  echo number_format($pd->p_cost); ?>gp</td>
 				</tr>
 			</table>
+    </div>
 <?php
     if ( !$legacy ) {
       //Only show this is the star is active
@@ -113,7 +115,8 @@
 			//The Star has played a match so continue
 ?>
       <h3 class="bblm-table-caption"><?php echo __( 'League Statistics','bblm' ); ?></h3>
-			<table class="bblm_table">
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+      <table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Career Total</th>
 					<th class="bblm_tbl_stat">Pld</th>
@@ -135,6 +138,7 @@
 					<td><?php echo $s->SPP; ?></th>
 				</tr>
 			</table>
+    </div>
 <?php
 
 			//Breakdown by team
@@ -143,6 +147,7 @@
 				$zebracount = 1;
 ?>
       <h3 class="bblm-table-caption"><?php echo __( 'Team Breakdown','bblm' ); ?></h3>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Playing for</th>
@@ -167,7 +172,7 @@
 					print ("					<td><a href=\"" . get_post_permalink( $s->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
 					$zebracount++;
 				}
-				print("			</table>\n");
+				print("			</table></div>\n");
 			}
 
 			// -- KILLER --
@@ -189,6 +194,7 @@
 
 ?>
     <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+    <div role="region" aria-labelledby="Caption01" tabindex="0">
     <table class="bblm_table">
       <thead>
         <tr>
@@ -230,8 +236,10 @@
 ?>
   </tbody>
   </table>
+</div>
 
   <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+  <div role="region" aria-labelledby="Caption01" tabindex="0">
   <table class="bblm_table">
     <thead>
       <tr>
@@ -273,8 +281,10 @@
 ?>
     </tbody>
     </table>
+  </div>
 
     <h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+    <div role="region" aria-labelledby="Caption01" tabindex="0">
     <table class="bblm_table">
       <thead>
         <tr>
@@ -315,8 +325,10 @@
 ?>
   </tbody>
 </table>
+</div>
 
       <h3 class="bblm-table-caption"><?php echo __( 'Recent Matches','bblm' ); ?></h3>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm_sortable bblm_expandable">
 				<thead>
 				<tr>
@@ -413,6 +425,7 @@
       }
       echo '</tbody>';
       echo '</table>';
+      echo '</div>';
     }
 
 
