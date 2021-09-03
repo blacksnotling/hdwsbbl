@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * For front end functions reloated to the CPT see the includes/post-types directory
  *
  * @class 		BBLM_Meta_Race
- * @version		1.1
+ * @version		1.2
  * @package		BBowlLeagueMan/Admin/CPT/Meta_Boxes
  * @category	Class
  * @author 		blacksnotling
@@ -50,14 +50,6 @@ class BBLM_Meta_Race {
 			'bblm_race',
 			'side',
 			'high'
-		);
-		add_meta_box(
-			'race_srules',
-			__( 'Race Special Rules', 'bblm' ),
-			array( $this, 'render_meta_boxes_srules' ),
-			'bblm_race',
-			'normal',
-			'low'
 		);
 		add_meta_box(
 			'race_stars',
@@ -104,21 +96,6 @@ class BBLM_Meta_Race {
  <?php
 
   }
-
-	/**
-	 * The HTML for the Race Spoecial Rules Meta Box
-	 *
-	 */
-	 function render_meta_boxes_srules( $post ) {
-
-		 $meta = get_post_custom( $post->ID );
-		 $srules = ! isset( $meta['race_srules'][0] ) ? '' : $meta['race_srules'][0];
-	?>
-	<label for="race_srules"><?php echo __('Race Special Rules','bblm' ) ?></label><br />
-	<textarea id="race_srules" name="race_srules" rows="4" cols="70" placeholder="<?php echo __('Any special rules for the race can be added here.','bblm' ) ?>"><?php echo esc_textarea( $srules ); ?></textarea>
-	<?php
-
-	 }
 
  /**
   * The HTML for the Star Players Meta Box(s)
@@ -189,7 +166,6 @@ class BBLM_Meta_Race {
  		}
  		$meta['race_rrcost'] = ( isset( $_POST['race_rr'] ) ? esc_textarea( $_POST['race_rr'] ) : '' );
 		$meta['race_rstatus'] = ( isset( $_POST['race_rstatusddown'] ) ? (int) $_POST['race_rstatusddown'] : '' );
-		$meta['race_srules'] = ( isset( $_POST['race_srules'] ) ? esc_textarea( $_POST['race_srules'] ) : '' );
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}

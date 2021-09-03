@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.5
+ * @version		1.6
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -334,6 +334,18 @@ class BBLM_Post_types {
          'rewrite' => array( 'slug' => 'competition-post' ),
        )
      );
+
+		 // Competitions Tax race traits
+		 register_taxonomy(
+			 'race_rules',
+			 'bblm_race',
+			 array(
+				 'label' => __( 'Special Rules', 'bblm' ),
+				 'sort' => true,
+				 'args' => array( 'orderby' => 'term_order' ),
+				 'rewrite' => array( 'slug' => 'race-rules' ),
+			 )
+		 );
 
    }
 

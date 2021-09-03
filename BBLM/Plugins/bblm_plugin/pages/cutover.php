@@ -1862,8 +1862,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li>mp_ttm, mp_ktm, mp_etm, mp_def, mp_ptn, mp_foul</li>
 			<li>All at the end</li>
 			<li>int (1) except mp_foul (2)</li>
-			<li>default: 0</li>			
+			<li>default: 0</li>
 		</ul>
+
+		<h2>V1.13 -> V1.14</h2>
+		<p>Add all the releevant race traits to the races</p>
 
 
 </form>
