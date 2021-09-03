@@ -4,7 +4,7 @@ Theme URI: Theme URI: https://github.com/blacksnotling/HDWSBBL
 Author: The HDWSBBL
 Author URI: https://www.hdwsbbl.co.uk
 Description: Crownstar is the new custom theme of the HDWSBBL
-Version: 1.1
+Version: 1.1.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: crownstar
@@ -795,6 +795,9 @@ a:hover .page-title:hover {
   background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
   background-position: 0 0, 100%, 0 0, 100%;
   background-attachment: local, local, scroll, scroll;
+}
+table.bblm_brackets td {
+  vertical-align: middle;
 }
 
 /* Media Queries */
