@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Race {
@@ -159,6 +159,18 @@ class BBLM_CPT_Race {
     return $teamnum;
 
   }// end of get_number_teams()
+
+	/**
+   * Returns true if a race has "low cost linesmen"
+   *
+   * @param wordpress $query
+   * @return bool true / false
+   */
+   public static function is_race_cheap_linos( $ID ) {
+
+		 return has_term( 'low-cost-linemen', 'race_rules', $ID );
+
+   }// end of is_race_cheap_linos()
 
 	/**
    * Returns the cost of Rerolls for a race

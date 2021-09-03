@@ -24,6 +24,8 @@ if (isset($_POST['bblm_team_add'])) {
 
 	$bblm_safe_input['pname'] = wp_filter_nohtml_kses($_POST['bblm_pname']);
 
+	$low_cost_linos = 0;
+
 	if ($_POST['bblm_free'] > 0) {
 		//Player is a JM or a merc and so does not cost the team anything!
 		if ("2" == $_POST['bblm_free']) {
@@ -49,6 +51,11 @@ if (isset($_POST['bblm_team_add'])) {
 			$bblm_guid = $pd->guid;
 			$bblm_tname = $pd->t_name;
 		}
+	}
+
+	//checks to see if the teams race has low cost linesmen
+	if ( BBLM_CPT_Race::is_race_cheap_linos( (int) $_POST['bblm_rid'] ) ) {
+		$low_cost_linos = 1;
 	}
 
 	//call the options from the table
@@ -82,6 +89,7 @@ if (isset($_POST['bblm_team_add'])) {
 			$bblm_posav = $posd->pos_av;
 			$bblm_posskills = $posd->pos_skills;
 			$bblm_poscost = $posd->pos_cost;
+			$bblm_default = $posd->pos_freebooter;
 		}
 	}
 	if ($freebooter) {
@@ -130,7 +138,16 @@ if (isset($_POST['bblm_team_add'])) {
 	Start of SQL Generation
 	*/
 
-	$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$bblm_poscost.'\'';
+	//If the player being added is permanent, the teams race has "low cost Linos", and the position is the default (freebooter) then the cost is zero
+	//It is dones this way so the cost is still taken out of the treasury below
+	if ( $bblm_default && $low_cost_linos ) {
+		$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+0';
+	}
+	else {
+		$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$bblm_poscost.'\'';
+	}
+
+
 
 	if (0 == $freebooter) {
 		$teamupdatesql .= ', `t_bank` = t_bank-\''.$bblm_poscost.'\' ';
@@ -148,6 +165,10 @@ if (isset($_POST['bblm_team_add'])) {
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
+
+		if ( $bblm_default && $low_cost_linos ) {
+			$bblm_poscost = 0;
+		}
 
 		$playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$_POST['bblm_tid'].'\', \''.$bblm_posid.'\', \''.$bblm_page_title.'\', \''.$_POST['bblm_pnum'].'\', \''.$bblm_posma.'\', \''.$bblm_posst.'\', \''.$bblm_posag.'\', \''.$bblm_pospa.'\', \''.$bblm_posav.'\', \'0\', \''.$bblm_posskills.'\', \'0\', \'none\', \''.$bblm_poscost.'\', \''.$bblm_poscost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
 
