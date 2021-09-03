@@ -126,13 +126,18 @@
 					</tbody>
 				</table>
 
+<?php
+        if ( get_the_content() != "No Report Filed Yet" ) {
+          //Only display the match report if one is entered
+?>
 				<h3><?php echo __( 'Match Report', 'bblm' ); ?></h3>
 				<div class="bblm_details bblm_match_report">
 					<?php the_content(); ?>
 				</div>
 
-
 <?php
+        }
+
 				//Display match Trivia if something is present
 				if ( "" !== $m->m_trivia ) {
 ?>
