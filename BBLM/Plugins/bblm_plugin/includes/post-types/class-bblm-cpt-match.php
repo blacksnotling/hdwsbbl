@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.1.1
  */
 
 class BBLM_CPT_Match {
@@ -39,6 +39,7 @@ class BBLM_CPT_Match {
 	 if ( $recmatch = $wpdb->get_results( $recentmatchsql ) ) {
 		 $zebracount = 1;
 
+		 echo '<div role="region" aria-labelledby="Caption01" tabindex="0">';
 		 echo '<table class="bblm_table">';
 		 echo '<thead>';
 		 echo '<tr>';
@@ -72,7 +73,7 @@ class BBLM_CPT_Match {
 			 $zebracount++;
 		 }
 
-		 echo '</tbody></table>';
+		 echo '</tbody></table></div>';
 
 	 }
 	 else {

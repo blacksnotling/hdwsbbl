@@ -30,7 +30,7 @@ Template Name: List Teams
 <?php
 	//Start of Custom content
 	//$teamsql = "SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team AS R, $wpdb->posts AS P, '.$wpdb->prefix.'bb2wp AS J WHERE R.t_id = J.tid AND P.ID = J.pid AND J.prefix = 't_' AND R.t_show = 1 ORDER BY t_name ASC";
-	$teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
+	$teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
 
 
 if ($teams = $wpdb->get_results($teamsql)) {
@@ -45,7 +45,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 			$current_type = $team->type_name;
 			$current_status = $team->t_active;
 			if (1 !== $is_first_type) {
-				print(" 	</tbody>\n	</table>\n");
+				print(" 	</tbody>\n	</table>\n</div>");
 				$zebracount = 1;
 			}
 			$is_first_type = 1;
@@ -53,7 +53,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		if ($team->t_active !== $current_status) {
 			$current_status = $team->t_active;
 			if (1 !== $is_first_status) {
-				print(" 	</tbody>\n	</table>\n");
+				print(" 	</tbody>\n	</table>\n</div>");
 				$zebracount = 1;
 			}
 			$is_first_status = 1;
@@ -68,12 +68,12 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 
 		if ($is_first_type) {
-			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_type = 0;
 			$is_first_status = 0;
 		}
 		if ($is_first_status) {
-			print("<h4 class=\"bblm-table-caption\">".$status_title."</h4>\n  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h4 class=\"bblm-table-caption\">".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_status = 0;
 		}
 		if ($zebracount % 2) {
@@ -91,7 +91,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		else {
 			BBLM_CPT_Race::display_race_icon( $team->r_id, 'icon' );
 		}
-		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>" . bblm_get_race_name( $team->r_id ) . "</td>\n		<td>".number_format($team->t_tv)."gp</td>\n");
+		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>" . bblm_get_race_name( $team->r_id ) . "</td>\n		<td>".number_format($team->t_ctv)."gp</td>\n");
 
 
 		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
@@ -118,7 +118,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 		$zebracount++;
 	}
-	print("	</tbody>\n	</table>\n");
+	print("	</tbody>\n	</table>\n</div>");
 }
 else {
 	print("	<div class=\"bblm_info\">\n		<p>There are no Teams currently set-up!</p>	</div>\n");

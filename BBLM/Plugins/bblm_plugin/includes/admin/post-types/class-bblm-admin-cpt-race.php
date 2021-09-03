@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Admin_CPT_Race {
@@ -42,6 +42,7 @@ class BBLM_Admin_CPT_Race {
   		'title' => __( 'Race Name', 'bblm' ),
   		'cost' => __( 'ReRoll Cost', 'bblm' ),
       'position' => __( 'Positions', 'bblm' ),
+			'status' => __( 'Status', 'bblm' ),
   	);
 
   	return $columns;
@@ -97,6 +98,23 @@ class BBLM_Admin_CPT_Race {
 
 
       break;
+
+			// If displaying the 'status' column.
+			case 'status' :
+
+				$rstatus = get_post_meta( $post_id, 'race_rstatus', true );
+				if ( (int) $rstatus ) {
+
+					echo __( 'Available', 'bblm' );
+				}
+
+				else {
+
+					echo __( 'Retired', 'bblm' );
+
+				}
+
+			break;
 
       // Break out of the switch statement for anything else.
       default :

@@ -14,7 +14,6 @@
 		</header><!-- .page-header -->
 
     <div class="entry-content">
-      <h3 class="bblm-table-caption"><?php echo __( 'Available races', 'bblm' ); ?></h3>
 <?php    BBLM_CPT_Race::get_race_listing();    ?>
 
     </div><!-- .entry-content -->

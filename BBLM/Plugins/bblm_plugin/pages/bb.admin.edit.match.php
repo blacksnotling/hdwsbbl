@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.0
+ * @version   1.0.1
  */
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -380,7 +380,7 @@ class BBLM_Edit_Match {
 		 //ininalise array to hold the details of the Matches
 
 ?>
-		<div class="notice"><p><strong><?php echo __( 'You cannot edit the following via this page: TV, Treasury, Fan Factor', 'bblm' ); ?></strong></p></div>
+		<div class="notice"><p><strong><?php echo __( 'You cannot edit the following via this page: TV, Treasury, Dedicated Fans', 'bblm' ); ?></strong></p></div>
 		<div class="form-wrap">
 			<form id="bblm_edit_match_form" method="post" action="" class="validate">
 			<?php wp_nonce_field( 'bblm_edit_match', 'bblm_matches' ); ?>
@@ -535,7 +535,7 @@ class BBLM_Edit_Match {
 							<td class="comment"><?php echo __( 'The weather during the match', 'bblm' ); ?></td>
 						</tr>
 						<tr>
-							<td><?php echo __( 'Change in Fan Factor', 'bblm' ); ?></td>
+							<td><?php echo __( 'Change in Dedicated Fans', 'bblm' ); ?></td>
 							<td>
 								<select id="tAff" name="tAff">
 									<option value="0" <?php selected( $mA->mt_ff, 0 ) ?>>No change</option>
@@ -551,7 +551,7 @@ class BBLM_Edit_Match {
 									<option value="2" <?php selected( $mB->mt_ff, 1 ) ?>>Plus One (+1)</option>
 								</select>
 							</td>
-							<td class="comment"><?php echo __( 'Changing these will <strong>NOT</strong> update the teams Fan Factor', 'bblm' ); ?></td>
+							<td class="comment"><?php echo __( 'Changing these will <strong>NOT</strong> update the teams Dedicated Fans', 'bblm' ); ?></td>
 						</tr>
 						<tr>
 							<td><?php echo __( 'Coach Comments', 'bblm' ); ?></td>
@@ -672,7 +672,7 @@ class BBLM_Edit_Match {
 					$bblm_submit_tB['result'] = "D";
 				}
 
-				//Calculate change in FF
+				//Calculate change in FF / Dedicated Fans
 				$bblm_ff_options = array('0','-1','+1');
 				$bblm_submit_tA['ff'] = $bblm_ff_options[$bblm_submit_tA['ff']];
 				$bblm_submit_tB['ff'] = $bblm_ff_options[$bblm_submit_tB['ff']];

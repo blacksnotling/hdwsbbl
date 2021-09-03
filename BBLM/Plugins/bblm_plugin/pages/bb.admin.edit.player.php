@@ -262,7 +262,7 @@ else if (isset($_POST['bblm_mhistory_update'])) {
 	while ($p <= $pmax){
 
 		if ("on" == $_POST['bblm_pchng'.$p]) {
-			$mhistoryupdatesql[$p] = 'UPDATE `'.$wpdb->prefix.'match_player` SET `mp_td` = \''.$_POST['bblm_ptd'.$p].'\', `mp_cas` = \''.$_POST['bblm_pcas'.$p].'\', `mp_comp` = \''.$_POST['bblm_pcomp'.$p].'\', `mp_int` = \''.$_POST['bblm_pint'.$p].'\', `mp_mvp` = \''.$_POST['bblm_pmvp'.$p].'\', `mp_spp` = \''.$_POST['bblm_pspp'.$p].'\', `mp_mng` = \''.$_POST['bblm_pmng'.$p].'\', `mp_inj` = \''.$_POST['bblm_pinj'.$p].'\', `mp_inc` = \''.$_POST['bblm_pinc'.$p].'\' WHERE `m_id` = '.$_POST['bblm_mid'.$p].' AND `p_id` = '.$_POST['bblm_pid'].' LIMIT 1';
+			$mhistoryupdatesql[$p] = 'UPDATE `'.$wpdb->prefix.'match_player` SET `mp_td` = \''.$_POST['bblm_ptd'.$p].'\', `mp_cas` = \''.$_POST['bblm_pcas'.$p].'\', `mp_comp` = \''.$_POST['bblm_pcomp'.$p].'\', `mp_int` = \''.$_POST['bblm_pint'.$p].'\', `mp_def` = \''.$_POST['bblm_pdef'.$p].'\', `mp_mvp` = \''.$_POST['bblm_pmvp'.$p].'\', `mp_spp` = \''.$_POST['bblm_pspp'.$p].'\', `mp_mng` = \''.$_POST['bblm_pmng'.$p].'\', `mp_inj` = \''.$_POST['bblm_pinj'.$p].'\', `mp_ttm` = \''.$_POST['bblm_pttm'.$p].'\', `mp_ktm` = \''.$_POST['bblm_pktm'.$p].'\', `mp_etm` = \''.$_POST['bblm_petm'.$p].'\', `mp_ptn` = \''.$_POST['bblm_pptn'.$p].'\', `mp_foul` = \''.$_POST['bblm_pfoul'.$p].'\', `mp_inc` = \''.$_POST['bblm_pinc'.$p].'\' WHERE `m_id` = '.$_POST['bblm_mid'.$p].' AND `p_id` = '.$_POST['bblm_pid'].' LIMIT 1';
 		} //end of if changed
 		$p++;
 	}
@@ -278,7 +278,7 @@ else if (isset($_POST['bblm_mhistory_update'])) {
 		print("<div id=\"updated\" class=\"updated fade\"><p>Changes have been made. you may wish to check the SPP points held on the player profile.</p></div>");
 	}
 	else {
-	print("<div id=\"updated\" class=\"updated fade\"><p>Something fucked up, try again!</p></div>");
+	print("<div id=\"updated\" class=\"updated fade\"><p>Something went wrong, try again!</p></div>");
 	}
 
 
@@ -296,7 +296,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 	print("<hr />");*/
 
 	//Generate SQL
-	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
+	$pstatupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_num` = \''.$_POST['bblm_posnum'].'\', `p_ma` = \''.$_POST['bblm_pma'].'\', `p_st` = \''.$_POST['bblm_pst'].'\', `p_ag` = \''.$_POST['bblm_pag'].'\', `p_pa` = \''.$_POST['bblm_ppa'].'\', `p_av` = \''.$_POST['bblm_pav'].'\', `p_spp` = \''.$_POST['bblm_pspp'].'\', `p_cspp` = \''.$_POST['bblm_pcspp'].'\', `p_skills` = \''.$_POST['bblm_pskills'].'\', `p_mng` = \''.$_POST['bblm_mng'].'\', `p_tr` = \''.$_POST['bblm_tr'].'\', `p_injuries` = \''.$_POST['bblm_pinj'].'\', `p_cost` = \''.$_POST['bblm_pcost'].'\', `p_cost_ng` = \''.$_POST['bblm_pcostng'].'\', `p_status` = \''.$_POST['bblm_status'].'\' WHERE `p_id` = \''.$_POST['bblm_pid'].'\' LIMIT 1';
 	//print("<p>".$pstatupdatesql."</p>");
 
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
@@ -350,12 +350,14 @@ else if ("edit" == $_GET['action']) {
 				<th><label for="bblm_pma">MA</label></th>
 				<th><label for="bblm_pst">ST</label></th>
 				<th><label for="bblm_pag">AG</label></th>
+				<th><label for="bblm_pag">PA</label></th>
 				<th><label for="bblm_pav">AV</label></th>
-				<th><label for="bblm_psp">SPP</label></th>
-				<th>SPP (from DB)</th>
+				<th><label for="bblm_psp">Total SPP</label></th>
+				<th><label for="bblm_pcspp">SPP for Skills</label></th>
 				<th><label for="bblm_pcost">Cost</label></th>
 				<th><label for="bblm_pcostng">Cost NG</label></th>
 				<th><label for="bblm_mng">MNG?</label></th>
+				<th><label for="bblm_tr">Temp Retired?</label></th>
 				<th><label for="bblm_status">Status</label></th>
 			</tr>
 			</thead>
@@ -366,13 +368,15 @@ else if ("edit" == $_GET['action']) {
 				<td><input type="text" name="bblm_posnum" size="2" value="<?php print($p->p_num); ?>" id="bblm_posnum" maxlength="2"></td>
 				<td><input type="text" name="bblm_pma" size="2" value="<?php print($p->p_ma); ?>" id="bblm_pma" maxlength="2"></td>
 				<td><input type="text" name="bblm_pst" size="2" value="<?php print($p->p_st); ?>" id="bblm_pst" maxlength="2"></td>
-				<td><input type="text" name="bblm_pag" size="2" value="<?php print($p->p_ag); ?>" id="bblm_pag" maxlength="2"></td>
-				<td><input type="text" name="bblm_pav" size="2" value="<?php print($p->p_av); ?>" id="bblm_pav" maxlength="2"></td>
+				<td><input type="text" name="bblm_pag" size="2" value="<?php print($p->p_ag); ?>" id="bblm_pag" maxlength="2">+</td>
+				<td><input type="text" name="bblm_ppa" size="2" value="<?php print($p->p_pa); ?>" id="bblm_ppa" maxlength="2">+</td>
+				<td><input type="text" name="bblm_pav" size="2" value="<?php print($p->p_av); ?>" id="bblm_pav" maxlength="2">+</td>
 				<td><input type="text" name="bblm_pspp" size="2" value="<?php print($p->p_spp); ?>" id="bblm_pspp" maxlength="3"></td>
-				<td><?php print($psppfdb); ?></td>
+				<td><input type="text" name="bblm_pcspp" size="2" value="<?php print($p->p_cspp); ?>" id="bblm_pcspp" maxlength="3"></td>
 				<td><input type="text" name="bblm_pcost" size="5" value="<?php print($p->p_cost); ?>" id="bblm_pcost" maxlength="7"></td>
 				<td><input type="text" name="bblm_pcostng" size="5" value="<?php print($p->p_cost_ng); ?>" id="bblm_costng" maxlength="7"></td>
 				<td><input type="text" name="bblm_mng" size="2" value="<?php print($p->p_mng); ?>" id="bblm_pmng" maxlength="1"></td>
+				<td><input type="text" name="bblm_tr" size="2" value="<?php print($p->p_tr); ?>" id="bblm_tr" maxlength="1"></td>
 				<td><input type="text" name="bblm_status" size="2" value="<?php print($p->p_status); ?>" id="bblm_pstatus" maxlength="1"></td>
 			</tr>
 			</tbody>
@@ -416,14 +420,19 @@ else if ("edit" == $_GET['action']) {
 					<th>TD</th>
 					<th>CAS</th>
 					<th>INT</th>
+					<th>Deflection</th>
 					<th>COMP</th>
 					<th>MVP</th>
+					<th>Throw Team Mate</th>
+					<th>Kick Team Mate</th>
+					<th>Eat Team Mate</th>
+					<th>Prayers to Nuffle</th>
+					<th>Fouls</th>
 					<th>SPP</th>
-					<th>MNG?</th>
+					<th>MNG</th>
 					<th>Increases</th>
 					<th>Injuries</th>
 					<th>Changed?</th>
-					<th>View</th>
 				</tr>
 				</thead>
 				</tbody>
@@ -432,24 +441,25 @@ else if ("edit" == $_GET['action']) {
 ?>
 				<tr>
 <?php
-					if ($pm->TAid == $pm->t_id) {
-							print("					<td>vs <strong>".$pm->TB."</strong> - (".date("d.m.y", $pm->mdate).")</td>\n");
-					}
-					else {
-						print("					<td>vs <strong>".$pm->TA."</strong> - (".date("d.m.y", $pm->mdate).")</td>\n");
-					}
 ?>
+					<td><?php echo bblm_get_match_link_score( $pm->MWPID, 0 ); ?></td>
 					<td><input type="text" name="bblm_ptd<?php print($count); ?>" size="3" value="<?php print($pm->mp_td); ?>" id="bblm_ptd" maxlength="2"></td>
 					<td><input type="text" name="bblm_pcas<?php print($count); ?>" size="3" value="<?php print($pm->mp_cas); ?>" id="bblm_pcas" maxlength="2"></td>
 					<td><input type="text" name="bblm_pint<?php print($count); ?>" size="3" value="<?php print($pm->mp_int); ?>" id="bblm_pint" maxlength="2"></td>
+					<td><input type="text" name="bblm_pdef<?php print($count); ?>" size="3" value="<?php print($pm->mp_def); ?>" id="bblm_pdef" maxlength="2"></td>
 					<td><input type="text" name="bblm_pcomp<?php print($count); ?>" size="3" value="<?php print($pm->mp_comp); ?>" id="bblm_pma" maxlength="2"></td>
 					<td><input type="text" name="bblm_pmvp<?php print($count); ?>" size="3" value="<?php print($pm->mp_mvp); ?>" id="bblm_pmvp" maxlength="2"></td>
+					<td><input type="text" name="bblm_pttm<?php print($count); ?>" size="3" value="<?php print($pm->mp_ttm); ?>" id="bblm_pttm" maxlength="2"></td>
+					<td><input type="text" name="bblm_pktm<?php print($count); ?>" size="3" value="<?php print($pm->mp_ktm); ?>" id="bblm_pktm" maxlength="2"></td>
+					<td><input type="text" name="bblm_petm<?php print($count); ?>" size="3" value="<?php print($pm->mp_etm); ?>" id="bblm_petm" maxlength="2"></td>
+					<td><input type="text" name="bblm_pptn<?php print($count); ?>" size="3" value="<?php print($pm->mp_ptn); ?>" id="bblm_pptn" maxlength="2"></td>
+					<td><input type="text" name="bblm_pfoul<?php print($count); ?>" size="3" value="<?php print($pm->mp_foul); ?>" id="bblm_pfoul" maxlength="2"></td>
 					<td><input type="text" name="bblm_pspp<?php print($count); ?>" size="3" value="<?php print($pm->mp_spp); ?>" id="bblm_pspp" maxlength="2"></td>
 					<td><input type="text" name="bblm_pmng<?php print($count); ?>" size="3" value="<?php print($pm->mp_mng); ?>" id="bblm_pmng" maxlength="2"></td>
 					<td><input type="text" name="bblm_pinc<?php print($count); ?>" size="10" value="<?php print($pm->mp_inc); ?>" id="bblm_pinc"></td>
 					<td><input type="text" name="bblm_pinj<?php print($count); ?>" size="10" value="<?php print($pm->mp_inj); ?>" id="bblm_pinj"></td>
 					<td><input type="checkbox" name="bblm_pchng<?php print($count); ?>"></td>
-					<td><?php echo bblm_get_match_link_score( $pm->MWPID, 0 ); ?><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->MWPID); ?>" id="bblm_mid" maxlength="5"></td>
+					<td><input type="hidden" name="bblm_mid<?php print($count); ?>" size="5" value="<?php print($pm->MWPID); ?>" id="bblm_mid" maxlength="5"></td>
 				</tr>
 <?php
 				$count++;

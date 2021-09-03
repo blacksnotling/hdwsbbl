@@ -9,7 +9,7 @@
   	 * @author 		Blacksnotling
   	 * @category 	Admin
   	 * @package 	BBowlLeagueMan/Admin
-  	 * @version   1.0
+  	 * @version   1.1
   	 */
 
   	class BBLM_Player_AddBulk {
@@ -94,7 +94,8 @@
               $bblm_guid .= $bblm_page_slug;
 
               $teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$position_cost.'\'';
-            	$teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost.'\' ';
+              $teamupdatesql .= ', `t_ctv` = t_ctv+\''.$position_cost.'\' ';
+              $teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost.'\' ';
               $teamupdatesql .= ' WHERE `t_id` = '.$addbulk_team.' LIMIT 1';
 
               $my_post = array(

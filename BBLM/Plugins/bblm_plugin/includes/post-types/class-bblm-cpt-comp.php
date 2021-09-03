@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.3.1
  */
 
 class BBLM_CPT_Comp {
@@ -90,6 +90,7 @@ class BBLM_CPT_Comp {
 		if ( $compl = $wpdb->get_results( $complistingsql ) ) {
 			$zebracount = 1;
 ?>
+			<div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm_sortable">
 				<thead>
 					<tr>
@@ -122,6 +123,7 @@ class BBLM_CPT_Comp {
 			} //end of foreach
 			echo '</tbody>';
 			echo '</table>';
+			echo '</div>';
 		}
 		else {
 
@@ -314,6 +316,7 @@ class BBLM_CPT_Comp {
 			 $numgames = count( $brackets );
 			 if ( 7 == $numgames ) {
 ?>
+		<h3 class="bblm-table-caption"><?php echo __( 'Tournament Standings', 'bblm' ); ?></h3>
 		 <table class="bblm_table bblm_brackets">
 			 <tr>
 				 <th><?php echo $brackets[0][1]; ?></th>

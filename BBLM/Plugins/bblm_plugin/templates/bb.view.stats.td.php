@@ -111,6 +111,7 @@
 					if ($period_alltime) {
 						print("	<p>Players who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
+          echo '<div role="region" aria-labelledby="Caption01" tabindex="0">';
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th class=\"bblm_tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
@@ -146,7 +147,7 @@
 						}
 						$zebracount++;
 					}
-					print("</table>\n");
+					print("</table></div>\n");
 				}
 				else {
 					print("	<div class=\"bblm_info\">\n		<p>No players have scored any Touchdowns!</p>\n	</div>\n");
@@ -165,6 +166,7 @@
 					if ($period_alltime) {
 						print("	<p>Teams who are <strong>highlighted</strong> are still active in the League.</p>\n");
 					}
+          echo '<div role="region" aria-labelledby="Caption01" tabindex="0">';
 					print("<table class=\"bblm_table bblm_expandable\">\n	<tr>\n		<th class=\"bblm_tbl_stat\">#</th>\n		<th>Team</th>\n		<th class=\"bblm_tbl_name\">Race</th>\n		<th class=\"bblm_tbl_stat\">TD</th>\n		</tr>\n");
 					$zebracount = 1;
 					$prevvalue = 0;
@@ -200,7 +202,7 @@
 						}
 						$zebracount++;
 					}
-					print("</table>\n");
+					print("</table>\n</div>");
 				}
 				else {
 					print("	<div class=\"bblm_info\">\n		<p>No Teams have scored any Touchdowns!</p>\n	</div>\n");

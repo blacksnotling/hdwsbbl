@@ -65,7 +65,7 @@ if(isset($_POST['bblm_team_submit'])) {
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_ctv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -239,10 +239,11 @@ function UpdateBankTv() {
 
 	var tot_apoc = document.getElementById('bblm_tapoc').value * 50000;
 
-	var tot_tv = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
+	var tot_tv = tot_rr + tot_cl + tot_ac + tot_apoc;
+	var tot_tvb = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
 	document.getElementById('bblm_ttv').value = tot_tv;
 
-	var tot_bank = 1000000 - tot_tv;
+	var tot_bank = 1000000 - tot_tvb;
 	document.getElementById('bblm_tbank').value = tot_bank;
 }
 </script>
@@ -259,7 +260,7 @@ function UpdateBankTv() {
 		@ <?php print($rrcost); ?> each</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
+		<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 		  <td><input type="text" name="bblm_tff" size="2" value="0" maxlength="2" id="bblm_tff" class="small-text"/><br />
 		  @ 10,000 each</td>
 	</tr>

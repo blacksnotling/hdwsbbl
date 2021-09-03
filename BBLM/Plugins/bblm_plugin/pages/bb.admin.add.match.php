@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version 	2.0
+ * @version 	2.1
  */
 //Check the file is not being accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -152,7 +152,7 @@ class BBLM_Add_Match {
 					'ping_status' => 'closed'
 				);
 
-				//Calculate change in FF
+				//Calculate change in FF / Dedicated Fans
 				$bblm_ff_options = array('0','-1','+1');
 				$bblm_submit_tA['ff'] = $bblm_ff_options[$bblm_submit_tA['ff']];
 				$bblm_submit_tB['ff'] = $bblm_ff_options[$bblm_submit_tB['ff']];
@@ -174,7 +174,7 @@ class BBLM_Add_Match {
 
 					// Update teams (FF and bank)
 
-					//Calculate values of the Fan Factor changes
+					//Calculate values of the Dedicated Fans changes
 					$teamA_ffinc = $bblm_submit_tA['ff']*10000;
 					$teamB_ffinc = $bblm_submit_tB['ff']*10000;
 
@@ -214,6 +214,9 @@ class BBLM_Add_Match {
 
 					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tA['id'], $bblm_submit_match['comp'], $tAdiv );
 					BBLM_Admin_CPT_Competition::update_team_standings( $bblm_submit_tB['id'], $bblm_submit_match['comp'], $tBdiv );
+
+					bblm_update_tv( $bblm_submit_tA['id'] );
+					bblm_update_tv( $bblm_submit_tB['id'] );
 
 					//If we get to this point we have added a match to the database!
 					$sucess = TRUE;
@@ -335,7 +338,7 @@ class BBLM_Add_Match {
 			if ( "F" == $_POST['bblm_mtype'] ) {
 
 				//We are using a fixture to base the match record off
-				$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.WPID AS TA, R.WPID AS TB, T.t_tv AS TAtv, R.t_tv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
+				$fixturedetailsql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, F.c_id, D.div_name, D.div_id, T.WPID AS TA, R.WPID AS TB, T.t_ctv AS TAtv, R.t_ctv AS TBtv, T.stad_id, F.f_teamA, F.f_teamB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.div_id = D.div_id AND F.f_complete = 0 AND F.f_id = '.$f_id;
 
  				//check the fixture exists
 				if ( $fixturedetail = $wpdb->get_results( $fixturedetailsql ) ) {
@@ -627,7 +630,7 @@ class BBLM_Add_Match {
 								<td class="comment"><?php echo __( 'The weather during the match', 'bblm' ); ?></td>
 							</tr>
 							<tr>
-								<td><?php echo __( 'Change in Fan Factor', 'bblm' ); ?></td>
+								<td><?php echo __( 'Change in Dedicated Fans', 'bblm' ); ?></td>
 								<td>
 									<select id="tAff" name="tAff">
 										<option value="0" selected=selected><?php echo __( 'No change', 'bblm' ); ?></option>
@@ -643,7 +646,7 @@ class BBLM_Add_Match {
 										<option value="2"><?php echo __( 'Plus One (+1)', 'bblm' ); ?></option>
 									</select>
 								</td>
-								<td class="comment"><?php echo __( 'The change in FF (if any).', 'bblm' ); ?></td>
+								<td class="comment"><?php echo __( 'The change in Dedicated Fans (if any).', 'bblm' ); ?></td>
 							</tr>
 							<tr>
 								<td><?php echo __( 'Coach Comments', 'bblm' ); ?></td>

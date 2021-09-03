@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version 	2.0
+ * @version 	2.1
  */
 //Check the file is not being accessed directly
  if ( ! defined( 'ABSPATH' ) ) {
@@ -79,7 +79,7 @@ class BBLM_Add_Match_Player {
 					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
 						if ( "on" == $_POST['bblm_pcng'.$p] ) {
 
-							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
+							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_cspp` = \''.(int) $_POST['bblm_pspp'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 
 							if ( '1' !== $_POST['bblm_mng'.$p] ) {
 								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
@@ -228,7 +228,7 @@ class BBLM_Add_Match_Player {
 <?php
 
 			$noplayers = 0;
-			$playersql = 'SELECT P.p_id, P.t_id, P.p_spp, X.post_title AS p_name, P.p_num, T.t_name from '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X where P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND P.t_id = T.t_id AND (P.t_id = '.$tAid.' OR P.t_id = '.$tBid.') AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num';
+			$playersql = 'SELECT P.p_id, P.t_id, P.p_spp, P.p_cspp, X.post_title AS p_name, P.p_num, T.t_name from '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X where P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND P.t_id = T.t_id AND (P.t_id = '.$tAid.' OR P.t_id = '.$tBid.') AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num';
 			if ( $playerlist = $wpdb->get_results( $playersql ) ) {
 				//initiate var for count
 
@@ -255,13 +255,20 @@ class BBLM_Add_Match_Player {
 							<th><?php echo __( 'Name', 'bblm' ); ?></th>
 							<th><?php echo __( 'TD', 'bblm' ); ?></th>
 							<th><?php echo __( 'COMP', 'bblm' ); ?></th>
+              <th><?php echo __( 'Throw TM', 'bblm' ); ?></th>
 							<th><?php echo __( 'CAS', 'bblm' ); ?></th>
 							<th><?php echo __( 'INT', 'bblm' ); ?></th>
+              <th><?php echo __( 'DEF', 'bblm' ); ?></th>
 							<th><?php echo __( 'MVP', 'bblm' ); ?></th>
+              <th><?php echo __( 'Kick TM', 'bblm' ); ?></th>
+              <th><?php echo __( 'Eat TM', 'bblm' ); ?></th>
+              <th><?php echo __( 'Fouls', 'bblm' ); ?></th>
+              <th><?php echo __( 'Prayer TN', 'bblm' ); ?></th>
 							<th><?php echo __( 'Gained SPP', 'bblm' ); ?></th>
-							<th><?php echo __( 'Prev SPP', 'bblm' ); ?></th>
+							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'Played?', 'bblm' ); ?></th>
 							<th><?php echo __( 'MNG?', 'bblm' ); ?></th>
+              <th><?php echo __( 'Temp Retire?', 'bblm' ); ?></th>
 							<th><?php echo __( 'Increase', 'bblm' ); ?></th>
 							<th><?php echo __( 'Injury', 'bblm' ); ?></th>
 						</tr>
@@ -284,24 +291,31 @@ class BBLM_Add_Match_Player {
 							<td><?php echo $pl->p_name; ?></td>
 							<td><input type="text" name="bblm_td<?php echo $p; ?>" id="bblm_td<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_comp<?php echo $p; ?>" id="bblm_comp<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
+              <td><input type="text" name="bblm_ttm<?php echo $p; ?>" id="bblm_ttm<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_cas<?php echo $p; ?>" id="bblm_cas<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_int<?php echo $p; ?>" id="bblm_int<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
+              <td><input type="text" name="bblm_def<?php echo $p; ?>" id="bblm_def<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_mvp<?php echo $p; ?>" id="bblm_mvp<?php echo $p; ?>" size="3" value="0" maxlength="1" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_ktm<?php echo $p; ?>" id="bblm_ktm<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_etm<?php echo $p; ?>" id="bblm_etm<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_foul<?php echo $p; ?>" id="bblm_foul<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_ptn<?php echo $p; ?>" id="bblm_ptn<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
 <?php
 					if ( $ccounts ) {
 ?>
-							<td style="background-color:#ddd;"><input type="text" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" /></td>
+							<td style="background-color:#99ebff;"><input type="text" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" /></td>
 <?php
 					}
 					else {
 ?>
-							<td style="background-color:#ddd;"><input type="hidden" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" />N/A</td>
+							<td style="background-color:#99ebff;"><input type="hidden" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" />N/A</td>
 <?php
 					}
 ?>
-							<td><input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="<?php echo $pl->p_spp; ?>" /><?php echo $pl->p_spp; ?></td>
+							<td><input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="<?php echo $pl->p_cspp; ?>" /><?php echo $pl->p_cspp; ?></td>
 							<td><input type="checkbox" name="bblm_plyd<?php echo $p; ?>" checked="checked" /></td>
 							<td><input type="checkbox" name="mng<?php echo $p; ?>" /></td>
+              <td><input type="checkbox" name="ptr<?php echo $p; ?>" /></td>
 <?php
 					if ( $ccounts ) {
 ?>
@@ -346,9 +360,14 @@ class BBLM_Add_Match_Player {
 							<th><?php echo __( 'Star', 'bblm' ); ?></th>
 							<th><?php echo __( 'TD', 'bblm' ); ?></th>
 							<th><?php echo __( 'COMP', 'bblm' ); ?></th>
+              <th><?php echo __( 'Throw TM', 'bblm' ); ?></th>
 							<th><?php echo __( 'CAS', 'bblm' ); ?></th>
 							<th><?php echo __( 'INT', 'bblm' ); ?></th>
+              <th><?php echo __( 'DEF', 'bblm' ); ?></th>
 							<th><?php echo __( 'MVP', 'bblm' ); ?></th>
+              <th><?php echo __( 'Kick TM', 'bblm' ); ?></th>
+              <th><?php echo __( 'Eat TM', 'bblm' ); ?></th>
+              <th><?php echo __( 'Fouls', 'bblm' ); ?></th>
 							<th><?php echo __( 'SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'Played?', 'bblm' ); ?></th>
 						</tr>
@@ -368,10 +387,15 @@ class BBLM_Add_Match_Player {
 							<td><select id="bblm_pid<?php echo $p; ?>" name="bblm_pid<?php echo $p; ?>"><?php echo $starlist; ?></select></td>
 							<td><input type="text" name="bblm_td<?php echo $p; ?>" id="bblm_td<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_comp<?php echo $p; ?>" id="bblm_comp<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
+              <td><input type="text" name="bblm_ttm<?php echo $p; ?>" id="bblm_ttm<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_cas<?php echo $p; ?>" id="bblm_cas<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_int<?php echo $p; ?>" id="bblm_int<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
+              <td><input type="text" name="bblm_def<?php echo $p; ?>" id="bblm_def<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_mvp<?php echo $p; ?>" id="bblm_mvp<?php echo $p; ?>" size="3" value="0" maxlength="1" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
-							<td style="background-color:#ddd;"><input type="text" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_ktm<?php echo $p; ?>" id="bblm_ktm<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_etm<?php echo $p; ?>" id="bblm_etm<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+              <td style="background-color:#ddd;"><input type="text" name="bblm_foul<?php echo $p; ?>" id="bblm_foul<?php echo $p; ?>" size="3" value="0" maxlength="1" /></td>
+							<td style="background-color:##99ebff;"><input type="text" name="bblm_spp<?php echo $p; ?>" id="bblm_spp<?php echo $p; ?>" size="3" value="0" maxlength="2" /></td>
 							<td>
 								<input type="checkbox" name="bblm_plyd<?php echo $p; ?>" />
 								<input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="0" />
@@ -402,49 +426,58 @@ class BBLM_Add_Match_Player {
 
 				<h3><?php echo __( 'Increase Reference', 'bblm' ); ?></h3>
 
-				<table cellspacing="0" class="widefat" style="width:360px;">
+				<table cellspacing="0" class="widefat">
 					<thead>
 						<tr>
-							<th><?php echo __( 'SPPS', 'bblm' ); ?></th>
-							<th><?php echo __( 'Title', 'bblm' ); ?></th>
-							<th><?php echo __( 'Increases', 'bblm' ); ?></th>
+							<th><?php echo __( 'Advancements Table', 'bblm' ); ?></th>
+							<th><?php echo __( 'Randomly select a Primary Skill', 'bblm' ); ?></th>
+							<th><?php echo __( 'Choose a Primary Skill or randomly select a Secondary Skill', 'bblm' ); ?></th>
+              <th><?php echo __( 'Choose a Secondary Skill', 'bblm' ); ?></th>
+              <th><?php echo __( 'Randomly select a Characteristic Improvement', 'bblm' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><?php echo __( '0 - 5', 'bblm' ); ?></td>
-							<td><?php echo __( 'Rookie', 'bblm' ); ?></td>
-							<td><?php echo __( 'None', 'bblm' ); ?></td>
+							<td><?php echo __( 'Experienced (first advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '3 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '6 - 15', 'bblm' ); ?></td>
-							<td><?php echo __( 'Experienced', 'bblm' ); ?></td>
-							<td><?php echo __( 'One', 'bblm' ); ?></td>
+              <td><?php echo __( 'Veteran (second advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '4 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '14 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '20 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr>
-							<td><?php echo __( '16 - 30', 'bblm' ); ?></td>
-							<td><?php echo __( 'Veteran', 'bblm' ); ?></td>
-							<td><?php echo __( 'Two', 'bblm' ); ?></td>
+              <td><?php echo __( 'Emerging Star (third advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '24 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '31 - 50', 'bblm' ); ?></td>
-							<td><?php echo __( 'Emerging Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Three', 'bblm' ); ?></td>
+              <td><?php echo __( 'Star (fourth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '16 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '22 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '28 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr>
-							<td><?php echo __( '51 - 75', 'bblm' ); ?></td>
-							<td><?php echo __( 'Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Four', 'bblm' ); ?></td>
+              <td><?php echo __( 'Super Star (fifth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '10 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '26 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '32 SPP', 'bblm' ); ?></td>
 						</tr>
 						<tr class="alternate">
-							<td><?php echo __( '76 - 175', 'bblm' ); ?></td>
-							<td><?php echo __( 'Super Star', 'bblm' ); ?></td>
-							<td><?php echo __( 'Five', 'bblm' ); ?></td>
-						</tr>
-						<tr>
-							<td><?php echo __( '175+', 'bblm' ); ?></td>
-							<td><?php echo __( 'Legend', 'bblm' ); ?></td>
-							<td><?php echo __( 'Six', 'bblm' ); ?></td>
+              <td><?php echo __( 'Legend (sixth advancement)', 'bblm' ); ?></td>
+							<td><?php echo __( '15 SPP', 'bblm' ); ?></td>
+							<td><?php echo __( '30 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '40 SPP', 'bblm' ); ?></td>
+              <td><?php echo __( '50 SPP', 'bblm' ); ?></td>
 						</tr>
 					</tbody>
 				</table>
@@ -463,6 +496,10 @@ class BBLM_Add_Match_Player {
 							<td><?php echo __( 'Passing Completion', 'bblm' ); ?></td>
 							<td>1</td>
 						</tr>
+            <tr>
+              <td><?php echo __( 'Throw Team Mate', 'bblm' ); ?></td>
+              <td>1</td>
+            </tr>
 						<tr class="alternate">
 							<td><?php echo __( 'Casuality', 'bblm' ); ?></td>
 							<td>2</td>
@@ -471,13 +508,17 @@ class BBLM_Add_Match_Player {
 							<td><?php echo __( 'Interception', 'bblm' ); ?></td>
 							<td>2</td>
 						</tr>
+            <tr>
+              <td><?php echo __( 'Deflection', 'bblm' ); ?></td>
+              <td>1</td>
+            </tr>
 						<tr class="alternate">
 							<td><?php echo __( 'Touchdown', 'bblm' ); ?></td>
 							<td>3</td>
 						</tr>
 						<tr>
 							<td><?php echo __( 'Most Valued Player (MVP)', 'bblm' ); ?></td>
-							<td>5</td>
+							<td>4</td>
 						</tr>
 					</tbody>
 				</table>
@@ -538,8 +579,9 @@ class BBLM_Add_Match_Player {
 							<th><?php echo __( 'MA', 'bblm' ); ?></th>
 							<th><?php echo __( 'ST', 'bblm' ); ?></th>
 							<th><?php echo __( 'AG', 'bblm' ); ?></th>
+              <th><?php echo __( 'PA', 'bblm' ); ?></th>
 							<th><?php echo __( 'AV', 'bblm' ); ?></th>
-							<th><?php echo __( 'SPP', 'bblm' ); ?></th>
+							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'COST', 'bblm' ); ?></th>
 							<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 							<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
@@ -573,9 +615,10 @@ class BBLM_Add_Match_Player {
 						echo '<td>' . $pl->p_name . '</td>';
 						echo '<td><input type="text" name="bblm_pma'.$p.'" size="3" value="'.$pl->p_ma.'" maxlength="2" /></td>';
 						echo '<td><input type="text" name="bblm_pst'.$p.'" size="3" value="'.$pl->p_st.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_spp.'" maxlength="2" /></td>';
+						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" />+</td>';
+            echo '<td><input type="text" name="bblm_ppa'.$p.'" size="3" value="'.$pl->p_pa.'" maxlength="2" />+</td>';
+						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" />+</td>';
+						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_cspp.'" maxlength="2" /></td>';
 						echo '<td><input type="text" name="bblm_pcost'.$p.'" size="7" value="'.$pl->p_cost.'" maxlength="7"';
 						if ( $incmade ) {
 							echo ' style="background-color:#5EFB6E"';
@@ -613,6 +656,64 @@ class BBLM_Add_Match_Player {
 							<?php wp_nonce_field( basename( __FILE__ ), 'bblm_player_changes' ); ?>
 						</form>
 
+            <h3><?php echo __( 'Increase Reference', 'bblm' ); ?></h3>
+
+    				<table cellspacing="0" class="widefat">
+    					<thead>
+    						<tr>
+    							<th><?php echo __( 'Advancements Table', 'bblm' ); ?></th>
+    							<th><?php echo __( 'Randomly select a Primary Skill', 'bblm' ); ?></th>
+    							<th><?php echo __( 'Choose a Primary Skill or randomly select a Secondary Skill', 'bblm' ); ?></th>
+                  <th><?php echo __( 'Choose a Secondary Skill', 'bblm' ); ?></th>
+                  <th><?php echo __( 'Randomly select a Characteristic Improvement', 'bblm' ); ?></th>
+    						</tr>
+    					</thead>
+    					<tbody>
+    						<tr>
+    							<td><?php echo __( 'Experienced (first advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '3 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Veteran (second advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '4 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '14 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr>
+                  <td><?php echo __( 'Emerging Star (third advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '6 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '12 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '18 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '24 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Star (fourth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '8 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '16 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '22 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '28 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr>
+                  <td><?php echo __( 'Super Star (fifth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '10 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '20 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '26 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '32 SPP', 'bblm' ); ?></td>
+    						</tr>
+    						<tr class="alternate">
+                  <td><?php echo __( 'Legend (sixth advancement)', 'bblm' ); ?></td>
+    							<td><?php echo __( '15 SPP', 'bblm' ); ?></td>
+    							<td><?php echo __( '30 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '40 SPP', 'bblm' ); ?></td>
+                  <td><?php echo __( '50 SPP', 'bblm' ); ?></td>
+    						</tr>
+    					</tbody>
+    				</table>
+
 						<h3><?php echo __( 'Cost Reference', 'bblm' ); ?></h3>
 
 						<table cellspacing="0" class="widefat" style="width:360px;">
@@ -624,23 +725,35 @@ class BBLM_Add_Match_Player {
 							</thead>
 							<tbody>
 								<tr>
-									<td>20,000</td>
-									<td><?php echo __( 'New Skill', 'bblm' ); ?></td>
+									<td>10,000</td>
+									<td><?php echo __( 'Randomly selected Primary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr class="alternate">
-									<td>30,000</td>
-									<td><?php echo __( 'Double Skill', 'bblm' ); ?></td>
+									<td>20,000</td>
+									<td><?php echo __( 'Chosen Primary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr>
-									<td>30,000</td>
-									<td>+MA <?php echo __( 'or', 'bblm' ); ?> +AV</td>
+									<td>20,000</td>
+									<td><?php echo __( 'Randomly selected Secondary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr class="alternate">
 									<td>40,000</td>
-									<td>+AG</td>
+									<td><?php echo __( 'Chosen Secondary skill', 'bblm' ); ?></td>
 								</tr>
 								<tr>
-									<td>50,000</td>
+									<td>10,000</td>
+									<td>+AV</td>
+								</tr>
+                <tr class="alternate">
+                  <td>20,000</td>
+                  <td>+MA <?php echo __( 'OR', 'bblm' ); ?> +PA</td>
+                </tr>
+                <tr>
+                  <td>40,000</td>
+                  <td>+AG</td>
+                </tr>
+                <tr class="alternate">
+									<td>80,000</td>
 									<td>+ST</td>
 								</tr>
 							</tbody>
@@ -677,7 +790,7 @@ class BBLM_Add_Match_Player {
 			$compcounts = (int) $_POST['bblm_ccounts'];
 			$finished = 0;
 
-			$playermatchsql = "INSERT INTO `".$wpdb->prefix."match_player` (`m_id`, `p_id`, `t_id`, `mp_td`, `mp_cas`, `mp_comp`, `mp_int`, `mp_mvp`, `mp_spp`, `mp_mng`, `mp_inj`, `mp_inc`, `mp_counts`) VALUES ";
+			$playermatchsql = "INSERT INTO `".$wpdb->prefix."match_player` (`m_id`, `p_id`, `t_id`, `mp_td`, `mp_cas`, `mp_comp`, `mp_int`, `mp_mvp`, `mp_spp`, `mp_mng`, `mp_inj`, `mp_inc`, `mp_counts`, `mp_ttm`, `mp_ktm`, `mp_etm`, `mp_def`, `mp_ptn`, `mp_foul`) VALUES ";
 			//Set initial values for loop
 			$p = 1;
 			$pmax = (int) $_POST['bblm_numofplayers'];
@@ -698,7 +811,8 @@ class BBLM_Add_Match_Player {
 
 					if ("on" == $_POST['bblm_plyd'.$p]) {
 
-						$playerplayed[$p] =  (int) $_POST['bblm_pid'.$p];
+						$playerplayed[$p][0] =  (int) $_POST['bblm_pid'.$p];
+            $playerplayed[$p]['spp'] =  (int) $_POST['bblm_spp'.$p];
 
 						//we only want a comma added for all but the first
 						if ( 1 !== $is_first_player ) {
@@ -721,6 +835,19 @@ class BBLM_Add_Match_Player {
 						else {
 							$mng[$p] = 0;
 						}
+            if ( isset( $_POST['ptr'.$p] ) ) {
+              $ptr[$p] = $_POST['ptr'.$p];
+
+              if ( "on" == $ptr[$p] ) {
+                $ptr[$p] = 1;
+              }
+              else {
+                $ptr[$p] = 0;
+              }
+            }//end of if mng is set
+            else {
+              $ptr[$p] = 0;
+            }
 
 						//Fill in blanks for Injuries and Increases
 						if ( empty( $_POST['bblm_injury'.$p] ) ) {
@@ -731,13 +858,17 @@ class BBLM_Add_Match_Player {
 						}
 
 						//generate the SQL
-						$playermatchsql .= '(\''. (int) $_POST['bblm_mid'].'\', \''. (int) $_POST['bblm_pid'.$p].'\', \''. (int) $_POST['bblm_tid'.$p].'\', \''. (int) $_POST['bblm_td'.$p].'\', \''. (int) $_POST['bblm_cas'.$p].'\', \''. (int) $_POST['bblm_comp'.$p].'\', \''. (int) $_POST['bblm_int'.$p].'\', \''. (int) $_POST['bblm_mvp'.$p].'\', \''. (int) $_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_injury'.$p] ) ).'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_increase'.$p] ) ).'\', \''.$compcounts.'\')';
+						$playermatchsql .= '(\''. (int) $_POST['bblm_mid'].'\', \''. (int) $_POST['bblm_pid'.$p].'\', \''. (int) $_POST['bblm_tid'.$p].'\', \''. (int) $_POST['bblm_td'.$p].'\', \''. (int) $_POST['bblm_cas'.$p].'\', \''. (int) $_POST['bblm_comp'.$p].'\', \''. (int) $_POST['bblm_int'.$p].'\', \''. (int) $_POST['bblm_mvp'.$p].'\', \''. (int) $_POST['bblm_spp'.$p].'\', \''. $mng[$p] .'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_injury'.$p] ) ).'\', \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_increase'.$p] ) ).'\', \''.$compcounts.'\', \''. (int) $_POST['bblm_ttm'.$p].'\', \''. (int) $_POST['bblm_ktm'.$p].'\', \''. (int) $_POST['bblm_etm'.$p].'\', \''. (int) $_POST['bblm_def'.$p].'\', \''. (int) $_POST['bblm_ptn'.$p].'\', \''. (int) $_POST['bblm_foul'.$p].'\')';
 
 						//If the player is injured (exhibition or otherwise) then update the player table
+            //also if they retire for the rest of the season
 						$playerupdatesql = "";
 						if ( $mng[$p] )  {
 							$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_mng` = \'1\' WHERE `p_id` = \''. (int) $_POST['bblm_pid'.$p].'\' LIMIT 1';
 						}
+            if ( $ptr[$p] )  {
+              $playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cost_ng` = \'0\', `p_tr` = \'1\' WHERE `p_id` = \''. (int) $_POST['bblm_pid'.$p].'\' LIMIT 1';
+            }
 
 						//once we have the sql generated, we can insert into the array to insert later on
 						if ( strlen( $playerupdatesql ) > 0 ) {
@@ -783,8 +914,12 @@ class BBLM_Add_Match_Player {
 			if ( $compcounts ) {
 
 				foreach ( $playerplayed as $pssp ) {
-					//Update the players SPP
-					bblm_update_player( $pssp, $compcounts );
+					//Update the players career SPP
+					bblm_update_player( $pssp[0], $compcounts );
+          //Update the players current Spp
+          $currentsppsql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_cspp` = `p_cspp`+\''.$pssp['spp'].'\' WHERE `p_id` = \''.$pssp[0].'\' LIMIT 1';
+          $wpdb->query( $currentsppsql );
+
 				}
 
 			} //end of if comp counts

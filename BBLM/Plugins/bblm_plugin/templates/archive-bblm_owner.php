@@ -16,6 +16,7 @@
     <?php $own = new BBLM_CPT_Owner; ?>
     <div class="entry-content">
 
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
       <table class="bblm_table bblm_sortable">
         <thead>
         <tr>
@@ -56,6 +57,7 @@
     <?php endwhile; ?>
           </tbody>
         </table>
+      </div>
 
         </div><!-- .entry-content -->
 

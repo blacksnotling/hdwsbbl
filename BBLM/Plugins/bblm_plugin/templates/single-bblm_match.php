@@ -63,6 +63,12 @@
 
 			<div class="entry-content">
 
+<?php
+        if ( $m->m_legacy ) {
+          bblm_display_legacy_notice( "Match" );
+        }
+?>
+
 				<table class="bblm_table">
 					<thead>
 						<tr>
@@ -138,6 +144,7 @@
 } // end of if ("" !== $m->m_trivia) {
 ?>
 			<h3 class="bblm-table-caption"><?php echo __( 'Player Actions', 'bblm' ); ?></h3>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
 		<table class="bblm_table">
       <thead>
   			<tr>
@@ -214,7 +221,7 @@
 <?php
 						$zebracount++;
 					}
-          echo '</tbody></table>';
+          echo '</tbody></table></div>';
 					//set flag to show some player actions have been recorded
 					$playeractions = 1;
 					//final check of the recorded MVP. If it is blank then set the default value to show that none was assigned (which is different to not recorded)

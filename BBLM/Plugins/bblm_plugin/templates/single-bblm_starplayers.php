@@ -25,8 +25,9 @@
 			/*
 			Gather Information for page
 			*/
-			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
+			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_spp, P.p_skills, P.p_cost, P.p_legacy FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
+      $legacy = 0;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
@@ -39,12 +40,27 @@
 	<div class="bblm_details">
 		<?php the_content(); ?>
 		</div>
-			<table class="bblm_table">
+
+<?php if ( $pd->p_legacy ) {
+  $legacy = 1;
+  bblm_display_legacy_notice( "Star Player" );
+}
+?>
+
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+      <table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_name">Position</th>
 					<th class="bblm_tbl_stat">MA</th>
 					<th class="bblm_tbl_stat">ST</th>
 					<th class="bblm_tbl_stat">AG</th>
+<?php
+          if ( !$legacy ) {
+?>
+          <th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+<?php
+          }
+?>
 					<th class="bblm_tbl_stat">AV</th>
 					<th>Skills</th>
 					<th>Cost per match</th>
@@ -53,27 +69,44 @@
 					<td>Star Player</td>
 					<td><?php echo $pd->p_ma; ?></td>
 					<td><?php echo $pd->p_st; ?></td>
-					<td><?php echo $pd->p_ag; ?></td>
-					<td><?php echo $pd->p_av; ?></td>
+<?php
+          if ( $legacy ) {
+?>
+          <td><?php echo $pd->p_ag; ?></td>
+          <td><?php echo $pd->p_av; ?></td>
+<?php
+          }
+          else {
+?>
+          <td><?php echo $pd->p_ag; ?>+</td>
+          <td><?php echo $pd->p_pa; ?>+</td>
+          <td><?php echo $pd->p_av; ?>+</td>
+<?php
+          }
+?>
 					<td class="bblm_tbl_skills"><?php  echo $pd->p_skills; ?></td>
 					<td><?php  echo number_format($pd->p_cost); ?>gp</td>
 				</tr>
 			</table>
+    </div>
 <?php
-		$racelistsql = 'SELECT R.r_id FROM '.$wpdb->prefix.'race2star R WHERE R.p_id = '.$pd->p_id.' ORDER BY R.r_id ASC';
-		$racelist = $wpdb->get_results($racelistsql);
+    if ( !$legacy ) {
+      //Only show this is the star is active
+      $racelistsql = 'SELECT R.r_id FROM '.$wpdb->prefix.'race2star R WHERE R.p_id = '.$pd->p_id.' ORDER BY R.r_id ASC';
+      $racelist = $wpdb->get_results($racelistsql);
 
-		$is_first = 1;
-		echo '<p>' . __( 'Available to hire for the following Races:', 'bblm');
-		foreach ($racelist as $rl) {
-			if (! $is_first) {
-				echo ',';
-			}
+      $is_first = 1;
+      echo '<p>' . __( 'Available to hire for the following Races:', 'bblm');
+      foreach ($racelist as $rl) {
+        if (! $is_first) {
+          echo ',';
+        }
 
-			echo ' ' . bblm_get_race_link( $rl->r_id );
-			$is_first = 0;
-		}
-		echo ".</p>\n";
+        echo ' ' . bblm_get_race_link( $rl->r_id );
+        $is_first = 0;
+      }
+      echo ".</p>\n";
+    }//end of if not legacy
 
 
 		//Career Stats
@@ -82,7 +115,8 @@
 			//The Star has played a match so continue
 ?>
       <h3 class="bblm-table-caption"><?php echo __( 'League Statistics','bblm' ); ?></h3>
-			<table class="bblm_table">
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+      <table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Career Total</th>
 					<th class="bblm_tbl_stat">Pld</th>
@@ -104,6 +138,7 @@
 					<td><?php echo $s->SPP; ?></th>
 				</tr>
 			</table>
+    </div>
 <?php
 
 			//Breakdown by team
@@ -112,6 +147,7 @@
 				$zebracount = 1;
 ?>
       <h3 class="bblm-table-caption"><?php echo __( 'Team Breakdown','bblm' ); ?></h3>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table">
 				<tr>
 					<th class="bblm_tbl_title">Playing for</th>
@@ -136,7 +172,7 @@
 					print ("					<td><a href=\"" . get_post_permalink( $s->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
 					$zebracount++;
 				}
-				print("			</table>\n");
+				print("			</table></div>\n");
 			}
 
 			// -- KILLER --
@@ -158,6 +194,7 @@
 
 ?>
     <h3 class="bblm-table-caption"><?php echo __( 'Performance by Season', 'bblm' ); ?></h3>
+    <div role="region" aria-labelledby="Caption01" tabindex="0">
     <table class="bblm_table">
       <thead>
         <tr>
@@ -199,8 +236,10 @@
 ?>
   </tbody>
   </table>
+</div>
 
   <h3 class="bblm-table-caption"><?php echo __( 'Performance by Championship Cup', 'bblm' ); ?></h3>
+  <div role="region" aria-labelledby="Caption01" tabindex="0">
   <table class="bblm_table">
     <thead>
       <tr>
@@ -242,8 +281,10 @@
 ?>
     </tbody>
     </table>
+  </div>
 
     <h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+    <div role="region" aria-labelledby="Caption01" tabindex="0">
     <table class="bblm_table">
       <thead>
         <tr>
@@ -284,8 +325,10 @@
 ?>
   </tbody>
 </table>
+</div>
 
       <h3 class="bblm-table-caption"><?php echo __( 'Recent Matches','bblm' ); ?></h3>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm_sortable bblm_expandable">
 				<thead>
 				<tr>
@@ -382,6 +425,7 @@
       }
       echo '</tbody>';
       echo '</table>';
+      echo '</div>';
     }
 
 

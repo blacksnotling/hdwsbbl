@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.3
+ * @version		1.3.1
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -178,7 +178,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     */
     public function display_player_table( $args ) {
 ?>
-      <table class="bblm_expandable bblm_table bblm_stats">
+			<div role="region" aria-labelledby="Caption01" tabindex="0">
+			<table class="bblm_expandable bblm_table bblm_stats">
         <tr>
           <th class="bblm_tbl_stat">#</th>
           <th class="bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
@@ -217,6 +218,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       $zebracount++;
     }
     echo '</table>';
+		echo '</div>';
 
   } // end of display_player_table()
 

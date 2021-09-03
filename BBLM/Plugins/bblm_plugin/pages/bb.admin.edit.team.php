@@ -69,6 +69,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($tinfoupdatesql)) {
 		$sucess = TRUE;
+		bblm_update_tv( (int) $_POST['bblm_tid'] );
 		do_action( 'bblm_post_submission' );
 	}
 ?>
@@ -107,27 +108,6 @@ else if ("edit" == $_GET['action']) {
 		<h3>Edit Team Infomation - <?php print($t->post_title); ?></h3>
 		<form name="bblm_updatestats" method="post" id="post">
 		<p>Below information recorded for this team. make any changes and press the update button to save. For the "team active" and "show in listing" options, 0 = No and 1 = Yes</p>
-
-<script type="text/javascript">
-function UpdateTv() {
-	var tot_rr = document.getElementById('bblm_trr').value * <?php  echo $rrcost; ?>;
-
-	var tot_ff = document.getElementById('bblm_tff').value * 10000;
-
-	var tot_cl = document.getElementById('bblm_tcl').value * 10000;
-
-	var tot_ac = document.getElementById('bblm_tac').value * 10000;
-
-	var tot_apoc = document.getElementById('bblm_tapoc').value * 50000;
-
-	var tot_tpvalue = <?php print($tpvalue); ?>;
-
-	var tot_tv = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc + tot_tpvalue;
-	document.getElementById('bblm_ttv').value = tot_tv;
-}
-</script>
-
-
 
 		<table class="form-table">
 			<tr class="form-field form-required">
@@ -177,7 +157,7 @@ function UpdateTv() {
 				@ <?php echo number_format( $rrcost ); ?> GP each - remember that they cost double when bought during a season</td>
 			</tr>
 			<tr class="form-field form-required">
-				<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
+				<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 				  <td><input type="text" name="bblm_tff" size="2" tabindex="5" value="<?php print("$t->t_ff"); ?>" maxlength="2" id="bblm_tff"><br />
 				  @ 10,000 each</td>
 			</tr>
@@ -201,12 +181,14 @@ function UpdateTv() {
 			  <td><input type="text" name="bblm_tbank" size="7" tabindex="9" value="<?php print("$t->t_bank"); ?>" maxlength="7" id="bblm_tbank">gp</td>
 			</tr>
 			<tr class="form-field form-required">
-				<th scope="row" valign="top">&nbsp;</th>
-				  <td><input type="button" value="Update TV" onClick="UpdateTv();"></td>
+				<th scope="row" valign="top"><label for="bblm_ttv">Team Value</label></th>
+				  <td><input type="hidden" name="bblm_ttv" size="7" tabindex="10" value="<?php print("$t->t_tv"); ?>" maxlength="7" id="bblm_ttv"><?php echo number_format( $t->t_tv ); ?> gp<br />
+					<?php echo __('This will automatically update when you save','bblm' ); ?></td>
 			</tr>
 			<tr class="form-field form-required">
-				<th scope="row" valign="top"><label for="bblm_ttv">Team Value</label></th>
-				  <td><input type="text" name="bblm_ttv" size="7" tabindex="10" value="<?php print("$t->t_tv"); ?>" maxlength="7" id="bblm_ttv">gp</td>
+				<th scope="row" valign="top"><label for="bblm_tctv">Current Team Value</label></th>
+					<td><input type="hidden" name="bblm_tctv" size="7" tabindex="10" value="<?php print("$t->t_ctv"); ?>" maxlength="7" id="bblm_tctv"><?php echo number_format( $t->t_ctv ); ?> gp<br />
+					<?php echo __('This will automatically update when you save','bblm' ); ?></td>
 			</tr>
 			</table>
 			<hr/>

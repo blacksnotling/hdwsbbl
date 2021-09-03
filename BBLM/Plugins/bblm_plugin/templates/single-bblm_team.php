@@ -39,11 +39,15 @@
 				}
 
 		}
+    if ( $ti->t_legacy ) {
+      bblm_display_legacy_notice( "Team" );
+    }
 ?>
 				<div class="bblm_details bblm_team_description">
 					<?php the_content(); ?>
 				</div>
 <?php
+
 			//Set default value to flag if the team has played a game or not
 			$has_played = 1;
 
@@ -53,7 +57,8 @@
 
 				if ( !empty( $ohs ) ) { //Need something better - IE a result has been returned
 ?>
-        <h3 class="bblm-table-caption"><?php echo __( 'Career Statistics for ', 'bblm' ) . the_title(); ?></h3>
+        <h3 class="bblm-table-caption"><?php echo __( 'Career Statistics for ', 'bblm' ) . get_the_title(); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 				<table class="bblm_table">
 					<tr>
 						<th class="bblm_tbl_title">Team</th>
@@ -99,6 +104,7 @@
  				}
 ?>
 				</table>
+      </div>
 
         <h4><?php echo __( 'Key', 'bblm' ); ?></h4>
 				<ul class="bblm_expandablekey">
@@ -116,7 +122,8 @@
 			if ( $seah = $wpdb->get_results( $seasonsql ) ) {
 				$zebracount = 1;
 ?>
-				<table class="bblm_table bblm_sortable">
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
+        <table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
 							<th class="bblm_tbl_title"><?php echo __( 'Season', 'bblm'); ?></th>
@@ -166,6 +173,7 @@
 				}
 				echo '</tbody>';
 				echo '</table>';
+        echo '</div>';
 			}
 
       echo '<h3 class="bblm-table-caption">'.__('Performance by Championship Cup','bblm').'</h3>';
@@ -173,6 +181,7 @@
 			if ( $seah = $wpdb->get_results( $cupsql ) ) {
 				$zebracount = 1;
 ?>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
@@ -223,10 +232,12 @@
 				}
 				echo '</tbody>';
 				echo '</table>';
+        echo '</div>';
 			}
 
 ?>
 				<h3 class="bblm-table-caption"><?php echo __( 'Performance by Competition', 'bblm' ); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 
 <?php
 			$matchhsql = 'SELECT C.WPID AS CWPID, SUM(T.tc_played) AS PLD, SUM(T.tc_W) AS win, SUM(T.tc_L) AS lose, SUM(T.tc_D) AS draw, SUM(T.tc_tdfor) AS TDf, SUM(T.tc_tdagst) AS TDa, SUM(T.tc_casfor) AS CASf, SUM(T.tc_casagst) AS CASa, SUM(T.tc_comp) AS COMP, SUM(T.tc_int) AS cINT FROM '.$wpdb->prefix.'team_comp T, '.$wpdb->prefix.'comp C WHERE T.c_id = C.WPID AND tc_played > 0 AND T.t_id = '.$tid.' GROUP BY C.c_id ORDER BY C.c_id DESC';
@@ -254,6 +265,7 @@
 					$zebracount++;
 				}
 				print("</tbody>\n	</table>\n");
+        echo '</div>';
 			}
 ?>
 
@@ -403,6 +415,7 @@
 		if ($has_played) {
 ?>
 				<h3 class="bblm-table-caption"><?php echo __('Recent Matches','bblm'); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 <?php
 				$matchssql = 'SELECT M.m_id, M.WPID AS MWPID, T.WPID AS tAid, R.WPID AS tBid, UNIX_TIMESTAMP(M.m_date) AS mdate, N.mt_winnings, N.mt_att, N.mt_tv, N.mt_comment, N.mt_result, M.m_teamA, M.m_teamB, M.m_teamAtd, M.m_teamBtd,';
 				$matchssql .= ' M.m_teamAcas, M.m_teamBcas FROM '.$wpdb->prefix.'match_team N, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID';
@@ -457,6 +470,7 @@
 						$zebracount++;
 					}
 					print("	</tbody>\n	</table>\n");
+          echo '</div>';
 				}
 ?>
 

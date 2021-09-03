@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -81,6 +81,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         echo '<ul>';
         echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $tstatus . '</li>';
         echo '<li><strong>' . __( 'Team Value', 'bblm' ) . ':</strong> ' . number_format( $ti->t_tv ) . '</li>';
+        echo '<li><strong>' . __( 'Current Team Value', 'bblm' ) . ':</strong> ' . number_format( $ti->t_ctv ) . '</li>';
         echo '<li><strong>' . __( 'Current Form', 'bblm' ) . ':</strong> ' . $currentform . '</li>';
         echo '<li><strong>' . __( 'Head Coach', 'bblm' ) . ':</strong> ' . $ti->t_hcoach . '</li>';
         if ( isset( $teamcaplink ) ) {

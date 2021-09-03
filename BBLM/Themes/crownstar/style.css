@@ -4,7 +4,7 @@ Theme URI: Theme URI: https://github.com/blacksnotling/HDWSBBL
 Author: The HDWSBBL
 Author URI: https://www.hdwsbbl.co.uk
 Description: Crownstar is the new custom theme of the HDWSBBL
-Version: 1.0
+Version: 1.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: crownstar
@@ -767,6 +767,34 @@ a:hover .page-title:hover {
 
 .single-bblm_team .has-post-thumbnail .bblm-excerpt {
     clear: left;
+}
+/*for scrolling tables*/
+[role="region"][aria-labelledby][tabindex] {
+  overflow: auto;
+}
+
+[role="region"][aria-labelledby][tabindex]:focus {
+  outline: .1em solid rgba(0,0,0,.1);
+}
+[role="region"][aria-labelledby][tabindex] {
+  background: linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0)),
+    linear-gradient(to right, rgba(255, 255, 255, 0), #fff 70%) 0 100%,
+    radial-gradient(
+      farthest-side at 0% 50%,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+        farthest-side at 100% 50%,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-position: 0 0, 100%, 0 0, 100%;
+  background-attachment: local, local, scroll, scroll;
 }
 
 /* Media Queries */

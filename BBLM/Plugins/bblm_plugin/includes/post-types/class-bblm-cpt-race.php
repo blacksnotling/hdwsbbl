@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_CPT_Race {
@@ -52,24 +52,16 @@ class BBLM_CPT_Race {
   * @return none
   */
   public static function get_race_listing() {
-?>
-    <table class="bblm_table">
-      <thead>
-        <tr>
-					<th><?php echo __( 'Icon', 'bblm' ); ?></th>
-          <th><?php echo __( 'Race Name', 'bblm' ); ?></th>
-          <th><?php echo __( '# Teams', 'bblm' ); ?></th>
-        </tr>
-      </thead>
-      <tbody>
 
-<?php
     //Grabs a list of 'posts' from the bblm_cup CPT
     $cpostsarg = array(
       'post_type' => 'bblm_race',
       'numberposts' => -1,
-      'orderby' => 'post_title',
-      'order' => 'ASC',
+			'meta_key' => 'race_rstatus',
+      'orderby' => array(
+				'meta_value' => 'DESC',
+				'post_title' => 'ASC',
+			),
 			'meta_query' => array(
 				array(
 					'key'     => 'race_hide',
@@ -80,8 +72,45 @@ class BBLM_CPT_Race {
     if ( $cposts = get_posts( $cpostsarg ) ) {
       $zebracount = 1;
       $race = new BBLM_CPT_Race;
+			$rstatus = 0;
+			$is_first = 1;
+			$current_status = 0;
 
       foreach( $cposts as $c ) {
+
+				if ($c->race_rstatus !== $rstatus) {
+					$rstatus = $c->race_rstatus;
+					if (1 !== $is_first) {
+						echo '</tbody>';
+						echo '</table>';
+						$zebracount = 1;
+					}
+					$is_first = 1;
+				}
+
+				if (1 == $rstatus) {
+					$status_title = "Available Races";
+				}
+				else {
+					$status_title = "Inactive Races";
+				}
+
+
+				if ( $is_first  ) {
+?>
+					<h3 class="bblm-table-caption"><?php echo $status_title; ?></h3>
+					<table class="bblm_table">
+						<thead>
+							<tr>
+								<th><?php echo __( 'Icon', 'bblm' ); ?></th>
+								<th><?php echo __( 'Race Name', 'bblm' ); ?></th>
+								<th><?php echo __( '# Teams', 'bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+<?php
+					$is_first = 0;
+				}
 
         if ($zebracount % 2) {
           echo '<tr>';
@@ -103,7 +132,7 @@ class BBLM_CPT_Race {
     } //end of if
     else {
 
-      echo '<p>' . __( 'No Championship cups have been created for this league', 'bblm' ) . '</p>';
+      echo '<p>' . __( 'No Races have been created for this league', 'bblm' ) . '</p>';
 
     } //end of else
 
@@ -145,6 +174,34 @@ class BBLM_CPT_Race {
 
    }// end of get_reroll_cost()
 
+	 /**
+    * Returns the Special Rules for a race
+    *
+    * @param wordpress $query
+    * @return int $rr_cost cost of reroll
+    */
+    public static function get_special_rules( $ID ) {
+
+ 		 $rr_cost = get_post_meta( $ID, 'race_srules', true );
+
+      return $rr_cost;
+
+    }// end of get_special_rules
+
+		/**
+		 * Returns the status (active / retired) of the Race
+		 *
+		 * @param wordpress $query
+		 * @return int $rr_cost cost of reroll
+		 */
+		 public static function get_race_status( $ID ) {
+
+			$rstatus = get_post_meta( $ID, 'race_rstatus', true );
+
+			 return $rstatus;
+
+		 }// end of et_race_status
+
 	/**
    * OUTPUTS the race icon to a set size
    *
@@ -181,7 +238,9 @@ class BBLM_CPT_Race {
 			$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = ' . $ID . ' ORDER by pos_cost ASC';
 			if ( $positions = $wpdb->get_results( $positionsql ) ) {
 				$zebracount = 1;
+				$legacy = $this->get_race_status( $ID );
 ?>
+			<div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table bblm-tbl-scrollable">
 				<thead>
 					<tr>
@@ -190,6 +249,13 @@ class BBLM_CPT_Race {
 						<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+<?php
+				if ( $legacy ) {
+?>
+						<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+<?php
+				}
+?>
 						<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 						<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 						<th><?php echo __( 'Cost', 'bblm' ); ?></th>
@@ -209,8 +275,21 @@ class BBLM_CPT_Race {
 						<td>0 - <?php echo $pos->pos_limit; ?></td>
 						<td><?php echo $pos->pos_ma; ?></td>
 						<td><?php echo $pos->pos_st; ?></td>
+<?php
+					if ( !$legacy ) {
+?>
 						<td><?php echo $pos->pos_ag; ?></td>
 						<td><?php echo $pos->pos_av; ?></td>
+<?php
+					}
+					else {
+?>
+						<td><?php echo $pos->pos_ag; ?>+</td>
+						<td><?php echo $pos->pos_pa; ?>+</td>
+						<td><?php echo $pos->pos_av; ?>+</td>
+<?php
+					}
+?>
 						<td class="bblm_tbl_skills"><?php echo $pos->pos_skills; ?></td>
 						<td><?php echo number_format( $pos->pos_cost ); ?> GP</td>
 					</tr>
@@ -220,6 +299,7 @@ class BBLM_CPT_Race {
 ?>
 						</tbody>
 					</table>
+				</div>
 <?php
 			}
 			else {
@@ -237,10 +317,11 @@ class BBLM_CPT_Race {
  	  public function display_stars_available( $ID ) {
  			global $wpdb;
 
-			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'player X WHERE X.p_id = S.p_id AND S.r_id = ' . $ID . ' AND X.p_status = 1 ORDER BY X.p_name ASC';
+			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_id = S.p_id AND S.r_id = ' . $ID . ' AND X.p_status = 1 ORDER BY X.p_name ASC';
 			if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
 				$zebracount = 1;
 ?>
+					<div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table bblm-tbl-scrollable">
 						<thead>
 							<tr>
@@ -248,6 +329,7 @@ class BBLM_CPT_Race {
 								<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
+								<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
 								<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
 								<th><?php echo __( 'Skills', 'bblm' ); ?></th>
 								<th><?php echo __( 'Cost', 'bblm' ); ?></th>
@@ -268,8 +350,9 @@ class BBLM_CPT_Race {
 								<td><?php echo bblm_get_player_link( $star->PWPID ); ?></td>
 								<td><?php echo $star->p_ma; ?></td>
 								<td><?php echo $star->p_st; ?></td>
-								<td><?php echo $star->p_ag; ?></td>
-								<td><?php echo $star->p_av; ?></td>
+								<td><?php echo $star->p_ag; ?>+</td>
+								<td><?php echo $star->p_pa; ?>+</td>
+								<td><?php echo $star->p_av; ?>+</td>
 								<td class="bblm_tbl_skills"><?php echo $star->p_skills; ?></td>
 								<td><?php number_format( $star->p_cost ); ?> GP</td>
 							</tr>
@@ -279,6 +362,7 @@ class BBLM_CPT_Race {
 ?>
 						</tbody>
 					</table>
+				</div>
 <?php
 			}
 

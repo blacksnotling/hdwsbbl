@@ -187,7 +187,8 @@ Template Name: List Resuts
 						//The Second Layout has been selected
 						$zebracount = 1;
 ?>
-				<table class="bblm_table bblm_sortable">
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
+        <table class="bblm_table bblm_sortable">
 					<thead>
   					<tr>
   						<th class="bblm_tbl_matchdate"><?php echo __( 'Date','bblm' ); ?></th>
@@ -220,7 +221,7 @@ Template Name: List Resuts
 <?php
 							$zebracount++;
 						}//end of for each
-						echo '</tbody></table>';
+						echo '</tbody></table></div>';
 					}//end of Layout 2
 				}//end of if SQL worked
 				else {
