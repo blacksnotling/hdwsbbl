@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.5
+ * @version   1.6
  */
 
  class BBLM_Admin_Post_Types {
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
  		add_action( 'admin_init', array( $this, 'include_post_type_handlers' ) );
 		add_action( 'admin_init', array( $this, 'include_post_meta_boxes' ) );
+		add_action( 'admin_init', array( $this, 'include_post_tax_boxes' ) );
 
  	}
 
@@ -56,6 +57,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/meta-boxes/class-bblm-meta-race.php' );
 
 	}
+
+	/**
+	 * Loads all the Ccustom fields for taxonomies for admin screen functions
+	 */
+	 public function include_post_tax_boxes() {
+
+		 include_once( 'post-types/taxonomy/class-bblm-tax-race_trait.php' );
+
+	 }
 
 }
 
