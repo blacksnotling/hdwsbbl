@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -97,6 +97,16 @@ class BBLM_Admin_Menus {
 		//Create the 'Manage Fixtures'
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-fixtures.php' );
 		new BBLM_Manage_Fixtures();
+
+		//Force the display of the race special rules tax page in the menu
+		add_submenu_page(
+			'bblm_main_menu',
+			__( 'Race Traits', 'bblm' ),
+			__( 'Race Traits', 'bblm' ),
+			'manage_options',
+			'edit-tags.php?taxonomy=race_rules',
+			false
+		);
 
 	}
 

@@ -340,7 +340,16 @@ class BBLM_Post_types {
 			 'race_rules',
 			 'bblm_race',
 			 array(
-				 'label' => __( 'Special Rules', 'bblm' ),
+				 'labels' => array(
+					 'name' => _x( 'Race Traits / Special Rules', 'taxonomy general name', 'bblm' ),
+					 'singular_name' => _x( 'Race Trait / Special Rule', 'taxonomy singular name', 'bblm' ),
+					 'search_items' => __( 'Search Traits', 'bblm' ),
+					 'all_items' => __( 'All Traits', 'bblm' ),
+					 'edit_item' => __( 'Edit Trait', 'bblm' ),
+					 'update_item' => __( 'Update Trait', 'bblm' ),
+					 'add_new_item' => __( 'Add New Trait', 'bblm' ),
+					 'new_item_name' => __( 'New Trait Name', 'bblm' ),
+				 ),
 				 'sort' => true,
 				 'args' => array( 'orderby' => 'term_order' ),
 				 'rewrite' => array( 'slug' => 'race-rules' ),
