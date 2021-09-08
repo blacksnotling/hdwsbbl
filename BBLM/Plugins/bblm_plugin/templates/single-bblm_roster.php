@@ -350,7 +350,7 @@ a:hover, a:active {
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Race', 'bblm'); ?></td>
-						<td colspan="3"><?php echo bblm_get_race_name( $ti->r_id ); ?></td>
+						<td colspan="3"><?php echo bblm_get_race_link( $ti->r_id ); ?></td>
 						<td colspan="4" class="bblm_tbl_label"><?php echo __('Assistant Coaches', 'bblm'); ?></td>
 						<td><?php echo $ti->t_ac; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
@@ -377,7 +377,7 @@ a:hover, a:active {
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Head Coach', 'bblm'); ?></td>
-						<td colspan="3"><?php echo esc_textarea( $ti->t_hcoach ); ?> (<?php echo esc_html( get_the_title( $tid = $ti->ID ) ); ?>)</td>
+						<td colspan="3"><?php echo esc_textarea( $ti->t_hcoach ); ?> (<?php echo bblm_get_owner_link( $tid = $ti->ID ); ?>)</td>
 						<td colspan="6" class="bblm_tbl_label"><?php echo __('Team value', 'bblm'); ?></td>
 						<td colspan=2 class="bblm_tbl_value"><?php echo number_format( $ti->t_tv ); ?>gp</td>
 					</tr>
