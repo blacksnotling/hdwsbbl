@@ -56,10 +56,10 @@ class BBLM_Widget_Fixtures extends WP_Widget {
 <?php
       foreach ( $fixture as $m ) {
         if ( $zebracount % 2 ) {
-          echo '<tr id="F'. $m->f_id . '">';
+          echo '<tr class="bblm_tbl_alt" id="F'. $m->f_id . '">';
         }
         else {
-          echo '<tr class="bblm_tbl_alt" id="F'. $m->f_id . '">';
+          echo '<tr id="F'. $m->f_id . '">';
         }
 ?>
             <td><?php echo date("d.m.y", $m->mdate ); ?></td>
