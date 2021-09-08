@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widgets
- * @version   1.2
+ * @version   1.3
  */
 
 
@@ -23,6 +23,7 @@ include_once( 'widgets/class-bblm-widget-listcomps.php' );
 include_once( 'widgets/class-bblm-widget-recenttransfers.php' );
 include_once( 'widgets/class-bblm-widget-recentplayers.php' );
 include_once( 'widgets/class-bblm-widget-recentdepartures.php' );
+include_once( 'widgets/class-bblm-widget-fixtures.php' );
 
  //Template Companions - only displayed with certain templates
 include_once( 'widgets/class-bblm-widget-tccompdetails.php' );
