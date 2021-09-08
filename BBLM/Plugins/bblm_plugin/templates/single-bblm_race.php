@@ -39,7 +39,7 @@
         echo '<ul>';
         echo '<li><strong>' . __( 'Re-Roll Cost:', 'bblm' ) . '</strong> ' . number_format( $rr_cost ) . ' GP</li>';
         //Display the race Special rules, if any are set
-        echo get_the_term_list( $post->ID, 'race_rules', '<li>', ', ', '</li>' );
+        echo '<li><strong>' . __( 'Special Rules:', 'bblm' ) . '</strong> ' . strip_tags( get_the_term_list( $post->ID, 'race_rules', '', ', ', '' ) . '</li>' );
         echo '</ul>';
 
         $race = new BBLM_CPT_Race;
