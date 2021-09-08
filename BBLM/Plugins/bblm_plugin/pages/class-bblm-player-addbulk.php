@@ -79,6 +79,7 @@
               $position_ma = $racedeet->pos_ma;
               $position_st = $racedeet->pos_st;
               $position_ag = $racedeet->pos_ag;
+              $position_ag = $racedeet->pos_pa;
               $position_av = $racedeet->pos_av;
               $position_skills = $racedeet->pos_skills;
               $position_cost = $racedeet->pos_cost;
@@ -112,7 +113,7 @@
 
                 add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
 
-                $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
+                $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`,  `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_pa.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
 
                 //Insert into the Player table
                 $wpdb->query($playersql);
