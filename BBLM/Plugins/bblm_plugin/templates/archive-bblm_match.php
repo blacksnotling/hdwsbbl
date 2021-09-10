@@ -116,7 +116,7 @@ Template Name: List Resuts
 ?>
 								<h3><?php echo bblm_get_season_name( $m->sea_id ); ?></h3>
                 <h4><?php echo bblm_get_competition_link( $m->CWPID ); ?></h4>
-                <h5><?php echo $m->div_name; ?></h5>
+                <h5 class="bblm-table-caption"><?php echo $m->div_name; ?></h5>
                 <table class="bblm_table">
                   <thead>
                     <tr>
@@ -135,7 +135,7 @@ Template Name: List Resuts
 							if ( $is_first_comp ) {
 ?>
                 <h4><?php echo bblm_get_competition_link( $m->CWPID ); ?></h4>
-                <h5><?php echo $m->div_name; ?></h5>
+                <h5 class="bblm-table-caption"><?php echo $m->div_name; ?></h5>
                 <table class="bblm_table">
                   <thead>
                     <tr>
@@ -152,7 +152,7 @@ Template Name: List Resuts
 							}
 							if ( $is_first_div ) {
 ?>
-                <h5><?php echo $m->div_name; ?></h5>
+                <h5 class="bblm-table-caption"><?php echo $m->div_name; ?></h5>
                 <table class="bblm_table">
                   <thead>
                     <tr>
@@ -167,10 +167,10 @@ Template Name: List Resuts
 								$is_first_div = 0;
 							}
 							if ( $zebracount % 2 ) {
-                echo '<tr>';
+                echo '<tr class="bblm_tbl_alt">';
 							}
 							else {
-                echo '<tr class="bblm_tbl_alt">';
+                echo '<tr>';
 							}
 ?>
                       <td><?php echo date("d.m.y", $m->mdate); ?></td>
@@ -187,6 +187,7 @@ Template Name: List Resuts
 						//The Second Layout has been selected
 						$zebracount = 1;
 ?>
+        <h4 class="bblm-table-caption"><?php echo __('Results by date','bblm'); ?></h4>
         <div role="region" aria-labelledby="Caption01" tabindex="0">
         <table class="bblm_table bblm_sortable">
 					<thead>
@@ -204,10 +205,10 @@ Template Name: List Resuts
 <?php
 						foreach ( $match as $m ) {
 							if ( $zebracount % 2 ) {
-								echo '<tr id="' . $m->m_id . '">';
+                echo '<tr class="bblm_tbl_alt" id="' . $m->m_id . '">';
 							}
 							else {
-                echo '<tr class="bblm_tbl_alt" id="' . $m->m_id . '">';
+                echo '<tr id="' . $m->m_id . '">';
 							}
 ?>
   						<td><?php echo date( "d.m.y", $m->mdate ); ?></td>

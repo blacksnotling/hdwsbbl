@@ -209,10 +209,10 @@
 							$tainc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ( $zebracount % 2 ) {
-              echo '<tr>';
+              echo '<tr class="bblm_tbl_alt">';
 						}
 						else {
-              echo '<tr class="bblm_tbl_alt">';
+              echo '<tr>';
 						}
 ?>
             <td><?php echo $tap->p_num; ?></td>
@@ -285,10 +285,10 @@
 							$tbinc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ($zebracount % 2) {
-              echo '<tr>';
+              echo '<tr class="bblm_tbl_alt">';
 						}
 						else {
-              echo '<tr class="bblm_tbl_alt">';
+              echo '<tr>';
 						}
 ?>
             <td><?php echo $tap->p_num; ?></td>

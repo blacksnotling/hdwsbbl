@@ -16,6 +16,7 @@
     <?php $own = new BBLM_CPT_Owner; ?>
     <div class="entry-content">
 
+      <h3 class="bblm-table-caption"><?php echo __('Team Owners','bblm'); ?></h3>
       <div role="region" aria-labelledby="Caption01" tabindex="0">
       <table class="bblm_table bblm_sortable">
         <thead>
@@ -42,7 +43,7 @@
 		<?php while (have_posts()) : the_post(); ?>
       <?php do_action( 'bblm_template_before_content' ); ?>
 
-          <tr<?php echo (($c = !$c)?' class="bblm_tbl_alt"':''); ?>>
+          <tr<?php echo (($c = !$c)?'':' class="bblm_tbl_alt"'); ?>>
             <td><a href="<?php the_permalink(); ?>" title="<?php echo __( 'Read more about', 'bblm'); ?> <?php the_title(); ?>"><?php the_title(); ?></a></td>
             <td><?php echo $own->get_number_teams() ?></td>
             <td><?php echo $own->get_number_championships(); ?></td>

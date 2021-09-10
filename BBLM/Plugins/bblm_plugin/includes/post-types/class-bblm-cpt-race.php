@@ -277,10 +277,10 @@ class BBLM_CPT_Race {
 <?php
 				foreach ( $positions as $pos ) {
 					if ( $zebracount % 2 ) {
-						echo '<tr id="pos-' . $pos->pos_id . '">';
+						echo '<tr class="bblm_tbl_alt" id="pos-' . $pos->pos_id . '">';
 					}
 					else {
-						echo '<tr class="bblm_tbl_alt" id="pos-' . $pos->pos_id . '">';
+						echo '<tr id="pos-' . $pos->pos_id . '">';
 					}
 ?>
 						<td><?php echo esc_html( $pos->pos_name ); ?></td>

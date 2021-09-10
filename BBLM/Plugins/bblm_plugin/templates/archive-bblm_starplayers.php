@@ -84,8 +84,8 @@
 			if ($starplayerlist = $wpdb->get_results($starplayerlistsql)) {
 				//If any Star Players are found
 ?>
-        <div role="region" aria-labelledby="Caption01" tabindex="0">
         <h3 class="bblm-table-caption"><?php echo __( 'The Stars', 'bblm' ); ?></h3>
+        <div role="region" aria-labelledby="Caption01" tabindex="0">
 				<table class="bblm_table bblm_sortable">
 					<thead>
 						<tr>
@@ -104,10 +104,10 @@
 				$zebracount = 1;
 				foreach ($starplayerlist as $spl) {
 					if ($zebracount % 2) {
-						print("						<tr>\n");
+						print("						<tr class=\"bblm_tbl_alt\">\n");
 					}
 					else {
-						print("						<tr class=\"bblm_tbl_alt\">\n");
+						print("						<tr>");
 					}
 ?>
 							<td><a href="<?php echo $spl->guid; ?>" title="Learn more about <?php echo $spl->post_title; ?>"><?php echo $spl->post_title; ?></a></td>

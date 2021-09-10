@@ -41,19 +41,19 @@
 						//The award in question is a Championship
 						$compmajorawardssql = 'SELECT P.post_title, P.guid, B.c_id AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 1 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND B.c_id = C.WPID AND C.c_counts = 1 AND A.a_id = '.$aw->a_id.' ORDER BY C.c_id DESC';
 						if (($cmawards = $wpdb->get_results($compmajorawardssql)) && (0 < count($cmawards))) {
-							$aoutput .= "					<table class=\"bblm_table\">\n						<tr>\n							<th class=\"bblm_tbl_name\">Team</th>\n							<th class=\"bblm_tbl_name\">Competition</th>\n						</tr>\n";
+              $aoutput .= '<table class="bblm_table"><thead><tr><th class="bblm_tbl_name">' . __('Team','bblm') . '</th><th class="bblm_tbl_name">' . __('Competition','bblm') . '</th></tr></thead><tbody>';
 							$zebracount = 1;
 							foreach ($cmawards as $cma) {
 								if ($zebracount % 2) {
-									$aoutput .="						<tr>\n";
+                  $aoutput .= "						<tr class=\"bblm_tbl_alt\">\n";
 								}
 								else {
-									$aoutput .= "						<tr class=\"bblm_tbl_alt\">\n";
+																		$aoutput .="						<tr>\n";
 								}
 									$aoutput .= "							<td><a href=\"".$cma->guid."\" title=\"Read more about ".$cma->post_title."\">".$cma->post_title."</a></td>\n						<td>" . bblm_get_competition_link( $cma->CWPID ) . "</td>\n	</tr>\n";
 								$zebracount++;
 							}
-							$aoutput .= "					</table>\n";
+							$aoutput .= "					</tbody></table>\n";
 						}
 					}// end of if cup
 					else {
@@ -80,10 +80,10 @@
 							$zebracount = 1;
 							foreach ( $ctawards as $cta ) {
 								if ( $zebracount % 2 ) {
-									$aoutput .= '<tr>';
+									$aoutput .= '<tr class="bblm_tbl_alt">';
 								}
 								else {
-									$aoutput .= '<tr class="bblm_tbl_alt">';
+									$aoutput .= '<tr>';
 								}
 								$aoutput .= '<td>' . bblm_get_season_link( $cta->WPID ) . '</td>
 														 <td>' . bblm_get_season_link( $cta->sea_id ) . '</td>
@@ -118,10 +118,10 @@
 							$zebracount = 1;
 							foreach ( $ctawards as $cta ) {
 								if ( $zebracount % 2 ) {
-									$aoutput .= '<tr>';
+									$aoutput .= '<tr class="bblm_tbl_alt">';
 								}
 								else {
-									$aoutput .= '<tr class="bblm_tbl_alt">';
+									$aoutput .= '<tr>';
 								}
 								$aoutput .= '<td>' . bblm_get_season_link( $cta->WPID ) . '</td>
 														 <td>' . bblm_get_season_link( $cta->sea_id ) . '</td>
@@ -143,14 +143,14 @@
 						//3. Awards to teams in a competition
 						$compteamawardssql = 'SELECT P.post_title, P.guid, B.atc_value AS value, B.c_id AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE A.a_id = B.a_id AND a_cup = 0 AND B.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.c_id DESC';
 						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
-							$aoutput .= "					<h4>Team recipients during a Competition</h4>\n					<table class=\"bblm_table\">\n						<tr>\n							<th class=\"bblm_tbl_name\">Team</th>\n							<th class=\"bblm_tbl_name\">Competition</th>\n							<th class=\"bblm_tbl_stat\">Value</th>\n						</tr>\n";
+              $aoutput .= '<table class="bblm_table"><thead><tr><th class="bblm_tbl_name">' . __('Team','bblm') . '</th><th class="bblm_tbl_name">' . __('Competition','bblm') . '</th><th class="bblm_tbl_stat">' . __('Value','bblm') . '</th></tr></thead><tbody>';
 							$zebracount = 1;
 							foreach ($ctawards as $cta) {
 								if ($zebracount % 2) {
-									$aoutput .= "						<tr>\n";
+									$aoutput .= '<tr class="bblm_tbl_alt">';
 								}
 								else {
-									$aoutput .= "						<tr class=\"bblm_tbl_alt\">\n";
+									$aoutput .= "						<tr>";
 								}
 								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td>" . bblm_get_competition_link( $cta->CWPID ) . "</td>\n						<td>";
 								if (0 < $cta->value) {
@@ -162,20 +162,20 @@
 								$aoutput .= "</td>\n						</tr>\n";
 								$zebracount++;
 							}
-							$aoutput .= "</table>";
+							$aoutput .= "</tbody></table>";
 						}
 
 						//4. Awards to Players in a competition
 						$compteamawardssql = 'SELECT P.post_title, P.guid, B.apc_value AS value, B.c_id AS CWPID, D.WPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'team D, '.$wpdb->prefix.'player X WHERE X.p_id = B.p_id AND X.t_id = D.t_id AND A.a_id = B.a_id AND a_cup = 0 AND B.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND A.a_id = '.$aw->a_id.' ORDER BY B.c_id DESC';
 						if ($ctawards = $wpdb->get_results($compteamawardssql)) {
-							$aoutput .= "					<h4>Player recipients during a Competition</h4>\n					<table class=\"bblm_table\">\n						<tr>\n							<th class=\"bblm_tbl_name\">Player</th>\n							<th class=\"bblm_tbl_name\">Competition</th>\n							<th class=\"bblm_tbl_name\">Team</th>\n							<th class=\"bblm_tbl_stat\">Value</th>\n						</tr>\n";
+              $aoutput .= '<h4>Player recipients during a Competition</h4><table class="bblm_table"><thead><tr><th class="bblm_tbl_name">' . __('Player','bblm') . '</th><th class="bblm_tbl_name">' . __('Competition','bblm') . '</th><th class="bblm_tbl_name">' . __('Team','bblm') . '</th><th class="bblm_tbl_stat">' . __('Value','bblm') . '</th></tr></thead><tbody>';
 							$zebracount = 1;
 							foreach ($ctawards as $cta) {
 								if ($zebracount % 2) {
-									$aoutput .= "						<tr>\n";
+									$aoutput .= "						<tr class=\"bblm_tbl_alt\">\n";
 								}
 								else {
-									$aoutput .= "						<tr class=\"bblm_tbl_alt\">\n";
+									$aoutput .= "						<tr>\n";
 								}
 								$aoutput .= "							<td><a href=\"".$cta->guid."\" title=\"Read more about ".$cta->post_title."\">".$cta->post_title."</a></td>\n							<td>" . bblm_get_competition_link( $cta->CWPID ) . "</td>\n							<td><a href=\"".  get_post_permalink( $cta->WPID ) ."\" title=\"Read more about this team\">" . esc_html( get_the_title( $cta->WPID ) ) . "</a></td>\n						<td>";
 								if (0 < $cta->value) {
@@ -187,7 +187,7 @@
 								$aoutput .= "</td>\n						</tr>\n";
 								$zebracount++;
 							}
-							$aoutput .= "</table>";
+							$aoutput .= "</tbody></table>";
 						}
 					} //end of if else cup
 					/*

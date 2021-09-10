@@ -83,7 +83,7 @@ Template Name: List Fixtures
 								$current_comp = $m->CWPID;
 								$current_div = $m->div_name;
 								if (1 !== $is_first_comp) {
-									print(" </table>\n");
+									print(" </tbody></table>\n");
 									$zebracount = 1;
 								}
 								$is_first_comp = 1;
@@ -91,25 +91,25 @@ Template Name: List Fixtures
 							if ($m->div_name !== $current_div) {
 								$current_div = $m->div_name;
 								if (1 !== $is_first_div) {
-									print(" </table>\n");
+									print(" </tbody></table>\n");
 									$zebracount = 1;
 								}
 								$is_first_div = 1;
 							}
 							if ($is_first_comp) {
-								print("<h3>" . bblm_get_competition_link( $m->CWPID ) . "</h3>\n <h4>".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
+								print("<h3>" . bblm_get_competition_link( $m->CWPID ) . "</h3>\n <h4 class=\"bblm-table-caption\">".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n<thead>		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr></thead><tbody>\n");
 								$is_first_comp = 0;
 								$is_first_div = 0;
 							}
 							if ($is_first_div) {
-								print("<h4>".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   </tr>\n");
+								print("<h4 class=\"bblm-table-caption\">".$m->div_name."</h4>\n  <table class=\"bblm_table\">\n		 <thead><tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		   </tr></thead><tbody>\n");
 								$is_first_div = 0;
 							}
 							if ($zebracount % 2) {
-								print("		<tr id=\"F".$m->f_id."\">\n");
+                print("		<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
 							}
 							else {
-								print("		<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
+								print("		<tr id=\"F".$m->f_id."\">\n");
 							}
 							print("		   <td>".date("d.m.y", $m->mdate)."</td>\n		<td>");
 							if ($bblm_tbd_team == $m->TAid) {
@@ -129,14 +129,15 @@ Template Name: List Fixtures
 							print("</td>\n	</tr>\n");
 							$zebracount++;
 						}
-						print("</table>\n");
+						print("</tbody></table>\n");
 						//END OF LAYOUT 1 (by Comp)
 					}
 					else {
 						//The Second Layout has been selected
 						$zebracount = 1;
 ?>
-				<table class="bblm_table bblm_sortable">
+        <h4 class="bblm-table-caption"><?php echo __('Upcoming Fixtures','bblm'); ?></h4>
+        <table class="bblm_table bblm_sortable">
 					<thead>
 					<tr>
 						<th class="bblm_tbl_matchdate">Date</th>
@@ -149,10 +150,10 @@ Template Name: List Fixtures
 <?php
 						foreach ($fixture as $m) {
 							if ($zebracount % 2) {
-								print("					<tr  id=\"F".$m->f_id."\">\n");
+                print("					<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
 							}
 							else {
-								print("					<tr class=\"bblm_tbl_alt\"  id=\"F".$m->f_id."\">\n");
+								print("					<tr  id=\"F".$m->f_id."\">\n");
 							}
 ?>
 						<td><?php print(date("d.m.y", $m->mdate)); ?></td>

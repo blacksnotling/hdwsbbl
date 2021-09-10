@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1.1
+ * @version   1.1.2
  */
 
 class BBLM_CPT_Match {
@@ -53,16 +53,16 @@ class BBLM_CPT_Match {
 
 		 foreach ( $recmatch as $rm ) {
 			 if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-				 echo '<tr class="bblm_tbl_hide">';
-			 }
-			 else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-				 echo '<tr>';
-			 }
-			 else if ( 10 < $zebracount ) {
 				 echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
 			 }
-			 else {
+			 else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
 				 echo '<tr class="bblm_tbl_alt">';
+			 }
+			 else if ( 10 < $zebracount ) {
+				 echo '<tr class="blm_tbl_hide">';
+			 }
+			 else {
+				 echo '<tr>';
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
 			 echo '<td>' . bblm_get_match_link( $rm->MWPID ) . '</td>';

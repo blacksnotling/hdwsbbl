@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.2.1
  */
 
 class BBLM_CPT_Cup {
@@ -77,10 +77,10 @@ class BBLM_CPT_Cup {
       foreach( $cposts as $c ) {
 
         if ($zebracount % 2) {
-          echo '<tr>';
+          echo '<tr class="bblm_tbl_alt">';
         }
         else {
-          echo '<tr class="bblm_tbl_alt">';
+          echo '<tr>';
         }
         echo '<td>' . bblm_get_cup_link( $c->ID ) . '</td>';
         echo '<td>' . $comp->get_cup_count_by_cup( $c->ID ) . '</td>';
