@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -93,6 +93,9 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
         }
         echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $ti->r_id ) . '</li>';
+        $meta = get_post_custom( $post->ID );
+        $tmotto = ! isset( $meta['team_motto'][0] ) ? '' : $meta['team_motto'][0];
+        echo '<li><strong>' . __( 'Motto', 'bblm' ) . ':</strong> <em>' . sanitize_text_field( $tmotto ) . '</em></li>';
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';

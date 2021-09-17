@@ -63,6 +63,7 @@ if(isset($_POST['bblm_team_submit'])) {
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
+		add_post_meta($bblm_submission, 'team_motto', esc_textarea( $_POST['bblm_tmotto'] ) );
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
@@ -161,6 +162,10 @@ else if(isset($_POST['bblm_race_select'])) {
 	<tr valign="top">
 		<th scope="row"><label for="bblm_tdesc">Bio</label></th>
 		<td><p><textarea rows="10" cols="50" name="bblm_tdesc" id="bblm_tdesc" class="large-text"></textarea></p></td>
+	</tr>
+	<tr valign="top">
+		<th scope="row"><label for="bblm_tdesc"><?php echo __( 'Team Motto','bblm');?></label></th>
+		<td><p><textarea rows="1" cols="50" name="bblm_tmotto" id="bblm_tmotto" class="large-text"></textarea></p></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_sname">Short Name</label></th>
