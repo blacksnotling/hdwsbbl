@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_RecentDepartures extends WP_Widget {
@@ -38,16 +38,39 @@ class BBLM_Widget_RecentDepartures extends WP_Widget {
     $playersql = 'SELECT T.WPID, P.WPID AS PID, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND P.t_id = T.t_ID ORDER BY P.WPID DESC LIMIT ' . $instance['numshow'];
     $playersql = 'SELECT T.WPID, P.WPID AS PID, F.*, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_fate X, '.$wpdb->prefix.'fate F, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND F.f_id = X.f_id AND X.p_id = P.p_id AND P.t_id = T.t_ID AND F.f_id != 5 ORDER BY X.m_id DESC LIMIT ' . $instance['numshow'];
     if ( $player = $wpdb->get_results( $playersql ) ) {
+      $zebracount = 1;
 
-      echo '<ul>';
+?>
+      <table>
+        <thead>
+          <tr>
+            <th><?php echo __( 'Player','bblm' ); ?></th>
+            <th><?php echo __( 'Team','bblm' ); ?></th>
+            <th><?php echo __( 'Reason','bblm' ); ?></th>
+          </tr>
+        </thead>
+        <tbody>
+<?php
 
       foreach ( $player as $p ) {
 
-        echo '<li>' . bblm_get_player_link( $p->PID ) . ' (' . esc_html( $p->pos_name ) . ' for ' . bblm_get_team_link( $p->WPID ) . ') - ' . esc_html( $p->d_desc ) . '</li>';
+        if ( $zebracount % 2 ) {
+          echo '<tr class="bblm_tbl_alt">';
+        }
+        else {
+          echo '<tr>';
+        }
+
+        echo '<td>' . bblm_get_player_link( $p->PID ) . ' (' . esc_html( $p->pos_name ) . ')</td>';
+        echo '<td>' . bblm_get_team_link( $p->WPID ) . '</td>';
+        echo '<td>' . esc_html( $p->d_desc ) . '</td>';
+        echo '</tr>';
+
+        $zebracount++;
 
       }
 
-      echo '</ul>';
+      echo '</tbody></table>';
     }
 
     echo $args['after_widget'];
