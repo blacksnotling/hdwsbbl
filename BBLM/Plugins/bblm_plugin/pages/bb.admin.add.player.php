@@ -99,6 +99,13 @@ if (isset($_POST['bblm_team_add'])) {
 	if ($freebooter) {
 		if ("jm" == $freebooter_type) {
 			$bblm_posid = 1;
+			//Also add the loner skill
+			if ( "none" == $bblm_posskills ) {
+				$bblm_posskills = "Loner (4+)"; 	
+			}
+			else {
+				$bblm_posskills .= ", Loner (4+)";
+			}
 		}
 		else if ("rrookie" == $freebooter_type) {
 			$bblm_posid = $rrookie_pos;
