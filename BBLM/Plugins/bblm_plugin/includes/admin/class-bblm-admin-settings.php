@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
 class BBLM_Settings_Admin {
@@ -269,6 +269,14 @@ class BBLM_Settings_Admin {
             'placeholder' => '',
             'helper' => __( 'The ID number for the "Merc" Position', 'bblm' ),
         	),
+					array(
+						'uid' => 'player_rrookie',
+						'label' => __( 'Player_ID - Riotous Rookie', 'bblm' ),
+						'section' => 'third_section',
+						'type' => 'number',
+						'placeholder' => '',
+						'helper' => __( 'The ID number for the "Riotous Rookie" Position', 'bblm' ),
+					),
 
         );
 

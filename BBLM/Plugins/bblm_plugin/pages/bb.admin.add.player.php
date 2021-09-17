@@ -31,8 +31,11 @@ if (isset($_POST['bblm_team_add'])) {
 		if ("2" == $_POST['bblm_free']) {
 			$freebooter_type = "merc";
 		}
-		else {
+		else if ("1" == $_POST['bblm_free']) {
 			$freebooter_type = "jm";
+		}
+		else if ("3" == $_POST['bblm_free']) {
+			$freebooter_type = "rrookie";
 		}
 		$freebooter = 1;
 	}
@@ -61,11 +64,12 @@ if (isset($_POST['bblm_team_add'])) {
 	//call the options from the table
 	$options = get_option('bblm_config');
 	$merc_pos = htmlspecialchars($options['player_merc'], ENT_QUOTES);
+	$rrookie_pos = htmlspecialchars($options['player_rrookie'], ENT_QUOTES);
 
 
 	$posnamesql = "SELECT * FROM ".$wpdb->prefix."position ";
 	if ($freebooter) {
-		if ("jm" == $freebooter_type) {
+		if ( "jm" == $freebooter_type  || "rrookie" == $freebooter_type ) {
 			$posnamesql .= "WHERE pos_freebooter = 1 AND r_id = ".$_POST['bblm_rid'];
 		}
 		else {
@@ -96,6 +100,9 @@ if (isset($_POST['bblm_team_add'])) {
 		if ("jm" == $freebooter_type) {
 			$bblm_posid = 1;
 		}
+		else if ("rrookie" == $freebooter_type) {
+			$bblm_posid = $rrookie_pos;
+		}
 		else {
 			//we have a mer so we need to verride the skills and cost parts
 			$bblm_posid = $merc_pos;
@@ -113,6 +120,9 @@ if (isset($_POST['bblm_team_add'])) {
 	if ($freebooter) {
 		if ("jm" == $freebooter_type) {
 			$bblm_page_content .= "Journeyman";
+		}
+		else if ("rrookie" == $freebooter_type) {
+			$bblm_page_content .= "Riotous Rookie";
 		}
 		else {
 			$bblm_page_content .= "Mercenary ".$posd->pos_name;;
@@ -140,7 +150,7 @@ if (isset($_POST['bblm_team_add'])) {
 
 	//If the player being added is permanent, the teams race has "low cost Linos", and the position is the default (freebooter) then the cost is zero
 	//It is dones this way so the cost is still taken out of the treasury below
-	if ( $bblm_default && $low_cost_linos ) {
+	if ( ( $bblm_default && $low_cost_linos ) || "rrookie" == $freebooter_type ) {
 		$teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+0';
 	}
 	else {
@@ -166,7 +176,7 @@ if (isset($_POST['bblm_team_add'])) {
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
 
-		if ( $bblm_default && $low_cost_linos ) {
+		if ( ( $bblm_default && $low_cost_linos ) || "rrookie" == $freebooter_type ) {
 			$bblm_poscost = 0;
 		}
 
@@ -234,6 +244,7 @@ else if ((isset($_POST['bblm_team_select'])) || ("add" == $_GET['action'])) {
 			$team_race = $res->r_id;
 		}
 	}
+	$low_cost_linos = 0;
 
 	//Select number of players on the team
 	$numplayerssql = "SELECT COUNT(*) AS numplay FROM ".$wpdb->prefix."player WHERE p_status = 1 AND t_id = ".$team_id;
@@ -241,8 +252,16 @@ else if ((isset($_POST['bblm_team_select'])) || ("add" == $_GET['action'])) {
 	$player_count = $wpdb->get_var($numplayerssql);
 
 	//caluculate available "shirt" numbers on the team
-	//Create array of numbers 1 through 16
-	$num = Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+	//If the race has access to low cost linos then this can extend to 23!
+	if ( BBLM_CPT_Race::is_race_cheap_linos( $team_race ) ) {
+		$low_cost_linos = 1;
+		//Create array of numbers 1 through 16
+		$num = Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23);
+	}
+	else {
+		//Create array of numbers 1 through 16
+		$num = Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+	}
 	//Sql to determin position numbers in user
 	$usedsql = 'SELECT DISTINCT p_num AS used from '.$wpdb->prefix.'player WHERE t_id = '.$team_id.' AND p_status = "1" ORDER BY used ASC ';
 	if ($unused = $wpdb->get_results($usedsql, ARRAY_A)) {
@@ -294,6 +313,15 @@ else if ((isset($_POST['bblm_team_select'])) || ("add" == $_GET['action'])) {
 			<label title='JM'><input type="radio" value="1" name="bblm_free"> <strong>Journeyman</strong> - You are done, hit submit!</label><br />
 			<label title='Norm'><input type="radio" value="0" name="bblm_free" checked="yes"> <strong>Normal Permanent Player</strong> - Please fill out section (1) below</label><br />
 			<label title='Merc'><input type="radio" value="2" name="bblm_free"> <strong>Mercenary</strong> - Please fill out sections (1) and (2) below</label><br />
+<?php
+			//Only Ogre and Snotling teams can have them so check for "low cost Lino" race trait
+			if ( $low_cost_linos ) {
+?>
+				<label title='rRookie'><input type="radio" value="3" name="bblm_free"> <strong><?php echo __( 'Riotous Rookie','bblm' ); ?></strong> - <?php echo __( 'Give them a name and hit submit','bblm' ); ?></label><br />
+<?php
+			}
+
+?>
 			</fieldset>
 		</td>
 	</tr>

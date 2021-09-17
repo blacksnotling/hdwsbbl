@@ -178,7 +178,20 @@ else if(isset($_POST['bblm_journeyman_add'])) {
 	print_r($_POST);
 	print("</pre>"); */
 
-$teamsql = "UPDATE `".$wpdb->prefix."team` SET `t_bank` = t_bank-'".$_POST['bblm_cost']."' WHERE `t_id` = ".$_POST['bblm_team'];
+//First we check to see if the race has low cost linos
+$low_cost_linos = 0;
+if ( BBLM_CPT_Race::is_race_cheap_linos( (int) $_POST['bblm_race'] ) ) {
+	$low_cost_linos = 1;
+}
+
+//If the race has Low cost Linos then this player is a default position, and thus costs nothing!
+if ( $low_cost_linos ) {
+	//Dummy query to avoid an error
+	$teamsql = "SELECT * FROM ".$wpdb->prefix."team";
+}
+else {
+	$teamsql = "UPDATE `".$wpdb->prefix."team` SET `t_bank` = t_bank-'".$_POST['bblm_cost']."' WHERE `t_id` = ".$_POST['bblm_team'];
+}
 $playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_position']." WHERE `p_id` = ".$_POST['bblm_player'];
 
 	if (FALSE !== $wpdb->query($teamsql)) {
@@ -197,7 +210,7 @@ $playersql = "UPDATE `".$wpdb->prefix."player` SET `pos_id` = ".$_POST['bblm_pos
 
 		$linksql = "SELECT J.pid FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."bb2wp J WHERE P.p_id = J.tid AND J.prefix = 'p_' AND P.p_id = ".$_POST['bblm_player'];
 	$wppage_id = $wpdb->get_var($linksql);
-		print("Journeyman has been hired. You may wish to <a href=\"".home_url()."/wp-admin/post.php?post=".$wppage_id."&action=edit\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
+		print("Journeyman / Riotous Rookie has been hired. You may wish to <a href=\"".home_url()."/wp-admin/post.php?post=".$wppage_id."&action=edit\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
 	}
 	else {
 		print("Something went wrong");
@@ -539,12 +552,15 @@ else if ("edit" == $_GET['action']) {
 		///////////////////////
 		$bblm_player = $_GET['id'];
 ?>
-<h3>Permanently Add a Journeyman To This Team</h3>
+<h3>Permanently Add a Journeyman or Riotous Rookie To This Team</h3>
 <?php
 		$playerdetailssql = "SELECT P.p_id, P.p_name, P.p_cost, T.t_name, T.t_bank, T.r_id, P.t_id, P.pos_id FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."team T WHERE P.t_id = T.t_id AND P.p_id = ".$bblm_player;
 		$jm = $wpdb->get_row($playerdetailssql);
-		//Check to see if the player is actually a Journeyman
-		if (1 == $jm->pos_id) {
+		//Check to see if the player is actually a Journeyman or Riotous Rookie
+		$options = get_option('bblm_config');
+		$rrookie_pos = htmlspecialchars($options['player_rrookie'], ENT_QUOTES);
+
+		if ( 1 == $jm->pos_id || $rrookie_pos == $jm->pos_id ) {
 ?>
 <h4>Player Details<h4>
 <table cellspacing="0" class="widefat" style="width:400px;">
@@ -615,6 +631,7 @@ else if ("edit" == $_GET['action']) {
 	<input type="hidden" name="bblm_position" size="6" value="<?php print($position_id); ?>">
 	<input type="hidden" name="bblm_team" size="6" value="<?php print($jm->t_id); ?>">
 	<input type="hidden" name="bblm_cost" size="6" value="<?php print($jm->p_cost); ?>">
+	<input type="hidden" name="bblm_race" size="6" value="<?php print($jm->r_id); ?>">
 
 	<p class="submit">
 		<input type="submit" name="bblm_journeyman_add" tabindex="4" value="Hire Journeyman" title="Hire Journeyman"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($jm->t_id); ?>" title="Cancel this and select another player">Cancel</a>

@@ -1867,6 +1867,9 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 
 		<h2>V1.13 -> V1.14</h2>
 		<p>Add all the releevant race traits to the races</p>
+		<p>Add a new position for 'Riotous Rookie' and set its owning race to 0</p>
+		<p>Update the settings with the new Riotous Rookie Position</p>
+		<p>Update the Fate db table to include Riotous Rookies along side JM</p>
 
 
 </form>

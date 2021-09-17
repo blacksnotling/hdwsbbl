@@ -304,6 +304,38 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
+
+		//Start of inducements
+		register_post_type( 'bblm_inducement',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Inducements', 'bblm' ),
+					'singular_name' 		=> __( 'Inducement', 'bblm' ),
+					'add_new_item' 			=> __( 'New Inducement', 'bblm' ),
+					'add_new' 			=> __( 'New Inducement', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Inducement', 'bblm' ),
+					'new_item' 				=> __( 'New Inducement', 'bblm' ),
+					'view_item' 			=> __( 'View Inducement', 'bblm' ),
+					'view_items' 			=> __( 'View Inducement', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Inducements found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Inducement found.', 'bblm' ),
+					'all_items' 			=> __( 'Inducements', 'bblm' ),
+				),
+				'public' 				=> true,
+				'description' 				=> 'true',
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'Inducements' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Match
 	}
 
   /**
