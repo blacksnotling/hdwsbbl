@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_Widget_ListComps extends WP_Widget {
@@ -30,63 +30,86 @@ class BBLM_Widget_ListComps extends WP_Widget {
     $sea_id = BBLM_CPT_Season::get_current_season();
 
 		$compsql = 'SELECT C.WPID AS CWPID, C.c_active, UNIX_TIMESTAMP(C.c_sdate) AS sdate  FROM '.$wpdb->prefix.'comp C WHERE C.c_counts = 1 AND C.sea_id = '.$sea_id.' ORDER BY C.c_active DESC, C.c_sdate ASC';
-		if ($complisting = $wpdb->get_results($compsql)) {
+		if ( $complisting = $wpdb->get_results( $compsql ) ) {
       //set up the code below
 			$is_first = 1;
 			$last_stat = 0;
 			$today = date("U");
+      $zebracount = 1;
 
-			foreach ($complisting as $cl) {
-				if (($cl->c_active) && ($cl->sdate < $today)) {
+			foreach ( $complisting as $cl ) {
+				if ( ( $cl->c_active ) && ( $cl->sdate < $today ) ) {
 
-						if ((1 !== $last_stat) && (!$is_first)) {
-							print("		</ul>\n	</div>\n");
+						if ( ( 1 !== $last_stat ) && ( !$is_first ) ) {
+              $zebracount = 1;
+							echo '</tbody></table>';
 							$is_first = 1;
 						}
-						if ($is_first) {
+						if ( $is_first ) {
               echo '<div>';
               echo $args['before_title'] . apply_filters( 'widget_title', __( 'Active Competitions' ) ) . $args['after_title'];
-              echo '<ul>';
+              echo '<table><tbody>';
 
               $is_first = 0;
 						}
-						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
+            if ( $zebracount % 2 ) {
+              echo '<tr class="bblm_tbl_alt"><td>';
+            }
+            else {
+              echo '<tr><td>';
+            }
+            echo bblm_get_competition_link( $cl->CWPID ) . '</td></tr>';
 						$last_stat = 1;
 				}//end of active comp
-				else if (($cl->c_active) && ($cl->sdate > $today)) {
+				else if ( ( $cl->c_active ) && ( $cl->sdate > $today ) ) {
 
-						if ((2 !== $last_stat) && (!$is_first)) {
-							print("		</ul>\n	</div>\n");
+						if ( ( 2 !== $last_stat ) && ( !$is_first ) ) {
+              $zebracount = 1;
+							echo '</tbody></table>';
 							$is_first = 1;
 						}
-						if ($is_first) {
+						if ( $is_first ) {
               echo '<div>';
               echo $args['before_title'] . apply_filters( 'widget_title', __( 'Upcoming Competitions' ) ) . $args['after_title'];
-              echo '<ul>';
+              echo '<table><tbody>';
 
 							$is_first = 0;
 						}
-						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
+            if ( $zebracount % 2 ) {
+              echo '<tr class="bblm_tbl_alt"><td>';
+            }
+            else {
+              echo '<tr><td>';
+            }
+            echo bblm_get_competition_link( $cl->CWPID ) . '</td></tr>';
 						$last_stat = 2;
 				}//end of upcoming comp
 				else {
 
-						if ((3 !== $last_stat) && (!$is_first)) {
-							print("		</ul>\n	</div>\n");
+						if ( ( 3 !== $last_stat ) && ( !$is_first ) ) {
+              $zebracount = 1;
+							echo '</tbody></table>';
 							$is_first = 1;
 						}
-						if ($is_first) {
+						if ( $is_first ) {
               echo '<div>';
               echo $args['before_title'] . apply_filters( 'widget_title', __( 'Recent Competitions' ) ) . $args['after_title'];
-              echo '<ul>';
+              echo '<table><tbody>';
 
 							$is_first = 0;
 						}
-						echo '<li>' . bblm_get_competition_link( $cl->CWPID ) . '</li>';
+            if ( $zebracount % 2 ) {
+              echo '<tr class="bblm_tbl_alt"><td>';
+            }
+            else {
+              echo '<tr><td>';
+            }
+            echo bblm_get_competition_link( $cl->CWPID ) . '</td></tr>';
 						$last_stat = 3;
 				}//end of recent comp
+        $zebracount++;
 			}//end of for each
-			print("		</ul>\n	</div>\n");
+			echo '</tbody></table>';
 		}//end of if sql
 
 

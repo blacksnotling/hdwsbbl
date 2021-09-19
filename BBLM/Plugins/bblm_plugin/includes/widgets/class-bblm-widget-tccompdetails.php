@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_TCcompdetails extends WP_Widget {
@@ -80,8 +80,13 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
                   'key' => 'comp_cup',
                   'value' => $cm[ 'comp_cup' ][0],
                   'compare' => '=',
-              )
+              ),
+              'season' => array(
+                'key' => 'comp_season',
+                'type' => 'NUMERIC'
+              ),
           ),
+          'orderby' => 'season'
         )
       );
 
@@ -106,33 +111,70 @@ class BBLM_Widget_TCcompdetails extends WP_Widget {
 
       echo $args['before_widget'];
       echo $args['before_title'] . apply_filters( 'widget_title', 'Other Competitions this Season' ) . $args['after_title'];
-
+?>
+      <table>
+        <thead>
+          <tr>
+            <th><?php echo __( 'Competition','bblm' ); ?></th>
+            <th><?php echo __( 'Cup','bblm' ); ?></th>
+          </tr>
+        </thead>
+        <tbody>
+<?php
       if( $sposts ) {
-        echo '<ul>';
+        $zebracount = 1;
+
         foreach( $sposts as $o ) {
-          echo '<li>' . bblm_get_competition_link( $o->ID ) . '</li>';
+          if ( $zebracount % 2 ) {
+            echo '<tr class="bblm_tbl_alt">';
+          }
+          else {
+            echo '<tr>';
+          }
+          echo '<td>' . bblm_get_competition_link( $o->ID ) . '</td>';
+          echo '<td>' . bblm_get_cup_link( get_post_meta( $o->ID, 'comp_cup', true ) ) . '</td></tr>';
+          $zebracount++;
         }
-        echo '</ul>';
       }
       else {
-        echo '<p>' . __( 'None at present.', 'bblm' ) . '</p>';
+        echo '<tr class="bblm_tbl_alt"><td colSpan="2">' . __( 'None at present.', 'bblm' ) . '</td></tr>';
       }
+
+      echo '</tbody></table>';
 
       echo $args['after_widget'];
 
       echo $args['before_widget'];
       echo $args['before_title'] . apply_filters( 'widget_title', 'Other Competitions for this Cup' ) . $args['after_title'];
-
+?>
+      <table>
+        <thead>
+          <tr>
+            <th><?php echo __( 'Competition','bblm' ); ?></th>
+            <th><?php echo __( 'Season','bblm' ); ?></th>
+          </tr>
+        </thead>
+        <tbody>
+<?php
       if( $cposts ) {
-        echo '<ul>';
+        $zebracount = 1;
         foreach( $cposts as $o ) {
-          echo '<li>' . bblm_get_competition_link( $o->ID ) . '</li>';
+          if ( $zebracount % 2 ) {
+            echo '<tr class="bblm_tbl_alt">';
+          }
+          else {
+            echo '<tr>';
+          }
+          echo '<td>' . bblm_get_competition_link( $o->ID ) . '</td>';
+          echo '<td>' . bblm_get_season_link( get_post_meta( $o->ID, 'comp_season', true ) ) . '</td></tr>';
+          $zebracount++;
         }
-        echo '</ul>';
       }
       else {
-        echo '<p>' . __( 'None at present.', 'bblm' ) . '</p>';
+        echo '<tr><td>' . __( 'None at present.', 'bblm' ) . '</td></tr>';
       }
+
+      echo '</tbody></table>';
 
       echo $args['after_widget'];
 

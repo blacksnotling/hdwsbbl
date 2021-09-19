@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Widget_TCmatchdetails extends WP_Widget {
@@ -42,10 +42,10 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
 
       //Gathering data for the sidebar
       //Top players in match
-      $topplayerssql = 'SELECT P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 5';
+      $topplayerssql = 'SELECT P.ID AS PWPID, P.post_title, P.guid, T.mp_spp AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_spp > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 5';
 
       //scorers
-      $topscorerssql = 'SELECT P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 10';
+      $topscorerssql = 'SELECT P.ID AS PWPID, P.post_title, P.guid, T.mp_td AS value FROM '.$wpdb->prefix.'match_player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.mp_td > 0 AND T.m_id = '.$matchid.' ORDER BY value DESC LIMIT 10';
 
       $compsql = 'SELECT C.WPID AS CWPID, D.div_name, C.sea_id FROM '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D WHERE D.div_id = '.$m->div_id.' AND C.WPID = '.$m->c_id.' LIMIT 1';
       $comp = $wpdb->get_row( $compsql );
@@ -80,33 +80,67 @@ class BBLM_Widget_TCmatchdetails extends WP_Widget {
 
         echo $args['before_widget'];
         echo $args['before_title'] . apply_filters( 'widget_title', 'Top Players of the Match' ) . $args['after_title'];
-
+?>
+        <table>
+          <thead>
+            <tr>
+              <th><?php echo __( 'Player','bblm' ); ?></th>
+              <th><?php echo __( 'SPP','bblm' ); ?></th>
+            </tr>
+          </thead>
+          <tbody>
+<?php
         if ( $topplayers = $wpdb->get_results( $topplayerssql ) ) {
-          echo '<ul>';
-            foreach ($topplayers as $ts) {
-              print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value." spp</li>");
+          $zebracount = 1;
+            foreach ( $topplayers as $ts ) {
+              if ( $zebracount % 2 ) {
+                echo '<tr class="bblm_tbl_alt">';
+              }
+              else {
+                echo '<tr>';
+              }
+              echo '<td>' . bblm_get_player_link( $ts->PWPID ) . '</td>';
+              echo '<td>' . $ts->value . '</td></tr>';
+              $zebracount++;
             }
-          echo '</ul>';
         }
         else {
-          echo '<p>' . __( 'None!', 'bblm' ) . '</p>';
+          echo '<tr class="bblm_tbl_alt"><td colSpan="2">' . __( 'None at present.', 'bblm' ) . '</td></tr>';
         }
+        echo '</tbody></table>';
 
         echo $args['after_widget'];
 
         echo $args['before_widget'];
         echo $args['before_title'] . apply_filters( 'widget_title', 'Top Scorers of the Match' ) . $args['after_title'];
-
-        if ( $topscorers = $wpdb->get_results( $topscorerssql ) ) {
-          echo '<ul>';
-            foreach ($topscorers as $ts) {
-              print("						<li><a href=\"".$ts->guid."\" title=\"Read more on this player\">".$ts->post_title."</a> - ".$ts->value."</li>");
+?>
+        <table>
+          <thead>
+            <tr>
+              <th><?php echo __( 'Player','bblm' ); ?></th>
+              <th><?php echo __( 'SPP','bblm' ); ?></th>
+            </tr>
+          </thead>
+          <tbody>
+<?php
+        if ( $topplayers = $wpdb->get_results( $topscorerssql ) ) {
+          $zebracount = 1;
+            foreach ( $topplayers as $ts ) {
+              if ( $zebracount % 2 ) {
+                echo '<tr class="bblm_tbl_alt">';
+              }
+              else {
+                echo '<tr>';
+              }
+              echo '<td>' . bblm_get_player_link( $ts->PWPID ) . '</td>';
+              echo '<td>' . $ts->value . '</td></tr>';
+              $zebracount++;
             }
-          echo '</ul>';
         }
         else {
-          echo '<p>' . __( 'None!', 'bblm' ) . '</p>';
+          echo '<tr class="bblm_tbl_alt"><td colSpan="2">' . __( 'No Touchdowns were scored.', 'bblm' ) . '</td></tr>';
         }
+        echo '</tbody></table>';
 
         echo $args['after_widget'];
 
