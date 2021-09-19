@@ -57,9 +57,12 @@ if ( ! defined( 'ABSPATH' ) ) {
       $playerstatsarray[4]['item'] = "mp_int";
       $playerstatsarray[4]['title'] = "Top Interceptors";
       $playerstatsarray[4]['error'] = "No Inteceptions have been made yet";
-      $playerstatsarray[5]['item'] = "mp_mvp";
-      $playerstatsarray[5]['title'] = "Most Valuable Players (MVP)";
-      $playerstatsarray[5]['error'] = "The Most Valuable Players list is not available at the moment";
+			$playerstatsarray[5]['item'] = "mp_def";
+			$playerstatsarray[5]['title'] = "Top Deflections";
+			$playerstatsarray[5]['error'] = "No Deflections have been made yet";
+      $playerstatsarray[6]['item'] = "mp_mvp";
+      $playerstatsarray[6]['title'] = "Most Valuable Players (MVP)";
+      $playerstatsarray[6]['error'] = "The Most Valuable Players list is not available at the moment";
 
       //For each of the stats, print the top players list. If none are found, display the relevant error
       foreach ( $playerstatsarray as $tpa ) {
