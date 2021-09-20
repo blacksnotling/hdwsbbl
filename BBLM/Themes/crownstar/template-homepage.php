@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-	<div id="primary" class="content-area content-area-<?php echo crownstar_get_sidebar_setting(); ?>-sidebar">
+	<div id="primary" class="content-area content-area-full-width">
 		<main id="main" class="site-main" role="main">
 
 			<?php while ( have_posts() ) : the_post(); ?>
@@ -20,6 +20,5 @@ get_header(); ?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
-
-<?php get_sidebar(); ?>
+	
 <?php get_footer(); ?>
