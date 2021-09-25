@@ -61,7 +61,7 @@ class BBLM_Widget_RecentMatchSum extends WP_Widget {
           echo '<tr class="bblm_tbl_alt">';
         }
         else {
-          echo '<tr">';
+          echo '<tr>';
         }
         echo '<td>' . bblm_get_match_link_date( $o->ID ) . '</td>';
         echo '<td>' . bblm_get_match_link_score( $o->ID ) . '</td>';
