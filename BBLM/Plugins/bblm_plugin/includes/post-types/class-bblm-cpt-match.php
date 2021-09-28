@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1.2
+ * @version   1.2
  */
 
 class BBLM_CPT_Match {
@@ -91,17 +91,34 @@ class BBLM_CPT_Match {
  * @param $ID the ID of the match (WPID)
  * @return string the data of the match
  */
- public static function get_match_date( $ID ) {
+ public static function get_match_date( $ID, $format ) {
 	 global $wpdb;
+
+	 switch ( $format ) {
+		case ( 'short' == $format ):
+				break;
+		case ( 'long' == $format ):
+				break;
+		default :
+				$format = 'short';
+				break;
+	}
 
 	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '. $ID;
 
 	 $result = $wpdb->get_var( $sql );
 
-	 return date("d.m.y", $result );
+	 if ( 'short' == $format ) {
+		 return date("d.m.y", $result );
+	 }
+	 else if ( 'long' == $format ) {
+		 return date("jS F 'y", $result );
+	 }
+
 
  } //end of get_match_date
 
 } //end of class
+
 
 new BBLM_CPT_Match();

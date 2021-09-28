@@ -800,6 +800,60 @@ table.bblm_brackets td {
   vertical-align: middle;
 }
 
+/* Event Blocks */
+.bblm-event-blocks thead {
+	display: none;
+}
+.bblm-event-blocks .bblm-event-date,
+.bblm-event-blocks .bblm-event-time,
+.bblm-event-blocks .bblm-event-results,
+.bblm-event-blocks .bblm-event-title {
+	text-align: center;
+	display: block;
+	margin: 10px 0;
+	clear: none;
+}
+.bblm-event-blocks .bblm-event-league,
+.bblm-event-blocks .bblm-event-season,
+.bblm-event-blocks .bblm-event-comp,
+.bblm-event-blocks .bblm-event-venue {
+	text-align: center;
+	margin: 0 20%;
+	padding: 0 20px;
+}
+.bblm-event-blocks .team-logo {
+	margin: 10px;
+	width: 20%;
+	text-align: center;
+}
+.bblm-event-blocks .logo-odd {
+	float: left;
+}
+.bblm-event-blocks .logo-even {
+	float: right;
+}
+.bblm-event-blocks .team-logo img {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+}
+.bblm-fixtures-results {
+	clear: both;
+}
+.widget .bblm-event-blocks .bblm-event-title {
+	margin: 10px;
+	padding: 0;
+}
+
+span.bblm_event_spec_label {
+	font-weight: bold;
+}
+
+.bblm-event-results .bblm-result {
+  font-size: larger;
+}
+
 /* Media Queries */
 @media screen and (max-width: 600px) {
     .main-navigation .nav-menu > li:hover > a,

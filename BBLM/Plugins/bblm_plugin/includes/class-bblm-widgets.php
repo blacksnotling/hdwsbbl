@@ -31,3 +31,7 @@ include_once( 'widgets/class-bblm-widget-tcteamlogo.php' );
 include_once( 'widgets/class-bblm-widget-tcteamdetails.php' );
 include_once( 'widgets/class-bblm-widget-tcmatchdetails.php' );
 include_once( 'widgets/class-bblm-widget-tcplayerdetails.php' );
+
+//Front Page Widgets - Designed for the front page only
+include_once( 'widgets/class-bblm-widget-frontrecentmatches.php' );
+include_once( 'widgets/class-bblm-widget-frontfixtures.php' );

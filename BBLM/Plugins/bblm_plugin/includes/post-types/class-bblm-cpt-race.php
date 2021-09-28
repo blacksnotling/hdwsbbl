@@ -239,6 +239,30 @@ class BBLM_CPT_Race {
    }// end of display_race_icon()
 
 	 /**
+		 * RETURNS the race icon to a set size
+		 *
+		 * @param wordpress $query
+		 * @return none
+		 */
+		 public static function get_race_icon( $ID, $size ) {
+
+			switch ( $size ) {
+			 case ( 'medium' == $size ):
+					 break;
+			 case ( 'icon' == $size ):
+					 break;
+			 case ( 'mini' == $size ):
+					 break;
+			 default :
+					 $size = 'icon';
+					 break;
+		 }
+
+			 return get_the_post_thumbnail( $ID, 'bblm-fit-' . $size );
+
+		 }// end of get_race_icon()
+
+	 /**
 	  * Outputs the positions that can play for a race
 	  *
 	  * @param int $id the race in question

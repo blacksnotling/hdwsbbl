@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.3
+ * @version   1.4
  */
 
  /**
@@ -58,6 +58,50 @@ function bblm_get_team_link( $ID ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_team_link
+
+/**
+ * Returns the link of a team, properly escaped and formatted
+ * with the teams logo in between (or the race image if not available)
+ * Takes in the ID of the Wordpress Page
+ */
+function bblm_get_team_link_logo( $ID ) {
+	global $wpdb;
+
+	//grab the ID of the "tbd" team
+	$bblm_tbd_team = bblm_get_tbd_team();
+
+  $team_name = bblm_get_team_name( $ID );
+  $output = "";
+
+	$output .= '<a title="Read more about ' . $team_name . '" href="' . get_post_permalink( $ID ) . '">';
+
+	//Determine if a custom logo is present
+	$teamsql = 'SELECT * FROM '.$wpdb->prefix.'team T WHERE T.WPID = '. $ID;
+	$team = $wpdb->get_row ( $teamsql );
+	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/" . $team->t_sname . "_big.gif";
+	if (file_exists($filename)) {
+		$output .= '<img src="' . home_url() . '/images/teams/' . $team->t_sname . '_big.gif" alt="' . $team_name . ' Logo" />';
+	}
+	else {
+		if ( $bblm_tbd_team == $team->t_id ) {
+			//If the team is TBD then display the logo of the star races (the league shiled)
+			$options = get_option( 'bblm_config' );
+			$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
+
+			$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, 'medium' );
+		}
+		else {
+			//otherwise display the race logo
+			$output .= BBLM_CPT_Race::get_race_icon( $team->r_id, 'medium' );
+		}
+
+	}
+
+	$output .= '</a>';
+
+  return __( $output, 'bblm');
+
+}// end of bblm_get_team_link_logo
 
 /**
  * Returns the name of a Player, properly escaped and formatted
@@ -315,9 +359,19 @@ function bblm_get_match_link( $ID ) {
  * Returns the link of a Match as a date, properly escaped and formatted
  * Takes in the ID of the Wordpress Page
  */
-function bblm_get_match_link_date( $ID ) {
+function bblm_get_match_link_date( $ID, $format="short" ) {
 
-  $match_date = BBLM_CPT_Match::get_match_date( $ID );
+	switch ( $format ) {
+	 case ( 'short' == $format ):
+			 break;
+	 case ( 'long' == $format ):
+			 break;
+	 default :
+			 $format = 'short';
+			 break;
+ }
+
+  $match_date = BBLM_CPT_Match::get_match_date( $ID, $format );
   $output = "";
 
   $output .= '<a title="View details of the match" href="' . get_post_permalink( $ID ) . '">' . $match_date . '</a>';
