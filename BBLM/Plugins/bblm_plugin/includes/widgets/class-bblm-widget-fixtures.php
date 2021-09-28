@@ -66,7 +66,7 @@ class BBLM_Widget_Fixtures extends WP_Widget {
             <td>
 <?php
         if ( $bblm_tbd_team == $m->TAid ) {
-          echo bblm_get_team_name( $m->TATWPID );
+          echo __( 'To Be Determined', 'bblm' );
         }
         else {
           echo bblm_get_team_link( $m->TATWPID );
