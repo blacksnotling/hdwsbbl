@@ -1,6 +1,6 @@
 /*
  *
- * CSS used by the plugin. This can be overwritten in your own style.css within
+ * CSS used by the plugin. These can be overwritten in your own style.css within
  * you theme folder
  *
 */
@@ -28,4 +28,9 @@ div.dykcontainer p, div.dykcontainer h4 {
 }
 div.dykcontainer p.dykfooter {
 	text-align: right;
+}
+
+/***** Tables *****/
+table tr.bblm_tbl_alt, table tr.odd {
+	background-color: #fff;
 }
