@@ -881,6 +881,10 @@ span.bblm_event_spec_label {
         color: #fff;
         background: #00a69c;
     }
+    /** Hide certain table colums **/
+    .bblm_tbl_collapse {
+      display:none;
+    }
 }
 
 @media screen and (min-width: 601px) {

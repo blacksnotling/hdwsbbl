@@ -64,8 +64,20 @@ function bblm_get_team_link( $ID ) {
  * with the teams logo in between (or the race image if not available)
  * Takes in the ID of the Wordpress Page
  */
-function bblm_get_team_link_logo( $ID ) {
+function bblm_get_team_link_logo( $ID, $size='medium' ) {
 	global $wpdb;
+
+	switch ( $size ) {
+	 case ( 'medium' == $size ):
+			 break;
+	 case ( 'icon' == $size ):
+			 break;
+	 case ( 'mini' == $size ):
+			 break;
+	 default :
+			 $size = 'medium';
+			 break;
+ }
 
 	//grab the ID of the "tbd" team
 	$bblm_tbd_team = bblm_get_tbd_team();
@@ -88,11 +100,11 @@ function bblm_get_team_link_logo( $ID ) {
 			$options = get_option( 'bblm_config' );
 			$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
 
-			$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, 'medium' );
+			$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, $size );
 		}
 		else {
 			//otherwise display the race logo
-			$output .= BBLM_CPT_Race::get_race_icon( $team->r_id, 'medium' );
+			$output .= BBLM_CPT_Race::get_race_icon( $team->r_id, $size );
 		}
 
 	}

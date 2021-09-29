@@ -35,3 +35,4 @@ include_once( 'widgets/class-bblm-widget-tcplayerdetails.php' );
 //Front Page Widgets - Designed for the front page only
 include_once( 'widgets/class-bblm-widget-frontrecentmatches.php' );
 include_once( 'widgets/class-bblm-widget-frontfixtures.php' );
+include_once( 'widgets/class-bblm-widget-frontteamperf.php' );
