@@ -24,13 +24,17 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
+    echo '<div class="bblm-widget-align-' . esc_attr( $instance['align'] ) . '">';
     echo $args['before_widget'];
 
-    //If a title was provided then display the title
-    if ( ! empty( $instance['title'] ) ) {
+    //If a title was provided then display the title, If on the front page then force a heading wrapper
+    if ( ( ! empty( $instance['title'] ) ) && is_front_page() ) {
+      echo '<h2 class="bblm-table-caption">' . apply_filters( 'widget_title', $instance['title'] ) . '</h2>';
+    }
+    else if ( ! empty( $instance['title'] ) ) {
       echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
     }
-    //If a number of matches was not submitted, then default to 6
+    //If a number of items to show was not submitted, then default to 6
     if ( empty( $instance['numshow'] ) ) {
       $instance['numshow'] = 6;
     }
@@ -68,6 +72,7 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
     }
 
     echo $args['after_widget'];
+    echo '</div>';
 
   }
 
@@ -77,8 +82,14 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
     echo '<p>'.__( 'Displays a summary of recently hired Players (suitible for the sidebar)', 'bblm' ).'</p>';
     //if no data has been provided then this populates some default values
     $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Recent Hires', 'bblm' );
-    $numshow = ! empty( $instance['numshow'] ) ? $instance['numshow'] : "6";
-	?>
+    $numshow = ! empty( $instance['numshow'] ) ? $instance['numshow'] : "6";    $align = ! empty( $instance['align'] ) ? $instance['align'] : "none";
+?>
+    <p><label for="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>"><?php esc_attr_e( 'Alignment when on Front page:', 'bblm' ); ?></label>
+      <select id="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'align' ) ); ?>" class="widefat" style="width:100%;">
+        <option<?php selected( esc_attr( $align ), "none" ); ?> value="none"><?php echo __( 'None','bblm' ); ?></option>
+        <option<?php selected( esc_attr( $align ), "left" ); ?> value="left"><?php echo __( 'Left','bblm' ); ?></option>
+        <option<?php selected( esc_attr( $align ), "right" ); ?> value="right"><?php echo __( 'Right','bblm' ); ?></option>
+      </select></p>
     <p>
       <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'bblm' ); ?></label>
       <input
@@ -110,6 +121,7 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
     $instance = array();
   	$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
     $instance['numshow'] = ( ! empty( $new_instance['numshow'] ) ) ? (int) strip_tags( $new_instance['numshow'] ) : '';
+    $instance['align'] = ( ! empty( $new_instance['align'] ) ) ? esc_attr( $new_instance['align'] ) : '';
 
     return $instance;
 

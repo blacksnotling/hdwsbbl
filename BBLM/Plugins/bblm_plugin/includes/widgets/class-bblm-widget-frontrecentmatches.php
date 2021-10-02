@@ -107,7 +107,8 @@ class BBLM_Widget_FrontRecentMatchSum extends WP_Widget {
     $nummatch = ! empty( $instance['nummatch'] ) ? $instance['nummatch'] : "6";
     $align = ! empty( $instance['align'] ) ? $instance['align'] : "none";
 	?>
-    <p><select id="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'align' ) ); ?>" class="widefat" style="width:100%;">
+    <p><label for="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>"><?php esc_attr_e( 'Alignment when on Front page:', 'bblm' ); ?></label>
+      <select id="<?php echo esc_attr( $this->get_field_id( 'align' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'align' ) ); ?>" class="widefat" style="width:100%;">
       <option<?php selected( esc_attr( $align ), "none" ); ?> value="none"><?php echo __( 'None','bblm' ); ?></option>
       <option<?php selected( esc_attr( $align ), "left" ); ?> value="left"><?php echo __( 'Left','bblm' ); ?></option>
       <option<?php selected( esc_attr( $align ), "right" ); ?> value="right"><?php echo __( 'Right','bblm' ); ?></option>
