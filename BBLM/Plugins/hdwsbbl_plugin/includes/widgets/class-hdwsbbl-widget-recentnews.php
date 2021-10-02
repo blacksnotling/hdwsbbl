@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	HDWSBBL/Widgets
- * @version   1.0
+ * @version   1.1
  */
 
 class HWSBBL_Widget_RecentNews extends WP_Widget {
@@ -42,15 +42,29 @@ class HWSBBL_Widget_RecentNews extends WP_Widget {
 
           // The Loop
           if ( $the_query->have_posts() ) {
-            print("<ul>\n");
+            $zebracount = 1;
+?>
+      <table class="bblm_table bblm_sortable">
+        <tbody>
+<?php
             while ( $the_query->have_posts() ) {
               $the_query->the_post();
-    ?>
-    <li><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></li>
 
-      <?php
+              if ( $zebracount % 2 ) {
+                echo '<tr class="bblm_tbl_alt" id="F'. $m->f_id . '">';
+              }
+              else {
+                echo '<tr id="F'. $m->f_id . '">';
+              }
+?>
+    <td><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></td>
+
+<?php
+              echo '</tr>';
+
+              $zebracount++;
             } //end of while
-            print("</ul>\n");
+            echo '</tbody></table>';
           } //end of have posts
 
 
