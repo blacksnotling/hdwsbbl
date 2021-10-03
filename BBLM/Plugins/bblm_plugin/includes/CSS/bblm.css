@@ -34,3 +34,67 @@ div.dykcontainer p.dykfooter {
 table tr.bblm_tbl_alt, table tr.odd {
 	background-color: #fff;
 }
+
+/***** Sponsors *****/
+.bblm-sponsors {
+	display: block;
+	clear: both;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.bblm-sponsors .bblm-sponsors-title {
+	margin-top: 0;
+}
+
+.bblm-sponsors .sponsor {
+	display: inline-block;
+	margin: 15px;
+}
+
+.bblm-sponsors .bblm-sponsor-logo {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	height: auto;
+	width: auto;
+/*	display: block;*/
+}
+
+.bblm-header-sponsors {
+	z-index: 10;
+	right: 0;
+	top: 100%;
+	margin: 10px 10px -10px;
+}
+
+.bblm-header-sponsors .bblm-sponsors .sponsor {
+	margin: 5px 5px;
+}
+
+.bblm-footer-sponsors {
+	clear: both;
+	background: #f4f4f4;
+	margin: 0 -100%;
+}
+
+.bblm-footer-sponsors .bblm-sponsors {
+	position: relative;
+	z-index: 2;
+	clear: both;
+	padding: 5em 0;
+}
+
+.bblm-footer-sponsors .bblm-sponsors .bblm-sponsors-title {
+	color: #888888;
+}
+
+@media only screen and (min-width: 40.063em) {
+	.bblm-header-sponsors {
+		float: right;
+	}
+
+	.bblm-header-sponsors .bblm-sponsors {
+		text-align: right;
+	}
+}

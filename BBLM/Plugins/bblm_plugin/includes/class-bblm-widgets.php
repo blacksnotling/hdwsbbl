@@ -36,3 +36,4 @@ include_once( 'widgets/class-bblm-widget-tcplayerdetails.php' );
 include_once( 'widgets/class-bblm-widget-frontrecentmatches.php' );
 include_once( 'widgets/class-bblm-widget-frontfixtures.php' );
 include_once( 'widgets/class-bblm-widget-frontteamperf.php' );
+include_once( 'widgets/class-bblm-widget-frontsponsor.php' );
