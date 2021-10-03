@@ -804,6 +804,11 @@ table.bblm_brackets td {
 .bblm-event-blocks thead {
 	display: none;
 }
+.widget_bblm_frontrecentmatches table.bblm-event-blocks tbody tr,
+.widget_bblm_frontwfixtures table.bblm-event-blocks tbody tr {
+  height: 240px;
+}
+
 .bblm-event-blocks .bblm-event-date,
 .bblm-event-blocks .bblm-event-time,
 .bblm-event-blocks .bblm-event-results,
