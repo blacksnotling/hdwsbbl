@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
  /**
@@ -76,8 +76,9 @@ function bblm_jm_report() {
   //call the options from the table
 	$options = get_option('bblm_config');
 	$merc_pos = htmlspecialchars($options['player_merc'], ENT_QUOTES);
+	$rrookie_pos = htmlspecialchars($options['player_rrookie'], ENT_QUOTES);
 
-	$jmsql = 'SELECT P.post_title AS Player, O.post_title AS Team, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND X.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.') ORDER BY X.t_id, X.p_num';
+	$jmsql = 'SELECT P.post_title AS Player, O.post_title AS Team, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND X.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.' OR X.pos_id = '.$rrookie_pos.') ORDER BY X.t_id, X.p_num';
 
 	if ( $journeymen = $wpdb->get_results($jmsql) ) {
 		$is_first = 1;
@@ -124,7 +125,7 @@ function bblm_jm_report() {
 		print("</ul>\n");
 	}
 	else {
-    echo __( '<p><strong>There are no Journeymen or Mercenarys currently active in the league!</strong></p>', 'bblm');
+    echo __( '<p><strong>There are no Journeymen, Mercenarys, or Riotous Rookies currently active in the league!</strong></p>', 'bblm');
 	}
 
 } // end of bblm_jm_report

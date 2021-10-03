@@ -1559,22 +1559,7 @@ object {
 		background: #000;
 }
 
-.bblm-template-event-video .bblm-table-caption {
-	display: none;
-}
 
-.bblm-event-staff {
-	font-size: 14px;
-	padding: 0.625em 15px;
-}
-
-.bblm-template-event-performance-icons thead {
-	display: none;
-}
-
-.bblm-template-event-performance-icons td {
-	border-width: 0;
-}
 
 .bblm-template-event-performance-icons .bblm-performance-icons {
 	width: 40%;
@@ -1767,7 +1752,7 @@ object {
 }
 
 .bblm-footer-sponsors .bblm-sponsors {
-	padding: 3em 0;
+	padding: 2em 0;
 }
 
 .bblm-template.bblm-template-tournament-winner {

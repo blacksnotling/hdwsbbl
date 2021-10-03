@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.5
+ * @version		1.6
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -304,6 +304,38 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
+
+		//Start of inducements
+		register_post_type( 'bblm_inducement',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Inducements', 'bblm' ),
+					'singular_name' 		=> __( 'Inducement', 'bblm' ),
+					'add_new_item' 			=> __( 'New Inducement', 'bblm' ),
+					'add_new' 			=> __( 'New Inducement', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Inducement', 'bblm' ),
+					'new_item' 				=> __( 'New Inducement', 'bblm' ),
+					'view_item' 			=> __( 'View Inducement', 'bblm' ),
+					'view_items' 			=> __( 'View Inducement', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No Inducements found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No Inducement found.', 'bblm' ),
+					'all_items' 			=> __( 'Inducements', 'bblm' ),
+				),
+				'public' 				=> true,
+				'description' 				=> 'true',
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> true, //exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'Inducements' ),
+				'supports' 				=> array( 'title', 'editor'),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+			)
+		); //end of Match
 	}
 
   /**
@@ -334,6 +366,27 @@ class BBLM_Post_types {
          'rewrite' => array( 'slug' => 'competition-post' ),
        )
      );
+
+		 // Competitions Tax race traits
+		 register_taxonomy(
+			 'race_rules',
+			 'bblm_race',
+			 array(
+				 'labels' => array(
+					 'name' => _x( 'Race Traits / Special Rules', 'taxonomy general name', 'bblm' ),
+					 'singular_name' => _x( 'Race Trait / Special Rule', 'taxonomy singular name', 'bblm' ),
+					 'search_items' => __( 'Search Traits', 'bblm' ),
+					 'all_items' => __( 'All Traits', 'bblm' ),
+					 'edit_item' => __( 'Edit Trait', 'bblm' ),
+					 'update_item' => __( 'Update Trait', 'bblm' ),
+					 'add_new_item' => __( 'Add New Trait', 'bblm' ),
+					 'new_item_name' => __( 'New Trait Name', 'bblm' ),
+				 ),
+				 'sort' => true,
+				 'args' => array( 'orderby' => 'term_order' ),
+				 'rewrite' => array( 'slug' => 'race-rules' ),
+			 )
+		 );
 
    }
 

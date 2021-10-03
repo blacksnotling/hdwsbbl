@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.3.1
+ * @version		1.3.2
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -57,9 +57,12 @@ if ( ! defined( 'ABSPATH' ) ) {
       $playerstatsarray[4]['item'] = "mp_int";
       $playerstatsarray[4]['title'] = "Top Interceptors";
       $playerstatsarray[4]['error'] = "No Inteceptions have been made yet";
-      $playerstatsarray[5]['item'] = "mp_mvp";
-      $playerstatsarray[5]['title'] = "Most Valuable Players (MVP)";
-      $playerstatsarray[5]['error'] = "The Most Valuable Players list is not available at the moment";
+			$playerstatsarray[5]['item'] = "mp_def";
+			$playerstatsarray[5]['title'] = "Top Deflections";
+			$playerstatsarray[5]['error'] = "No Deflections have been made yet";
+      $playerstatsarray[6]['item'] = "mp_mvp";
+      $playerstatsarray[6]['title'] = "Most Valuable Players (MVP)";
+      $playerstatsarray[6]['error'] = "The Most Valuable Players list is not available at the moment";
 
       //For each of the stats, print the top players list. If none are found, display the relevant error
       foreach ( $playerstatsarray as $tpa ) {
@@ -89,7 +92,7 @@ if ( ! defined( 'ABSPATH' ) ) {
           $statsql .= ' LIMIT '.bblm_get_stat_limit();
         }
 
-        echo '<h4>' . __( $tpa[ 'title' ], 'bblm' ) . '</h4>';
+        echo '<h4 class="bblm-table-caption">' . __( $tpa[ 'title' ], 'bblm' ) . '</h4>';
 
         if ( $topstats = $wpdb->get_results( $statsql ) ) {
 
@@ -153,7 +156,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         $statsql .= ' LIMIT '.bblm_get_stat_limit();
       }
 
-      echo '<h4>' . __( 'Top Killers', 'bblm' ) . '</h4>';
+      echo '<h4 class="bblm-table-caption">' . __( 'Top Killers', 'bblm' ) . '</h4>';
 
       if ( $topstats = $wpdb->get_results( $statsql ) ) {
 
@@ -180,29 +183,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 			<div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_expandable bblm_table bblm_stats">
-        <tr>
-          <th class="bblm_tbl_stat">#</th>
-          <th class="bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
-          <th><?php echo __( 'Position', 'bblm' ); ?></th>
-          <th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
-          <th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
-        </tr>
+				<thead>
+					<tr>
+						<th class="bblm_tbl_stat">#</th>
+						<th class="bblm_tbl_name"><?php echo __( 'Player', 'bblm' ); ?></th>
+						<th><?php echo __( 'Position', 'bblm' ); ?></th>
+						<th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __( 'Value', 'bblm' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
 <?php
       $zebracount = 1;
       $prevvalue = 0;
 
       foreach ( $args as $ts ) {
       if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-        echo '<tr class="bblm_tbl_hide">';
+				echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
       }
       else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-        echo '<tr>';
+        echo '<tr class="bblm_tbl_alt">';
       }
       else if ( 10 < $zebracount ) {
-        echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
+        echo '<tr class="bblm_tbl_hide">';
       }
       else {
-        echo '<tr class="bblm_tbl_alt">';
+        echo '<tr>';
       }
       if ( $ts->VALUE > 0 ) {
         if ( $prevvalue == $ts->VALUE ) {
@@ -217,7 +223,8 @@ if ( ! defined( 'ABSPATH' ) ) {
       }
       $zebracount++;
     }
-    echo '</table>';
+    echo '</tbody>';
+		echo '</table>';
 		echo '</div>';
 
   } // end of display_player_table()

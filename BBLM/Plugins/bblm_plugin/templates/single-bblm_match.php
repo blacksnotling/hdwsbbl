@@ -126,13 +126,18 @@
 					</tbody>
 				</table>
 
+<?php
+        if ( get_the_content() != "No Report Filed Yet" ) {
+          //Only display the match report if one is entered
+?>
 				<h3><?php echo __( 'Match Report', 'bblm' ); ?></h3>
 				<div class="bblm_details bblm_match_report">
 					<?php the_content(); ?>
 				</div>
 
-
 <?php
+        }
+
 				//Display match Trivia if something is present
 				if ( "" !== $m->m_trivia ) {
 ?>
@@ -204,10 +209,10 @@
 							$tainc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ( $zebracount % 2 ) {
-              echo '<tr>';
+              echo '<tr class="bblm_tbl_alt">';
 						}
 						else {
-              echo '<tr class="bblm_tbl_alt">';
+              echo '<tr>';
 						}
 ?>
             <td><?php echo $tap->p_num; ?></td>
@@ -280,10 +285,10 @@
 							$tbinc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ($zebracount % 2) {
-              echo '<tr>';
+              echo '<tr class="bblm_tbl_alt">';
 						}
 						else {
-              echo '<tr class="bblm_tbl_alt">';
+              echo '<tr>';
 						}
 ?>
             <td><?php echo $tap->p_num; ?></td>

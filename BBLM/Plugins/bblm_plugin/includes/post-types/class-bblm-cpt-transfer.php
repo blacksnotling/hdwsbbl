@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Transfer {
@@ -252,23 +252,37 @@ class BBLM_CPT_Transfer {
 				'order'			=> 'DESC',
 			);
 			if ( $recenttransfers = get_posts( $args ) ) {
+				$zebracount = 1;
 
-				$output .= '<ul>';
+				$output .= '<table>';
+				$output .= '<thead>';
+				$output .= '<tr>';
+				$output .= '<th>' . __( 'Team','bblm' ) . '</th>';
+				$output .= '<th>' . __( 'Hires','bblm' ) . '</th>';
+				$output .= '<th>' . __( 'From','bblm' ) . '</th>';
+				$output .= '</tr>';
+				$output .= '</thead>';
+				$output .= '<tbody>';
 
 				foreach ( $recenttransfers as $rt ) {
 					$meta = get_post_meta( $rt->ID );
 
-					$output .= '<li>';
-					$output .= bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] );
-        	$output .= ' hires ';
-        	$output .= bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] );
-        	$output .= ' from ';
-        	$output .= bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] );
-        	$output .= '</li>';
+					if ( $zebracount % 2 ) {
+						$output .= '<tr class="bblm_tbl_alt">';
+					}
+					else {
+						$output .= '<tr>';
+					}
+					$output .= '<td>' . bblm_get_player_link( $meta[ 'bblm_transfer_player' ][0] ) . '</td>';
+					$output .= '<td>' . bblm_get_team_link( $meta[ 'bblm_transfer_hteam' ][0] ) . '</td>';
+        	$output .= '<td>' . bblm_get_team_link( $meta[ 'bblm_transfer_steam' ][0] ) . '</td>';
+        	$output .= '</tr>';
+
+					$zebracount++;
 
 				}//end of foreach
 
-				$output .= '</ul>';
+				$output .= '</tbody></table>';
 
 			}
 

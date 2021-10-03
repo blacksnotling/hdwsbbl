@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1.1
+ * @version   1.1.2
  */
 
 class BBLM_CPT_Team {
@@ -95,10 +95,10 @@ class BBLM_CPT_Team {
 <?php
 			foreach ( $teamstats as $tst ) {
 				if ($zebracount % 2) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 
 				echo '<td>' . bblm_get_team_link( $tst->WPID ) . '</td>';

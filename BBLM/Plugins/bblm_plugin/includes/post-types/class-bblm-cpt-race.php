@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Race {
@@ -161,6 +161,18 @@ class BBLM_CPT_Race {
   }// end of get_number_teams()
 
 	/**
+   * Returns true if a race has "low cost linesmen"
+   *
+   * @param wordpress $query
+   * @return bool true / false
+   */
+   public static function is_race_cheap_linos( $ID ) {
+
+		 return has_term( 'low-cost-linemen', 'race_rules', $ID );
+
+   }// end of is_race_cheap_linos()
+
+	/**
    * Returns the cost of Rerolls for a race
    *
    * @param wordpress $query
@@ -227,6 +239,30 @@ class BBLM_CPT_Race {
    }// end of display_race_icon()
 
 	 /**
+		 * RETURNS the race icon to a set size
+		 *
+		 * @param wordpress $query
+		 * @return none
+		 */
+		 public static function get_race_icon( $ID, $size ) {
+
+			switch ( $size ) {
+			 case ( 'medium' == $size ):
+					 break;
+			 case ( 'icon' == $size ):
+					 break;
+			 case ( 'mini' == $size ):
+					 break;
+			 default :
+					 $size = 'icon';
+					 break;
+		 }
+
+			 return get_the_post_thumbnail( $ID, 'bblm-fit-' . $size );
+
+		 }// end of get_race_icon()
+
+	 /**
 	  * Outputs the positions that can play for a race
 	  *
 	  * @param int $id the race in question
@@ -265,10 +301,10 @@ class BBLM_CPT_Race {
 <?php
 				foreach ( $positions as $pos ) {
 					if ( $zebracount % 2 ) {
-						echo '<tr id="pos-' . $pos->pos_id . '">';
+						echo '<tr class="bblm_tbl_alt" id="pos-' . $pos->pos_id . '">';
 					}
 					else {
-						echo '<tr class="bblm_tbl_alt" id="pos-' . $pos->pos_id . '">';
+						echo '<tr id="pos-' . $pos->pos_id . '">';
 					}
 ?>
 						<td><?php echo esc_html( $pos->pos_name ); ?></td>

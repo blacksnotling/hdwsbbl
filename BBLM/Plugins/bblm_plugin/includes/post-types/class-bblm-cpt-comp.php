@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.3.1
+ * @version   1.3.2
  */
 
 class BBLM_CPT_Comp {
@@ -106,10 +106,10 @@ class BBLM_CPT_Comp {
 <?php
 			foreach ( $compl as $cl ) {
 				if ( $zebracount % 2 ) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 				echo '<td>' . bblm_get_competition_link( $cl->CWPID ) . '</td>';
 				echo '<td>' . ( $cl->PLD / 2 ) . '</td>';
@@ -318,43 +318,51 @@ class BBLM_CPT_Comp {
 ?>
 		<h3 class="bblm-table-caption"><?php echo __( 'Tournament Standings', 'bblm' ); ?></h3>
 		 <table class="bblm_table bblm_brackets">
-			 <tr>
-				 <th><?php echo $brackets[0][1]; ?></th>
-				 <th><?php echo $brackets[4][1]; ?></th>
-				 <th><?php echo $brackets[6][1]; ?></th>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[0][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[4][0]; ?></td>
-				 <td rowspan="4"><?php echo $brackets[6][0]; ?></td>
-						 </tr>
-						 <tr>
-				 <td><?php echo $brackets[1][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[2][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[5][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[3][0]; ?></td>
-			 </tr>
+			 <thead>
+				 <tr>
+					 <th><?php echo $brackets[0][1]; ?></th>
+					 <th><?php echo $brackets[4][1]; ?></th>
+					 <th><?php echo $brackets[6][1]; ?></th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				 <tr>
+					 <td><?php echo $brackets[0][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[4][0]; ?></td>
+					 <td rowspan="4"><?php echo $brackets[6][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[1][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[2][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[5][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[3][0]; ?></td>
+				 </tr>
+			 </tbody>
 		 </table>
 <?php
 			 } //end of if 7 games
 			 else if ( 3 == $numgames ) {
 ?>
 		 <table class="bblm_table bblm_brackets">
-			 <tr>
-				 <th><?php echo $brackets[0][1]; ?></th>
-				 <th><?php echo $brackets[2][1]; ?></th>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[0][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[2][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[1][0]; ?></td>
-			 </tr>
+			 <thead>
+				 <tr>
+					 <th><?php echo $brackets[0][1]; ?></th>
+					 <th><?php echo $brackets[2][1]; ?></th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				 <tr>
+					 <td><?php echo $brackets[0][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[2][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[1][0]; ?></td>
+				 </tr>
+			 </tbody>
 		 </table>
 <?php
 			 } //end of else if 3 games
@@ -362,43 +370,47 @@ class BBLM_CPT_Comp {
 			 ?>
 
 		 <table class="bblm_table bblm_brackets">
-			 <tr>
-				 <th><?php echo $brackets[0][1]; ?></th>
-				 <th><?php echo $brackets[8][1]; ?></th>
-				 <th><?php echo $brackets[12][1]; ?></th>
-				 <th><?php echo $brackets[14][1]; ?></th>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[0][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[8][0]; ?></td>
-				 <td rowspan="4"><?php echo $brackets[12][0]; ?></td>
-				 <td rowspan="8"><?php echo $brackets[14][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[1][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[2][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[9][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[3][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[4][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[10][0]; ?></td>
-				 <td rowspan="4"><?php echo $brackets[13][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[5][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[6][0]; ?></td>
-				 <td rowspan="2"><?php echo $brackets[11][0]; ?></td>
-			 </tr>
-			 <tr>
-				 <td><?php echo $brackets[7][0]; ?></td>
-			 </tr>
+			 <thead>
+				 <tr>
+					 <th><?php echo $brackets[0][1]; ?></th>
+					 <th><?php echo $brackets[8][1]; ?></th>
+					 <th><?php echo $brackets[12][1]; ?></th>
+					 <th><?php echo $brackets[14][1]; ?></th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				 <tr>
+					 <td><?php echo $brackets[0][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[8][0]; ?></td>
+					 <td rowspan="4"><?php echo $brackets[12][0]; ?></td>
+					 <td rowspan="8"><?php echo $brackets[14][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[1][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[2][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[9][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[3][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[4][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[10][0]; ?></td>
+					 <td rowspan="4"><?php echo $brackets[13][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[5][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[6][0]; ?></td>
+					 <td rowspan="2"><?php echo $brackets[11][0]; ?></td>
+				 </tr>
+				 <tr>
+					 <td><?php echo $brackets[7][0]; ?></td>
+				 </tr>
+			 </tbody>
 		 </table>
 <?php
 			 } //end of else if 15 games

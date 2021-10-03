@@ -68,7 +68,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 
 
 		if ($is_first_type) {
-			print("<h3>".$team->type_name." Teams</h3>\n <h4>".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+			print("<h3>".$team->type_name." Teams</h3>\n <h4 class=\"bblm-table-caption\">".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
 			$is_first_type = 0;
 			$is_first_status = 0;
 		}
@@ -77,10 +77,10 @@ if ($teams = $wpdb->get_results($teamsql)) {
 			$is_first_status = 0;
 		}
 		if ($zebracount % 2) {
-			print("		<tr id=\"".$team->t_id."\">\n");
+      print("		<tr class=\"bblm_tbl_alt\" id=\"".$team->t_id."\">\n");
 		}
 		else {
-			print("		<tr class=\"bblm_tbl_alt\" id=\"".$team->t_id."\">\n");
+			print("		<tr id=\"".$team->t_id."\">\n");
 		}
 		print("		<td>");
 

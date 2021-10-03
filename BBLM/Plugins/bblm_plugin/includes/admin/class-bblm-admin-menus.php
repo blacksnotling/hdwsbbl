@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.4
+ * @version   1.5
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -44,6 +44,21 @@ class BBLM_Admin_Menus {
 			array( $this, 'bblm_main_page_content' ),
 			'dashicons-forms',
 			100
+		);
+
+		//Legacy Menu Items
+		add_menu_page(
+			__( 'League Admin', 'bblm' ),
+			__( 'BB: League Admin', 'bblm' ),
+			'bblm_manage_league',
+			'bblm_plugin/pages/bb.admin.core.welcome.php'
+		);
+
+		add_menu_page(
+			__( 'Team Management', 'bblm' ),
+			__( 'BB: Team Admin', 'bblm' ),
+			'bblm_manage_league',
+			'bblm_plugin/pages/bb.admin.core.teamm.php'
 		);
 
 		//Create a submenu page, calling the same function as the parent page above
@@ -97,6 +112,31 @@ class BBLM_Admin_Menus {
 		//Create the 'Manage Fixtures'
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-fixtures.php' );
 		new BBLM_Manage_Fixtures();
+
+		//Force the display of the race special rules tax page in the menu
+		add_submenu_page(
+			'bblm_main_menu',
+			__( 'Race Traits', 'bblm' ),
+			__( 'Race Traits', 'bblm' ),
+			'manage_options',
+			'edit-tags.php?taxonomy=race_rules',
+			false
+		);
+
+		//Load Legacy pages
+		//Adds the subpages to the master heading - League Admin Pages
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.award.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Competition', 'Close Comp', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.comp.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Close a Season', 'Close Sea', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.end.season.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Generate Weekly Summary', 'Gen Summary', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.generate.summary.php');
+
+	//Adds the subpages to the master heading - Team Management Pages
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Team', 'Add Team', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.team.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Teams', 'Manage Teams', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.team.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Player', 'Add Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.player.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.player.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.star.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.report.jm.php');
 
 	}
 

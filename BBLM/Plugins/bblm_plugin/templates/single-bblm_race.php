@@ -35,13 +35,11 @@
 <?php
         $race_id = get_the_ID();
         $rr_cost = BBLM_CPT_Race::get_reroll_cost( $race_id );
-        $rspecialrules = BBLM_CPT_Race::get_special_rules( $race_id );
 
         echo '<ul>';
         echo '<li><strong>' . __( 'Re-Roll Cost:', 'bblm' ) . '</strong> ' . number_format( $rr_cost ) . ' GP</li>';
-        if ( "" !== $rspecialrules ) {
-          echo '<li><strong>' . __( 'Special Rules:', 'bblm' ) . '</strong> ' . esc_textarea( $rspecialrules ) . '</li>';
-        }
+        //Display the race Special rules, if any are set
+        echo '<li><strong>' . __( 'Special Rules:', 'bblm' ) . '</strong> ' . strip_tags( get_the_term_list( $post->ID, 'race_rules', '', ', ', '' ) . '</li>' );
         echo '</ul>';
 
         $race = new BBLM_CPT_Race;

@@ -11,7 +11,6 @@
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
-
 ?>
 <div class="wrap">
 	<h2>Manage Teams</h2>
@@ -69,6 +68,8 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	if (FALSE !== $wpdb->query($tinfoupdatesql)) {
 		$sucess = TRUE;
+		//Update Post Meta (Motto etc)
+		update_post_meta( $_POST['bblm_twid'], 'team_motto', sanitize_text_field( $_POST['bblm_tmotto'] ) );
 		bblm_update_tv( (int) $_POST['bblm_tid'] );
 		do_action( 'bblm_post_submission' );
 	}
@@ -104,6 +105,8 @@ else if ("edit" == $_GET['action']) {
 			$playervaluesql = 'SELECT SUM(P.p_cost_ng) FROM '.$wpdb->prefix.'player P WHERE P.p_status = 1 AND P.t_id = '.$tid;
 			$tpvalue = $wpdb->get_var($playervaluesql);
 			$rrcost = BBLM_CPT_Race::get_reroll_cost( $t->r_id );
+			$meta = get_post_custom( $t->WPID );
+			$tmotto = ! isset( $meta['team_motto'][0] ) ? '' : $meta['team_motto'][0];
 ?>
 		<h3>Edit Team Infomation - <?php print($t->post_title); ?></h3>
 		<form name="bblm_updatestats" method="post" id="post">
@@ -113,6 +116,10 @@ else if ("edit" == $_GET['action']) {
 			<tr class="form-field form-required">
 				<th scope="row" valign="top">Team Name</th>
 				<td><?php print("$t->post_title"); ?></td>
+			</tr>
+			<tr class="form-field form-required">
+				<th scope="row" valign="top"><label for="bblm_tmotto"><?php echo __( 'Team Motto','bblm' ); ?></label></th>
+				<td><input type="text" name="bblm_tmotto" size="50" value="<?php echo sanitize_text_field( $tmotto ); ?>" maxlength="1000"></td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top">Short Name</th>
@@ -204,6 +211,7 @@ else if ("edit" == $_GET['action']) {
 		</table>
 
 		<input type="hidden" name="bblm_tid" size="5" value="<?php print($tid); ?>" id="bblm_tid" maxlength="5">
+		<input type="hidden" name="bblm_twid" size="5" value="<?php print($t->WPID); ?>" id="bblm_twid" maxlength="5">
 
 
 		<p class="submit">

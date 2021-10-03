@@ -95,14 +95,14 @@
                   echo '<h3>' . __( '** Old World Confrence (OWC) **', 'bblm') . '</h3>';
 								}
 								//end cross division hard code
-								print("<h4>".$stand->div_name."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\"><table class=\"bblm_table\">\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
+								print("<h4 class=\"bblm-table-caption\">".$stand->div_name."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\"><table class=\"bblm_table\">\n <thead><tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr></thead><tbody>\n");
 							}
 							$lastdiv = $stand->div_name;
 							if ($zebracount % 2) {
-								print("					<tr>\n");
+                print("					<tr class=\"bblm_tbl_alt\">\n");
 							}
 							else {
-								print("					<tr class=\"bblm_tbl_alt\">\n");
+                print("					<tr>\n");
 							}
 							print("  <td><a href=\"" . get_post_permalink( $stand->WPID ) . "\" title=\"View more information about this team\">" . esc_html( get_the_title( $stand->WPID ) ) . "</a></td>\n <td>".$stand->tc_played."</td>\n  <td>".$stand->tc_W."</td>\n  <td>".$stand->tc_D."</td>\n  <td>".$stand->tc_L."</td>\n  <td>".$stand->tc_tdfor."</td>\n  <td>".$stand->tc_tdagst."</td>\n  <td>".$stand->TDD."</td>\n  <td>".$stand->tc_casfor."</td>\n  <td>".$stand->tc_casagst."</td>\n  <td>".$stand->CASD."</td>\n  <td><strong>".$stand->tc_points."</strong></td>\n	</tr>\n");
 
@@ -110,7 +110,7 @@
 							$is_first_div = 0;
 							$zebracount++;
 						}
-						print("</table></div>\n");
+						print("</tbody></table></div>\n");
 ?>
         <h4><?php echo __( 'Key','bblm'); ?></h4>
 				<ul class="bblm_expandablekey">
@@ -162,16 +162,16 @@
 				$zebracount = 1;
 				foreach ( $match as $md ) {
 					if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-						echo '<tr class="bblm_tbl_hide">';
+						echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
-						echo '<tr>';
+						echo '<tr class="bblm_tbl_alt">';
 					}
 					else if ( 10 < $zebracount ) {
-            echo '<tr class="bblm_tbl_hide bblm_tbl_alt">';
+            echo '<tr class="bblm_tbl_hide">';
 					}
 					else {
-            echo '<tr class="bblm_tbl_alt">';
+            echo '<tr>';
 					}
 ?>
                 <td><?php echo date("d.m.y", $md->mdate); ?></td>
@@ -198,7 +198,7 @@
 			$fixturesql = 'SELECT UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_id AS TA, M.t_id AS TB, V.post_title AS TAname, O.post_title AS TBname, V.guid AS TAlink, O.guid AS TBlink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp U, '.$wpdb->posts.' V, '.$wpdb->prefix.'team M, '.$wpdb->prefix.'bb2wp N, '.$wpdb->posts.' O, '.$wpdb->prefix.'division D WHERE D.div_id = F.div_id AND T.t_id = F.f_teamA AND M.t_id = F.f_teamB AND T.t_id = U.tid AND U.prefix = \'t_\' AND U.pid = V.ID AND M.t_id = N.tid AND N.prefix = \'t_\' AND N.pid = O.ID AND F.f_complete = 0 AND F.c_id = '.$cid.' ORDER BY F.f_date ASC, F.div_id DESC';
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
         echo '<h3 class="bblm-table-caption">' . __( 'Upcoming Fixtures', 'bblm') . '</h3>';
-				print("<table class=\"bblm_table bblm_expandable\">\n		 <tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr>\n");
+				print("<table class=\"bblm_table bblm_expandable\">\n		 <thead><tr>\n		   <th class=\"bblm_tbl_matchdate\">Date</th>\n		   <th class=\"bblm_tbl_matchname\">Match</th>\n		 </tr></thead><tbody>\n");
 
 				$is_first = 0;
 				$current_div = "";
@@ -209,16 +209,16 @@
 
 				foreach ($fixtures as $fd) {
 					if (($zebracount % 2) && (10 < $zebracount)) {
-						print("		<tr class=\"bblm_tbl_hide\">\n");
+            print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
 					}
 					else if (($zebracount % 2) && (10 >= $zebracount)) {
-						print("		<tr>\n");
+            print("		<tr class=\"bblm_tbl_alt\">\n");
 					}
 					else if (10 < $zebracount) {
-						print("		<tr class=\"bblm_tbl_alt bblm_tbl_hide\">\n");
+						print("		<tr class=\"bblm_tbl_hide\">\n");
 					}
 					else {
-						print("		<tr class=\"bblm_tbl_alt\">\n");
+						print("		<tr>\n");
 					}
 					print("		   <td>".date("d.m.y", $fd->fdate)."</td>\n		<td>\n");
 					if ($bblm_tbd_team == $fd->TA) {
@@ -237,7 +237,7 @@
 					print("</td>\n	</tr>\n");
 					$zebracount++;
 				}
-				print("</table>\n");
+				print("</tbody></table>\n");
 			} //end of if fixtures SQL
 
 			  ///////////
@@ -275,10 +275,10 @@
 <?php
 					foreach ($teamstats as $ps) {
 						if ($zebracount % 2) {
-							print("					<tr>\n");
+              print("					<tr class=\"bblm_tbl_alt\">\n");
 						}
 						else {
-							print("					<tr class=\"bblm_tbl_alt\">\n");
+							print("					<tr>\n");
 						}
 ?>
 						<td><a href="<?php print( get_post_permalink( $ps->WPID ) ); ?>" title="Read more on this team"><?php print( esc_html( get_the_title( $ps->WPID ) ) ); ?></a></td>

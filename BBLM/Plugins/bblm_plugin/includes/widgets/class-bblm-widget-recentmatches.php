@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.3
+ * @version   1.4s
  */
 
 class BBLM_Widget_RecentMatchSum extends WP_Widget {
@@ -45,11 +45,33 @@ class BBLM_Widget_RecentMatchSum extends WP_Widget {
     );
 
     if( $oposts ) {
-    	echo '<ul>';
+      $zebracount = 1;
+?>
+      <table class="bblm_table bblm_sortable">
+        <thead>
+          <tr>
+            <th class="bblm_tbl_matchdate"><?php echo __('Date', 'bblm'); ?></th>
+            <th class="bblm_tbl_matchname"><?php echo __('Result', 'bblm'); ?></th>
+          </tr>
+        </thead>
+        <tbody>
+<?php
     	foreach( $oposts as $o ) {
-        echo '<li>' . bblm_get_match_link_score( $o->ID ) . '</li>';
+        if ( $zebracount % 2 ) {
+          echo '<tr class="bblm_tbl_alt">';
+        }
+        else {
+          echo '<tr>';
+        }
+        echo '<td>' . bblm_get_match_link_date( $o->ID ) . '</td>';
+        echo '<td>' . bblm_get_match_link_score( $o->ID ) . '</td>';
+        echo '</tr>';
+
+        $zebracount++;
     	}
-    	echo '</ul>';
+    	echo '</tbody>';
+      echo '</table>';
+
     }
 
     echo $args['after_widget'];
@@ -59,7 +81,7 @@ class BBLM_Widget_RecentMatchSum extends WP_Widget {
   // The Widget output on the admin screen
   public function form( $instance ) {
 
-    echo '<p>'.__( 'Displays a summary fo recent matches (suitible for the sidebar)', 'bblm' ).'</p>';
+    echo '<p>'.__( 'Displays a summary of recent matches (suitible for the sidebar)', 'bblm' ).'</p>';
     //if no data has been provided then this populates some default values
     $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Recent Matches', 'bblm' );
     $nummatch = ! empty( $instance['nummatch'] ) ? $instance['nummatch'] : "6";

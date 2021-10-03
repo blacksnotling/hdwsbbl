@@ -49,6 +49,7 @@
 
       <div role="region" aria-labelledby="Caption01" tabindex="0">
       <table class="bblm_table">
+        <thead>
 				<tr>
 					<th class="bblm_tbl_name">Position</th>
 					<th class="bblm_tbl_stat">MA</th>
@@ -65,6 +66,8 @@
 					<th>Skills</th>
 					<th>Cost per match</th>
 				</tr>
+      </thead>
+      <tbody>
 				<tr>
 					<td>Star Player</td>
 					<td><?php echo $pd->p_ma; ?></td>
@@ -87,6 +90,7 @@
 					<td class="bblm_tbl_skills"><?php  echo $pd->p_skills; ?></td>
 					<td><?php  echo number_format($pd->p_cost); ?>gp</td>
 				</tr>
+      </tbody>
 			</table>
     </div>
 <?php
@@ -117,6 +121,7 @@
       <h3 class="bblm-table-caption"><?php echo __( 'League Statistics','bblm' ); ?></h3>
       <div role="region" aria-labelledby="Caption01" tabindex="0">
       <table class="bblm_table">
+        <thead>
 				<tr>
 					<th class="bblm_tbl_title">Career Total</th>
 					<th class="bblm_tbl_stat">Pld</th>
@@ -127,6 +132,8 @@
 					<th class="bblm_tbl_stat">MVP</th>
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
+      </thead>
+      <tbody>
 				<tr>
 					<td><?php the_title(); ?></th>
 					<td><?php echo $s->GAMES; ?></th>
@@ -137,6 +144,7 @@
 					<td><?php echo $s->MVP; ?></th>
 					<td><?php echo $s->SPP; ?></th>
 				</tr>
+      </tbody>
 			</table>
     </div>
 <?php
@@ -149,6 +157,7 @@
       <h3 class="bblm-table-caption"><?php echo __( 'Team Breakdown','bblm' ); ?></h3>
       <div role="region" aria-labelledby="Caption01" tabindex="0">
 			<table class="bblm_table">
+        <thead>
 				<tr>
 					<th class="bblm_tbl_title">Playing for</th>
 					<th class="bblm_tbl_stat">Pld</th>
@@ -159,14 +168,16 @@
 					<th class="bblm_tbl_stat">MVP</th>
 					<th class="bblm_tbl_stat">SPP</th>
 				</tr>
+      </thead>
+      <tbody>
 
 <?php
 				foreach ($stats as $s) {
 					if ($zebracount % 2) {
-						print("				<tr>\n");
+            print("				<tr class=\"bblm_tbl_alt\">\n");
 					}
 					else {
-						print("				<tr class=\"bblm_tbl_alt\">\n");
+						print("				<tr>\n");
 					}
 					$team_name = esc_html( get_the_title( $s->WPID ) );
 					print ("					<td><a href=\"" . get_post_permalink( $s->WPID ) . "\" title=\"Read more about " . $team_name . "\">" . $team_name . "</a></td>\n					<td>".$s->GAMES."</td>\n					<td>".$s->TD."</td>\n					<td>".$s->CAS."</td>\n					<td>".$s->COMP."</td>\n					<td>".$s->MINT."</td>\n					<td>".$s->MVP."</td>\n					<td>".$s->SPP."</td>\n				</tr>\n");
@@ -215,10 +226,10 @@
      $zebracount = 1;
      foreach ( $playersea as $pc ) {
        if ( $zebracount % 2 ) {
-         echo '<tr>';
+         echo '<tr class="bblm_tbl_alt">';
        }
        else {
-         echo '<tr class="bblm_tbl_alt">';
+         echo '<tr>';
        }
        echo '<td>' . bblm_get_season_link( $pc->sea_id ) . '</td>';
        echo '<td>' . $pc->GAMES . '</td>';
@@ -260,10 +271,10 @@
       $zebracount = 1;
       foreach ( $playersea as $pc ) {
         if ( $zebracount % 2 ) {
-          echo '<tr>';
+          echo '<tr class="bblm_tbl_alt">';
         }
         else {
-          echo '<tr class="bblm_tbl_alt">';
+          echo '<tr>';
         }
         echo '<td>' . bblm_get_cup_link( $pc->series_id ) . '</td>';
         echo '<td>' . $pc->GAMES . '</td>';
@@ -305,10 +316,10 @@
       $zebracount = 1;
       foreach ( $playercomp as $pc ) {
         if ( $zebracount % 2 ) {
-          echo '<tr>';
+          echo '<tr class="bblm_tbl_alt">';
         }
         else {
-          echo '<tr class="bblm_tbl_alt">';
+          echo '<tr>';
         }
         echo '<td>' . bblm_get_competition_link( $pc->CWPID  ) . '</td>';
         echo '<td>' . $pc->GAMES . '</td>';
@@ -350,16 +361,16 @@
 			$zebracount = 1;
       foreach ( $playermatch as $pm ) {
 				if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-          echo '<tr class="bblm_tbl_hide">';
-        }
-        else if (($zebracount % 2) && (10 >= $zebracount)) {
-          echo '<tr>';
-        }
-        else if ( 10 < $zebracount ) {
           echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
         }
-        else {
+        else if (($zebracount % 2) && (10 >= $zebracount)) {
           echo '<tr class="bblm_tbl_alt">';
+        }
+        else if ( 10 < $zebracount ) {
+          echo '<tr class="bblm_tbl_hide">';
+        }
+        else {
+          echo '<tr>';
         }
         echo '<td>';
         echo bblm_get_match_link_date( $pm->MWPID );

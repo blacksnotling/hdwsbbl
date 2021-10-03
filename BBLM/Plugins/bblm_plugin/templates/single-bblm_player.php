@@ -261,10 +261,10 @@
 					$zebracount = 1;
 						foreach ( $playersea as $pc ) {
 							if ( $zebracount % 2 ) {
-								echo '<tr>';
+                echo '<tr class="bblm_tbl_alt">';
 							}
 							else {
-								echo '<tr class="bblm_tbl_alt">';
+								echo '<tr>';
 							}
 							echo '<td>' . bblm_get_season_link( $pc->sea_id ) . '</td>';
 							echo '<td>' . $pc->GAMES . '</td>';
@@ -306,10 +306,10 @@
         $zebracount = 1;
           foreach ( $playersea as $pc ) {
             if ( $zebracount % 2 ) {
-              echo '<tr>';
+              echo '<tr class="bblm_tbl_alt">';
             }
             else {
-              echo '<tr class="bblm_tbl_alt">';
+              echo '<tr>';
             }
             echo '<td>' . bblm_get_cup_link( $pc->series_id ) . '</td>';
             echo '<td>' . $pc->GAMES . '</td>';
@@ -351,10 +351,10 @@
 						$zebracount = 1;
 						foreach ( $playercomp as $pc ) {
 							if ( $zebracount % 2 ) {
-								echo '<tr>';
+                echo '<tr class="bblm_tbl_alt">';
 							}
 							else {
-								echo '<tr class="bblm_tbl_alt">';
+								echo '<tr>';
 							}
 							echo '<td>' . bblm_get_competition_link( $pc->CWPID  ) . '</td>';
 							echo '<td>' . $pc->GAMES . '</td>';
@@ -397,16 +397,16 @@
 						$zebracount = 1;
 							foreach ( $playermatch as $pm ) {
 								if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-									echo '<tr class="bblm_tbl_hide">';
+                  echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
 								}
 								else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-									echo '<tr>';
+                  echo '<tr class="bblm_tbl_alt">';
 								}
 								else if ( 10 < $zebracount ) {
-									echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
+									echo '<tr class="bblm_tbl_hide">';
 								}
 								else {
-									echo '<tr class="bblm_tbl_alt">';
+									echo '<tr>';
 								}
 								if ( $pm->TAid == $pd->t_id ) {
                   echo '<td>' . bblm_get_team_link( $pm->TB ) . '<br />' . bblm_get_match_link_date( $pm->MWPID ) . '</td>';
@@ -500,19 +500,19 @@
 						if ($champs = $wpdb->get_results($championshipssql)) {
 							$has_cups = 1;
 							$zebracount = 1;
-              echo '<h4>' . __('Championships','bblm' ) . '</h4>';
-							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr>\n");
+              echo '<h4 class="bblm-table-caption">' . __('Championships','bblm' ) . '</h4>';
+							print("<table class=\"bblm_table\">\n	<thead><tr>\n		<th class=\"bblm_tbl_name\">Title</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n	</tr></thead><tbody>\n");
 							foreach ($champs as $cc) {
 								if ($zebracount % 2) {
-									print("		<tr>\n");
+                  print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								else {
-									print("		<tr class=\"bblm_tbl_alt\">\n");
+									print("		<tr>\n");
 								}
 								print("		<td>".$cc->a_name."</td>\n		<td>" . bblm_get_competition_link( $cc->CWPID ) . "</td>\n	</tr>\n");
 								$zebracount++;
 							}
-							print("</table>\n");
+							print("</tbody></table>\n");
 						}
 						else {
 							$ccfail = 1;
@@ -521,19 +521,19 @@
 						$seasonsql = 'SELECT A.a_name, B.sea_id, B.aps_value FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_sea B WHERE A.a_id = B.a_id AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($sawards = $wpdb->get_results($seasonsql)) {
 							$zebracount = 1;
-              echo '<h4>' . __('Awards from Seasons','bblm' ) . '</h4>';
-							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
+              echo '<h4 class="bblm-table-caption">' . __('Awards from Seasons','bblm' ) . '</h4>';
+							print("<table class=\"bblm_table\">\n	<thead><tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr></thead><tbody>\n");
 							foreach ($sawards as $sa) {
-								if ($zebracount % 2) {
-									print("		<tr>\n");
+                if ($zebracount % 2) {
+                  print("		<tr class=\"bblm_tbl_alt\">\n");
 								}
 								else {
-									print("		<tr class=\"bblm_tbl_alt\">\n");
+									print("		<tr>\n");
 								}
 								print("		<td>".$sa->a_name."</td>\n		<td>" . bblm_get_season_link( $sa->sea_id ) . "</td>\n		<td>".$sa->aps_value."</td>\n	</tr>\n");
 								$zebracount++;
 							}
-							print("</table>\n");
+							print("</tbody></table>\n");
 						}
 						else {
 							$safail = 1;
@@ -543,19 +543,19 @@
 						$compawardssql = 'SELECT A.a_name, B.apc_value, B.c_id AS CWPID FROM '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_player_comp B, '.$wpdb->prefix.'comp C WHERE A.a_id = B.a_id AND a_cup = 0 AND B.c_id = C.WPID AND B.p_id = '.$pd->p_id.' ORDER BY A.a_id ASC';
 						if ($cawards = $wpdb->get_results($compawardssql)) {
 							$zebracount = 1;
-							echo '<h4>' . __('Awards from Competitions','bblm' ) . '</h4>';
-							print("<table class=\"bblm_table\">\n	<tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr>\n");
+							echo '<h4 class="bblm-table-caption">' . __('Awards from Competitions','bblm' ) . '</h4>';
+							print("<table class=\"bblm_table\">\n	<thead><tr>\n		<th class=\"bblm_tbl_name\">Award</th>\n		<th class=\"bblm_tbl_name\">Competition</th>\n		<th class=\"bblm_tbl_stat\">Value</th>\n	</tr></thead><tbody>\n");
 							foreach ($cawards as $ca) {
-								if ($zebracount % 2) {
-									print("		<tr>\n");
-								}
-								else {
-									print("		<tr class=\"bblm_tbl_alt\">\n");
-								}
+                if ($zebracount % 2) {
+                  print("		<tr class=\"bblm_tbl_alt\">\n");
+  							}
+  							else {
+  								print("		<tr>\n");
+  							}
 								print("		<td>".$ca->a_name."</td>\n		<td>" . bblm_get_competition_link( $ca->CWPID ) . "</td>\n		<td>".$ca->apc_value."</td>\n	</tr>\n");
 								$zebracount++;
 							}
-						print("</table>\n");
+            print("</tbody></table>\n");
 						}
 						else {
 							$cafail = 1;

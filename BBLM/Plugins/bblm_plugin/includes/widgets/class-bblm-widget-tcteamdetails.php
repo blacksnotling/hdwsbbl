@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -93,6 +93,9 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
           echo '<li><strong>' . __( 'Debut', 'bblm' ) . ':</strong> ' . bblm_get_season_link( $sd->season ) . '</li>';
         }
         echo '<li><strong>' . __( 'Race', 'bblm' ) . ':</strong> ' . bblm_get_race_link( $ti->r_id ) . '</li>';
+        $meta = get_post_custom( $post->ID );
+        $tmotto = ! isset( $meta['team_motto'][0] ) ? '' : $meta['team_motto'][0];
+        echo '<li><strong>' . __( 'Motto', 'bblm' ) . ':</strong> <em>' . sanitize_text_field( $tmotto ) . '</em></li>';
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';
@@ -109,17 +112,35 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         echo '<div class="widget_bblm_awards">';
 
           echo $args['before_title'] . apply_filters( 'widget_title', 'Championships' ) . $args['after_title'];
-
+?>
+          <table>
+            <thead>
+              <tr>
+                <th><?php echo __( 'Award','bblm' ); ?></th>
+                <th><?php echo __( 'Competition','bblm' ); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+<?php
           if ( $has_cups ) {
-            echo '<ul>';
+            $zebracount = 1;
             foreach ( $champs as $cc ) {
-              print("	<li><strong>".$cc->a_name."</strong> - " . bblm_get_competition_link( $cc->CWPID ) . "</li>\n");
+              if ( $zebracount % 2 ) {
+                echo '<tr class="bblm_tbl_alt">';
+              }
+              else {
+                echo '<tr>';
+              }
+              echo '<td><strong>' . $cc->a_name . '</strong></td>';
+              echo '<td>' . bblm_get_competition_link( $cc->CWPID ) . '</td>';
+              echo '</tr>';
+              $zebracount++;
             }
-            echo '</ul>';
           }
           else {
-            echo '<p>' . __( 'This team has not won any Championships at present.', 'bblm' ) . '</p>';
+            echo '<tr class="bblm_tbl_alt"><td colSpan="2">' . __( 'This team has not won any Championships at present.', 'bblm' ) . '</td></tr>';
           }
+          echo '</tbody></table>';
           print("<p><a href=\"#awardsfull\" title=\"View all awards this team has won\">View all awards this team has won &gt;&gt;</a></p>");
 
         echo '</div>';
@@ -128,29 +149,66 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
         echo $args['before_widget'];
         echo $args['before_title'] . apply_filters( 'widget_title', 'Currently Participating in' ) . $args['after_title'];
-
-        $currentcompssql = 'SELECT C.WPID AS CWPID FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
+?>
+        <table>
+          <thead>
+            <tr>
+              <th><?php echo __( 'Competition','bblm' ); ?></th>
+              <th><?php echo __( 'Cup','bblm' ); ?></th>
+            </tr>
+          </thead>
+          <tbody>
+<?php
+        $currentcompssql = 'SELECT C.WPID AS CWPID, C.series_id AS SWPID FROM '.$wpdb->prefix.'team_comp M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_active = 1 AND M.t_id = '.$tid.' LIMIT 0, 30 ';
         if ( $currentcomp = $wpdb->get_results( $currentcompssql ) ) {
-          echo '<ul>';
+          $zebracount = 1;
           foreach ($currentcomp as $curc) {
-            echo '<li>' . bblm_get_competition_link( $curc->CWPID ) . '</li>';
+            if ( $zebracount % 2 ) {
+              echo '<tr class="bblm_tbl_alt">';
+            }
+            else {
+              echo '<tr>';
+            }
+            echo '<td>' . bblm_get_competition_link( $curc->CWPID ) . '</td>';
+            echo '<td>' . bblm_get_cup_link( $curc->SWPID ) . '</td>';
+            echo '</tr>';
+            $zebracount++;
           }
-          echo '</ul>';
         }
         else {
-          print("<p>This team is currently not taking part in any Competitions.</p>\n");
+          echo '<tr class="bblm_tbl_alt"><td colSpan="2">' . __( 'This team is currently not participating in any Competitions.', 'bblm' ) . '</td></tr>';
         }
+        echo '</tbody></table>';
         echo $args['after_widget'];
 
-        $topplayerssql = 'SELECT P.post_title, P.guid, T.p_spp FROM '.$wpdb->prefix.'player T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND T.t_id = '.$tid.' ORDER BY T.p_spp DESC LIMIT 5';
+        $topplayerssql = 'SELECT T.WPID AS PWPID, T.p_spp FROM '.$wpdb->prefix.'player T WHERE T.t_id = '.$tid.' ORDER BY T.p_spp DESC LIMIT 5';
         if ( $topp = $wpdb->get_results( $topplayerssql ) ) {
+          $zebracount = 1;
           echo $args['before_widget'];
           echo $args['before_title'] . apply_filters( 'widget_title', 'Top Players on this team' ) . $args['after_title'];
-          echo '<ul>';
+?>
+          <table>
+            <thead>
+              <tr>
+                <th><?php echo __( 'Player','bblm' ); ?></th>
+                <th><?php echo __( 'SPP','bblm' ); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+<?php
           foreach ($topp as $tp) {
-            print("	<li><a href=\"".$tp->guid."\" title=\"Read more about ".$tp->post_title."\">".$tp->post_title."</a> - ".$tp->p_spp."</li>\n");
+            if ( $zebracount % 2 ) {
+              echo '<tr class="bblm_tbl_alt">';
+            }
+            else {
+              echo '<tr>';
+            }
+            echo '<td>' . bblm_get_player_link( $tp->PWPID ) . '</td>';
+            echo '<td>' . (int) $tp->p_spp . '</td>';
+            echo '</tr>';
+            $zebracount++;
           }
-          echo '</ul>';
+          echo '</tbody></table>';
           echo $args['after_widget'];
         }
 

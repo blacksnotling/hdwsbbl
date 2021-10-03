@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1
+ * @version   1.1.1
  */
 
 class BBLM_CPT_Award {
@@ -80,10 +80,10 @@ class BBLM_CPT_Award {
 			foreach ( $winners as $wi ) {
 
 				if ( $zebracount % 2 ) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 				echo '<td>' . bblm_get_team_link( $wi->WPID ) . '</td>';
 				echo '<td>' . $wi->wins . '</td>';
@@ -142,10 +142,10 @@ class BBLM_CPT_Award {
 			foreach ( $winners as $wi ) {
 
  				if ( $zebracount % 2 ) {
- 					echo '<tr>';
+ 					echo '<tr class="bblm_tbl_alt">';
  				}
  				else {
- 					echo '<tr class="bblm_tbl_alt">';
+ 					echo '<tr>';
  				}
  				echo '<td>' . bblm_get_team_link( $wi->WPID ) . '</td>';
  				echo '<td>' . $wi->wins . '</td>';
@@ -210,7 +210,7 @@ class BBLM_CPT_Award {
 			$zebracount = 1;
 
 ?>
-			<h4><?php echo __( 'Main Awards', 'bblm' ); ?></h4>
+			<h4 class="bblm-table-caption"><?php echo __( 'Main Awards', 'bblm' ); ?></h4>
 			<table class="bblm_table">
 				<thead>
 					<tr>
@@ -225,10 +225,10 @@ class BBLM_CPT_Award {
 <?php
 			foreach ( $cmawards as $cma ) {
 				if ($zebracount % 2) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 				echo '<td>' . $cma->a_name . '</td>';
 				echo '<td>' . bblm_get_team_link( $cma->TWPID ) . '</td>';
@@ -246,7 +246,7 @@ class BBLM_CPT_Award {
 			$zebracount = 1;
 
 ?>
-			<h4><?php echo __( 'Awards assigned to Teams', 'bblm' ); ?></h4>
+			<h4 class="bblm-table-caption"><?php echo __( 'Awards assigned to Teams', 'bblm' ); ?></h4>
 			<table class="bblm_table">
 				<thead>
 					<tr>
@@ -262,10 +262,10 @@ class BBLM_CPT_Award {
 <?php
 			foreach ($ctawards as $cta) {
 				if ($zebracount % 2) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 				echo '<td>' . $cta->a_name . '</td>';
 				echo '<td>' . bblm_get_team_link( $cta->TWPID ) . '</td>';
@@ -285,7 +285,7 @@ class BBLM_CPT_Award {
 
 
 ?>
-			<h4><?php echo __( 'Awards assigned to Players', 'bblm' ); ?></h4>
+			<h4 class="bblm-table-caption"><?php echo __( 'Awards assigned to Players', 'bblm' ); ?></h4>
 			<table class="bblm_table">
 				<thead>
 					<tr>
@@ -302,10 +302,10 @@ class BBLM_CPT_Award {
 <?php
 			foreach ( $cpawards as $cpa ) {
 				if ($zebracount % 2) {
-					echo '<tr>';
+					echo '<tr class="bblm_tbl_alt">';
 				}
 				else {
-					echo '<tr class="bblm_tbl_alt">';
+					echo '<tr>';
 				}
 				echo '<td>' . $cpa->a_name . '</td>';
 				echo '<td>' . bblm_get_player_link( $cpa->PWPID ) . '</td>';

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.1.1
+ * @version   1.2
  */
 
 class BBLM_CPT_Match {
@@ -53,16 +53,16 @@ class BBLM_CPT_Match {
 
 		 foreach ( $recmatch as $rm ) {
 			 if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
-				 echo '<tr class="bblm_tbl_hide">';
-			 }
-			 else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
-				 echo '<tr>';
-			 }
-			 else if ( 10 < $zebracount ) {
 				 echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
 			 }
-			 else {
+			 else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
 				 echo '<tr class="bblm_tbl_alt">';
+			 }
+			 else if ( 10 < $zebracount ) {
+				 echo '<tr class="blm_tbl_hide">';
+			 }
+			 else {
+				 echo '<tr>';
 			 }
 			 echo '<td>' . date( "d.m.y", $rm->mdate ) . '</td>';
 			 echo '<td>' . bblm_get_match_link( $rm->MWPID ) . '</td>';
@@ -91,17 +91,34 @@ class BBLM_CPT_Match {
  * @param $ID the ID of the match (WPID)
  * @return string the data of the match
  */
- public static function get_match_date( $ID ) {
+ public static function get_match_date( $ID, $format ) {
 	 global $wpdb;
+
+	 switch ( $format ) {
+		case ( 'short' == $format ):
+				break;
+		case ( 'long' == $format ):
+				break;
+		default :
+				$format = 'short';
+				break;
+	}
 
 	 $sql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate FROM '.$wpdb->prefix.'match M WHERE M.WPID = '. $ID;
 
 	 $result = $wpdb->get_var( $sql );
 
-	 return date("d.m.y", $result );
+	 if ( 'short' == $format ) {
+		 return date("d.m.y", $result );
+	 }
+	 else if ( 'long' == $format ) {
+		 return date("jS F 'y", $result );
+	 }
+
 
  } //end of get_match_date
 
 } //end of class
+
 
 new BBLM_CPT_Match();

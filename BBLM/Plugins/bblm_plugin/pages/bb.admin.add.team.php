@@ -49,6 +49,8 @@ if(isset($_POST['bblm_team_submit'])) {
 		add_post_meta( $bblm_tstad, 'stadium_featured', 'No' );
 	}
 
+	//Add the free Dedicated Fan
+	$bblm_tff = $_POST['bblm_tff']+1;
 
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($_POST['bblm_tname']),
@@ -61,11 +63,12 @@ if(isset($_POST['bblm_team_submit'])) {
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
+		add_post_meta($bblm_submission, 'team_motto', esc_textarea( $_POST['bblm_tmotto'] ) );
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_ctv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_ctv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$bblm_tff.'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -159,6 +162,10 @@ else if(isset($_POST['bblm_race_select'])) {
 	<tr valign="top">
 		<th scope="row"><label for="bblm_tdesc">Bio</label></th>
 		<td><p><textarea rows="10" cols="50" name="bblm_tdesc" id="bblm_tdesc" class="large-text"></textarea></p></td>
+	</tr>
+	<tr valign="top">
+		<th scope="row"><label for="bblm_tdesc"><?php echo __( 'Team Motto','bblm');?></label></th>
+		<td><p><textarea rows="1" cols="50" name="bblm_tmotto" id="bblm_tmotto" class="large-text"></textarea></p></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_sname">Short Name</label></th>
@@ -262,7 +269,8 @@ function UpdateBankTv() {
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 		  <td><input type="text" name="bblm_tff" size="2" value="0" maxlength="2" id="bblm_tff" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 10,000 each<br />
+		<strong><?php echo __( 'An extra Dedicated Fan will be added for free when the team is created','bblm' ); ?></strong></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tcl">Cheerleaders</label></th>
