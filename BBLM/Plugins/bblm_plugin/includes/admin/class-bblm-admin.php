@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.5
+ * @version   1.6
  */
 
 class BBLM_Admin {
@@ -72,6 +72,7 @@ class BBLM_Admin {
 
 			wp_register_script( 'bblm_match_management', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.match.management.js' );
 			wp_register_script( 'bblm_player_changes', plugin_dir_url( __FILE__ ) . '../../includes/js/admin.player.changes.js' );
+			wp_register_script( 'widget_sponsor_media', plugin_dir_url( __FILE__ ) . '../../includes/js/widget_sponsor_media.js' );
 
  		} //end of add_admin_js
 

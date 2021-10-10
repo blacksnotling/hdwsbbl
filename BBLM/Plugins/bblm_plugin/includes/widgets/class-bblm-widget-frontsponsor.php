@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_FrontSponsor extends WP_Widget {
@@ -96,7 +96,6 @@ class BBLM_Widget_FrontSponsor extends WP_Widget {
   {
      wp_enqueue_script( 'media-upload' );
      wp_enqueue_media();
-     wp_register_script( 'widget_sponsor_media', plugin_dir_url( __FILE__ ) . '../js/widget_sponsor_media.js' );
      wp_enqueue_script( 'widget_sponsor_media' );
   }
 
