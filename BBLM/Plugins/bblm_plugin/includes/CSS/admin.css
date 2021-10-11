@@ -1,7 +1,7 @@
 /*
  *
  * CSS used by the plugin on the admin screens.
- * Version 1.0
+ * Version 1.1
  *
 */
 
@@ -11,4 +11,17 @@ table.bblm_brackets {
 }
 table.bblm_brackets td {
 	border: 1px solid #333;
+}
+
+/***** Admin Tables *****/
+table.bblm_admin_table,
+table.bblm_admin_table tr,
+table.bblm_admin_table th,
+table.bblm_admin_table td {
+	border: 1px solid #333;
+	border-collapse: collapse;
+}
+table.bblm_admin_table th,
+table.bblm_admin_table td {
+	padding: 5px;
 }
