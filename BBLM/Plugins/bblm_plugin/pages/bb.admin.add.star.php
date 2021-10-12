@@ -89,29 +89,26 @@ class BBLM_Add_StarPlayers {
 					<td><p><textarea rows="10" cols="50" name="bblm_pskills" id="bblm_pskills" class="large-text"></textarea></p></td>
 				</tr>
 				<tr valign="top">
-					<th scope="row"><label for="bblm_plyd"><?php echo __('Available for','bblm'); ?></label></th>
-					<?php
-							//Grabs a list of 'posts' from the Stadiums CPT
-							$oposts = get_posts(
-								array(
-									'post_type' => 'bblm_race',
-									'numberposts' => -1,
-									'orderby' => 'post_title',
-									'order' => 'ASC'
-								)
-							);
-							if( ! $oposts ) return;
-							echo '<td>';
-							echo '<ul>';
-							$p = 1;
-							foreach( $oposts as $o ) {
-								echo '<li><input type="checkbox" name="bblm_plyd' . $p . '"/> ' . bblm_get_race_name( $o->ID ) .' <input type="hidden" name="bblm_raceid' . $p . '" id="bblm_raceid' . $p . '" value="' . $o->ID .'"></li>';
-								$p++;
-							}
-							echo '</ul>';
-							echo '</td>';
+					<th scope="row"><label for="bblm_racerule"><?php echo __('Available for','bblm'); ?></label></th>
+					<td>
+<?php
+					$args = array( 'taxonomy' => 'race_rules', 'hide_empty' => false );
+
+					$terms = get_terms( $args );
+					echo '<ul>';
+					$p = 1;
+					foreach($terms as $term){
+						echo '<li>';
+						echo '<input type="checkbox" id="'.$term->slug.'" name="bblm_racerule'.$p.'"> '.$term->name;
+						echo '<input type="hidden" name="bblm_ruleid' . $p . '" id="bblm_ruleid' . $p . '" value="' . $term->slug .'">';
+						echo '</li>';
+
+						$p++;
+					}
+					echo '</ul>';
 
 	?>
+					</td>
 				</tr>
 			</table>
 			<input type="hidden" name="bblm_numofraces" id="bblm_numofraces" value="<?php echo $p-1; ?>">
@@ -134,10 +131,6 @@ class BBLM_Add_StarPlayers {
 
 		 if ( ( isset( $_POST[ 'bblm_star_submit' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_starplayer_submission' ], basename(__FILE__) ) ) ) {
 
-			 //Determine the parent page
-			 $options = get_option('bblm_config');
-			 $bblm_page_parent = htmlspecialchars($options['page_stars'], ENT_QUOTES);
-
 			 //Determine other need options
 			 $bblm_race_star = htmlspecialchars($options['race_star'], ENT_QUOTES);
 			 $bblm_team_star = bblm_get_star_player_team();
@@ -151,48 +144,66 @@ class BBLM_Add_StarPlayers {
 			 $my_post = array(
 				 'post_title' => wp_filter_nohtml_kses( $_POST['bblm_pname'] ),
 				 'post_content' => $pdesc,
-				 'post_type' => 'page',
+				 'post_type' => 'bblm_star',
 				 'post_status' => 'publish',
 				 'comment_status' => 'closed',
-				 'ping_status' => 'closed',
-				 'post_parent' => $bblm_page_parent
+				 'ping_status' => 'closed'
 			 );
-			 if ($bblm_submission = wp_insert_post( $my_post )) {
+			 if ( $bblm_submission = wp_insert_post( $my_post ) ) {
 				 add_post_meta( $bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_starplayers.php' );
 
-				 $bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`) VALUES (\'\', \''.$bblm_team_star.'\', \''.$posnum.'\', \''.wp_filter_nohtml_kses($_POST['bblm_pname']).'\', \'00\', \''.$_POST['bblm_pma'].'\', \''.$_POST['bblm_pst'].'\', \''.$_POST['bblm_pag'].'\', \''.$_POST['bblm_ppa'].'\', \''.$_POST['bblm_pav'].'\', \'0\', \''.$_POST['bblm_pskills'].'\', \'0\', \'none\', \''.$_POST['bblm_pcost'].'\', \''.$_POST['bblm_pcost'].'\', \'1\', \'\', \'0\')';
-				 $wpdb->query( $bblmdatasql );
+				 $playerargs = array (
+					 't_id'			=> $bblm_team_star,
+					 'pos'				=> $posnum,
+					 'name'			=> get_the_title( $bblm_submission ),
+					 'num'				=> 0,
+					 'ma'				=> (int) $_POST['bblm_pma'],
+					 'st'				=> (int) $_POST['bblm_pst'],
+					 'ag'				=> (int) $_POST['bblm_pag'],
+					 'pa'				=> (int) $_POST['bblm_ppa'],
+					 'av'				=> (int) $_POST['bblm_pav'],
+					 'spp'				=> 0,
+					 'cspp'			=> 0,
+					 'skills'		=> esc_textarea( $_POST['bblm_pskills'] ),
+					 'mng'				=> 0,
+					 'inj'				=> '',
+					 'cost'			=> (int) $_POST['bblm_pcost'],
+					 'costng'		=> (int) $_POST['bblm_pcost'],
+					 'status'		=> '1',
+					 'img'				=> '',
+					 'former'		=> 0,
+					 'WPID'			=> $bblm_submission,
+					 'legacy'		=> 0,
+					 'tr'				=> 0,
+				 );
+
+				 $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_cspp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`, `p_legacy`, `p_tr`) VALUES (NULL, \''.$playerargs['t_id'].'\', \''.$playerargs['pos'].'\', \''.$playerargs['name'].'\', \''.$playerargs['num'].'\', \''.$playerargs['ma'].'\', \''.$playerargs['st'].'\', \''.$playerargs['ag'].'\', \''.$playerargs['pa'].'\', \''.$playerargs['av'].'\', \''.$playerargs['spp'].'\', \''.$playerargs['cspp'].'\', \''.$playerargs['skills'].'\', \''.$playerargs['mng'].'\', \''.$playerargs['inj'].'\', \''.$playerargs['cost'].'\', \''.$playerargs['costng'].'\', \''.$playerargs['status'].'\', \''.$playerargs['img'].'\', \''.$playerargs['former'].'\', \''.$playerargs['WPID'].'\', \''.$playerargs['legacy'].'\', \''.$playerargs['tr'].'\');';
+
+				 $wpdb->query( $playersql );
 
 				 //Store the player ID (p_id)
 				 $bblm_player_id = $wpdb->insert_id;
 
-				 $bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$bblm_player_id.'\', \''.$bblm_submission.'\', \'p_\')';
-				 $wpdb->query( $bblmmappingsql );
-
-				 //Update the stars WPID value
-				 $playerupdatesql = 'UPDATE  `'.$wpdb->prefix.'player` SET  `WPID` =  "'.$bblm_submission.'" WHERE  `p_id` ='.$bblm_player_id;
-				 $wpdb->query( $playerupdatesql );
-
 				 $success = 1;
-				 $addattempt = 1;
 				 do_action( 'bblm_post_submission' );
 
-				 //Now we populate the race2star table in the database
+				 //Now we assign the player to the race special rules / traits
 				 $p = 1;
-				 $race2starsqla = array();
+				 $race2stars = array();
+
 				 while ( $p <= $_POST['bblm_numofraces'] ) {
 					 //if  "on" result for a field then generate SQL
-					 if ( on == $_POST['bblm_plyd'.$p] ) {
+					 if ( 'on' == $_POST['bblm_racerule'.$p] ) {
 
-						 $insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\''.$_POST['bblm_raceid'.$p].'\', \''.$bblm_player_id.'\')';
-						 $race2starsqla[$p] = $insertstarracesql;
+						 array_push( $race2stars ,$_POST['bblm_ruleid'.$p] );
+
 					 }
 					 $p++;
 				 }
 
-				 foreach ( $race2starsqla as $ps ) {
-					 $addstar2race = $wpdb->query( $ps );
-				 }
+				 //Overwrite any existing terms for this ID
+				 wp_set_object_terms( $bblm_submission, $race2stars, 'race_rules' );
+
 			 } //end of if post insertion was successful
 
 			}//end of if submitted, and nonce is valid
@@ -200,7 +211,7 @@ class BBLM_Add_StarPlayers {
 			if ( $success ) {
 				echo '<div id="updated" class="notice notice-success inline">';
 				echo '<p>';
-				echo __( 'Star Player has been added.','bblm' ) . ' <a href="' . get_permalink( $bblm_submission ) .'" title="View the match page">' . __( 'View the Star Player','bblm' ) . '</a>';
+				echo __( 'Star Player has been added.','bblm' ) . ' <a href="' . get_permalink( $bblm_submission ) .'" title="View the match page">' . __( 'View the Star Player','bblm' ) . '</a> or further <a href="' . admin_url( 'post.php?post=' . $bblm_submission . '&action=edit' ) . '">edit the star</a>';
 				echo '</p>';
 				echo '</div>';
 			}

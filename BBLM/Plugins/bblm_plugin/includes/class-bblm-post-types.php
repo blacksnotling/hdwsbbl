@@ -331,7 +331,7 @@ class BBLM_Post_types {
 				'exclude_from_search' 	=> false, //don't exclude from search
 				'hierarchical' 			=> false,
 				'rewrite' 				=> array( 'slug' => 'star-players' ),
-				'supports' 				=> array( 'title', 'thumbnail' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
 				'has_archive' 			=> true,
 				'show_in_nav_menus' 	=> true,
 				'show_in_menu' => 'bblm_main_menu',
@@ -403,7 +403,10 @@ class BBLM_Post_types {
 		 // Competitions Tax race traits
 		 register_taxonomy(
 			 'race_rules',
-			 'bblm_race',
+			 array(
+				 'bblm_race',
+				 'bblm_star'
+			 ),
 			 array(
 				 'labels' => array(
 					 'name' => _x( 'Race Traits / Special Rules', 'taxonomy general name', 'bblm' ),
