@@ -50,7 +50,7 @@ class BBLM_Admin {
    function add_dashboard_counts() {
 
      $glancer = new Gamajo_Dashboard_Glancer;
-     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp', 'bblm_race', 'bblm_match' );
+     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp', 'bblm_race', 'bblm_match', 'bblm_star' );
      $glancer->add( $my_post_types, array( 'publish' ) );
 
    }

@@ -304,7 +304,40 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
-
+		register_post_type( 'bblm_star',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Star Players', 'bblm' ),
+					'singular_name' 		=> __( 'Star Player', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Star', 'bblm' ),
+					'add_new' 			=> __( 'New Star', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Star', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Star Player', 'bblm' ),
+					'view_items' 			=> __( 'View Star Players', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Star Players', 'bblm' ),
+					'featured_image'		=> __( 'Star Photo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Photo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'star-players' ),
+				'supports' 				=> array( 'title', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-star-filled',
+			)
+		); //end of bblm_star
 		//Start of inducements
 		register_post_type( 'bblm_inducement',
 			array(
