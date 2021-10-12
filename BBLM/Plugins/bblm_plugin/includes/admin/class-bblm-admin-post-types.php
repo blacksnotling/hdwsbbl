@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.6
+ * @version   1.7
  */
 
  class BBLM_Admin_Post_Types {
@@ -41,6 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/class-bblm-admin-cpt-match.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-team.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-player.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-stars.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-inducement.php' );
 
  }
