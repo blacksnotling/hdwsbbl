@@ -1871,6 +1871,10 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<p>Update the settings with the new Riotous Rookie Position</p>
 		<p>Update the Fate db table to include Riotous Rookies along side JM</p>
 
+		<h2>V1.14 -> V1.15</h2>
+		<p>Convert Star Players</p>
+		<p>YOu can now delete the old star players page and update any menus</p>
+
 
 </form>
 
