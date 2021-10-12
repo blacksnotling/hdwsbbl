@@ -18,7 +18,6 @@
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
 		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
 			<?php do_action( 'bblm_template_before_content' ); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
@@ -30,7 +29,7 @@
 
 			<div class="entry-content">
 				<div class="bblm_details">
-					<?php the_content(); ?>
+					<div class="archive-description"><?php echo bblm_echo_archive_desc( 'stars' ) ?></div>
 				</div>
 <?php
 		$bblm_star_team = bblm_get_star_player_team();
@@ -146,7 +145,6 @@
 </article><!-- .post-ID -->
 
 <?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 <?php do_action( 'bblm_template_after_posts' ); ?>
