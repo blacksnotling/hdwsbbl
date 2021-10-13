@@ -23,7 +23,7 @@
 
 		<header class="page-header entry-header">
 
-			<h2 class="entry-title"><?php the_title(); ?></h2>
+      <h2 class="entry-title"><?php echo __( 'Star Players', 'bblm'); ?></h2>
 
 		</header><!-- .page-header -->
 
