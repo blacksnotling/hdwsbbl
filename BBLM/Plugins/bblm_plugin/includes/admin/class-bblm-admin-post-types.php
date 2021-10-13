@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  		add_action( 'admin_init', array( $this, 'include_post_type_handlers' ) );
 		add_action( 'admin_init', array( $this, 'include_post_meta_boxes' ) );
 		add_action( 'admin_init', array( $this, 'include_post_tax_boxes' ) );
+		add_action( 'admin_init', array( $this, 'convert_race_rules_terms_to_integers' ) );
+		add_filter( 'post_edit_category_parent_dropdown_args', array( $this, 'hide_race_rules_dropdown_select' ) );
 
  	}
 
@@ -69,6 +71,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 include_once( 'post-types/taxonomy/class-bblm-tax-race_trait.php' );
 
 	 }
+
+	 /**
+	  * Displays the Race Rules Taxonomy as a selection box rather than a tag cloud
+	  * despite it being non-hierarchical
+	  */
+	  function hide_race_rules_dropdown_select( $args ) {
+	 	 if ( 'race_rules' == $args['taxonomy'] ) {
+	 		 $args['echo'] = false;
+	 	 }
+	 	 return $args;
+	  } //end of hide_parent_dropdown_select
+
+		/**
+ 	  * converts the taxonomy back to intigets to save correctly
+ 	  */
+		function convert_race_rules_terms_to_integers() {
+			$taxonomy = 'race_rules';
+			if ( isset( $_POST['tax_input'][ $taxonomy ] ) && is_array( $_POST['tax_input'][ $taxonomy ] ) ) {
+				$terms = $_POST['tax_input'][ $taxonomy ];
+				$new_terms = array_map( 'intval', $terms );
+				$_POST['tax_input'][ $taxonomy ] = $new_terms;
+			}
+		}
+
 
 }
 

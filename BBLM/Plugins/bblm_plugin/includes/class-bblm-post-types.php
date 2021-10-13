@@ -400,7 +400,7 @@ class BBLM_Post_types {
        )
      );
 
-		 // Competitions Tax race traits
+		 // Competitions Tax race rules / traits
 		 register_taxonomy(
 			 'race_rules',
 			 array(
@@ -421,6 +421,7 @@ class BBLM_Post_types {
 				 'sort' => true,
 				 'args' => array( 'orderby' => 'term_order' ),
 				 'rewrite' => array( 'slug' => 'race-rules' ),
+				 'meta_box_cb' => 'post_categories_meta_box',
 			 )
 		 );
 
