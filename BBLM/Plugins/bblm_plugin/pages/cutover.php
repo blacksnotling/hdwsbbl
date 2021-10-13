@@ -1556,6 +1556,33 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																}
 
 															} // END OF bblm_player_spp_update
+															/**
+																  *
+																  * UPDATING MAIN POST TABLE FOR THE STADIUM CPT
+																  */
+																if (isset($_POST['bblm_star_starcpt'])) {
+																	$bblm_team_star = bblm_get_star_player_team();
+
+																  $stadpostsql = "SELECT P.ID, R.*, R.WPID AS SWPID, P.post_title FROM ".$wpdb->prefix."player R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.p_id = J.tid AND P.ID = J.pid and J.prefix = 'p_' AND R.t_id = $bblm_team_star ORDER BY P.ID ASC";
+																    if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																      //echo '<ul>';
+																      foreach ($stadposts as $stad) {
+																        $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_star' WHERE `".$wpdb->posts."`.`ID` = '".$stad->SWPID."';";
+																        //print("<li>".$stadupdatesql."</li>");
+																        if ( $wpdb->query($stadupdatesql) ) {
+																          $result = true;
+																        }
+																        else {
+																          $result = false;
+																        }
+
+																      } //end of foreach
+																      //echo '</ul>';
+																      if ( $result ) {
+																        print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Star Players! <strong>Now you can delete the star platers page!</strong></p></div>\n");
+																      }
+																    }//end of if sql was successful
+																} //end of if (isset($_POST['bblm_star_starcpt'])) {
 
 /**
  *
@@ -1872,8 +1899,11 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<p>Update the Fate db table to include Riotous Rookies along side JM</p>
 
 		<h2>V1.14 -> V1.15</h2>
-		<p>Convert Star Players</p>
-		<p>YOu can now delete the old star players page and update any menus</p>
+		<h3>Convert Star Players</h3>
+		<ul>
+			<li><input type="submit" name="bblm_star_starcpt" value="Convert Star Player Post Types" title="Convert the Star Player Post Types"/></li>
+			<li>You can now delete the old star players page and update any menus</li>
+		</ul>
 
 
 </form>

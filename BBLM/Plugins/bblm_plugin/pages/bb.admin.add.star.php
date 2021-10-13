@@ -132,6 +132,7 @@ class BBLM_Add_StarPlayers {
 		 if ( ( isset( $_POST[ 'bblm_star_submit' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_starplayer_submission' ], basename(__FILE__) ) ) ) {
 
 			 //Determine other need options
+			 $options = get_option('bblm_config');
 			 $bblm_race_star = htmlspecialchars($options['race_star'], ENT_QUOTES);
 			 $bblm_team_star = bblm_get_star_player_team();
 
@@ -150,7 +151,6 @@ class BBLM_Add_StarPlayers {
 				 'ping_status' => 'closed'
 			 );
 			 if ( $bblm_submission = wp_insert_post( $my_post ) ) {
-				 add_post_meta( $bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_starplayers.php' );
 
 				 $playerargs = array (
 					 't_id'			=> $bblm_team_star,
