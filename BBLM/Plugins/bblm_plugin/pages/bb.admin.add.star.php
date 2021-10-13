@@ -23,7 +23,7 @@ class BBLM_Add_StarPlayers {
 	public function plugin_menu() {
 
 		$hook = add_submenu_page(
-			'bblm_main_menu',
+			'bblm_star',
 			__( 'Add Star', 'bblm' ),
 			__( 'Add Star', 'bblm' ),
 			'manage_options',
