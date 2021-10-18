@@ -42,10 +42,11 @@
 		<?php the_content(); ?>
 		</div>
 
-<?php if ( $pd->p_legacy ) {
-  $legacy = 1;
-  bblm_display_legacy_notice( "Star Player" );
-}
+<?php
+  if ( $pd->p_legacy ) {
+    $legacy = 1;
+    bblm_display_legacy_notice( "Star Player" );
+  }
 ?>
 
       <div role="region" aria-labelledby="Caption01" tabindex="0">
@@ -97,20 +98,59 @@
 <?php
     if ( !$legacy ) {
       //Only show this is the star is active
-      $racelistsql = 'SELECT R.r_id FROM '.$wpdb->prefix.'race2star R WHERE R.p_id = '.$pd->p_id.' ORDER BY R.r_id ASC';
-      $racelist = $wpdb->get_results($racelistsql);
+      //Grab the list of Race Special Rules / Traits assigned to this race
+      $term_obj_list = get_the_terms( $post->ID, 'race_rules' );
 
-      $is_first = 1;
-      echo '<p>' . __( 'Available to hire for the following Races:', 'bblm');
-      foreach ($racelist as $rl) {
-        if (! $is_first) {
-          echo ',';
+      if ( $term_obj_list && ! is_wp_error( $term_obj_list ) ) {
+        //Loop through them and add them to an array
+        $race_terms = array();
+        foreach ( $term_obj_list as $term ) {
+          $race_terms[] = $term->slug;
         }
+        //Form the custom query, looking for races who have the same traits as the Star
+        $args = array(
+          'post_type' => 'bblm_race',
+          'orderby'   => 'title',
+          'order' => 'ASC',
+          'tax_query' => array(
+            array(
+              'taxonomy' => 'race_rules',
+              'field' => 'slug',
+              'terms' => $race_terms
+            )
+          )
+        );
 
-        echo ' ' . bblm_get_race_link( $rl->r_id );
-        $is_first = 0;
+        $starsqlarray = array();
+        $starsql = "";
+
+        // The Query
+        $the_query = new WP_Query( $args );
+
+        // The Loop
+        if ( $the_query->have_posts() ) {
+          while ( $the_query->have_posts() ) {
+            $the_query->the_post();
+
+            //Loop though each one and form the sql
+            $starsqlarray[] = bblm_get_race_link( get_the_ID() );
+          }
+          $starsql .= join( ", ", $starsqlarray );
+          echo '<p>' . __( 'Available to hire for the following: ', 'bblm') . $starsql.'</p>';
+        }
+        else {
+          // no posts found
+          echo '<p>' . __( 'There are currently no Races assigned to this Star Players','bblm' ) . '<p>';
+        }
+        /* Restore original Post Data */
+        wp_reset_postdata();
+
+      }//end of if the race has any terms assigned
+      else {
+        //nothing is returned
+        echo '<p>' . __( 'There are currently no Races assigned to this Star Players','bblm' ) . '<p>';
       }
-      echo ".</p>\n";
+
     }//end of if not legacy
 
 
