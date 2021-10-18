@@ -59,6 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/meta-boxes/class-bblm-meta-season.php' );
 		include_once( 'post-types/meta-boxes/class-bblm-meta-comp.php' );
 		include_once( 'post-types/meta-boxes/class-bblm-meta-race.php' );
+		include_once( 'post-types/meta-boxes/class-bblm-meta-stars.php' );
 		include_once( 'post-types/meta-boxes/class-bblm-meta-inducement.php' );
 
 	}

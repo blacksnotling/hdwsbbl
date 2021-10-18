@@ -24,6 +24,9 @@ class BBLM_Admin_CPT_Stars {
   */
   public function __construct() {
 
+		add_filter( 'manage_edit-bblm_star_columns', array( $this, 'my_edit_columns' ) );
+    add_action( 'manage_bblm_star_posts_custom_column', array( $this, 'my_manage_columns' ), 10, 2 );
+    add_action( 'pre_get_posts', array( $this, 'manage_archives' ) );
 		add_filter( 'admin_url', array( $this, 'redirect_add_star_link' ), 10, 2 );
 
     return TRUE;
@@ -45,6 +48,81 @@ class BBLM_Admin_CPT_Stars {
 		 return $url;
 
    }//end of redirect_add_star_link()
+
+
+	   /**
+	    * Sets the Column headers for the CPT edit list screen
+	    */
+	   function my_edit_columns( $columns ) {
+
+	   	$columns = array(
+	   		'cb' => '<input type="checkbox" />',
+	   		'title' => __( 'Star Player Name', 'bblm' ),
+				'racefor' => __( '# Races plays for', 'bblm' ),
+	 			'status' => __( 'Status', 'bblm' ),
+	   	);
+
+	   	return $columns;
+
+	   }
+
+	   /**
+	    * Sets the Column content for the CPT edit list screen
+	    */
+	   function my_manage_columns( $column, $post_id ) {
+	   	global $post;
+
+	 		switch( $column ) {
+
+	 			// If displaying the 'status' column.
+	 			case 'status' :
+
+	 				$sstatus = get_post_meta( $post_id, 'star_status', true );
+	 				if ( (int) $sstatus ) {
+
+	 					echo __( 'Available', 'bblm' );
+	 				}
+
+	 				else {
+
+	 					echo __( 'Legacy / Retired', 'bblm' );
+
+	 				}
+
+	 			break;
+
+				// if displaying the racefor column
+				case 'racefor' :
+
+				$terms = wp_get_post_terms( $post_id, 'race_rules' );
+				echo count( $terms );
+
+				break;
+
+	       // Break out of the switch statement for anything else.
+	       default :
+	       break;
+
+	     }
+
+	   }
+
+	   /**
+	 	 * stops the CPT archive pages pagenating on the admin side and changes the display order
+	 	 *
+	 	 * @param wordpress $query
+	 	 * @return none
+	 	 */
+	 	 public function manage_archives( $query ) {
+
+	 	    if( is_post_type_archive( 'bblm_star' ) && is_admin() && $query->is_main_query() ) {
+	 	        $query->set( 'posts_per_page', -1 );
+	 	        $query->set( 'orderby', 'title' );
+	 	        $query->set( 'order', 'asc' );
+	 	    }
+
+	 	  }
+
 
 }//end of class
 
