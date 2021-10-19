@@ -98,3 +98,10 @@ table tr.bblm_tbl_alt, table tr.odd {
 		text-align: right;
 	}
 }
+/***** Sponsors *****/
+.bblm_details {
+	border: 1px solid #e0e0e0;
+	background: #f4f4f4;
+	margin-bottom: 1.6em;
+	padding: 15px 15px 0 15px;
+}
