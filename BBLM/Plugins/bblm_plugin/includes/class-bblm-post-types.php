@@ -442,6 +442,8 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-comp.php' );
 		include_once( 'post-types/class-bblm-cpt-award.php' );
 		include_once( 'post-types/class-bblm-cpt-team.php' );
+		include_once( 'post-types/class-bblm-cpt-player.php' );
+		include_once( 'post-types/class-bblm-cpt-star.php' );
 		include_once( 'post-types/class-bblm-cpt-season.php' );
 		include_once( 'post-types/class-bblm-cpt-race.php' );
 
