@@ -291,6 +291,135 @@ class BBLM_CPT_Star extends BBLM_CPT_Player {
 
 			 } //end of display_plyaer_matchhistory()
 
+			 /**
+				* Displays teh list of star players, grouped by if they are active or not
+				*
+				* @param wordpress $query
+				* @return html
+				*/
+				public static function get_star_listing() {
+					global $wpdb;
+					
+					$bblm_star_team = bblm_get_star_player_team();
+
+					//First we collate all the star player stats to see if any have played
+					$starstatssql = 'SELECT P.WPID AS PWPID, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP';
+					$starstatssql .= ' FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P WHERE P.p_id = M.p_id AND M.mp_counts = 1 AND P.t_id = '.$bblm_star_team.' GROUP BY M.p_id ORDER BY P.WPID ASC';
+					if ( $starstats = $wpdb->get_results( $starstatssql, 'OBJECT_K' ) ) {
+
+						//Now we load in the star player post types
+						$spostsarg = array(
+							'post_type' => 'bblm_star',
+							'numberposts' => -1,
+							'meta_key' => 'star_status',
+							'orderby' => array(
+								'meta_value' => 'DESC',
+								'post_title' => 'ASC',
+							),
+						);
+						if ( $sposts = get_posts( $spostsarg ) ) {
+							//We have some output
+							$is_first = 1;
+							$current_status = 0;
+							$zebracount = 1;
+
+							foreach( $sposts as $s ) {
+								//Main Display loop
+
+								if ( $s->star_status !== $current_status ) {
+									$current_status = $s->star_status;
+
+									if ( 1 !== $is_first ) {
+										echo '</tbody>';
+										echo '</table>';
+										echo '</div>';
+									}
+									$is_first = 1;
+								}
+								if ( $is_first ) {
+									$zebracount = 1;
+									echo '<h3 class="bblm-table-caption">';
+									if ( $current_status ) {
+										echo __( 'Active Star Players','bblm' );
+									}
+									else {
+										echo __( 'Retired / Legacy Star Players','bblm' );
+									}
+									echo '</h3>';
+	?>
+				<div role="region" aria-labelledby="Caption01" tabindex="0">
+					<table class="bblm_table bblm_sortable bblm_table_collapsable">
+						<thead>
+							<tr>
+								<th><?php echo __( 'Star', 'bblm' ); ?></th>
+								<th><?php echo __( 'Pld', 'bblm' ); ?></th>
+								<th><?php echo __( 'TD', 'bblm' ); ?></th>
+								<th><?php echo __( 'CAS', 'bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'COMP', 'bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'INT', 'bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'MVP', 'bblm' ); ?></th>
+								<th><?php echo __( 'SPP', 'bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+	<?php
+									$is_first = 0;
+								}
+
+								if ($zebracount % 2) {
+									echo '<tr class="bblm_tbl_alt">';
+								}
+								else {
+									echo '<tr>';
+								}
+								//If the star has olayed a game (they exist in the DB result)
+								if (in_array_recursive( $s->ID, $starstats ) ) {
+	?>
+								<td><?php echo bblm_get_player_link( $s->ID ); ?></td>
+								<td><strong><?php echo $starstats[$s->ID]->GAMES; ?></strong></td>
+								<td><?php echo $starstats[$s->ID]->TD; ?></td>
+								<td><?php echo $starstats[$s->ID]->CAS; ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $starstats[$s->ID]->COMP; ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $starstats[$s->ID]->MINT; ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $starstats[$s->ID]->MVP; ?></td>
+								<td><strong><?php echo $starstats[$s->ID]->SPP; ?></strong></td>
+							</tr>
+	<?php
+								}
+								else {
+									//The player has not played a game
+	?>
+								<td><?php echo bblm_get_player_link( $s->ID ); ?></td>
+								<td><strong>0</strong></td>
+								<td>-</td>
+								<td>-</td>
+								<td class="bblm_tbl_collapse">-</td>
+								<td class="bblm_tbl_collapse">-</td>
+								<td class="bblm_tbl_collapse">-</td>
+								<td><strong>0</strong></td>
+							</tr>
+	<?php
+								}
+								$zebracount++;
+
+							} //end of foreach
+	?>
+					</tbody>
+					</table>
+				</div>
+	<?php
+						} //enf of if star players exist
+
+					}//end of if any players have taken part in a match
+					else {
+						//No games have been played with a Star Player
+						echo '<div class="bblm_info">';
+						echo '<p>' .  __( 'No Star Players have been hired by any teams, yet...', 'bblm' ) . '</p>';
+						echo '</div>';
+					}
+
+				} //end of get_star_listing()
+
 
 } //end of class
 
