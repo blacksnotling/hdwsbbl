@@ -30,7 +30,7 @@
     </div><!-- .entry-content -->
 
     <footer class="entry-footer">
-    	<p class="postmeta"><?php bblm_display_page_edit_link(); ?></p>
+    	<p class="postmeta">&nbsp;</p>
     </footer><!-- .entry-footer -->
 
     </article><!-- .post-ID -->
