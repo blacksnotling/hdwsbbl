@@ -22,7 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
  		add_action( 'admin_init', array( $this, 'include_post_type_handlers' ) );
 		add_action( 'admin_init', array( $this, 'include_post_meta_boxes' ) );
-		add_action( 'admin_init', array( $this, 'include_post_tax_boxes' ) );
 		add_action( 'admin_init', array( $this, 'convert_race_rules_terms_to_integers' ) );
 		add_filter( 'post_edit_category_parent_dropdown_args', array( $this, 'hide_race_rules_dropdown_select' ) );
 
@@ -63,15 +62,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/meta-boxes/class-bblm-meta-inducement.php' );
 
 	}
-
-	/**
-	 * Loads all the Ccustom fields for taxonomies for admin screen functions
-	 */
-	 public function include_post_tax_boxes() {
-
-		 include_once( 'post-types/taxonomy/class-bblm-tax-race_trait.php' );
-
-	 }
 
 	 /**
 	  * Displays the Race Rules Taxonomy as a selection box rather than a tag cloud
