@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * For front end functions reloated to the CPT see the includes/post-types directory
  *
  * @class 		BBLM_Meta_Race
- * @version		1.2
+ * @version		1.3
  * @package		BBowlLeagueMan/Admin/CPT/Meta_Boxes
  * @category	Class
  * @author 		blacksnotling
@@ -50,14 +50,6 @@ class BBLM_Meta_Race {
 			'bblm_race',
 			'side',
 			'high'
-		);
-		add_meta_box(
-			'race_stars',
-			__( 'Star Players available for this Race', 'bblm' ),
-			array( $this, 'render_meta_boxes_stars' ),
-			'bblm_race',
-			'normal',
-			'low'
 		);
 
 	}
@@ -98,49 +90,6 @@ class BBLM_Meta_Race {
   }
 
  /**
-  * The HTML for the Star Players Meta Box(s)
-  *
-  */
-  function render_meta_boxes_stars( $post ) {
-		global $wpdb;
-
-		$starssql = 'SELECT X.p_id, X.WPID AS PWPID FROM `'.$wpdb->prefix.'player` X WHERE X.t_id = ' . bblm_get_star_player_team() . ' order by p_name ASC';
-		if ( $stars = $wpdb->get_results( $starssql ) ) {
-			$p = 1;
-
-			//Grab the stars currently assignedf to the race. If the page is new then a dummy empty array is used
-
-			if ( isset( $post->ID ) ) {
-				$starsinracesql = 'SELECT * FROM '.$wpdb->prefix.'race2star WHERE r_id = '.$post->ID;
-				$starsinrace = $wpdb->get_results( $starsinracesql);
-			}
-			else {
-				$starsinrace = array();
-			}
-
-
-			echo '<ul>';
-			foreach ($stars as $star) {
-				echo '<li>';
-				echo '<input type="checkbox" name="bblm_plyd' . $p . '"';
-				if ( in_array_field( $star->p_id, 'p_id', $starsinrace ) ) {
-					echo ' checked';
-				}
-				echo '> ';
-				echo bblm_get_player_name( $star->PWPID );
-				echo ' <input type="hidden" name="bblm_spid' . $p . '" id="bblm_spid' . $p . '" value="' . $star->p_id . '">';
-				echo '</li>';
-				$p++;
-			}
-			echo '</ul>';
-?>
-			<input type="hidden" name="bblm_numofplayers" id="bblm_numofplayers" value="<?php echo $p-1; ?>">
-<?php
-		}
-
-  }
-
- /**
  	* Action when Saving the post type
  	*
  	*/
@@ -169,28 +118,6 @@ class BBLM_Meta_Race {
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}
-		//Now we populate the race2star table in the database
-
-		//First we delete eveything for this race
-		$deletestarsql = 'DELETE FROM `'.$wpdb->prefix.'race2star` WHERE `r_id` = ' . $post->ID;
-		$wpdb->get_row( $deletestarsql );
-
-		$p = 1;
-		$race2starsqla = array();
-		while ($p <= $_POST['bblm_numofplayers']){
-			//if  "on" result for a field then generate SQL
-			if (on == $_POST[ 'bblm_plyd'.$p]) {
-
-				$insertstarracesql = 'INSERT INTO `'.$wpdb->prefix.'race2star` (`r_id`, `p_id`) VALUES (\'' . $post->ID . '\', \''.$_POST['bblm_spid'.$p].'\')';
-				$race2starsqla[$p] = $insertstarracesql;
-				echo '<p>'.$insertstarracesql.'</p>';
-			}
-			$p++;
-		}
-
-		foreach ($race2starsqla as $ps) {
-				$addstar2race = $wpdb->query($ps);
-		}
 
  	}
 

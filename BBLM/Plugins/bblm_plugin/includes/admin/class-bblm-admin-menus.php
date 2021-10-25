@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.5
+ * @version   1.6
  */
 
 if ( ! class_exists( 'BBLM_Admin_Menus' ) ) :
@@ -113,6 +113,10 @@ class BBLM_Admin_Menus {
 		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/class-bblm-manage-fixtures.php' );
 		new BBLM_Manage_Fixtures();
 
+		//Create the 'Add Stars Page'
+		include_once( plugin_dir_path( BBLM_PLUGIN_FILE ) . 'pages/bb.admin.add.star.php' );
+		new BBLM_Add_StarPlayers();
+
 		//Force the display of the race special rules tax page in the menu
 		add_submenu_page(
 			'bblm_main_menu',
@@ -135,7 +139,6 @@ class BBLM_Admin_Menus {
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Teams', 'Manage Teams', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.team.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Player', 'Add Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.player.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.edit.player.php');
-	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.star.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.report.jm.php');
 
 	}

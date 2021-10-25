@@ -27,5 +27,6 @@
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.end.season.php" title="Close a competition">Close a Season.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.generate.summary.php" title="Generate the Weekly Summary">Generate the Weekly Summary.</a></li>
   <li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_transfers" title="Transfer a player">Transfer a player</a></li>
+  <li><a href="<?php bloginfo('url');?>/wp-admin/edit.php?post_type=bblm_star" title="Manage Star Players">Manage Star Players</a></li>
 </ul>
 </div>
