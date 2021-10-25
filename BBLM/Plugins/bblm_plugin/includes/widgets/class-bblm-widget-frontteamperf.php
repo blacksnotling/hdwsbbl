@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.0.1
  */
 
 class BBLM_Widget_FrontTeamPerformance extends WP_Widget {
@@ -53,7 +53,7 @@ class BBLM_Widget_FrontTeamPerformance extends WP_Widget {
       $zebracount = 1;
 ?>
       <div role="region" aria-labelledby="Caption01" tabindex="0">
-        <table class="bblm_table bblm_sortable">
+        <table class="bblm_table bblm_sortable bblm_table_collapsable">
           <thead>
             <tr>
               <th></th>
