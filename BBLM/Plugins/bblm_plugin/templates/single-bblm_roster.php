@@ -165,7 +165,7 @@ a:hover, a:active {
 						<th class="bblm_tbl_stat"><?php echo __('MVP', 'bblm'); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __('INJ', 'bblm'); ?></th>
 						<th class="bblm_tbl_stat"><?php echo __('TR', 'bblm'); ?></th>
-						<th class="bblm_tbl_stat"><?php echo __('Unspent SPP', 'bblm'); ?></th>
+						<th class="bblm_tbl_stat"><?php echo __('SPP', 'bblm'); ?></th>
 						<th><?php echo __('VALUE', 'bblm'); ?></th>
 					</tr>
 				</thead>
@@ -289,7 +289,7 @@ a:hover, a:active {
 							echo '<td>&nbsp;</td>';
 						}
 ?>
-						<td><?php echo $pl->p_cspp; ?></td>
+						<td class="bblm_tbl_spp"><strong><?php echo $pl->p_cspp . '</strong> / ' . $pl->p_spp ; ?></td>
 						<td><?php echo number_format( $pl->p_cost_ng ); ?>gp</td>
 					</tr>
 					<?php
