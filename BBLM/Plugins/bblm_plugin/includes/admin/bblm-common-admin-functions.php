@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Admin
- * @version   1.5
+ * @version   1.6
  */
 
  /**
@@ -47,7 +47,7 @@ function bblm_update_tv($tid) {
  /**
   * Updates a Players Star Player Points (SPP). Is used during editing a players match history.
   */
-function bblm_update_player($pid, $counts = 1) {
+function bblm_update_player( $pid, $counts = 1 ) {
 	//takes in two values, the player ID and a bool to see if only matches that count should be included
 	global $wpdb;
 
@@ -78,32 +78,33 @@ function bblm_jm_report() {
 	$merc_pos = htmlspecialchars($options['player_merc'], ENT_QUOTES);
 	$rrookie_pos = htmlspecialchars($options['player_rrookie'], ENT_QUOTES);
 
-	$jmsql = 'SELECT P.post_title AS Player, O.post_title AS Team, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = P.ID AND X.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.' OR X.pos_id = '.$rrookie_pos.') ORDER BY X.t_id, X.p_num';
+	$jmsql = 'SELECT X.t_id AS TWPID, X.WPID AS PWPID, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.' OR X.pos_id = '.$rrookie_pos.') AND X.WPID > 0 ORDER BY X.t_id, X.p_num';
 
 	if ( $journeymen = $wpdb->get_results($jmsql) ) {
 		$is_first = 1;
 		$current_team = "";
 
-		foreach ($journeymen as $jm) {
-			if ($jm->Team !== $current_team) {
-				$current_team = $jm->Team;
-				if (1 !== $is_first) {
-					print(" </ul>\n");
+		foreach ( $journeymen as $jm ) {
+			if ( $jm->TWPID !== $current_team ) {
+				$current_team = $jm->TWPID;
+				if ( 1 !== $is_first ) {
+					echo '</ul>';
 				}
 				$is_first = 1;
 			}
-			if ($is_first) {
-				print("<h3>".$jm->Team."</h3>\n <ul>\n");
+			if ( $is_first ) {
+				echo '<h3>' . bblm_get_team_name( $jm->TWPID ) . '</h3>';
+				echo '<ul>';
 				$is_first = 0;
 			}
       //Output player details
-			print ("   <li># ".$jm->p_num." - ".$jm->Player." (<em>".$jm->pos_name."</em>)");
+			echo '<li>' . $jm->p_num . ' - ' . bblm_get_player_name( $jm->PWPID ) . ' (<em>' . $jm->pos_name . '</em>)';
 
       //Work out the number of games played
       $PlrPldsql = "SELECT COUNT(M.m_id) as PLYD FROM hdbb_match_player M WHERE M.p_id = ".$jm->p_id." GROUP BY M.p_id";
-      if ( $pplyd = $wpdb->get_row($PlrPldsql) ) {
+      if ( $pplyd = $wpdb->get_row( $PlrPldsql ) ) {
         //They have played a game so list the matches played and the hire / fire options.
-        echo ' - '.$pplyd->PLYD.' match(s) played';
+        echo ' - ' . $pplyd->PLYD . ' match(s) played';
         echo ' - <a href="';
         bloginfo('url');
         echo '/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=remove&id='.$jm->p_id.'" title="'.__( 'Remove this freebooter from the team', 'bblm').'">['.__( 'Fire / Remove', 'bblm').']</a>';
@@ -118,11 +119,11 @@ function bblm_jm_report() {
       }
       else {
         //They have not played a game so just list their name
-        echo __( ' - Not played a match</li>', 'bblm');
+        echo __( ' - Not played a match', 'bblm') . '</li>';
       }
 
 		}
-		print("</ul>\n");
+		echo '</ul>';
 	}
 	else {
     echo __( '<p><strong>There are no Journeymen, Mercenarys, or Riotous Rookies currently active in the league!</strong></p>', 'bblm');
