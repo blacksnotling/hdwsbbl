@@ -78,7 +78,9 @@ function bblm_jm_report() {
 	$merc_pos = htmlspecialchars($options['player_merc'], ENT_QUOTES);
 	$rrookie_pos = htmlspecialchars($options['player_rrookie'], ENT_QUOTES);
 
-	$jmsql = 'SELECT X.t_id AS TWPID, X.WPID AS PWPID, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'position Z WHERE X.pos_id = Z.pos_id AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.' OR X.pos_id = '.$rrookie_pos.') AND X.WPID > 0 ORDER BY X.t_id, X.p_num';
+	$bblm_tbd_team = bblm_get_tbd_team();
+
+	$jmsql = 'SELECT T.WPID AS TWPID, X.WPID AS PWPID, X.p_num, Z.pos_name, Z.pos_id, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'position Z, '.$wpdb->prefix.'team T WHERE T.t_id = X.t_id AND X.pos_id = Z.pos_id AND X.p_status = 1 AND (X.pos_id = 1 OR X.pos_id = '.$merc_pos.' OR X.pos_id = '.$rrookie_pos.') AND T.t_id != ' . $bblm_tbd_team . ' ORDER BY X.t_id, X.p_num';
 
 	if ( $journeymen = $wpdb->get_results($jmsql) ) {
 		$is_first = 1;
