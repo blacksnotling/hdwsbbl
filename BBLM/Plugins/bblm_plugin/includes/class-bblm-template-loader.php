@@ -139,7 +139,7 @@ class BBLM_Template_Loader {
 		}
 		elseif ( is_post_type_archive( 'bblm_star' ) ) {
 
-				$file = 'archive-bblm_starplayers.php';
+				$file = 'archive-bblm_star.php';
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 		}

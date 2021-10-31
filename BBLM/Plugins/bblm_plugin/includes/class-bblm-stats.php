@@ -359,7 +359,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @param wordpress $query
 		 * @return html
 		 */
-		 public function display_stats_breakdown_star() {
+		 public static function display_stats_breakdown_star() {
 			 global $wpdb;
 
 			 $bblm_star_team = bblm_get_star_player_team();
