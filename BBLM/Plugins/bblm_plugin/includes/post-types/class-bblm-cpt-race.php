@@ -355,6 +355,7 @@ class BBLM_CPT_Race {
 					'post_type' => 'bblm_star',
 					'orderby'   => 'title',
 					'order' => 'ASC',
+					'posts_per_page' => -1,
 					'tax_query' => array(
 						array(
 							'taxonomy' => 'race_rules',

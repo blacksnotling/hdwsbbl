@@ -128,6 +128,7 @@ class BBLM_CPT_Star extends BBLM_CPT_Player {
 						'post_type' => 'bblm_race',
 						'orderby'   => 'title',
 						'order' => 'ASC',
+						'posts_per_page' => -1,
 						'tax_query' => array(
 							array(
 								'taxonomy' => 'race_rules',
@@ -299,7 +300,7 @@ class BBLM_CPT_Star extends BBLM_CPT_Player {
 				*/
 				public static function get_star_listing() {
 					global $wpdb;
-					
+
 					$bblm_star_team = bblm_get_star_player_team();
 
 					//First we collate all the star player stats to see if any have played
