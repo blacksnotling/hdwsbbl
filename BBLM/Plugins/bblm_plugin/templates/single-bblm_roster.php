@@ -373,7 +373,7 @@ a:hover, a:active {
 						<td><?php echo $ti->t_apoc; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
 						<td>50,000gp</td>
-						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_apoc*10000 ); ?>gp</td>
+						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_apoc*50000 ); ?>gp</td>
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Head Coach', 'bblm'); ?></td>
