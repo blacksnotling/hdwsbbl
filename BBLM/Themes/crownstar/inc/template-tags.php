@@ -283,7 +283,7 @@ function crownstar_entry_footer() {
 			<footer class="entry-footer">
 				<div class="entry-meta">
 				<?php crownstar_entry_meta(); ?>
-					<div class="entry-tag-links"> and tagged: 
+					<div class="entry-tag-links"> and tagged:
 						<?php echo $tags_list; ?>
 					</div><!-- .entry-tag-links -->
 				</div><!-- .entry-meta -->
