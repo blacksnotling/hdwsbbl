@@ -1904,6 +1904,10 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_star_starcpt" value="Convert Star Player Post Types" title="Convert the Star Player Post Types"/></li>
 			<li>You can now delete the old star players page and update any menus</li>
 		</ul>
+		<h3>Player Skill Rewrite</h3>
+		<ul>
+			<li>Create and Populate new Database Tables. <a href="https://github.com/blacksnotling/HDWSBBL/files/7493106/198.txt">File is availible here</a></li>
+		</ul>
 
 
 </form>
