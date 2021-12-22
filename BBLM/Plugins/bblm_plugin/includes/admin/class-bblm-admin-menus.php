@@ -166,6 +166,14 @@ class BBLM_Admin_Menus {
 			'dashicons-hammer'
 		);
 
+		add_submenu_page(
+			'bblm_plugin/pages/cutover.php',
+			__( 'Player Testing', 'bblm' ),
+			__( 'Player Testing', 'bblm' ),
+			'bblm_manage_league',
+			'bblm_plugin/pages/bb.admin.player.test.php'
+		);
+
 	}
 
 	/**

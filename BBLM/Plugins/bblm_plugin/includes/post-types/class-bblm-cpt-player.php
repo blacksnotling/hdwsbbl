@@ -308,7 +308,182 @@ class BBLM_CPT_Player {
 
 		} //display_player_team_history()
 
+		/**
+		 * returns a players skills
+		 * Only works for 2020+ players
+		 *
+		 * @param wordpress $query
+		 * @return string
+		 */
+		 public static function get_player_skills( $ID ) {
+			 global $wpdb;
 
+			 $increasesql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'increase I, '.$wpdb->prefix.'skills S WHERE P.inc_id = I.inc_id AND P.skill_id = S.skill_id AND P.p_id = '. $ID . ' ORDER BY I.inc_id ASC';
+			 if ( $increase = $wpdb->get_results( $increasesql ) ) {
+				 $first = 1;
+				 $inclist = "";
+				 foreach ( $increase as $in ) {
+					 if ( $first ) {
+						 $inclist = '<span class="bblm_increase-' . $in->inc_tier . '">' . $in->skill_name . '</span>';
+						 $first = 0;
+					 }
+					 else {
+						 $inclist .= ', <span class="bblm_increase-' . $in->inc_tier . '">' . $in->skill_name . '</span>';
+					 }
+				 }
+				 return $inclist;
+			 }
+			 else {
+				 //This player currently has no increases
+				 return '&nbsp;';
+			 }
+
+		 } //end of get_player_skills()
+
+	 /**
+	  * returns a players injuries
+	 	* Only works for 2020+ players
+	  *
+	  * @param wordpress $query
+	  * @return string
+	  */
+	  public static function get_player_injuries( $ID ) {
+			global $wpdb;
+
+			$injurysql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'injury I WHERE P.inj_id = I.inj_id AND P.p_id = '. $ID . ' ORDER BY I.inj_id ASC';
+			if ( $injury = $wpdb->get_results( $injurysql ) ) {
+				$first = 1;
+				$injlist = "";
+				foreach ( $injury as $in ) {
+					if ( $first ) {
+						$first = 0;
+					}
+					else {
+						$injlist .= ', ';
+					}
+					//Some Stats go up, others go down with injuries!
+					if ( "NI" == $in->inj_stat ) {
+						$injlist .= '';
+					}
+					else if ( "ag" == $in->inj_stat || "pa" == $in->inj_stat ) {
+						$injlist .= '+';
+					}
+					else {
+						$injlist .= '-';
+					}
+					$injlist .= $in->inj_stat;
+				}
+				return $injlist;
+			}
+			else {
+				//This player currently has no increases
+				return 'None';
+			}
+
+		} //end of get_player_injuries()
+
+	 /**
+	 	* returns a players cost of skills
+		* works for both legacy and 2020+ players
+	 	*
+	 	* @param wordpress $query
+	 	* @return int
+	 	*/
+	 	public static function get_player_skills_cost( $ID ) {
+			global $wpdb;
+
+			$increasesql = 'SELECT SUM(S.inc_cost) AS ICOST FROM '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'increase S WHERE S.inc_id = I.inc_id AND I.pi_type = 1 AND I.p_id = '. $ID;
+			$inccost = $wpdb->get_var( $increasesql );
+
+			if ( 0 < $inccost ) {
+				return (int) $inccost;
+			}
+			else {
+				return '0';
+			}
+
+	 	 } //end of get_player_skills_cost()
+
+	 /**
+	  * Outputs the list of matches the player has participated in
+	  * includes all relevent validation
+		* works for both legacy and 2020+ players
+	  *
+	  * @param wordpress $query
+		* @param int a number to append to the form if this is called more than once on a screen
+		* @param int 1 for increases, 2 for injuries
+	  * @return html
+	  */
+	  public static function display_player_match_history_select( $ID, $count=1, $type=1 ) {
+			global $wpdb;
+
+			//Optional Param to add a number to the fields, in the event more then one is displayed
+			//such as on the record player actions page
+			$count = (int) $count;
+			$fieldname = "";
+			if ( 1== (int) $type ) {
+				$fieldname = "bblm_mselect_s".$count;
+			}
+			else if ( 2== (int) $type ) {
+				$fieldname = "bblm_mselect_i".$count;
+			}
+			else {
+				$fieldname = "bblm_mselect_s".$count;
+			}
+?>
+			<label for="<?php echo $fieldname; ?>"><?php echo __( 'Match Recieved', 'bblm' ); ?>:</label>
+			<select name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>">
+<?php
+			$playermatchselectsql = 'SELECT M.m_id as MWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M WHERE M.p_id = P.p_id AND P.WPID = ' . $ID . ' ORDER BY M.m_id DESC';
+			if ( $playermatchselect = $wpdb->get_results( $playermatchselectsql ) ) {
+				foreach ( $playermatchselect as $m ) {
+					echo '<option value="' . $m->MWPID . '">' . bblm_get_match_name_score( $m->MWPID ) . '</option>';
+				}
+			}
+			else {
+				echo '<option value="X">' . __( 'No matches played','bblm' ) . '</option>';
+			}
+?>
+			</select>
+<?php
+
+		} //end of display_player_match_history_select
+
+		/**
+	  	* returns the number of increases a player has recieved (skill or injury)
+	  	* Defaults to skills
+			* Only works for 2020+ players
+	  	*
+	  	* @param wordpress $query
+			* @param string skill or injury
+	  	* @return string
+	  	*/
+			public static function get_player_increase_count( $ID, $inctype = "skill" ) {
+				global $wpdb;
+
+				$type = '';
+
+				switch ( $inctype ) {
+					case ( 'skill' == $inctype ):
+						$type = '1';
+						break;
+					case ( 'injury' == $inctype ):
+						$type = '2';
+						break;
+					default :
+					$type = '1';
+						break;
+				}
+
+				$playernumincsql = 'SELECT COUNT(*) AS ICOUNT FROM '.$wpdb->prefix.'player_increase P WHERE P.pi_type = ' . $type . ' AND P.p_id = '.$ID;
+				if ( $playernuminc = $wpdb->get_var( $playernumincsql ) ) {
+					return $playernuminc;
+				}
+				else {
+					return '0';
+				}
+
+			} //end of get_player_increase_countt()
 
 } //end of class
 
