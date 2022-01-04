@@ -365,6 +365,7 @@ class BBLM_Admin_CPT_Player {
 
 							//convert to lower case to match database table
 							$decreasestat = strtolower( $inj->inj_stat );
+							//Ignore if the stat changed is 'NI' to avoid errors
 							if ( "ni" != $decreasestat ) {
 								$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET ';
 
@@ -378,10 +379,10 @@ class BBLM_Admin_CPT_Player {
 
 								$playerupdatesql .= ' WHERE `WPID` = \''. $injdetails['player'] .'\' LIMIT 1';
 							}
-						}
-						if ( FALSE !== $wpdb->query( $playerupdatesql ) ) {
-							$success = TRUE;
-						}
+							if ( FALSE !== $wpdb->query( $playerupdatesql ) ) {
+								$success = TRUE;
+							}
+						} //end of if a stat decrease is recieved
 
 						return $success;
 
