@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version 	2.1
+ * @version 	2.2
  */
 //Check the file is not being accessed directly
  if ( ! defined( 'ABSPATH' ) ) {
@@ -44,6 +44,8 @@ class BBLM_Add_Match_Player {
 	public function add_match_player_page() {
 		global $wpdb;
 
+    $sucess = 0;
+
 ?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline"><?php echo __( 'Record Player Actions for a Match', 'bblm' ); ?></h1>
@@ -67,65 +69,120 @@ class BBLM_Add_Match_Player {
 
 			if ( ( isset( $_POST[ 'bblm_player_increase' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_player_changes' ], basename(__FILE__) ) ) ) {
 
-				//Set initil values for loop
-				$p = 1;
-				$pmax = $_POST['bblm_numofplayers'];
-				//define array to hold playerupdate sql
-				$playersqla = array();
+        //Check to see if we are dealing with pre 2020 rules or post
+        if ( (int) $_POST['bblm_legacy'] ) {
 
-				while ( $p <= $pmax ) {
+          //Set initil values for loop
+  				$p = 1;
+  				$pmax = $_POST['bblm_numofplayers'];
+  				//define array to hold playerupdate sql
+  				$playersqla = array();
 
-					//if  "on" result in "changed" then generate SQL
-					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
-						if ( "on" == $_POST['bblm_pcng'.$p] ) {
+  				while ( $p <= $pmax ) {
 
-							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_cspp` = \''.(int) $_POST['bblm_pspp'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
+  					//if  "on" result in "changed" then generate SQL
+  					if ( isset( $_POST['bblm_pcng'.$p] ) ) {
+  						if ( "on" == $_POST['bblm_pcng'.$p] ) {
 
-							if ( '1' !== $_POST['bblm_mng'.$p] ) {
-								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
-							}
+  							$updatesql = 'UPDATE `'.$wpdb->prefix.'player` SET `p_ma` = \''.(int) $_POST['bblm_pma'.$p].'\', `p_st` = \''.(int) $_POST['bblm_pst'.$p].'\', `p_ag` = \''.(int) $_POST['bblm_pag'.$p].'\', `p_pa` = \''.(int) $_POST['bblm_ppa'.$p].'\', `p_av` = \''.(int) $_POST['bblm_pav'.$p].'\', `p_cspp` = \''.(int) $_POST['bblm_pspp'.$p].'\', `p_skills` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pskills'.$p] ) ).'\', `p_injuries` = \''.sanitize_textarea_field( esc_textarea( $_POST['bblm_pinjuries'.$p] ) ).'\', `p_cost` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
 
-							$updatesql .= ' WHERE `p_id` = '. (int) $_POST['bblm_pid'.$p].' LIMIT 1';
+  							if ( '1' !== $_POST['bblm_mng'.$p] ) {
+  								$updatesql .= ', `p_cost_ng` = \''.(int) $_POST['bblm_pcost'.$p].'\'';
+  							}
 
-							$playersqla[$p] = $updatesql;
+  							$updatesql .= ' WHERE `p_id` = '. (int) $_POST['bblm_pid'.$p].' LIMIT 1';
 
-						} //end of if changed
+  							$playersqla[$p] = $updatesql;
 
-					}
+  						} //end of if changed
 
-					$p++;
+  					}
 
-				} //end of player loop
+  					$p++;
 
-				//insert the string into the DB
-				foreach ($playersqla as $ps) {
-					if (FALSE !== $wpdb->query($ps)) {
-						$sucess = TRUE;
-					}
-				}
+  				} //end of player loop
 
-				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
-				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
+  				//insert the string into the DB
+  				foreach ($playersqla as $ps) {
+  					if (FALSE !== $wpdb->query($ps)) {
+  						$sucess = TRUE;
+  					}
+  				}
 
+  				bblm_update_tv(  (int) $_POST['bblm_teamA'] );
+  				bblm_update_tv(  (int) $_POST['bblm_teamB'] );
+
+        }//end of if legacy
+        else {
+          //we are dealing with a 202 ruleset submission
+          $mid = (int) $_POST['bblm_mid'];
+
+          //Set initil values for loop
+          $p = 1;
+          $pmax = $_POST['bblm_numofplayers'];
+
+          //Because of shenanigans, on the previous page
+          // (the players are filtered out on display and so there are gaps in the number range)
+          //We have to loop though all the numbers from 1 to $pmax, skipping those which are not set
+
+          while ( $p <= $pmax ) {
+
+            if ( isset( $_POST['bblm_wpid'.$p] ) ) {
+
+              if ( isset( $_POST['bblm_sselect_s'.$p] ) ) {
+                $incdetails = array(
+                  'player' => (int) $_POST['bblm_wpid'.$p],
+                  'match' => $mid,
+                  'skill' => (int) $_POST[ 'bblm_sselect_s'.$p ],
+                  'incdetails' => (int) $_POST[ 'bblm_tselect_s'.$p ]
+                );
+                if ( BBLM_Admin_CPT_Player::player_add_skill( (int) $_POST['bblm_wpid'.$p], $incdetails ) ) {
+                  $sucess = 1;
+                }
+              }
+
+              if ( isset( $_POST['bblm_sselect_i'.$p] ) ) {
+                $injdetails = array(
+                  'player' => (int) $_POST['bblm_wpid'.$p],
+                  'match' => $mid,
+                  'injury' => (int) $_POST[ 'bblm_sselect_i'.$p ],
+                );
+                if (BBLM_Admin_CPT_Player::player_add_injury( (int) $_POST['bblm_wpid'.$p], $injdetails ) ) {
+                  $sucess = 1;
+
+                }
+              }
+
+            }
+
+
+
+
+            $p++;
+          }
+          //end of while
+
+          //Note: We don't need to update the teams TV as this is done as part of the player functions
+
+        }
+/*
 				//set the match to complete
 				if ( BBLM_Admin_CPT_Match::set_match_complete( (int) $_POST['bblm_mid'] ) ) {
 					$sucess = TRUE;
 				}
+*/
 
-?>
-				<div id="updated" class="notice notice-success">
-					<p>
-<?php
-				if ( $sucess ) {
-					echo __( 'All Player details have been successfully updated','bblm' );
-				}
-				else {
-					echo __( 'Something went wrong, please try again','bblm' );
-				}
-?>
-	</p>
-</div>
-<?php
+        if ( $sucess ) {
+          echo '<div id="updated" class="notice notice-success inline">';
+          echo '<p>' . __( 'All Player details have been successfully updated','bblm' );
+          echo '</div>';
+        }
+        else {
+          echo '<div id="updated" class="notice notice-error inline">';
+          echo '<p>' . __( 'Something went wrong! Please try again.','bblm' ) . '</p>';
+          echo '</div>';
+        }
+
 
 		} //end of if final submission is happening
 ?>
@@ -163,7 +220,6 @@ class BBLM_Add_Match_Player {
 		 global $wpdb;
 ?>
 			<h2 class="title"><?php echo __( 'Step 2: Record Player Actions', 'bblm'); ?></h2>
-			<p><strong><?php echo __( 'Warning', 'bblm' ); ?></strong>: <?php echo __( 'This may take some time to process all the information! Please ', 'bblm' ); ?><strong><?php echo __( 'don\'t', 'bblm' ); ?></strong><?php echo __( ' hit submit multiple times.', 'bblm' ); ?></p>
 <?php
 			$ccounts = 0;
 			$matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_teamA AS tAid, M.m_teamB AS tBid, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, A.mt_cas AS tAcas, B.mt_cas AS tBcas, A.mt_int AS tAint, B.mt_int AS tBint, A.mt_comp AS tAcomp, B.mt_comp AS tBcomp, M.c_id FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."match_team A, ".$wpdb->prefix."match_team B WHERE M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 AND A.m_id = M.WPID AND A.t_id = M.m_teamA AND B.m_id = M.WPID AND B.t_id = M.m_teamB AND M.WPID = ". (int) $_POST['bblm_mid'];
@@ -228,7 +284,7 @@ class BBLM_Add_Match_Player {
 <?php
 
 			$noplayers = 0;
-			$playersql = 'SELECT P.p_id, P.t_id, P.p_spp, P.p_cspp, X.post_title AS p_name, P.p_num, T.t_name from '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X where P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND P.t_id = T.t_id AND (P.t_id = '.$tAid.' OR P.t_id = '.$tBid.') AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num';
+      $playersql = 'SELECT P.p_id, P.t_id, P.p_spp, P.p_cspp, P.WPID AS PWPID, P.p_num, T.WPID AS TWPID from '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND (P.t_id = '.$tAid.' OR P.t_id = '.$tBid.') AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num';
 			if ( $playerlist = $wpdb->get_results( $playersql ) ) {
 				//initiate var for count
 
@@ -237,8 +293,10 @@ class BBLM_Add_Match_Player {
 				$current_team = "";
 
 				foreach ( $playerlist as $pl ) {
-					if ( $pl->t_name !== $current_team ) {
-						$current_team = $pl->t_name;
+          $p_legacy = BBLM_CPT_Player::is_player_legacy( $pl->PWPID );
+
+					if ( $pl->TWPID !== $current_team ) {
+						$current_team = $pl->TWPID;
 						if ( 1 !== $is_first ) {
 							echo '</tbody></table>';
 						}
@@ -247,7 +305,7 @@ class BBLM_Add_Match_Player {
 
 					if ( $is_first ) {
 ?>
-				<h3><?php echo $pl->t_name; ?></h3>
+				<h3><?php echo bblm_get_team_name( $pl->TWPID ); ?></h3>
 				<table cellspacing="0" class="widefat">
 					<thead>
 						<tr>
@@ -264,13 +322,26 @@ class BBLM_Add_Match_Player {
               <th><?php echo __( 'Eat TM', 'bblm' ); ?></th>
               <th><?php echo __( 'Fouls', 'bblm' ); ?></th>
               <th><?php echo __( 'Prayer TN', 'bblm' ); ?></th>
-							<th><?php echo __( 'Gained SPP', 'bblm' ); ?></th>
+							<th><?php echo __( 'Earnt SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
 							<th><?php echo __( 'Played?', 'bblm' ); ?></th>
-							<th><?php echo __( 'MNG?', 'bblm' ); ?></th>
               <th><?php echo __( 'Temp Retire?', 'bblm' ); ?></th>
+<?php
+            if ( $p_legacy ) {
+?>
+							<th><?php echo __( 'MNG?', 'bblm' ); ?></th>
 							<th><?php echo __( 'Increase', 'bblm' ); ?></th>
 							<th><?php echo __( 'Injury', 'bblm' ); ?></th>
+<?php
+            }
+            else {
+?>
+              <th><?php echo __( 'Increased?', 'bblm' ); ?></th>
+              <th><?php echo __( 'Injured?', 'bblm' ); ?></th>
+<?php
+            }
+
+?>
 						</tr>
 					</thead>
 					<tbody>
@@ -287,8 +358,10 @@ class BBLM_Add_Match_Player {
 							<td>
 								<input type="hidden" name="bblm_tid<?php echo $p; ?>" id="bblm_tid<?php echo $p; ?>" size="3" value="<?php echo $pl->t_id; ?>" />
 								<input type="hidden" name="bblm_pid<?php echo $p; ?>" size="3" value="<?php echo $pl->p_id; ?>" /><?php echo $pl->p_num; ?>
+                <input type="hidden" name="bblm_PWPID<?php echo $p; ?>" size="3" value="<?php echo $pl->PWPID; ?>" />
+                <input type="hidden" name="bblm_plegacy<?php echo $p; ?>" size="3" value="<?php echo $p_legacy; ?>" />
 							</td>
-							<td><?php echo $pl->p_name; ?></td>
+							<td><?php echo bblm_get_player_name( $pl->PWPID ); ?></td>
 							<td><input type="text" name="bblm_td<?php echo $p; ?>" id="bblm_td<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
 							<td><input type="text" name="bblm_comp<?php echo $p; ?>" id="bblm_comp<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
               <td><input type="text" name="bblm_ttm<?php echo $p; ?>" id="bblm_ttm<?php echo $p; ?>" size="3" value="0" maxlength="2" onChange="UpdateSPP(<?php echo $p; ?>)" /></td>
@@ -314,21 +387,37 @@ class BBLM_Add_Match_Player {
 ?>
 							<td><input type="hidden" name="bblm_oldspp<?php echo $p; ?>" id="bblm_oldspp<?php echo $p; ?>" size="3" value="<?php echo $pl->p_cspp; ?>" /><?php echo $pl->p_cspp; ?></td>
 							<td><input type="checkbox" name="bblm_plyd<?php echo $p; ?>" checked="checked" /></td>
-							<td><input type="checkbox" name="mng<?php echo $p; ?>" /></td>
               <td><input type="checkbox" name="ptr<?php echo $p; ?>" /></td>
 <?php
-					if ( $ccounts ) {
+          if ( $ccounts && $p_legacy ) {
 ?>
-							<td><input type="text" name="bblm_increase<?php echo $p; ?>" id="bblm_increase<?php echo $p; ?>" size="10" value="" maxlength="30" /></td>
+              <td><input type="checkbox" name="mng<?php echo $p; ?>" /></td>
+              <td><input type="text" name="bblm_increase<?php echo $p; ?>" id="bblm_increase<?php echo $p; ?>" size="10" value="" maxlength="30" /></td>
 <?php
 					}
-					else {
+					else if ( $ccounts && ! $p_legacy ) {
 ?>
+            <td><input type="checkbox" name="bblm_increased<?php echo $p; ?>" /></td>
+<?php
+          }
+          else {
+              //Friendly game
+?>
+              <td><input type="checkbox" name="mng<?php echo $p; ?>" /></td>
 							<td><input type="hidden" name="bblm_increase<?php echo $p; ?>" id="bblm_increase<?php echo $p; ?>" size="10" value="" maxlength="30" /><?php echo __( 'Exhibition Game', 'bblm'); ?></td>
 <?php
 					}
+          if ( $p_legacy ) {
 ?>
 							<td><input type="text" name="bblm_injury<?php echo $p; ?>" size="10" value="" maxlength="30" /></td>
+<?php
+          }
+          else {
+?>
+            <td><input type="checkbox" name="bblm_injured<?php echo $p; ?>" /></td>
+<?php
+          }
+?>
 						</tr>
 <?php
 					$p++;
@@ -541,7 +630,7 @@ class BBLM_Add_Match_Player {
 
 ?>
 			<h2 class="title"><?php echo __( 'Step 3: Record Changes to Players', 'bblm'); ?></h2>
-			<p><?php echo __( 'Below are all the players who took part in the match. If they had an increase, please ensure that the "Changed?" box is ticked. The Skills and Injuries boxes should be automatically filled but you will have to update any changes to Stats manually.', 'bblm' ); ?></p>
+			<p><?php echo __( 'Below are all the players took an increase, or where injured.', 'bblm' ); ?></p>
 			<p><strong><?php echo __( 'Warning', 'bblm' ); ?></strong>: <?php echo __( 'This may take some time to process all the information! Please ', 'bblm' ); ?><strong><?php echo __( 'don\'t', 'bblm' ); ?></strong><?php echo __( ' hit submit multiple times.', 'bblm' ); ?></p>
 
 			<form name="bblm_recordincreases" method="post" id="post">
@@ -551,100 +640,185 @@ class BBLM_Add_Match_Player {
 				<input type="hidden" name="bblm_teamB" size="3" value="<?php echo  (int) $_POST['bblm_teamB']; ?>" />
 
 <?php
-				$playersql = 'SELECT P.*, M.mp_inj, M.mp_inc, T.t_name FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.p_id = M.p_id AND m_id = '. (int) $_POST['bblm_mid'].' AND M.t_id = T.t_id ORDER BY P.t_id, P.p_num';
+				$playersql = 'SELECT P.*, P.WPID AS PWPID, M.mp_inj, M.mp_inc, T.WPID AS TWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.p_id = M.p_id AND m_id = '. (int) $_POST['bblm_mid'].' AND M.t_id = T.t_id ORDER BY P.t_id, P.p_num';
 				if ( $playerlist = $wpdb->get_results( $playersql ) ) {
 
 					//initiate var for count
 					$p = 1;
 					$is_first = 1;
 					$current_team = "";
+          $playerincrease = array();
+          $playerinjured = array();
 
 					foreach ($playerlist as $pl) {
-						if ($pl->t_name !== $current_team) {
-							$current_team = $pl->t_name;
-							if (1 !== $is_first) {
-								echo '</tbody></table>';
-							}
-							$is_first = 1;
-						}
+            //Check the first player, if they are a legacy player then run the old script, else run the new one
+            if ( $pl->p_legacy ) {
+              $mlegacy = 1;
 
-						if ($is_first) {
+  						if ( $pl->TWPID !== $current_team ) {
+  							$current_team = $pl->TWPID;
+  							if ( 1 !== $is_first ) {
+  								echo '</tbody></table>';
+  							}
+  							$is_first = 1;
+  						}
+
+  						if ( $is_first ) {
 ?>
-				<h3><?php echo $pl->t_name; ?></h3>
-				<table cellspacing="0" class="widefat">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th><?php echo __( 'Name', 'bblm' ); ?></th>
-							<th><?php echo __( 'MA', 'bblm' ); ?></th>
-							<th><?php echo __( 'ST', 'bblm' ); ?></th>
-							<th><?php echo __( 'AG', 'bblm' ); ?></th>
-              <th><?php echo __( 'PA', 'bblm' ); ?></th>
-							<th><?php echo __( 'AV', 'bblm' ); ?></th>
-							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
-							<th><?php echo __( 'COST', 'bblm' ); ?></th>
-							<th><?php echo __( 'Skills', 'bblm' ); ?></th>
-							<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
-							<th><?php echo __( 'Changed?', 'bblm' ); ?></th>
-						</tr>
-					</thead>
-					<tbody>
+  				<h3><?php echo bblm_get_team_name( $pl->TWPID ); ?></h3>
+  				<table cellspacing="0" class="widefat">
+  					<thead>
+  						<tr>
+  							<th>#</th>
+  							<th><?php echo __( 'Name', 'bblm' ); ?></th>
+  							<th><?php echo __( 'MA', 'bblm' ); ?></th>
+  							<th><?php echo __( 'ST', 'bblm' ); ?></th>
+  							<th><?php echo __( 'AG', 'bblm' ); ?></th>
+                <th><?php echo __( 'PA', 'bblm' ); ?></th>
+  							<th><?php echo __( 'AV', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Unspent SPP', 'bblm' ); ?></th>
+  							<th><?php echo __( 'COST', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Skills', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Changed?', 'bblm' ); ?></th>
+  						</tr>
+  					</thead>
+  					<tbody>
 <?php
-							$is_first = 0;
-						}
-						echo '<tr>';
-						if ($p % 2) {
-							echo '<tr>';
-						}
-						else {
-							echo '<tr class="alternate">';
-						}
+  							$is_first = 0;
+  						}
+              //Determine if player has had an increase or injury
+              $incmade = 0;
+              $injmade = 0;
+  						if ( "none" !== $pl->mp_inc ) {
+  							$incmade = 1;
+  						}
+  						else if ( "none" !== $pl->mp_inj ) {
+  							$injmade = 1;
+  						}
+  						echo '<tr>';
+  						if ($p % 2) {
+  							echo '<tr>';
+  						}
+  						else {
+  							echo '<tr class="alternate">';
+  						}
 
-						$incmade = 0;
-						$injmade = 0;
-						//Determine if player has had an increase or injury
-						if ( "none" !== $pl->mp_inc ) {
-							$incmade = 1;
-						}
-						else if ( "none" !== $pl->mp_inj ) {
-							$injmade = 1;
-						}
+  						echo '<td><input type="hidden" name="bblm_pid'.$p.'" size="3" value="'.$pl->p_id.'" />';
+  						echo '<input type="hidden" name="bblm_mng'.$p.'" size="3" value="'.$pl->p_mng.'" />'.$pl->p_num.'</td>';
+  						echo '<td>' . bblm_get_player_name( $pl->WPID ) . '</td>';
+  						echo '<td><input type="text" name="bblm_pma'.$p.'" size="3" value="'.$pl->p_ma.'" maxlength="2" /></td>';
+  						echo '<td><input type="text" name="bblm_pst'.$p.'" size="3" value="'.$pl->p_st.'" maxlength="2" /></td>';
+  						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" />+</td>';
+              echo '<td><input type="text" name="bblm_ppa'.$p.'" size="3" value="'.$pl->p_pa.'" maxlength="2" />+</td>';
+  						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" />+</td>';
+  						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_cspp.'" maxlength="2" /></td>';
+  						echo '<td><input type="text" name="bblm_pcost'.$p.'" size="7" value="'.$pl->p_cost.'" maxlength="7"';
+  						if ( $incmade ) {
+  							echo ' style="background-color:#5EFB6E"';
+  						}
+  						echo '></td>';
+  						echo '<td><input type="text" name="bblm_pskills'.$p.'" size="20" value="'.$pl->p_skills;
+  						if ( $incmade ) {
+  							echo ', '.$pl->mp_inc.'" style="background-color:#5EFB6E';
+  						}
+  						echo '"></td>';
+  						echo '<td><input type="text" name="bblm_pinjuries'.$p.'" size="20" value="'.$pl->p_injuries;
+  						if ( $injmade ) {
+  							echo ', '.$pl->mp_inj.'" style="background-color:#5EFB6E';
+  						}
+  						echo '"></td>';
+  						echo '<td><input type="checkbox" name="bblm_pcng'.$p.'"';
+  						if ( $incmade || $injmade ) {
+  							echo ' checked="checked"';
+  						}
+  						echo '></td>';
+  						echo '</tr>';
 
-						echo '<td><input type="hidden" name="bblm_pid'.$p.'" size="3" value="'.$pl->p_id.'" />';
-						echo '<input type="hidden" name="bblm_mng'.$p.'" size="3" value="'.$pl->p_mng.'" />'.$pl->p_num.'</td>';
-						echo '<td>' . $pl->p_name . '</td>';
-						echo '<td><input type="text" name="bblm_pma'.$p.'" size="3" value="'.$pl->p_ma.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pst'.$p.'" size="3" value="'.$pl->p_st.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pag'.$p.'" size="3" value="'.$pl->p_ag.'" maxlength="2" />+</td>';
-            echo '<td><input type="text" name="bblm_ppa'.$p.'" size="3" value="'.$pl->p_pa.'" maxlength="2" />+</td>';
-						echo '<td><input type="text" name="bblm_pav'.$p.'" size="3" value="'.$pl->p_av.'" maxlength="2" />+</td>';
-						echo '<td><input type="text" name="bblm_pspp'.$p.'" size="3" value="'.$pl->p_cspp.'" maxlength="2" /></td>';
-						echo '<td><input type="text" name="bblm_pcost'.$p.'" size="7" value="'.$pl->p_cost.'" maxlength="7"';
-						if ( $incmade ) {
-							echo ' style="background-color:#5EFB6E"';
-						}
-						echo '></td>';
-						echo '<td><input type="text" name="bblm_pskills'.$p.'" size="20" value="'.$pl->p_skills;
-						if ( $incmade ) {
-							echo ', '.$pl->mp_inc.'" style="background-color:#5EFB6E';
-						}
-						echo '"></td>';
-						echo '<td><input type="text" name="bblm_pinjuries'.$p.'" size="20" value="'.$pl->p_injuries;
-						if ( $injmade ) {
-							echo ', '.$pl->mp_inj.'" style="background-color:#5EFB6E';
-						}
-						echo '"></td>';
-						echo '<td><input type="checkbox" name="bblm_pcng'.$p.'"';
-						if ( $incmade || $injmade ) {
-							echo ' checked="checked"';
-						}
-						echo '></td>';
-						echo '</tr>';
+  						$p++;
+            }//end of legacy
+            else {
+              //2020 Ruleset and beyond
+              $mlegacy = 0;
 
-						$p++;
-						$incmade = 0;
-						$injmade = 0;
-					}
+              //New interface for 2020 players
+              if ( $pl->TWPID !== $current_team ) {
+  							$current_team = $pl->TWPID;
+  							if ( 1 !== $is_first ) {
+  								echo '</tbody></table>';
+  							}
+  							$is_first = 1;
+  						}
+
+  						if ( $is_first ) {
+?>
+  				<h3><?php echo bblm_get_team_name( $pl->TWPID ); ?></h3>
+  				<table cellspacing="0" class="widefat">
+  					<thead>
+  						<tr>
+  							<th>#</th>
+  							<th><?php echo __( 'Name', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Skills', 'bblm' ); ?></th>
+  							<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
+  						</tr>
+  					</thead>
+  					<tbody>
+  <?php
+  							$is_first = 0;
+  						}
+              //Determine if player has had an increase or injury
+              $incmade = 0;
+              $injmade = 0;
+              if ("on" == $_POST['bblm_increased'.$p]) {
+                $playerincrease[$p][0] =  1;
+                $incmade = 1;
+              }
+              if ("on" == $_POST['bblm_injured'.$p]) {
+                $playerinjured[$p][0] =  1;
+                $injmade = 1;
+              }
+
+              //Only show the form if the player was injured or took an increase
+              if ( $playerincrease[$p][0] || $playerinjured[$p][0] ) {
+
+    						echo '<tr>';
+    						if ($p % 2) {
+    							echo '<tr>';
+    						}
+    						else {
+    							echo '<tr class="alternate">';
+    						}
+
+    						echo '<td>';
+                echo '<input type="hidden" name="bblm_pid'.$p.'" size="3" value="'.$pl->p_id.'" />';
+                echo '<input type="hidden" name="bblm_wpid'.$p.'" size="3" value="'.$pl->WPID.'" />';
+                echo $pl->p_num;
+                echo '</td>';
+    						echo '<td>' . bblm_get_player_name( $pl->PWPID ) . '</td>';
+                if ( $incmade ) {
+                  echo '<td>';
+                  //Load the increase selection form, with numbers matching the player count, with no match selection drop down
+                  BBLM_Admin_CPT_Player::display_skill_selection_form( $pl->PWPID, $p, 0 );
+                  echo '</td>';
+                }
+                else {
+                  echo '<td>&nbsp;</td>';
+                }
+                if ( $injmade ) {
+                  echo '<td>';
+                  //Load the injury selection form, with numbers matching the player count, with no match selection drop down
+                  BBLM_Admin_CPT_Player::display_injury_selection_form( $pl->PWPID, $p, 0 );
+                  echo '</td>';
+                }
+                else {
+                  echo '<td>&nbsp;</td>';
+                }
+    						echo '</tr>';
+              }
+
+  						$p++;
+            } //end of new interface
+					} //end of for each
 					echo '</table>';
 				}
 				else {
@@ -652,6 +826,8 @@ class BBLM_Add_Match_Player {
 				}
 ?>
 							<input type="hidden" name="bblm_numofplayers" size="2" value="<?php echo $p-1; ?>" />
+              <input type="hidden" name="bblm_mid" size="2" value="<?php echo (int) $_POST['bblm_mid']; ?>" />
+              <input type="hidden" name="bblm_legacy" size="2" value="<?php echo $mlegacy; ?>" />
 							<p class="submit"><input type="submit" name="bblm_player_increase" tabindex="4" value="Submit Player Changes" title="Submit Player Changes"/ class="button-primary" /></p>
 							<?php wp_nonce_field( basename( __FILE__ ), 'bblm_player_changes' ); ?>
 						</form>
@@ -823,6 +999,7 @@ class BBLM_Add_Match_Player {
 
 						//Set the default "on" result from a checkbox to a 1
 						if ( isset( $_POST['mng'.$p] ) ) {
+              //MNG Only applies to legacy players
 							$mng[$p] = $_POST['mng'.$p];
 
 							if ( "on" == $mng[$p] ) {
@@ -850,6 +1027,7 @@ class BBLM_Add_Match_Player {
             }
 
 						//Fill in blanks for Injuries and Increases
+            //Only applies to legacy players
 						if ( empty( $_POST['bblm_injury'.$p] ) ) {
 							$_POST['bblm_injury'.$p] = "none";
 						}

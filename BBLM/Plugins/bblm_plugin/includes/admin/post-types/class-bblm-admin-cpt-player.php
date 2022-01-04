@@ -47,7 +47,7 @@ class BBLM_Admin_CPT_Player {
        return FALSE;
      }
 
-   }//end of reset_team_injuries()
+   }//end of reset_player_mng()
 
 	 	 /**
 			* Outputs the form to allow a skill to be added to a player
@@ -58,12 +58,15 @@ class BBLM_Admin_CPT_Player {
 			* @param int a number to append to the form if this is called more than once on a screen
 			* @return html
 			*/
-			public static function display_skill_selection_form( $ID, $count=1 ) {
+			public static function display_skill_selection_form( $ID, $count=1, $mselect=1 ) {
 				global $wpdb;
 
 				//Optional Param to add a number to the fields, in the event more then one is displayed
 				//such as on the record player actions page
 				$count = (int) $count;
+
+				//Optional Param to toggle the match selection option on or not
+				$mselect = (int) $mselect;
 
 				//Chech the Player has actually played in a match to earn SPP
 				if ( BBLM_CPT_Player::has_player_played( $ID ) ) {
@@ -86,7 +89,9 @@ class BBLM_Admin_CPT_Player {
 						//If they have enough then continue
 						if ( $playerspp >= $increasespp ) {
 
-						BBLM_CPT_Player::display_player_match_history_select( $ID, $count, 1 );
+							if ( $mselect ) {
+								BBLM_CPT_Player::display_player_match_history_select( $ID, $count, 1 );
+							}
 ?>
 							<label for="bblm_sselect_s<?php echo $count; ?>"><?php echo __( 'Selected Skill', 'bblm' ); ?>:</label>
 							<select name="bblm_sselect_s<?php echo $count; ?>" id="bblm_sselect_s<?php echo $count; ?>">
@@ -148,14 +153,19 @@ class BBLM_Admin_CPT_Player {
 			* @param int a number to append to the form if this is called more than once on a screen
 			* @return html
 			*/
-			public static function display_injury_selection_form( $ID, $count=1 ) {
+			public static function display_injury_selection_form( $ID, $count=1, $mselect=1 ) {
 				global $wpdb;
 
 				//Optional Param to add a number to the fields, in the event more then one is displayed
 				//such as on the record player actions page
 				$count = (int) $count;
 
-				BBLM_CPT_Player::display_player_match_history_select( $ID, $count, 2 );
+				//Optional Param to toggle the match selection option on or not
+				$mselect = (int) $mselect;
+
+				if ( $mselect ) {
+					BBLM_CPT_Player::display_player_match_history_select( $ID, $count, 2 );
+				}
 ?>
 				<label for="bblm_sselect_i<?php echo $count; ?>"><?php echo __( 'Selected Injury', 'bblm' ); ?>:</label>
 				<select name="bblm_sselect_i<?php echo $count; ?>" id="bblm_sselect_i<?php echo $count; ?>">
@@ -355,19 +365,19 @@ class BBLM_Admin_CPT_Player {
 
 							//convert to lower case to match database table
 							$decreasestat = strtolower( $inj->inj_stat );
-							if ( "NI" != $decreasestat ) {
+							if ( "ni" != $decreasestat ) {
 								$playerupdatesql = 'UPDATE `'.$wpdb->prefix.'player` SET ';
 
 								//Some Stats go up, others go down with injuries!
 								if ( "ag" == $decreasestat || "pa" == $decreasestat ) {
 									$playerupdatesql .= '`p_'. $decreasestat .'` = `p_'. $decreasestat .'`+\'1\'';
 								}
-								else {
+								else if ( "av" == $decreasestat || "ma" == $decreasestat || "st" == $decreasestat ) {
 									$playerupdatesql .= '`p_'. $decreasestat .'` = `p_'. $decreasestat .'`-\'1\'';
 								}
 
+								$playerupdatesql .= ' WHERE `WPID` = \''. $injdetails['player'] .'\' LIMIT 1';
 							}
-							$playerupdatesql .= ' WHERE `WPID` = \''. $injdetails['player'] .'\' LIMIT 1';
 						}
 						if ( FALSE !== $wpdb->query( $playerupdatesql ) ) {
 							$success = TRUE;
