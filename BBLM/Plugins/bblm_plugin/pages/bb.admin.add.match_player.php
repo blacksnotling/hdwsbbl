@@ -397,7 +397,9 @@ class BBLM_Add_Match_Player {
 					}
 					else if ( $ccounts && ! $p_legacy ) {
 ?>
-            <td><input type="checkbox" name="bblm_increased<?php echo $p; ?>" /></td>
+            <td><input type="checkbox" name="bblm_increased<?php echo $p; ?>" id="bblm_increased<?php echo $p; ?>" />
+            <input type="hidden" name="bblm_incnum<?php echo $p; ?>" id="bblm_incnum<?php echo $p; ?>" value="<?php echo BBLM_CPT_Player::get_player_increase_count( $pl->PWPID ); ?>" />
+            </td>
 <?php
           }
           else {
