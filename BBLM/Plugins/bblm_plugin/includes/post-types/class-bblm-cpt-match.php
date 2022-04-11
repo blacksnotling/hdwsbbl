@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_CPT_Match {
@@ -117,6 +117,79 @@ class BBLM_CPT_Match {
 
 
  } //end of get_match_date
+
+ /**
+	* returns if a match is legacy (played under a former ruleset)
+	*
+	* @param wordpress $query
+	* @return bool
+	*/
+	public static function is_match_legacy( $ID ) {
+		global $wpdb;
+
+		$matchsql = 'SELECT M.m_legacy FROM '.$wpdb->prefix.'match M WHERE M.WPID = '. $ID;
+		$md = $wpdb->get_row( $matchsql );
+
+		if ( $md->m_legacy ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	} //end of is_match_legacy()
+
+	/**
+	* Returns a list of increases gained during the match
+	* Works both Legacy and 2020+ Ruleset players and matches
+	*
+	* @param $ID the ID of the match (WPID)
+	* @param $Team the ID of the team (WPID)
+	* @return string a list of increases
+	*/
+	public static function get_match_increases( $ID ) {
+		global $wpdb;
+
+		$output = "Not Recorded";
+
+		if ( self::is_match_legacy( $ID ) ) {
+			//Old legacy output
+
+
+		}
+		else {
+			//New output for the 2020+ Ruleset
+
+		}
+
+		return $output;
+	}//end of get_match_increases()
+
+	/**
+	* Returns a list of injuries sustained during the match
+	* Works both Legacy and 2020+ Ruleset players and matches
+	*
+	* @param $ID the ID of the match (WPID)
+	* @param $Team the ID of the team (WPID)
+	* @return string a list of injuries
+	*/
+	public static function get_match_injuries() {
+		global $wpdb;
+		$output = "Not Recorded";
+
+		if ( self::is_match_legacy( $ID ) ) {
+			//Old legacy output
+
+
+		}
+		else {
+			//New output for the 2020+ Ruleset
+
+		}
+
+		return $output;
+	}//end of get_match_injuries()
+
 
 } //end of class
 
