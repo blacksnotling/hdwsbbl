@@ -285,7 +285,7 @@ function UpdateBankTv() {
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tapoc">Apothecary</label></th>
 		  <td><input type="text" name="bblm_tapoc" size="1" value="0" maxlength="1" id="bblm_tapoc" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 50,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top">&nbsp;</th>
