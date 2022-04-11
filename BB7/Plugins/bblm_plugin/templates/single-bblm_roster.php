@@ -296,8 +296,8 @@ a:hover, a:active {
 									}
 									$pcount++;
 								}
-							//now the sql has been completed, we have to print emtpy lines to ensure that 16 places are displayed!
-								while ( 17 > $pcount ) {
+							//now the sql has been completed, we have to print emtpy lines to ensure that 11 places are displayed!
+								while ( 12 > $pcount ) {
 									//print a generic row
 					?>
 					<tr>
@@ -354,8 +354,8 @@ a:hover, a:active {
 						<td colspan="4" class="bblm_tbl_label"><?php echo __('Assistant Coaches', 'bblm'); ?></td>
 						<td><?php echo $ti->t_ac; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
-						<td>10,000gp</td>
-						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_ac*10000 ); ?>gp</td>
+						<td>20,000gp</td>
+						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_ac*20000 ); ?>gp</td>
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_title bblm_tbl_label"><?php echo __('Dedicated fans', 'bblm'); ?></td>
@@ -363,8 +363,8 @@ a:hover, a:active {
 						<td colspan="4" class="bblm_tbl_label"><?php echo __('Cheerleaders', 'bblm'); ?></td>
 						<td><?php echo $ti->t_cl; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
-						<td>10,000gp</td>
-						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_cl*10000 ); ?>gp</td>
+						<td>20,000gp</td>
+						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_cl*20000 ); ?>gp</td>
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Treasury', 'bblm'); ?></td>
@@ -372,8 +372,8 @@ a:hover, a:active {
 						<td colspan="4" class="bblm_tbl_label"><?php echo __('Apothecary', 'bblm'); ?></td>
 						<td><?php echo $ti->t_apoc; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
-						<td>50,000gp</td>
-						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_apoc*50000 ); ?>gp</td>
+						<td>80,000gp</td>
+						<td class="bblm_tbl_value"><?php echo number_format( $ti->t_apoc*80000 ); ?>gp</td>
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Head Coach', 'bblm'); ?></td>

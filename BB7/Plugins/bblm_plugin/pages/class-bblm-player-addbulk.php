@@ -9,7 +9,7 @@
   	 * @author 		Blacksnotling
   	 * @category 	Admin
   	 * @package 	BBowlLeagueMan/Admin
-  	 * @version   1.2
+  	 * @version   1.2 (BB7)
   	 */
 
   	class BBLM_Player_AddBulk {
@@ -237,7 +237,7 @@
           $teamplayercount = $wpdb->get_row( $teamplayercountsql );
 
           $posfree = array();
-          $teamnumbers = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+          $teamnumbers = array(1,2,3,4,5,6,7,8,9,10,11);
 
           if ( 0 == $teamplayercount->NUM ) {
 
@@ -380,7 +380,7 @@
             <tbody>
 <?php
           //Output of table
-          $bblm_limit = 16 - $teamplayercount->NUM;
+          $bblm_limit = 11 - $teamplayercount->NUM;
           $i = 1;
 
           while( $i <= $bblm_limit ) {

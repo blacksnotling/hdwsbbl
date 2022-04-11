@@ -166,22 +166,22 @@ else if ("edit" == $_GET['action']) {
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 				  <td><input type="text" name="bblm_tff" size="2" tabindex="5" value="<?php print("$t->t_ff"); ?>" maxlength="2" id="bblm_tff"><br />
-				  @ 10,000 each</td>
+				  @ 20,000 each</td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tcl">Cheerleaders</label></th>
 				  <td><input type="text" name="bblm_tcl" size="2" tabindex="7" value="<?php print("$t->t_cl"); ?>" maxlength="2" id="bblm_tcl"><br />
-				  @ 10,000 each</td>
+				  @ 20,000 each</td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tac">Assistant Coaches</label></th>
 				  <td><input type="text" name="bblm_tac" size="2" tabindex="8" value="<?php print("$t->t_ac"); ?>" maxlength="3" id="bblm_tac"><br />
-				  @ 10,000 each</td>
+				  @ 20,000 each</td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tapoc">Apothecary</label></th>
 				  <td><input type="text" name="bblm_tapoc" size="1" tabindex="6" value="<?php print("$t->t_apoc"); ?>" maxlength="1" id="bblm_tapoc"><br />
-				  @ 50,000 each</td>
+				  @ 80,000 each</td>
 			</tr>
 			<tr class="form-field form-required">
 				<th scope="row" valign="top"><label for="bblm_tbank">Remaining Bank</label></th>

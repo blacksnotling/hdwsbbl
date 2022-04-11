@@ -238,19 +238,19 @@ else if(isset($_POST['bblm_race_select'])) {
 function UpdateBankTv() {
 	var tot_rr = document.getElementById('bblm_trr').value * document.getElementById('bblm_trrcost').value;
 
-	var tot_ff = document.getElementById('bblm_tff').value * 10000;
+	var tot_ff = document.getElementById('bblm_tff').value * 20000;
 
-	var tot_cl = document.getElementById('bblm_tcl').value * 10000;
+	var tot_cl = document.getElementById('bblm_tcl').value * 20000;
 
-	var tot_ac = document.getElementById('bblm_tac').value * 10000;
+	var tot_ac = document.getElementById('bblm_tac').value * 20000;
 
-	var tot_apoc = document.getElementById('bblm_tapoc').value * 50000;
+	var tot_apoc = document.getElementById('bblm_tapoc').value * 80000;
 
 	var tot_tv = tot_rr + tot_cl + tot_ac + tot_apoc;
 	var tot_tvb = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
 	document.getElementById('bblm_ttv').value = tot_tv;
 
-	var tot_bank = 1000000 - tot_tvb;
+	var tot_bank = 600000 - tot_tvb;
 	document.getElementById('bblm_tbank').value = tot_bank;
 }
 </script>
@@ -269,23 +269,23 @@ function UpdateBankTv() {
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 		  <td><input type="text" name="bblm_tff" size="2" value="0" maxlength="2" id="bblm_tff" class="small-text"/><br />
-		  @ 10,000 each<br />
+		  @ 20,000 each<br />
 		<strong><?php echo __( 'An extra Dedicated Fan will be added for free when the team is created','bblm' ); ?></strong></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tcl">Cheerleaders</label></th>
 		  <td><input type="text" name="bblm_tcl" size="2" value="0" maxlength="2" id="bblm_tcl" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 20,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tac">Assistant Coaches</label></th>
 		  <td><input type="text" name="bblm_tac" size="2" value="0" maxlength="2" id="bblm_tac" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 20,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tapoc">Apothecary</label></th>
 		  <td><input type="text" name="bblm_tapoc" size="1" value="0" maxlength="1" id="bblm_tapoc" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 80,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top">&nbsp;</th>
@@ -294,7 +294,7 @@ function UpdateBankTv() {
 
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tbank">Remaining Bank</label></th>
-		  <td><input type="text" name="bblm_tbank" size="7" value="1000000" maxlength="7" id="bblm_tbank"/>gp</td>
+		  <td><input type="text" name="bblm_tbank" size="7" value="600000" maxlength="7" id="bblm_tbank"/>gp</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_ttv">Team Value (initial)</label></th>

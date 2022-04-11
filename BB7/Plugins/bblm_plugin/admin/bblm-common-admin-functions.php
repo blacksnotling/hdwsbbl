@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Admin
- * @version   1.6
+ * @version   1.6 (BB7)
  */
 
  /**
@@ -29,7 +29,7 @@ function bblm_update_tv($tid) {
 	$teamextravaluesql = 'SELECT T.t_rr, T.t_cl, T.t_ac, T.t_apoc, T.r_id FROM '.$wpdb->prefix.'team T WHERE T.t_id = '.$tid;
 	$tev = $wpdb->get_row($teamextravaluesql);
 	$rrcost = BBLM_CPT_Race::get_reroll_cost( $tev->r_id );
-	$tevalue = ( $rrcost * $tev->t_rr ) + ( $tev->t_cl * 10000 ) + ( $tev->t_ac * 10000 ) + ( $tev->t_apoc * 50000 );
+	$tevalue = ( $rrcost * $tev->t_rr ) + ( $tev->t_cl * 20000 ) + ( $tev->t_ac * 20000 ) + ( $tev->t_apoc * 80000 );
 
 	//Add the two together
 	$newtv = $tpvalue+$tevalue;
