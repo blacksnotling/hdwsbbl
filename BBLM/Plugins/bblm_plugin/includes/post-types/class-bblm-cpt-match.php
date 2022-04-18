@@ -147,7 +147,7 @@ class BBLM_CPT_Match {
 	* @param $Team the ID of the team (WPID)
 	* @return string a list of increases
 	*/
-	public static function get_match_increases( $ID ) {
+	public static function get_match_increases( $ID, $team ) {
 		global $wpdb;
 
 		$output = "Not Recorded";
@@ -155,11 +155,63 @@ class BBLM_CPT_Match {
 		if ( self::is_match_legacy( $ID ) ) {
 			//Old legacy output
 
+			$playersql = 'SELECT M.*, P.p_num, P.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE T.t_id = P.t_id AND P.p_id = M.p_id AND M.m_id = '.$ID.' AND T.WPID = '.$team.' ORDER BY P.p_num ASC';
+			if ( $player = $wpdb->get_results( $playersql ) ) {
+				//as we have players, initialize arrays to hold injuries and increases
+				$valid = array();
 
-		}
+				//Loop through the players to see if any recorded increases
+				foreach ($player as $tp) {
+					if ("none" !== $tp->mp_inc) {
+						//if this player has an injury record it for later
+						$valid[] = "#".$tp->p_num." - ".bblm_get_player_name( $tp->PWPID ) . " - " . esc_html( $tp->mp_inc );
+					}
+				}
+
+				if ( isset( $valid ) ) {
+					if ( 0 !== count( $valid ) ) {
+						//If players where inj, we have details
+						$output = '<ul>';
+						foreach ( $valid as $v ) {
+							$output .= '<li>' . $v . '</li>';
+						}
+						$output .= '</ul>';
+					}
+					else {
+						$output = 'None';
+					}
+				}
+
+			} //end of if playersql
+
+		} //end of if legacy
 		else {
 			//New output for the 2020+ Ruleset
+			$playersql = 'SELECT P.p_num, P.WPID AS PWPID, S.skill_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'skills S WHERE S.skill_id = I.skill_id AND I.p_id = P.WPID AND I.skill_id > 0 AND I.m_id = ' . $ID . ' AND T.t_id = P.t_id AND T.WPID = '.$team.' ORDER BY P.p_num ASC';
+			if ( $player = $wpdb->get_results( $playersql ) ) {
+				//as we have players, initialize arrays to hold injuries and increases
+				$valid = array();
 
+				//Loop through the players to capture any entries
+				foreach ($player as $tp) {
+					$valid[] = "#".$tp->p_num." - ".bblm_get_player_name( $tp->PWPID )." - ". esc_html( $tp->skill_name );
+				}
+
+				if ( isset( $valid ) ) {
+					if ( 0 !== count( $valid ) ) {
+						//If players where inj, we have details
+						$output = '<ul>';
+						foreach ( $valid as $v ) {
+							$output .= '<li>' . $v . '</li>';
+						}
+						$output .= '</ul>';
+					}
+					else {
+						$output = 'None';
+					}
+				}
+
+			} //end of if playersql
 		}
 
 		return $output;
@@ -173,18 +225,70 @@ class BBLM_CPT_Match {
 	* @param $Team the ID of the team (WPID)
 	* @return string a list of injuries
 	*/
-	public static function get_match_injuries() {
+	public static function get_match_injuries( $ID, $team ) {
 		global $wpdb;
 		$output = "Not Recorded";
 
 		if ( self::is_match_legacy( $ID ) ) {
 			//Old legacy output
 
+			$playersql = 'SELECT M.*, P.p_num, P.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE T.t_id = P.t_id AND P.p_id = M.p_id AND M.m_id = '.$ID.' AND T.WPID = '.$team.' ORDER BY P.p_num ASC';
+			if ( $player = $wpdb->get_results( $playersql ) ) {
+				//as we have players, initialize arrays to hold injuries and increases
+				$valid = array();
 
-		}
+				//Loop through the players to see if any recorded increases
+				foreach ($player as $tp) {
+					if ("none" !== $tp->mp_inj) {
+						//if this player has an injury record it for later
+						$valid[] = "#".$tp->p_num." - " . bblm_get_player_name( $tp->PWPID ) . " - " . esc_html( $tp->mp_inj );
+					}
+				}
+
+				if ( isset( $valid ) ) {
+					if ( 0 !== count( $valid ) ) {
+						//If players where inj, we have details
+						$output = '<ul>';
+						foreach ( $valid as $v ) {
+							$output .= '<li>' . $v . '</li>';
+						}
+						$output .= '</ul>';
+					}
+					else {
+						$output = 'None';
+					}
+				}
+
+			} //end of if playersql
+
+		} //end of if legacy
 		else {
 			//New output for the 2020+ Ruleset
+			$playersql = 'SELECT P.p_num, P.WPID AS PWPID, S.inj_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'injury S WHERE S.inj_id = I.inj_id AND I.p_id = P.WPID AND I.inj_id > 0 AND I.m_id = ' . $ID . ' AND T.t_id = P.t_id AND T.WPID = '.$team.' ORDER BY P.p_num ASC';
+			if ( $player = $wpdb->get_results( $playersql ) ) {
+				//as we have players, initialize arrays to hold injuries and increases
+				$valid = array();
 
+				//Loop through the players to capture any entries
+				foreach ($player as $tp) {
+					$valid[] = "#".$tp->p_num." - " . bblm_get_player_name( $tp->PWPID ) . " - " . esc_html( $tp->inj_name );
+				}
+
+				if ( isset( $valid ) ) {
+					if ( 0 !== count( $valid ) ) {
+						//If players where inj, we have details
+						$output = '<ul>';
+						foreach ( $valid as $v ) {
+							$output .= '<li>' . $v . '</li>';
+						}
+						$output .= '</ul>';
+					}
+					else {
+						$output = 'None';
+					}
+				}
+
+			} //end of if playersql
 		}
 
 		return $output;
