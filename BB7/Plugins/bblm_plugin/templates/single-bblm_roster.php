@@ -215,7 +215,7 @@ a:hover, a:active {
 					  <td><?php echo $pl->p_ma; ?></td>
 						<td><?php echo $pl->p_st; ?></td>
 						<td><?php echo $pl->p_ag; ?>+</td>
-						<td><?php echo $pl->p_pa; ?>+</td>
+						<td><?php if ( $pl->p_pa ==0 ) { echo '-'; } else { echo $pl->p_pa .'+'; } ?></td>
 						<td><?php echo $pl->p_av; ?>+</td>
 						<td class="bblm_tbl_skills"><?php echo $pl->p_skills; ?>
 					<?php

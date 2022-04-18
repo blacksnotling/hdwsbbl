@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.1
+ * @version   1.1.1
  */
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -114,10 +114,17 @@ class BBLM_Positions_List extends WP_List_Table {
       case 'pos_ma':
       case 'pos_st':
       case 'pos_ag':
-			case 'pos_pa':
       case 'pos_av':
       case 'pos_skills':
 				return $item[ $column_name ];
+
+			case 'pos_pa':
+				if ( $item[ $column_name ] == 0 ){
+					return '-';
+				}
+				else {
+					return $item[ $column_name ];
+				}
 
       case 'pos_cost':
         return number_format( $item[ 'pos_cost' ] ) .' GP';

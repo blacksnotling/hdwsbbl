@@ -120,7 +120,7 @@
                   else {
 ?>
   							<td><?php echo $pd->p_ag; ?>+</td>
-                <td><?php echo $pd->p_pa; ?>+</td>
+                <td><?php if ( $pd->p_pa ==0 ) { echo '-'; } else { echo $pd->p_pa .'+'; } ?></td>
 								<td><?php echo $pd->p_av; ?>+</td>
 <?php
                   }

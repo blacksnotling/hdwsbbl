@@ -307,7 +307,7 @@ class BBLM_CPT_Race {
 					else {
 ?>
 						<td><?php echo $pos->pos_ag; ?>+</td>
-						<td><?php echo $pos->pos_pa; ?>+</td>
+						<td><?php if ( $pos->pos_pa ==0 ) { echo '-'; } else { echo $pos->pos_pa .'+'; } ?></td>
 						<td><?php echo $pos->pos_av; ?>+</td>
 <?php
 					}
