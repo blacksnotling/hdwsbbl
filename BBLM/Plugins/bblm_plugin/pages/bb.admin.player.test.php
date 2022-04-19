@@ -82,7 +82,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		//Show the details of the selected player
 		display_player_characteristics( $pid );
 ?>
-		<p><strong><?php echo __( 'Player Rank', 'bblm' ); ?>:</strong> <?php echo get_player_rank( $pid ); ?></p>
+		<p><strong><?php echo __( 'Player Rank', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_rank( $pid ); ?></p>
 		<p><strong><?php echo __( 'Number of Skills', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_increase_count( $pid, 'skill' ); ?></p>
 		<p><strong><?php echo __( 'Number of Injuries', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_increase_count( $pid, 'injury' ); ?></p>
 		<p><strong><?php echo __( 'Team TV', 'bblm' ); ?>:</strong> X GP (for testing purposes)</p>
@@ -227,100 +227,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 <?php
 
 	} //end of display_player_characteristics()
-
-
-
-
-	/**
- 	 * returns a players rank
-	 * works for both legacy and 2020+ players
- 	 *
- 	 * @param wordpress $query
- 	 * @return string
- 	 */
- 	 function get_player_rank( $ID ) {
-		 global $wpdb;
-
-		 $plevel = "";
-
-		 if ( BBLM_CPT_Player::is_player_legacy( $ID ) ) {
-
-			 $playercsppsql = 'SELECT P.p_cspp FROM '.$wpdb->prefix.'player P WHERE P.WPID = '.$ID;
-			 $pspp = $wpdb->get_var( $playercsppsql );
-
-			 switch ( $pspp ) {
-				 case 0:
-						 $plevel = "Rookie";
-						 break;
-				 case ( $pspp < 6 ):
-						 $plevel = "Rookie";
-						 break;
-				 case ( $pspp < 16 ):
-						 $plevel = "Experienced";
-						 break;
-				 case ( $pspp < 31 ):
-						 $plevel = "Veteran";
-						 break;
-				 case ( $pspp < 51 ):
-						 $plevel = "Emerging Star";
-						 break;
-				 case ( $pspp < 76 ):
-						 $plevel = "Star";
-						 break;
-				 case ($pspp < 176):
-						 $plevel = "Super Star";
-						 break;
-				 case ( $pspp > 175 ):
-						 $plevel = "Legend";
-						 break;
-				 default:
-						 $plevel = "Rookie";
-						 break;
-			 }
-		 } //end of if legacy
-		 else {
-
-			 //Using the 2020 ruleset definitions
-			 $pspp = (int) BBLM_CPT_Player::get_player_increase_count( $ID, "skill" );
-
-			 switch ( $pspp ) {
-				 case 0:
-						 $plevel = "Rookie";
-						 break;
-				 case ( 1 == $pspp ):
-						 $plevel = "Experienced";
-						 break;
-				 case ( 2 == $pspp ):
-						 $plevel = "Veteran";
-						 break;
-				 case ( 3 == $pspp ):
-						 $plevel = "Emerging Star";
-						 break;
-				 case ( 4 == $pspp ):
-						 $plevel = "Star";
-						 break;
-				 case ( 5 == $pspp ):
-						 $plevel = "Super Star";
-						 break;
-				 case ( 6 == $pspp ):
-						 $plevel = "Legend";
-						 break;
-				 default:
-						 $plevel = "Rookie";
-						 break;
-			 }
-
-		 }
-
-		 return $plevel;
- 	 } //end of get_player_rank()
-
-
-
-	//Notes for adding to classes later on
-	// - replace calls to the same class with self::
-	// - restore the 'public static' before the function names
-
 
 ?>
 

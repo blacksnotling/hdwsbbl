@@ -24,7 +24,7 @@
 			/*
 			Gather Information for page
 			*/
-			$playersql = 'SELECT P.*, T.WPID, E.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position E WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = E.pos_id';
+			$playersql = 'SELECT P.*, T.WPID, E.pos_name, P.WPID AS PWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position E WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = E.pos_id';
 			//if ($player = $wpdb->get_results($playersql)) {
 			if ( $pd = $wpdb->get_row( $playersql ) ) {
 				$pspp = $pd->p_spp;
@@ -32,36 +32,6 @@
 			} //end of if playersql
 
       $legacy = 0;
-
-				switch ( $pspp ) {
-					case 0:
-				    	$plevel = "Rookie";
-					    break;
-					case ($pspp < 6):
-				    	$plevel = "Rookie";
-					    break;
-					case ($pspp < 16):
-					    $plevel = "Experienced";
-					    break;
-					case ($pspp < 31):
-					    $plevel = "Veteran";
-					    break;
-					case ($pspp < 51):
-					    $plevel = "Emerging Star";
-					    break;
-					case ($pspp < 76):
-					    $plevel = "Star";
-					    break;
-					case ($pspp < 176):
-					    $plevel = "Super Star";
-					    break;
-					case ($pspp > 175):
-					    $plevel = "Legend";
-					    break;
-					default:
-				    	$plevel = "Rookie";
-					    break;
-				}
 
 				if ( 0 == $pd->p_status ) {
 					$status = "Inactive";

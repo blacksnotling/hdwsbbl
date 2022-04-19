@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_Widget_TCplayerdetails extends WP_Widget {
@@ -48,7 +48,6 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
       //pulling in the vars from the single-bblm_comp template
       global $pd;
       global $status;
-      global $plevel;
       global $has_played;
       global $seasonsql;
 
@@ -86,7 +85,7 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
           }
         }
         echo '<li><strong>' . __( 'Status', 'bblm' ) . ':</strong> ' . $status . '</li>';
-        echo '<li><strong>' . __( 'Rank', 'bblm' ) . ':</strong> ' . $plevel . '</li>';
+        echo '<li><strong>' . __( 'Rank', 'bblm' ) . ':</strong> ' .  BBLM_CPT_Player::get_player_rank( $pd->PWPID ) . '</li>';
         echo '<li><strong>' . __( 'Team', 'bblm' ) . ':</strong> <a href="' . get_post_permalink( $pd->WPID ) . '" title="Read more on this team">' . esc_html( get_the_title( $pd->WPID ) ) . '</a></li>';
         echo '<li><strong>' . __( 'Position Number', 'bblm' ) . ':</strong> ' . $pd->p_num . '</li>';
 

@@ -485,6 +485,90 @@ class BBLM_CPT_Player {
 
 			} //end of get_player_increase_countt()
 
+			/**
+		 	 * returns a players rank
+			 * works for both legacy and 2020+ players
+		 	 *
+		 	 * @param wordpress $query
+		 	 * @return string Player Rank
+		 	 */
+		 	 public static function get_player_rank( $ID ) {
+				 global $wpdb;
+
+				 $plevel = "";
+
+				 if ( self::is_player_legacy( $ID ) ) {
+
+					 $playercsppsql = 'SELECT P.p_cspp FROM '.$wpdb->prefix.'player P WHERE P.WPID = '.$ID;
+					 $pspp = $wpdb->get_var( $playercsppsql );
+
+					 switch ( $pspp ) {
+						 case 0:
+								 $plevel = "Rookie";
+								 break;
+						 case ( $pspp < 6 ):
+								 $plevel = "Rookie";
+								 break;
+						 case ( $pspp < 16 ):
+								 $plevel = "Experienced";
+								 break;
+						 case ( $pspp < 31 ):
+								 $plevel = "Veteran";
+								 break;
+						 case ( $pspp < 51 ):
+								 $plevel = "Emerging Star";
+								 break;
+						 case ( $pspp < 76 ):
+								 $plevel = "Star";
+								 break;
+						 case ($pspp < 176):
+								 $plevel = "Super Star";
+								 break;
+						 case ( $pspp > 175 ):
+								 $plevel = "Legend";
+								 break;
+						 default:
+								 $plevel = "Rookie";
+								 break;
+					 }
+				 } //end of if legacy
+				 else {
+
+					 //Using the 2020 ruleset definitions
+					 $pspp = (int) self::get_player_increase_count( $ID, "skill" );
+
+					 switch ( $pspp ) {
+						 case 0:
+								 $plevel = "Rookie";
+								 break;
+						 case ( 1 == $pspp ):
+								 $plevel = "Experienced";
+								 break;
+						 case ( 2 == $pspp ):
+								 $plevel = "Veteran";
+								 break;
+						 case ( 3 == $pspp ):
+								 $plevel = "Emerging Star";
+								 break;
+						 case ( 4 == $pspp ):
+								 $plevel = "Star";
+								 break;
+						 case ( 5 == $pspp ):
+								 $plevel = "Super Star";
+								 break;
+						 case ( 6 == $pspp ):
+								 $plevel = "Legend";
+								 break;
+						 default:
+								 $plevel = "Rookie";
+								 break;
+					 }
+
+				 }
+
+				 return $plevel;
+		 	 } //end of get_player_rank()
+
 } //end of class
 
 new BBLM_CPT_Player();
