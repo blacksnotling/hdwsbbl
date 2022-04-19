@@ -24,6 +24,7 @@
 			/*
 			Gather Information for page
 			*/
+      //Although this will be replaced by functions, it still needs to exist for the time being until everything is converted
 			$playersql = 'SELECT P.*, T.WPID, E.pos_name, P.WPID AS PWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position E WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND X.ID = '.$post->ID.' AND P.t_id = T.t_id AND P.pos_id = E.pos_id';
 			//if ($player = $wpdb->get_results($playersql)) {
 			if ( $pd = $wpdb->get_row( $playersql ) ) {
@@ -53,55 +54,9 @@
             $legacy = 1;
             bblm_display_legacy_notice( "Player" );
           }
+
+          BBLM_CPT_Player::display_player_characteristics( $pd->PWPID );
 ?>
-          <div role="region" aria-labelledby="Caption01" tabindex="0">
-					<table class="bblm_table">
-						<thead>
-							<tr>
-								<th class="bblm_tbl_name"><?php echo __( 'Position', 'bblm' ); ?></th>
-								<th class="bblm_tbl_stat"><?php echo __( 'MA', 'bblm' ); ?></th>
-								<th class="bblm_tbl_stat"><?php echo __( 'ST', 'bblm' ); ?></th>
-								<th class="bblm_tbl_stat"><?php echo __( 'AG', 'bblm' ); ?></th>
-<?php
-                if ( !$legacy ) {
-?>
-                <th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
-<?php
-                }
-?>
-								<th class="bblm_tbl_stat"><?php echo __( 'AV', 'bblm' ); ?></th>
-								<th><?php echo __( 'Skills', 'bblm' ); ?></th>
-								<th><?php echo __( 'Injuries', 'bblm' ); ?></th>
-								<th><?php echo __( 'Cost', 'bblm' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><?php echo esc_html( $pd->pos_name ); ?></td>
-								<td><?php echo $pd->p_ma; ?></td>
-								<td><?php echo $pd->p_st; ?></td>
-<?php
-                  if ( $legacy ) {
-?>
-                <td><?php echo $pd->p_ag; ?></td>
-                <td><?php echo $pd->p_av; ?></td>
-<?php
-                  }
-                  else {
-?>
-  							<td><?php echo $pd->p_ag; ?>+</td>
-                <td><?php echo $pd->p_pa; ?>+</td>
-								<td><?php echo $pd->p_av; ?>+</td>
-<?php
-                  }
-?>
-								<td class="bblm_tbl_skills"><?php echo $pd->p_skills; ?></td>
-								<td><?php echo $pd->p_injuries; ?></td>
-								<td><?php echo number_format( $pd->p_cost ); ?>gp</td>
-							</tr>
-						</tbody>
-					</table>
-        </div>
 
 					<div class="bblm_details bblm_player_description">
 						<?php the_content(); ?>

@@ -569,6 +569,81 @@ class BBLM_CPT_Player {
 				 return $plevel;
 		 	 } //end of get_player_rank()
 
+
+			/**
+			 * Displays a players full charcteristics
+			 * Intended to be used on the view player template
+			 * works for both legacy and 2020+ players
+			 *
+			 * @param wordpress $query
+			 * @return html
+			 */
+				public static function display_player_characteristics( $ID ) {
+			  global $wpdb;
+
+				 $playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_injuries, O.pos_skills, P.p_cost, P.p_spp, P.p_cspp, P.p_legacy, O.pos_name, O.pos_cost, P.p_skills FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.WPID = '.$ID;
+				 $pd = $wpdb->get_row( $playersql );
+			?>
+				 <div role="region" aria-labelledby="Caption01" tabindex="0">
+				 <table class="bblm_table bblm_table_collapsable">
+					 <thead>
+						 <tr>
+							 <th class="bblm_tbl_name"><?php echo __( 'Position','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'MA','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'ST','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'AG','bblm' ); ?></th>
+			<?php
+				if ( ! self::is_player_legacy( $ID ) ) {
+			?>
+								<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+			<?php
+				}
+			?>
+								<th class="bblm_tbl_stat"><?php echo __( 'AV','bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'Skills','bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'Injuries','bblm' ); ?></th>
+								<th><?php echo __( 'SPP','bblm' ); ?></th>
+								<th><?php echo __( 'Cost','bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="bblm_tbl_alt">
+								<td><?php echo $pd->pos_name; ?></td>
+								<td><?php echo $pd->p_ma; ?></td>
+								<td><?php echo $pd->p_st; ?></td>
+			<?php
+					if ( self::is_player_legacy( $ID ) ) {
+			?>
+								<td><?php echo $pd->p_ag; ?></td>
+								<td><?php echo $pd->p_av; ?></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_skills; ?></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_injuries; ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $pd->p_spp; ?></td>
+								<td><?php echo number_format( $pd->p_cost ); ?> gp</td>
+			<?php
+				}
+				else {
+			?>
+								<td><?php echo $pd->p_ag; ?>+</td>
+								<td><?php if ( $pd->p_pa ==0 ) { echo '-'; } else { echo $pd->p_pa .'+'; } ?></td>
+								<td><?php echo $pd->p_av; ?>+</td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><span class="bblm_pos_skill"><?php echo $pd->pos_skills; ?></span>
+									<br /><strong><?php echo self::get_player_skills( $ID ) ?></strong></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo self::get_player_injuries( $ID ) ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $pd->p_cspp . '/' . $pd->p_spp; ?></td>
+								<td><?php echo number_format( $pd->p_cost ); ?> gp
+									<br />(<span class="bblm_pos_skill"><?php echo number_format( $pd->pos_cost ) . ' + ' . number_format( self::get_player_skills_cost( $ID ) ); ?></span>)</td>
+			<?php
+				}
+			?>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<?php
+
+				} //end of display_player_characteristics()
+
 } //end of class
 
 new BBLM_CPT_Player();
