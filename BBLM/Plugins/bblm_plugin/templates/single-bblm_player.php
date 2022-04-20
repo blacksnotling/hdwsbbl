@@ -50,7 +50,7 @@
 
 				<div class="entry-content">
 <?php
-          if ( $pd->p_legacy ) {
+          if ( BBLM_CPT_Player::is_player_legacy( $pd->PWPID ) ) {
             $legacy = 1;
             bblm_display_legacy_notice( "Player" );
           }
@@ -311,12 +311,19 @@
 									<th><?php echo __( 'MVP', 'bblm' ); ?></th>
 									<th><?php echo __( 'SPP', 'bblm' ); ?></th>
 									<th><?php echo __( 'MNG?', 'bblm' ); ?></th>
+<?php
+                  if ( $legacy ) {
+?>
 									<th><?php echo __( 'Increase', 'bblm' ); ?></th>
 									<th><?php echo __( 'Injury', 'bblm' ); ?></th>
+<?php
+                  }
+?>
 								</tr>
 							</thead>
 							<tbody>
 <?php
+            //Assumes player has played in one match for this to display thus far
             $playermatchsql = 'SELECT P.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
 						if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
 						$zebracount = 1;
@@ -395,22 +402,24 @@
 									echo '<strong>Y</strong>';
 								}
 								echo '</td>';
-								echo '<td>';
-								if ( "none" == $pm->mp_inc ) {
-									echo '-';
-								}
-								else {
-									echo '<strong>' . $pm->mp_inc . '</strong>';
-								}
-								echo '</td>';
-								echo '<td>';
-								if ( "none" == $pm->mp_inj ) {
-									echo '-';
-								}
-								else {
-									echo '<strong>' . $pm->mp_inj . '</strong>';
-								}
-								echo '</td>';
+                if ( $legacy ) {
+  								echo '<td>';
+  								if ( "none" == $pm->mp_inc ) {
+  									echo '-';
+  								}
+  								else {
+  									echo '<strong>' . $pm->mp_inc . '</strong>';
+  								}
+  								echo '</td>';
+  								echo '<td>';
+  								if ( "none" == $pm->mp_inj ) {
+  									echo '-';
+  								}
+  								else {
+  									echo '<strong>' . $pm->mp_inj . '</strong>';
+  								}
+  								echo '</td>';
+                }//end of if legacy
 								$zebracount++;
 							}
 						}
@@ -418,6 +427,109 @@
 							</tbody>
 						</table>
           </div>
+
+<?php
+            if ( ! $legacy ) {
+?>
+              <h3 class="bblm-table-caption"><?php echo __( 'Increase History', 'bblm' ); ?></h3>
+              <div role="region" aria-labelledby="Caption01" tabindex="0">
+                <table class="bblm_table bblm_sortable bblm_expandable">
+                  <thead>
+                    <tr>
+                      <th><?php echo __( '#', 'bblm' ); ?></th>
+                      <th><?php echo __( 'Vs', 'bblm' ); ?></th>
+                      <th><?php echo __( 'Increase', 'bblm' ); ?></th>
+                      <th><?php echo __( 'Cost', 'bblm' ); ?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+<?php
+              $incinjsql = 'SELECT M.WPID AS MWPID, A.WPID AS TAWPID, B.WPID AS TBWPID, A.t_id AS TAid, B.t_id AS TBid, P.t_id AS TPid, S.skill_name, X.inc_name, X.inc_tier, X.inc_spp, X.inc_cost FROM '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B, '.$wpdb->prefix.'skills S, '.$wpdb->prefix.'increase X WHERE S.skill_id = I.skill_id AND X.inc_id = I.inc_id AND M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = I.m_id AND I.p_id = P.WPID AND P.WPID = ' . $pd->PWPID . ' ORDER BY X.inc_tier ASC';
+              if ( $incinj = $wpdb->get_results( $incinjsql) ) {
+                $zebracount = 1;
+                foreach ( $incinj as $ii ) {
+                  if ( $zebracount % 2 ) {
+                    echo '<tr class="bblm_tbl_alt">';
+                  }
+                  else {
+                    echo '<tr>';
+                  }
+                  echo '<td>' . bblm_ordinal( $ii->inc_tier ) . ' Skill</td>';
+                  if ( $ii->TAid == $ii->TPid ) {
+                    echo '<td>' . bblm_get_team_link( $ii->TBWPID ) . '<br />' . bblm_get_match_link_date( $ii->MWPID ) . '</td>';
+                  }
+                  else {
+                    echo '<td>' . bblm_get_team_link( $ii->TAWPID ) . '<br />' . bblm_get_match_link_date( $ii->MWPID ) . '</td>';
+                  }
+                  echo '<td>' . esc_html( $ii->skill_name ) . ' (' . esc_html( $ii->inc_name ) . ')</td>';
+                  echo '<td>-' . esc_html( $ii->inc_spp ) . 'SPP / +' . number_format( esc_html( $ii->inc_cost ) ) . 'gp</td>';
+                  echo '</tr>';
+
+                  $zebracount++;
+                }
+              }
+              else {
+                //The player has gained no increases or suffered no injuries
+                echo '<tr><td colSpan="3">' . __( 'This Player has gained no increases', 'bblm' ) . '</td></tr>';
+              }
+?>
+                  </tbody>
+                  </table>
+              </div>
+
+              <h3 class="bblm-table-caption"><?php echo __( 'Injury History', 'bblm' ); ?></h3>
+              <div role="region" aria-labelledby="Caption01" tabindex="0">
+                <table class="bblm_table bblm_sortable bblm_expandable">
+                  <thead>
+                    <tr>
+                      <th><?php echo __( 'Vs', 'bblm' ); ?></th>
+                      <th><?php echo __( 'Injury', 'bblm' ); ?></th>
+                      <th><?php echo __( 'MNG?', 'bblm' ); ?></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+<?php
+              $incinjsql = 'SELECT M.WPID AS MWPID, A.WPID AS TAWPID, B.WPID AS TBWPID, A.t_id AS TAid, B.t_id AS TBid, P.t_id AS TPid, X.inj_name, X.inj_mng FROM '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B, '.$wpdb->prefix.'injury X WHERE X.inj_id = I.inj_id AND M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = I.m_id AND I.p_id = P.WPID AND P.WPID = ' . $pd->PWPID . ' ORDER BY M.m_date DESC';
+              if ( $incinj = $wpdb->get_results( $incinjsql) ) {
+                $zebracount = 1;
+                foreach ( $incinj as $ii ) {
+                  if ( $zebracount % 2 ) {
+                    echo '<tr class="bblm_tbl_alt">';
+                  }
+                  else {
+                    echo '<tr>';
+                  }
+                  if ( $ii->TAid == $ii->TPid ) {
+                    echo '<td>' . bblm_get_team_link( $ii->TBWPID ) . '<br />' . bblm_get_match_link_date( $ii->MWPID ) . '</td>';
+                  }
+                  else {
+                    echo '<td>' . bblm_get_team_link( $ii->TAWPID ) . '<br />' . bblm_get_match_link_date( $ii->MWPID ) . '</td>';
+                  }
+                  echo '<td>' . esc_html( $ii->inj_name ) . '</td>';
+                  if ( $ii->inj_mng ) {
+                    echo '<td>Y</td>';
+                  }
+                  else {
+                    echo '<td>N</td>';
+                  }
+                  echo '</tr>';
+
+                  $zebracount++;
+                }
+              }
+              else {
+                //The player has suffered no injuries
+                echo '<tr><td colSpan="3">' . __( 'This Player has sustained no injuries', 'bblm' ) . '</td></tr>';
+              }
+?>
+                </tbody>
+                </table>
+              </div>
+
+<?php
+
+        }//end of if not legacy
+?>
 
 						<h3><?php echo __( 'Awards list in full', 'bblm' ); ?></h3>
 <?php
