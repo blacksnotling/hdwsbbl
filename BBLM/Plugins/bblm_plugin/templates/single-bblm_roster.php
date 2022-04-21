@@ -130,10 +130,11 @@ a:hover, a:active {
 				<?php while (have_posts()) : the_post(); ?>
 
 		<?php
-				$teaminfosql = 'SELECT T.*, J.tid AS teamid, T.r_id, T.stad_id, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = ' . $post->ID;
+				$teaminfosql = 'SELECT T.*, T.t_id AS teamid, T.r_id, T.stad_id, T.WPID AS TWPID, T.t_legacy FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = ' . $post->ID;
 				if ( $ti = $wpdb->get_row( $teaminfosql ) ) {
 					$tid = $ti->teamid;
 					$team_link = bblm_get_team_link( $ti->TWPID );
+					$legacy = $ti->t_legacy;
 
 					//determine Team Captain
 					$teamcap = 0;
@@ -171,7 +172,7 @@ a:hover, a:active {
 				</thead>
 				<tbody>
 <?php
-					$playersql = 'SELECT K.post_title, K.guid, K.ID AS PWPID, L.pos_name, P.* FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position L WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = L.pos_id AND P.p_status = 1 AND P.t_id = '.$tid.' ORDER BY P.p_num ASC';
+					$playersql = 'SELECT P.WPID AS PWPID, L.pos_name, L.pos_id, L.pos_skills, P.* FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position L WHERE P.pos_id = L.pos_id AND P.p_status = 1 AND P.t_id = '.$tid.' ORDER BY P.p_num ASC';
 					$pcount = 1;
 					if ( $players = $wpdb->get_results( $playersql ) ) {
 						foreach ( $players as $pl ) {
@@ -205,7 +206,7 @@ a:hover, a:active {
 						//checks to see the player belongs in this position
 						if ( $pcount == $pl->p_num ) {
 
-						$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_ttm) AS PTTM, SUM(M.mp_int) AS PINT, SUM(M.mp_def) AS PDEF, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE M.m_id = N.WPID AND N.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
+						$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_ttm) AS PTTM, SUM(M.mp_int) AS PINT, SUM(M.mp_def) AS PDEF, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C WHERE M.m_id = N.WPID AND N.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
 						$pd = $wpdb->get_row( $playerdetailssql );
 					?>
 					<tr>
@@ -215,14 +216,54 @@ a:hover, a:active {
 					  <td><?php echo $pl->p_ma; ?></td>
 						<td><?php echo $pl->p_st; ?></td>
 						<td><?php echo $pl->p_ag; ?>+</td>
+<?php
+						if ( ! $legacy ) {
+?>
 						<td><?php echo $pl->p_pa; ?>+</td>
 						<td><?php echo $pl->p_av; ?>+</td>
-						<td class="bblm_tbl_skills"><?php echo $pl->p_skills; ?>
-					<?php
-						if ("none" !== $pl->p_injuries) {
-							echo ', <em>'.$pl->p_injuries.'</em>';
+						<td class="bblm_tbl_skills">
+<?php
+						//We need to determine a few specific cases here. !. JM / Mercs / RR and 2. Positions with no default Skills
+						$options = get_option( 'bblm_config' );
+						$merc_pos = (int) $options['player_merc'];
+						$rrookie_pos = (int) $options['player_rrookie'];
+						$jm_pos = 1;
+
+						//JM, Mercs, and Riotous Rookies display what is assinged to their player record
+						if ( ( $pl->pos_id == $merc_pos ) || ( $pl->pos_id == $rrookie_pos ) || ( $pl->pos_id == $jm_pos ) ) {
+							echo $pl->p_skills;
 						}
-					?></td>
+						//If a position has no skills by default, and they have no increases display "none"
+						else if ( ( $pl->pos_skills == "none" ) && ( (int) BBLM_CPT_Player::get_player_increase_count( $pl->PWPID ) == 0 ) ) {
+							echo 'none';
+							echo BBLM_CPT_Player::get_player_injuries( $pl->PWPID );
+						}
+						//otherwise follow the new logic
+						else {
+							echo '<span class="bblm_pos_skill">' . $pl->pos_skills . '</span><br />';
+							echo '<strong>' . BBLM_CPT_Player::get_player_skills( $pl->PWPID ) . '</strong>';
+							echo ' (<em>' . BBLM_CPT_Player::get_player_injuries( $pl->PWPID ) . '</em>)';
+}
+?>
+						</td>
+<?php
+						}
+						else {
+?>
+
+<?php
+≈
+?>
+						<td>&nbsp;</td>
+						<td><?php echo $pl->p_av; ?>+</td>
+						<td class="bblm_tbl_skills"><?php echo $pl->p_skills; ?>
+<?php
+							if ("none" !== $pl->p_injuries) {
+								echo ', <em>'.$pl->p_injuries.'</em>';
+							}
+						} //end of if not legacy
+?>
+						</td>
 <?php
 						//TouchDowns
 						if ($pd->PTD == 0) {

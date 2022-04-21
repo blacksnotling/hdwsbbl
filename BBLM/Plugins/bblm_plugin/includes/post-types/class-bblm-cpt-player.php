@@ -581,7 +581,7 @@ class BBLM_CPT_Player {
 				public static function display_player_characteristics( $ID ) {
 			  global $wpdb;
 
-				 $playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_injuries, O.pos_skills, P.p_cost, P.p_spp, P.p_cspp, P.p_legacy, O.pos_name, O.pos_cost, P.p_skills FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.WPID = '.$ID;
+				 $playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_injuries, O.pos_skills, P.p_cost, P.p_spp, P.p_cspp, P.p_legacy, O.pos_name, O.pos_cost, P.p_skills, P.pos_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.WPID = '.$ID;
 				 $pd = $wpdb->get_row( $playersql );
 			?>
 				 <div role="region" aria-labelledby="Caption01" tabindex="0">
@@ -627,8 +627,29 @@ class BBLM_CPT_Player {
 								<td><?php echo $pd->p_ag; ?>+</td>
 								<td><?php if ( $pd->p_pa ==0 ) { echo '-'; } else { echo $pd->p_pa .'+'; } ?></td>
 								<td><?php echo $pd->p_av; ?>+</td>
-								<td class="bblm_tbl_skills bblm_tbl_collapse"><span class="bblm_pos_skill"><?php echo $pd->pos_skills; ?></span>
-									<br /><strong><?php echo self::get_player_skills( $ID ) ?></strong></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse">
+<?php
+								//We need to determine a few specific cases here. !. JM / Mercs / RR and 2. Positions with no default Skills
+								$options = get_option( 'bblm_config' );
+								$merc_pos = (int) $options['player_merc'];
+								$rrookie_pos = (int) $options['player_rrookie'];
+								$jm_pos = 1;
+
+								//JM, Mercs, and Riotous Rookies display what is assinged to their player record
+								if ( ( $pd->pos_id == $merc_pos ) || ( $pd->pos_id == $rrookie_pos ) || ( $pd->pos_id == $jm_pos ) ) {
+									echo $pd->p_skills;
+								}
+								//If a position has no skills by default, and they have no increases display "none"
+								else if ( ( $pd->pos_skills == "none" ) && ( (int) self::get_player_increase_count( $ID ) == 0 ) ) {
+									echo 'none';
+								}
+								//otherwise follow the new logic
+								else {
+									echo '<span class="bblm_pos_skill">' . $pd->pos_skills . '</span><br />';
+									echo '<strong>' . self::get_player_skills( $ID ) . '</strong>';
+}
+?>
+								</td>
 								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo self::get_player_injuries( $ID ) ?></td>
 								<td class="bblm_tbl_collapse"><?php echo $pd->p_cspp . '/' . $pd->p_spp; ?></td>
 								<td><?php echo number_format( $pd->p_cost ); ?> gp
