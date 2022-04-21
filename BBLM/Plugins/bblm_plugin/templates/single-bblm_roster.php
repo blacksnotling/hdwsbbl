@@ -80,6 +80,9 @@ td.bblm_tbl_image {
 	text-align:left;
 	font-size: smaller;
 }
+.bblm_tbl_cost {
+	font-size: smaller;
+}
 .bblm_tbl_name {
 	width:200px;
 }
@@ -99,6 +102,15 @@ a:hover, a:active {
 	color: #d9101d;
 	text-decoration: underline;
 }
+td.bblm_char_inc, td.bblm_char_dec {
+	font-weight: bold;
+}
+td.bblm_char_inc {
+	background-color: #00cc00;
+}
+td.bblm_char_dec {
+	background-color: #ff0000
+}
 } /* end of media screen */
 @media print {
 	#footer {
@@ -117,6 +129,12 @@ a:hover, a:active {
 		text-align:left;
 		font-size: smaller;
 	}
+	.bblm_tbl_cost {
+		font-size: smaller;
+	}
+	td.bblm_char_inc, td.bblm_char_dec {
+		font-weight: bold;
+	}
 
 }
 </style>
@@ -130,16 +148,17 @@ a:hover, a:active {
 				<?php while (have_posts()) : the_post(); ?>
 
 		<?php
-				$teaminfosql = 'SELECT T.*, J.tid AS teamid, T.r_id, T.stad_id, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = ' . $post->ID;
+				$teaminfosql = 'SELECT T.*, T.t_id AS teamid, T.r_id, T.stad_id, T.WPID AS TWPID, T.t_legacy FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = ' . $post->ID;
 				if ( $ti = $wpdb->get_row( $teaminfosql ) ) {
 					$tid = $ti->teamid;
 					$team_link = bblm_get_team_link( $ti->TWPID );
+					$legacy = $ti->t_legacy;
 
 					//determine Team Captain
 					$teamcap = 0;
 					$teamcaptainsql = 'SELECT * FROM '.$wpdb->prefix.'team_captain WHERE tcap_status = 1 and t_id = ' . $tid;
 					if ( $tcap = $wpdb->get_row( $teamcaptainsql ) ) {
-						$teamcap = $tcap->p_id;
+						$teamcap = (int) $tcap->p_id;
 					}
 
 					$rr_cost = (int) BBLM_CPT_Race::get_reroll_cost( $ti->r_id );
@@ -171,7 +190,7 @@ a:hover, a:active {
 				</thead>
 				<tbody>
 <?php
-					$playersql = 'SELECT K.post_title, K.guid, K.ID AS PWPID, L.pos_name, P.* FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' K, '.$wpdb->prefix.'position L WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = K.ID AND P.pos_id = L.pos_id AND P.p_status = 1 AND P.t_id = '.$tid.' ORDER BY P.p_num ASC';
+					$playersql = 'SELECT P.WPID AS PWPID, L.*, P.* FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position L WHERE P.pos_id = L.pos_id AND P.p_status = 1 AND P.t_id = '.$tid.' ORDER BY P.p_num ASC';
 					$pcount = 1;
 					if ( $players = $wpdb->get_results( $playersql ) ) {
 						foreach ( $players as $pl ) {
@@ -205,43 +224,74 @@ a:hover, a:active {
 						//checks to see the player belongs in this position
 						if ( $pcount == $pl->p_num ) {
 
-						$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_ttm) AS PTTM, SUM(M.mp_int) AS PINT, SUM(M.mp_def) AS PDEF, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O WHERE M.m_id = N.WPID AND N.c_id = C.WPID AND C.c_counts = 1 AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
+						$playerdetailssql = 'SELECT SUM(M.mp_td) AS PTD, SUM(M.mp_cas) AS PCAS, SUM(M.mp_comp) AS PCOMP, SUM(M.mp_ttm) AS PTTM, SUM(M.mp_int) AS PINT, SUM(M.mp_def) AS PDEF, SUM(M.mp_MVP) AS PMVP, SUM(M.mp_spp) AS PSPP FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'match N, '.$wpdb->prefix.'comp C WHERE M.m_id = N.WPID AND N.c_id = C.WPID AND C.c_counts = 1 AND M.p_id = P.p_id AND M.mp_spp > 0 AND P.p_id = '.$pl->p_id;
 						$pd = $wpdb->get_row( $playerdetailssql );
 					?>
 					<tr>
 						<td><?php echo $pcount; ?></td>
-						<td><?php echo bblm_get_player_link( $pl->PWPID ); if ($teamcap == $pl->p_id) { echo ' (C)';} ?></td>
+						<td><?php echo bblm_get_player_link( $pl->PWPID ); if ( $teamcap == (int) $pl->p_id ) { echo ' (C)';} ?></td>
 						<td><?php echo esc_html( $pl->pos_name ); ?></td>
-					  <td><?php echo $pl->p_ma; ?></td>
-						<td><?php echo $pl->p_st; ?></td>
-						<td><?php echo $pl->p_ag; ?>+</td>
-						<td><?php if ( $pl->p_pa ==0 ) { echo '-'; } else { echo $pl->p_pa .'+'; } ?></td>
-						<td><?php echo $pl->p_av; ?>+</td>
-						<td class="bblm_tbl_skills"><?php echo $pl->p_skills; ?>
-					<?php
-						if ("none" !== $pl->p_injuries) {
-							echo ', <em>'.$pl->p_injuries.'</em>';
+					  <td<?php if ( ( (int) $pl->p_ma > (int) $pl->pos_ma ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_ma < (int) $pl->pos_ma ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_ma; ?></td>
+						<td<?php if ( ( (int) $pl->p_st > (int) $pl->pos_st ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_st < (int) $pl->pos_st ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_st; ?></td>
+						<td<?php if ( ( (int) $pl->p_ag < (int) $pl->pos_ag ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_ag > (int) $pl->pos_ag ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_ag; ?>+</td>
+<?php
+						if ( ! $legacy ) {
+?>
+						<td<?php if ( ( (int) $pl->p_pa < (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_pa > (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php if ( $pl->p_pa ==0 ) { echo '-'; } else { echo $pl->p_pa .'+'; } ?></td>
+						<td<?php if ( ( (int) $pl->p_av > (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_av < (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_av; ?>+</td>
+						<td class="bblm_tbl_skills">
+<?php
+						//JM, Mercs, and Riotous Rookies display what is assinged to their player record
+						if ( BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) {
+							echo $pl->p_skills;
 						}
-					?></td>
+						//If a position has no skills byß default, and they have no increases display "none"
+						else if ( ( $pl->pos_skills == "none" ) && ( (int) BBLM_CPT_Player::get_player_increase_count( $pl->PWPID ) == 0 ) ) {
+							echo 'none';
+							echo BBLM_CPT_Player::get_player_injuries( $pl->PWPID );
+						}
+						//otherwise follow the new logic
+						else {
+							echo '<span class="bblm_pos_skill">' . $pl->pos_skills . '</span> ';
+							echo '<strong>' . BBLM_CPT_Player::get_player_skills( (int) $pl->PWPID ) . '</strong>';
+							echo ' (<em>' . BBLM_CPT_Player::get_player_injuries( (int) $pl->PWPID ) . '</em>)';
+}
+?>
+						</td>
+<?php
+						}
+						else {
+							//Player is a legacy player so output from the player record
+?>
+						<td>&nbsp;</td>
+						<td<?php if ( ( (int) $pl->p_av > (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_av < (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_av; ?>+</td>
+						<td class="bblm_tbl_skills"><?php echo $pl->p_skills; ?>
+<?php
+							if ("none" !== $pl->p_injuries) {
+								echo ', <em>'.$pl->p_injuries.'</em>';
+							}
+						} //end of if not legacy
+?>
+						</td>
 <?php
 						//TouchDowns
-						if ($pd->PTD == 0) {
+						if ( (int) $pd->PTD == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
-							echo '<td>' . $pd->PTD . '</td>';
+							echo '<td>' . (int) $pd->PTD . '</td>';
 						}
 
 						//Casualities
-						if ($pd->PCAS == 0) {
+						if ( (int) $pd->PCAS == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
-							echo '<td>' . $pd->PCAS . '</td>';
+							echo '<td>' . (int) $pd->PCAS . '</td>';
 						}
 
 						//Completions + Throw Team mates
-						if ($pd->PCOMP == 0) {
+						if ( $pd->PCOMP == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
@@ -250,31 +300,31 @@ a:hover, a:active {
 						}
 
 						//Interceptions
-						if ($pd->PINT == 0) {
+						if ( (int) $pd->PINT == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
-							echo '<td>' . $pd->PINT . '</td>';
+							echo '<td>' . (int) $pd->PINT . '</td>';
 						}
 
 						//Deflections
-						if ($pd->PDEF == 0) {
+						if ( (int) $pd->PDEF == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
-							echo '<td>' . $pd->PDEF . '</td>';
+							echo '<td>' . (int) $pd->PDEF . '</td>';
 						}
 
 						//MVP
-						if ($pd->PMVP == 0) {
+						if ( (int) $pd->PMVP == 0 ) {
 							echo '<td>&nbsp;</td>';
 						}
 						else {
-							echo '<td>' . $pd->PMVP . '</td>';
+							echo '<td>' . (int) $pd->PMVP . '</td>';
 						}
 
 						//Miss Next Game Flag
-						if ($pl->p_mng) {
+						if ( (int) $pl->p_mng ) {
 							echo '<td>Y</td>';
 						}
 						else {
@@ -282,17 +332,32 @@ a:hover, a:active {
 						}
 
 						//Temporary Retired
-						if ($pl->p_tr) {
+						if ( (int) $pl->p_tr ) {
 							echo '<td>Y</td>';
 						}
 						else {
 							echo '<td>&nbsp;</td>';
 						}
 ?>
-						<td class="bblm_tbl_spp"><strong><?php echo $pl->p_cspp . '</strong> / ' . $pl->p_spp ; ?></td>
-						<td><?php echo number_format( $pl->p_cost_ng ); ?>gp</td>
+						<td class="bblm_tbl_spp"><strong><?php echo (int) $pl->p_cspp . '</strong> / ' . (int) $pl->p_spp ; ?></td>
+<?php
+						if ( ! $legacy ) {
+							//Display the new way of showing Player Cost
+?>
+						<td class="bblm_tbl_cost"><?php echo number_format( (int) $pl->p_cost_ng ); ?> gp
+						<br />(<span class="bblm_pos_skill"><?php echo number_format( $pl->pos_cost ) . ' + ' . number_format( BBLM_CPT_Player::get_player_skills_cost( $pl->PWPID ) ); ?></span>)</td>
+<?php
+						}
+else {
+						//Player is a legacy player so output from the player record
+?>
+						<td><?php echo number_format( (int) $pl->p_cost_ng ); ?>gp</td>
+<?php
+}//end of if player legacy
+
+?>
 					</tr>
-					<?php
+<?php
 									}
 									$pcount++;
 								}

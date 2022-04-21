@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.4
+ * @version   1.5
  */
 
  /**
@@ -455,3 +455,20 @@ function bblm_get_match_link_score( $ID, $formatted = 1 ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_match_link_score
+
+/**
+ * returns the ordinal of a number (th, nd, rd, etc)
+ * Defaults to skills
+ *
+ * @param int the number to have the ordinal appended
+ * @return string
+ */
+ function bblm_ordinal( $number ) {
+	 $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+	 if ( ( ( $number % 100 ) >= 11 ) && ( ( $number%100 ) <= 13 ) ) {
+		 return $number. 'th';
+	 }
+	 else {
+		 return $number. $ends[$number % 10];
+	 }
+ } //end of bblm_ordinal

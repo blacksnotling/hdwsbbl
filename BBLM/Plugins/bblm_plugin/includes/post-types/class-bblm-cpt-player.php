@@ -308,6 +308,381 @@ class BBLM_CPT_Player {
 
 		} //display_player_team_history()
 
+		/**
+		 * returns a players skills
+		 * Only works for 2020+ players
+		 *
+		 * @param wordpress $query
+		 * @return string
+		 */
+		 public static function get_player_skills( $ID ) {
+			 global $wpdb;
+
+			 $increasesql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'increase I, '.$wpdb->prefix.'skills S WHERE P.inc_id = I.inc_id AND P.skill_id = S.skill_id AND P.p_id = '. $ID . ' ORDER BY I.inc_id ASC';
+			 if ( $increase = $wpdb->get_results( $increasesql ) ) {
+				 $first = 1;
+				 $inclist = "";
+				 foreach ( $increase as $in ) {
+					 if ( $first ) {
+						 $inclist = '<span class="bblm_increase-' . $in->inc_tier . '">' . $in->skill_name . '</span>';
+						 $first = 0;
+					 }
+					 else {
+						 $inclist .= ', <span class="bblm_increase-' . $in->inc_tier . '">' . $in->skill_name . '</span>';
+					 }
+				 }
+				 return $inclist;
+			 }
+			 else {
+				 //This player currently has no increases
+				 return '&nbsp;';
+			 }
+
+		 } //end of get_player_skills()
+
+	 /**
+	  * returns a players injuries
+	 	* Only works for 2020+ players
+	  *
+	  * @param wordpress $query
+	  * @return string
+	  */
+	  public static function get_player_injuries( $ID ) {
+			global $wpdb;
+
+			$injurysql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'injury I WHERE P.inj_id = I.inj_id AND P.p_id = '. $ID . ' ORDER BY I.inj_id ASC';
+			if ( $injury = $wpdb->get_results( $injurysql ) ) {
+				$first = 1;
+				$injlist = "";
+				foreach ( $injury as $in ) {
+					if ( $first ) {
+						$first = 0;
+					}
+					else {
+						$injlist .= ', ';
+					}
+					//Some Stats go up, others go down with injuries!
+					if ( "NI" == $in->inj_stat ) {
+						$injlist .= '';
+					}
+					else if ( "ag" == $in->inj_stat || "pa" == $in->inj_stat ) {
+						$injlist .= '+';
+					}
+					else {
+						$injlist .= '-';
+					}
+					$injlist .= $in->inj_stat;
+				}
+				return $injlist;
+			}
+			else {
+				//This player currently has no increases
+				return 'None';
+			}
+
+		} //end of get_player_injuries()
+
+	 /**
+	 	* returns a players cost of skills
+		* works for both legacy and 2020+ players
+	 	*
+	 	* @param wordpress $query
+	 	* @return int
+	 	*/
+	 	public static function get_player_skills_cost( $ID ) {
+			global $wpdb;
+
+			$increasesql = 'SELECT SUM(S.inc_cost) AS ICOST FROM '.$wpdb->prefix.'player_increase I, '.$wpdb->prefix.'increase S WHERE S.inc_id = I.inc_id AND I.pi_type = 1 AND I.p_id = '. $ID;
+			$inccost = $wpdb->get_var( $increasesql );
+
+			if ( 0 < $inccost ) {
+				return (int) $inccost;
+			}
+			else {
+				return '0';
+			}
+
+	 	 } //end of get_player_skills_cost()
+
+	 /**
+	  * Outputs the list of matches the player has participated in
+	  * includes all relevent validation
+		* works for both legacy and 2020+ players
+	  *
+	  * @param wordpress $query
+		* @param int a number to append to the form if this is called more than once on a screen
+		* @param int 1 for increases, 2 for injuries
+	  * @return html
+	  */
+	  public static function display_player_match_history_select( $ID, $count=1, $type=1 ) {
+			global $wpdb;
+
+			//Optional Param to add a number to the fields, in the event more then one is displayed
+			//such as on the record player actions page
+			$count = (int) $count;
+			$fieldname = "";
+			if ( 1== (int) $type ) {
+				$fieldname = "bblm_mselect_s".$count;
+			}
+			else if ( 2== (int) $type ) {
+				$fieldname = "bblm_mselect_i".$count;
+			}
+			else {
+				$fieldname = "bblm_mselect_s".$count;
+			}
+?>
+			<label for="<?php echo $fieldname; ?>"><?php echo __( 'Match Recieved', 'bblm' ); ?>:</label>
+			<select name="<?php echo $fieldname; ?>" id="<?php echo $fieldname; ?>">
+<?php
+			$playermatchselectsql = 'SELECT M.m_id as MWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match_player M WHERE M.p_id = P.p_id AND P.WPID = ' . $ID . ' ORDER BY M.m_id DESC';
+			if ( $playermatchselect = $wpdb->get_results( $playermatchselectsql ) ) {
+				foreach ( $playermatchselect as $m ) {
+					echo '<option value="' . $m->MWPID . '">' . bblm_get_match_name_score( $m->MWPID ) . '</option>';
+				}
+			}
+			else {
+				echo '<option value="X">' . __( 'No matches played','bblm' ) . '</option>';
+			}
+?>
+			</select>
+<?php
+
+		} //end of display_player_match_history_select
+
+		/**
+	  	* returns the number of increases a player has recieved (skill or injury)
+	  	* Defaults to skills
+			* Only works for 2020+ players
+	  	*
+	  	* @param wordpress $query
+			* @param string skill or injury
+	  	* @return string
+	  	*/
+			public static function get_player_increase_count( $ID, $inctype = "skill" ) {
+				global $wpdb;
+
+				$type = '';
+
+				switch ( $inctype ) {
+					case ( 'skill' == $inctype ):
+						$type = '1';
+						break;
+					case ( 'injury' == $inctype ):
+						$type = '2';
+						break;
+					default :
+					$type = '1';
+						break;
+				}
+
+				$playernumincsql = 'SELECT COUNT(*) AS ICOUNT FROM '.$wpdb->prefix.'player_increase P WHERE P.pi_type = ' . $type . ' AND P.p_id = '.$ID;
+				if ( $playernuminc = $wpdb->get_var( $playernumincsql ) ) {
+					return $playernuminc;
+				}
+				else {
+					return '0';
+				}
+
+			} //end of get_player_increase_countt()
+
+			/**
+		 	 * returns a players rank
+			 * works for both legacy and 2020+ players
+		 	 *
+		 	 * @param wordpress $query
+		 	 * @return string Player Rank
+		 	 */
+		 	 public static function get_player_rank( $ID ) {
+				 global $wpdb;
+
+				 $plevel = "";
+
+				 if ( self::is_player_legacy( $ID ) ) {
+
+					 $playercsppsql = 'SELECT P.p_cspp FROM '.$wpdb->prefix.'player P WHERE P.WPID = '.$ID;
+					 $pspp = $wpdb->get_var( $playercsppsql );
+
+					 switch ( $pspp ) {
+						 case 0:
+								 $plevel = "Rookie";
+								 break;
+						 case ( $pspp < 6 ):
+								 $plevel = "Rookie";
+								 break;
+						 case ( $pspp < 16 ):
+								 $plevel = "Experienced";
+								 break;
+						 case ( $pspp < 31 ):
+								 $plevel = "Veteran";
+								 break;
+						 case ( $pspp < 51 ):
+								 $plevel = "Emerging Star";
+								 break;
+						 case ( $pspp < 76 ):
+								 $plevel = "Star";
+								 break;
+						 case ($pspp < 176):
+								 $plevel = "Super Star";
+								 break;
+						 case ( $pspp > 175 ):
+								 $plevel = "Legend";
+								 break;
+						 default:
+								 $plevel = "Rookie";
+								 break;
+					 }
+				 } //end of if legacy
+				 else {
+
+					 //Using the 2020 ruleset definitions
+					 $pspp = (int) self::get_player_increase_count( $ID, "skill" );
+
+					 switch ( $pspp ) {
+						 case 0:
+								 $plevel = "Rookie";
+								 break;
+						 case ( 1 == $pspp ):
+								 $plevel = "Experienced";
+								 break;
+						 case ( 2 == $pspp ):
+								 $plevel = "Veteran";
+								 break;
+						 case ( 3 == $pspp ):
+								 $plevel = "Emerging Star";
+								 break;
+						 case ( 4 == $pspp ):
+								 $plevel = "Star";
+								 break;
+						 case ( 5 == $pspp ):
+								 $plevel = "Super Star";
+								 break;
+						 case ( 6 == $pspp ):
+								 $plevel = "Legend";
+								 break;
+						 default:
+								 $plevel = "Rookie";
+								 break;
+					 }
+
+				 }
+
+				 return $plevel;
+		 	 } //end of get_player_rank()
+
+
+			/**
+			 * Displays a players full charcteristics
+			 * Intended to be used on the view player template
+			 * works for both legacy and 2020+ players
+			 *
+			 * @param wordpress $query
+			 * @return html
+			 */
+				public static function display_player_characteristics( $ID ) {
+			  global $wpdb;
+
+				 $playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_injuries, O.pos_skills, P.p_cost, P.p_spp, P.p_cspp, P.p_legacy, O.pos_name, O.pos_cost, P.p_skills, P.pos_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.WPID = '.$ID;
+				 $pd = $wpdb->get_row( $playersql );
+			?>
+				 <div role="region" aria-labelledby="Caption01" tabindex="0">
+				 <table class="bblm_table bblm_table_collapsable">
+					 <thead>
+						 <tr>
+							 <th class="bblm_tbl_name"><?php echo __( 'Position','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'MA','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'ST','bblm' ); ?></th>
+							 <th class="bblm_tbl_stat"><?php echo __( 'AG','bblm' ); ?></th>
+			<?php
+				if ( ! self::is_player_legacy( $ID ) ) {
+			?>
+								<th class="bblm_tbl_stat"><?php echo __( 'PA', 'bblm' ); ?></th>
+			<?php
+				}
+			?>
+								<th class="bblm_tbl_stat"><?php echo __( 'AV','bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'Skills','bblm' ); ?></th>
+								<th class="bblm_tbl_collapse"><?php echo __( 'Injuries','bblm' ); ?></th>
+								<th><?php echo __( 'SPP','bblm' ); ?></th>
+								<th><?php echo __( 'Cost','bblm' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="bblm_tbl_alt">
+								<td><?php echo $pd->pos_name; ?></td>
+								<td><?php echo $pd->p_ma; ?></td>
+								<td><?php echo $pd->p_st; ?></td>
+			<?php
+					if ( self::is_player_legacy( $ID ) ) {
+			?>
+								<td><?php echo $pd->p_ag; ?></td>
+								<td><?php echo $pd->p_av; ?></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_skills; ?></td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_injuries; ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $pd->p_spp; ?></td>
+								<td><?php echo number_format( $pd->p_cost ); ?> gp</td>
+			<?php
+				}
+				else {
+			?>
+								<td><?php echo $pd->p_ag; ?>+</td>
+								<td><?php if ( $pd->p_pa ==0 ) { echo '-'; } else { echo $pd->p_pa .'+'; } ?></td>
+								<td><?php echo $pd->p_av; ?>+</td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse">
+<?php
+								//JM, Mercs, and Riotous Rookies display what is assinged to their player record
+								if ( self::is_position_special( $pd->pos_id ) ) {
+									echo $pd->p_skills;
+								}
+								//If a position has no skills by default, and they have no increases display "none"
+								else if ( ( $pd->pos_skills == "none" ) && ( (int) self::get_player_increase_count( $ID ) == 0 ) ) {
+									echo 'none';
+								}
+								//otherwise follow the new logic
+								else {
+									echo '<span class="bblm_pos_skill">' . $pd->pos_skills . '</span><br />';
+									echo '<strong>' . self::get_player_skills( $ID ) . '</strong>';
+}
+?>
+								</td>
+								<td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo self::get_player_injuries( $ID ) ?></td>
+								<td class="bblm_tbl_collapse"><?php echo $pd->p_cspp . '/' . $pd->p_spp; ?></td>
+								<td><?php echo number_format( $pd->p_cost ); ?> gp
+									<br />(<span class="bblm_pos_skill"><?php echo number_format( $pd->pos_cost ) . ' + ' . number_format( self::get_player_skills_cost( $ID ) ); ?></span>)</td>
+			<?php
+				}
+			?>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			<?php
+
+				} //end of display_player_characteristics()
+
+				/**
+				 * Determines if a position is a Mercinary, Riotous Rookie, or Journeyman
+				 * Used for various display Functions
+				 * Returns true if they are in this position
+				 *
+				 * @param wordpress $query
+				 * @return html
+				 */
+					public static function is_position_special( $position ) {
+
+						$result = 0;
+
+						$options = get_option( 'bblm_config' );
+						$merc_pos = (int) $options['player_merc'];
+						$rrookie_pos = (int) $options['player_rrookie'];
+						$jm_pos = 1;
+
+						if ( ( (int) $position == $merc_pos ) || ( (int) $position == $rrookie_pos ) || ( (int) $position == $jm_pos ) ) {
+							$result = 1;
+						}
+
+						return $result;
+
+					} //end of is_position_special
 
 
 } //end of class
