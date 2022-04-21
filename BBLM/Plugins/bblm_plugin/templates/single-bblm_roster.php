@@ -237,7 +237,7 @@ td.bblm_char_dec {
 <?php
 						if ( ! $legacy ) {
 ?>
-						<td<?php if ( ( (int) $pl->p_pa < (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_pa > (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_pa; ?>+</td>
+						<td<?php if ( ( (int) $pl->p_pa < (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_pa > (int) $pl->pos_pa ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php if ( $pl->p_pa ==0 ) { echo '-'; } else { echo $pl->p_pa .'+'; } ?></td>
 						<td<?php if ( ( (int) $pl->p_av > (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) { echo ' class="bblm_char_inc"'; } else if ( ( (int) $pl->p_av < (int) $pl->pos_av ) && ( ! BBLM_CPT_Player::is_position_special( $pl->pos_id ) ) ) {echo ' class="bblm_char_dec"'; } ?>><?php echo (int) $pl->p_av; ?>+</td>
 						<td class="bblm_tbl_skills">
 <?php

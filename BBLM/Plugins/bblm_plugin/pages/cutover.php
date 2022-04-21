@@ -202,7 +202,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 	    if ($teamposts = $wpdb->get_results($teampostsql)) {
 	      //echo '<ul>';
 	      foreach ($teamposts as $stad) {
-	        $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_team`.`t_id` = $stad->t_id;";
+	        $stadupdatesql = "UPDATE `".$wpdb->prefix."team` SET `stad_id` = '".$stad->ID."' WHERE `".$wpdb->prefix."team`.`t_id` = $stad->t_id;";
 	        //print("<li>".$stad->t_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
 	        //print("<li>".$stadupdatesql."</li>");
 	        if ( $wpdb->query($stadupdatesql) ) {
@@ -231,7 +231,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 	      if ($matchposts = $wpdb->get_results($matchpostsql)) {
 	        //echo '<ul>';
 	        foreach ($matchposts as $stad) {
-	          $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `stad_id` = '".$stad->ID."' WHERE `hdbb_match`.`m_id` = ".$stad->m_id.";";
+	          $stadupdatesql = "UPDATE `".$wpdb->prefix."match` SET `stad_id` = '".$stad->ID."' WHERE `".$wpdb->prefix."match`.`m_id` = ".$stad->m_id.";";
 	          //print("<li>".$stad->m_id." = ".$stad->stad_id." -> ".$stad->ID."</li>");
 	          //print("<li>".$stadupdatesql."</li>");
 	          if ( $wpdb->query($stadupdatesql) ) {
@@ -472,7 +472,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 				   } // end of if (isset($_POST['bblm_season_awardplayer'])) {
 					if ( isset( $_POST[ 'bblm_template_updatemeta' ] ) ) {
 
-						$templatemetasql = 'SELECT * FROM `'.$wpdb->prefix.'postmeta` WHERE meta_key = "_wp_page_template" ORDER BY `hdbb_postmeta`.`meta_value` ASC';
+						$templatemetasql = 'SELECT * FROM `'.$wpdb->prefix.'postmeta` WHERE meta_key = "_wp_page_template" ORDER BY `'.$wpdb->prefix.'postmeta`.`meta_value` ASC';
 						if ( $templatemeta = $wpdb->get_results( $templatemetasql ) ) {
 							echo '<ul>';
 							foreach ( $templatemeta as $tm ) {

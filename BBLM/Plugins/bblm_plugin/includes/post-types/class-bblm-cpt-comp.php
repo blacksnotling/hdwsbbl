@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.3.2
+ * @version   1.3.3
  */
 
 class BBLM_CPT_Comp {
@@ -255,7 +255,7 @@ class BBLM_CPT_Comp {
 			else {
 
 				$cfdate = date("d-m-Y", strtotime( get_post_meta( $ID, 'comp_fdate', true ) ) );
-				$duration = $csdate . __( ' to', 'bblm' ) . $cfdate;
+				$duration = $csdate . __( ' to ', 'bblm' ) . $cfdate;
 
 			}
 

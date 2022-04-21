@@ -127,7 +127,7 @@
 			}
 			else {
 				//The comp is set to NOT display the standings. as a result we display a list of teams
-        echo '<h3>' . __( 'Participents','bblm') . '<h3>';
+        echo '<h3>' . __( 'Participents','bblm') . '</h3>';
         echo '<p>' . __('Not all the participents for this Competition have been announced. So far the following teams have confirmed that they will be taking part:','bblm' ) . '</p>';
 				$participentssql = 'SELECT DISTINCT(P.post_title), P.guid FROM '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T WHERE T.t_show = 1 AND T.t_id = C.t_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$cid.' ORDER BY P.post_title ASC';
 				if ($participents = $wpdb->get_results($participentssql)) {
@@ -188,7 +188,7 @@
 			} //end of if match SQL
 			else {
 				//There are no matches to display
-				print("<p></p>	</div>.\n");
+				print("<p></p>	</div>\n");
         echo '<div class="bblm_info"><p>' . __( 'No Matches have taken place in this competition yet. Stay tuned for further updates.', 'bblm' ) . '</p></div>';
 			} //end of matches
 

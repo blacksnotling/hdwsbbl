@@ -307,7 +307,7 @@ class BBLM_CPT_Race {
 					else {
 ?>
 						<td><?php echo $pos->pos_ag; ?>+</td>
-						<td><?php echo $pos->pos_pa; ?>+</td>
+						<td><?php if ( $pos->pos_pa ==0 ) { echo '-'; } else { echo $pos->pos_pa .'+'; } ?></td>
 						<td><?php echo $pos->pos_av; ?>+</td>
 <?php
 					}
@@ -339,6 +339,8 @@ class BBLM_CPT_Race {
  	  public function display_stars_available( $ID ) {
  			global $wpdb;
 			global $post;
+
+			$starsql = 0;
 
 			//Grab the list of Race Special Rules / Traits assigned to this race
 			$term_obj_list = get_the_terms( $post->ID, 'race_rules' );
@@ -396,9 +398,17 @@ class BBLM_CPT_Race {
 			}
 
 
-			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_status = 1 AND '. $starsql .' ORDER BY X.p_name ASC';
-			if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
-				$zebracount = 1;
+			//Check that Stars exist and were generated
+			if ( !$starsql ) {
+				//Stars don't exist, error message printed above
+
+			}
+			else {
+				//Stars do exist, and the SQL was generated in the loop above
+					$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_status = 1 AND '. $starsql .' ORDER BY X.p_name ASC';
+
+					if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
+						$zebracount = 1;
 ?>
 					<div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table bblm-tbl-scrollable">
@@ -416,14 +426,14 @@ class BBLM_CPT_Race {
 						</thead>
 						<tbody>
 <?php
-				foreach ( $starplayer as $star ) {
-					if ( $zebracount % 2 ) {
-						echo '<tr class="bblm_tbl_alt">';
-					}
-					else {
-						echo '<tr>';
-					}
-						?>
+					foreach ( $starplayer as $star ) {
+						if ( $zebracount % 2 ) {
+							echo '<tr class="bblm_tbl_alt">';
+						}
+						else {
+							echo '<tr>';
+						}
+?>
 								<td><?php echo bblm_get_player_link( $star->PWPID ); ?></td>
 								<td><?php echo $star->p_ma; ?></td>
 								<td><?php echo $star->p_st; ?></td>
@@ -434,17 +444,14 @@ class BBLM_CPT_Race {
 								<td><?php echo number_format( $star->p_cost ); ?> GP</td>
 							</tr>
 <?php
-					$zebracount++;
-				 }
+						$zebracount++;
+					 }
 ?>
 						</tbody>
 					</table>
 				</div>
 <?php
-			}
-			else {
-				//nothing is returned
-				echo '<p>' . __( 'There are currently no Star Players assigned to this race','bblm' ) . '<p>';
+				}
 			}
 
  	  } //end of display_stars_available()
