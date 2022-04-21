@@ -87,7 +87,6 @@
               $position_st = $racedeet->pos_st;
               $position_ag = $racedeet->pos_ag;
               $position_pa = $racedeet->pos_pa;
-              $position_ag = $racedeet->pos_pa;
               $position_av = $racedeet->pos_av;
               $position_skills = $racedeet->pos_skills;
               $position_cost_tv = $racedeet->pos_cost;
