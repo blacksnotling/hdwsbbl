@@ -629,14 +629,8 @@ class BBLM_CPT_Player {
 								<td><?php echo $pd->p_av; ?>+</td>
 								<td class="bblm_tbl_skills bblm_tbl_collapse">
 <?php
-								//We need to determine a few specific cases here. !. JM / Mercs / RR and 2. Positions with no default Skills
-								$options = get_option( 'bblm_config' );
-								$merc_pos = (int) $options['player_merc'];
-								$rrookie_pos = (int) $options['player_rrookie'];
-								$jm_pos = 1;
-
 								//JM, Mercs, and Riotous Rookies display what is assinged to their player record
-								if ( ( $pd->pos_id == $merc_pos ) || ( $pd->pos_id == $rrookie_pos ) || ( $pd->pos_id == $jm_pos ) ) {
+								if ( self::is_position_special( $pd->pos_id ) ) {
 									echo $pd->p_skills;
 								}
 								//If a position has no skills by default, and they have no increases display "none"
@@ -664,6 +658,32 @@ class BBLM_CPT_Player {
 			<?php
 
 				} //end of display_player_characteristics()
+
+				/**
+				 * Determines if a position is a Mercinary, Riotous Rookie, or Journeyman
+				 * Used for various display Functions
+				 * Returns true if they are in this position
+				 *
+				 * @param wordpress $query
+				 * @return html
+				 */
+					public static function is_position_special( $position ) {
+
+						$result = 0;
+
+						$options = get_option( 'bblm_config' );
+						$merc_pos = (int) $options['player_merc'];
+						$rrookie_pos = (int) $options['player_rrookie'];
+						$jm_pos = 1;
+
+						if ( ( (int) $position == $merc_pos ) || ( (int) $position == $rrookie_pos ) || ( (int) $position == $jm_pos ) ) {
+							$result = 1;
+						}
+
+						return $result;
+
+					} //end of is_position_special
+
 
 } //end of class
 
