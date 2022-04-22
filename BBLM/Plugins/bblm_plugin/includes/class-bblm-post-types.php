@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.6
+ * @version		1.7
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -369,6 +369,40 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
+		register_post_type( 'bblm_player',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Players', 'bblm' ),
+					'singular_name' 		=> __( 'Player', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Player', 'bblm' ),
+					'add_new' 			=> __( 'New Player', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Player', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Player', 'bblm' ),
+					'view_items' 			=> __( 'View Players', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Players', 'bblm' ),
+					'featured_image'		=> __( 'Player Photo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Photo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'player' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-admin-users',
+			)
+		); //end of bblm_player
 	}
 
   /**

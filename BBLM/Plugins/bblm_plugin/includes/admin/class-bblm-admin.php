@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.6
+ * @version   1.7
  */
 
 class BBLM_Admin {
@@ -50,7 +50,7 @@ class BBLM_Admin {
    function add_dashboard_counts() {
 
      $glancer = new Gamajo_Dashboard_Glancer;
-     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp', 'bblm_race', 'bblm_match', 'bblm_star' );
+     $my_post_types = array( 'bblm_dyk', 'bblm_owner', 'bblm_transfer', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_comp', 'bblm_race', 'bblm_match', 'bblm_star', 'bblm_player' );
      $glancer->add( $my_post_types, array( 'publish' ) );
 
    }
