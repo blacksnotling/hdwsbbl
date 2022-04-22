@@ -141,7 +141,7 @@ class BBLM_Meta_PLAYER {
  		if ( !current_user_can( 'edit_post', $post->ID ) ) {
  			return $post_id;
  		}
- 		$meta['star_status'] = ( isset( $_POST['player_sstatusddown'] ) ? (int) $_POST['Player_sstatusddown'] : '' );
+ 		$meta['player_status'] = ( isset( $_POST['player_sstatusddown'] ) ? (int) $_POST['Player_sstatusddown'] : '' );
  		foreach ( $meta as $key => $value ) {
  			update_post_meta( $post->ID, $key, $value );
  		}

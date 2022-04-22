@@ -1583,6 +1583,60 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																      }
 																    }//end of if sql was successful
 																} //end of if (isset($_POST['bblm_star_starcpt'])) {
+																	/**
+																		  *
+																		  * UPDATING MAIN POST TABLE FOR THE PLAYER CPT
+																		  */
+																		if (isset($_POST['bblm_player_playercpt'])) {
+
+																			$stadpostsql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE P.p_id = J.tid AND X.ID = J.pid AND J.prefix = "p_" AND T.t_id = P.t_id ORDER BY X.ID ASC';
+																		    if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																		      //echo '<ul>';
+																		      foreach ($stadposts as $stad) {
+																		        $stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_player' WHERE `".$wpdb->posts."`.`ID` = '".$stad->PWPID."';";
+																		        //print("<li>".$stadupdatesql."</li>");
+																		        if ( $wpdb->query($stadupdatesql) ) {
+																		          $result = true;
+																		        }
+																		        else {
+																		          $result = false;
+																		        }
+
+																		      } //end of foreach
+																		      //echo '</ul>';
+																		      if ( $result ) {
+																		        print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Players!</p></div>\n");
+																		      }
+																		    }//end of if sql was successful
+																		} //end of if (isset($_POST['bblm_star_starcpt'])) {
+																			/**
+																					*
+																					* ADDING META FIELDS TO PLAYER CPT
+																					*/
+																				if (isset($_POST['bblm_player_playercptmeta'])) {
+
+																					$stadpostsql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE P.p_id = J.tid AND X.ID = J.pid AND J.prefix = "p_" AND T.t_id = P.t_id ORDER BY X.ID ASC';
+																						if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																							//echo '<ul>';
+																							foreach ($stadposts as $stad) {
+
+																								//print("<li>".$stadupdatesql."</li>");
+																								if ( add_post_meta( $stad->PWPID, 'player_status', $stad->p_status, true ) ) {
+																									add_post_meta( $stad->PWPID, 'player_team', $stad->TWPID, true );
+																									$result = true;
+																								}
+																								else {
+																									$result = false;
+																								}
+
+																							} //end of foreach
+																							//echo '</ul>';
+																							if ( $result ) {
+																								print("<div id=\"updated\" class=\"updated fade\"><p>Player Meta has been added</p></div>\n");
+																							}
+																						}//end of if sql was successful
+
+																				} //end of if (isset($_POST['bblm_star_starcptmetas'])) {
 
 /**
  *
@@ -1893,7 +1947,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		</ul>
 
 		<h2>V1.13 -> V1.14</h2>
-		<p>Add all the releevant race traits to the races</p>
+		<p>Add all the relevant race traits to the races</p>
 		<p>Add a new position for 'Riotous Rookie' and set its owning race to 0</p>
 		<p>Update the settings with the new Riotous Rookie Position</p>
 		<p>Update the Fate db table to include Riotous Rookies along side JM</p>
@@ -1906,7 +1960,28 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		</ul>
 		<h3>Player Skill Rewrite</h3>
 		<ul>
-			<li>Create and Populate new Database Tables. <a href="https://github.com/blacksnotling/HDWSBBL/files/7493106/198.txt">File is availible here</a></li>
+			<li>Create and Populate new Database Tables. <a href="https://github.com/blacksnotling/HDWSBBL/files/8535332/skills_rewritesql.txt">File is availible here</a></li>
+		</ul>
+
+		<h3>Players as CPT</h3>
+		<p>The following is a list of Players who have a player record, but not a Wordpress page (I.E Orphans):</p>
+<?php
+		$playerorphansql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE T.t_id = P.t_id AND P.WPID = 0 ORDER BY P.p_id';
+		if ( $playerorphan = $wpdb->get_results( $playerorphansql ) ) {
+			echo '<ul>';
+			foreach ( $playerorphan as $pdeet ) {
+				echo '<li>[' . $pdeet->p_id . '] - ' . $pdeet->p_name . ' - ' . bblm_get_team_name( $pdeet->TWPID ) . ' - ' . $pdeet->PWPID . '</li>';
+			}
+			echo '</ul>';
+
+		}
+		else {
+			echo '<p>No Orphans found! Excellent</p>';
+		}
+?>
+		<ul>
+			<li><input type="submit" name="bblm_player_playercpt" value="Convert Player Post Types" title="Convert the Player Post Types"/></li>
+			<li><input type="submit" name="bblm_player_playercptmeta" value="Add Player Meta" title="Add Player Meta"/></li>
 		</ul>
 
 
