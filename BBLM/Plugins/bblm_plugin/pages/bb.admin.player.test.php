@@ -2,7 +2,7 @@
 /**
  * BBowlLeagueMan Player testing page
  *
- * Testing new functionlity for the 1.15 Release - Player Skills
+ * Converting Player skills for the 1.15 release
  *
  * @author 		Blacksnotling
  * @category 	Core
@@ -13,7 +13,7 @@
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 ?>
 <div class="wrap">
-	<h2><?php echo __( 'Player Skill Testing', 'bblm' ); ?></h2>
+	<h2><?php echo __( 'Player Skill Conversion', 'bblm' ); ?></h2>
 <?php
 	if ( ( isset( $_POST[ 'bblm_player_test_addincrease' ] ) ) && ( wp_verify_nonce( $_POST[ 'bblm_playertest_submit' ], basename(__FILE__) ) ) ) {
 		//Increases have been submitted
@@ -78,15 +78,53 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 		//Sanitise varables
 		$pid = (int) $_POST['bblm_pid'];
-
+?>
+<h3><?php echo __( 'New Format', 'bblm' ); ?></h3>
+<?php
 		//Show the details of the selected player
-		display_player_characteristics( $pid );
+		BBLM_CPT_Player::display_player_characteristics( $pid );
 ?>
 		<p><strong><?php echo __( 'Player Rank', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_rank( $pid ); ?></p>
 		<p><strong><?php echo __( 'Number of Skills', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_increase_count( $pid, 'skill' ); ?></p>
 		<p><strong><?php echo __( 'Number of Injuries', 'bblm' ); ?>:</strong> <?php echo BBLM_CPT_Player::get_player_increase_count( $pid, 'injury' ); ?></p>
-		<p><strong><?php echo __( 'Team TV', 'bblm' ); ?>:</strong> X GP (for testing purposes)</p>
+		<p><strong><?php echo __( 'ID', 'bblm' ); ?>:</strong> <?php echo $pid; ?></p>
 
+		<h3><?php echo __( 'Old Format', 'bblm' ); ?></h3>
+<?php
+	$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_pa, P.p_injuries, O.pos_skills, P.p_cost, P.p_spp, P.p_cspp, P.p_legacy, O.pos_name, O.pos_cost, P.p_skills, P.pos_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position O WHERE O.pos_id = P.pos_id AND P.WPID = '.$pid;
+	$pd = $wpdb->get_row( $playersql );
+?>
+		<div role="region" aria-labelledby="Caption01" tabindex="0">
+		<table class="bblm_table bblm_table_collapsable">
+			<thead>
+				<tr>
+					<th class="bblm_tbl_name"><?php echo __( 'Position','bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'MA','bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'ST','bblm' ); ?></th>
+					<th class="bblm_tbl_stat"><?php echo __( 'AG','bblm' ); ?></th>
+					 <th class="bblm_tbl_stat"><?php echo __( 'AV','bblm' ); ?></th>
+					 <th class="bblm_tbl_collapse"><?php echo __( 'Skills','bblm' ); ?></th>
+					 <th class="bblm_tbl_collapse"><?php echo __( 'Injuries','bblm' ); ?></th>
+					 <th><?php echo __( 'SPP','bblm' ); ?></th>
+					 <th><?php echo __( 'Cost','bblm' ); ?></th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				 <tr class="bblm_tbl_alt">
+					 <td><?php echo $pd->pos_name; ?></td>
+					 <td><?php echo $pd->p_ma; ?></td>
+					 <td><?php echo $pd->p_st; ?></td>
+					 <td><?php echo $pd->p_ag; ?></td>
+					 <td><?php echo $pd->p_av; ?></td>
+					 <td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_skills; ?></td>
+					 <td class="bblm_tbl_skills bblm_tbl_collapse"><?php echo $pd->p_injuries; ?></td>
+					 <td class="bblm_tbl_collapse"><?php echo $pd->p_spp; ?></td>
+					 <td><?php echo number_format( $pd->p_cost ); ?> gp</td>
+
+				 </tr>
+			 </tbody>
+		 </table>
+	 </div>
 
 		<form method="post" id="player_test_add_skill" name="player_test_add_skill">
 			<h3><?php echo __( 'Skills', 'bblm' ); ?></h3>
@@ -107,6 +145,131 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	<input type="submit" name="bblm_player_test_addincrease" id="bblm_player_test_addincrease" value="Add Skils and Injuries" class="button button-primary" />
 </p>
 		</form>
+
+
+		<h3 class="bblm-table-caption"><?php echo __( 'Recent Matches', 'bblm' ); ?></h3>
+		<div role="region" aria-labelledby="Caption01" tabindex="0">
+			<table class="bblm_table bblm_sortable bblm_expandable">
+				<thead>
+					<tr>
+						<th><?php echo __( 'Vs', 'bblm' ); ?></th>
+						<th><?php echo __( 'TD', 'bblm' ); ?></th>
+						<th><?php echo __( 'CAS', 'bblm' ); ?></th>
+						<th><?php echo __( 'INT', 'bblm' ); ?></th>
+						<th><?php echo __( 'COMP', 'bblm' ); ?></th>
+						<th><?php echo __( 'MVP', 'bblm' ); ?></th>
+						<th><?php echo __( 'SPP', 'bblm' ); ?></th>
+						<th><?php echo __( 'MNG?', 'bblm' ); ?></th>
+						<th><?php echo __( 'Increase', 'bblm' ); ?></th>
+						<th><?php echo __( 'Injury', 'bblm' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+
+<?php
+//Assumes player has played in one match for this to display thus far
+$playermatchsql = 'SELECT P.*, M.WPID AS MWPID, UNIX_TIMESTAMP(M.m_date) AS mdate, A.WPID as TA, A.t_id AS TAid, B.WPID AS TB, B.t_id AS TBid FROM '.$wpdb->prefix.'match_player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'team A, '.$wpdb->prefix.'team B WHERE M.m_teamA = A.t_id AND M.m_teamB = B.t_id AND M.WPID = P.m_id AND P.p_id = ' . $pd->p_id . ' ORDER BY M.m_date DESC';
+if ( $playermatch = $wpdb->get_results( $playermatchsql ) ) {
+$zebracount = 1;
+	foreach ( $playermatch as $pm ) {
+		if ( ( $zebracount % 2 ) && ( 10 < $zebracount ) ) {
+			echo '<tr class="bblm_tbl_alt bblm_tbl_hide">';
+		}
+		else if ( ( $zebracount % 2 ) && ( 10 >= $zebracount ) ) {
+			echo '<tr class="bblm_tbl_alt">';
+		}
+		else if ( 10 < $zebracount ) {
+			echo '<tr class="bblm_tbl_hide">';
+		}
+		else {
+			echo '<tr>';
+		}
+		if ( $pm->TAid == $pd->t_id ) {
+			echo '<td>' . bblm_get_team_link( $pm->TB ) . '<br />' . bblm_get_match_link_date( $pm->MWPID ) . '</td>';
+		}
+		else {
+			echo '<td>' . bblm_get_team_link( $pm->TA ) . '<br />' . bblm_get_match_link_date( $pm->MWPID ) . '</td>';
+		}
+		echo '<td>';
+		if ( 0 == $pm->mp_td ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_td . '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_cas ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_cas . '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_int ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_int . '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_comp ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_comp. '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_mvp ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_mvp . '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_spp ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>' . $pm->mp_spp . '</strong>';
+		}
+		echo '</td>';
+		echo '<td>';
+		if ( 0 == $pm->mp_mng ) {
+			echo '0';
+		}
+		else {
+			echo '<strong>Y</strong>';
+		}
+		echo '</td>';
+			echo '<td>';
+			if ( "none" == $pm->mp_inc ) {
+				echo '-';
+			}
+			else {
+				echo '<strong>' . $pm->mp_inc . '</strong>';
+			}
+			echo '</td>';
+			echo '<td>';
+			if ( "none" == $pm->mp_inj ) {
+				echo '-';
+			}
+			else {
+				echo '<strong>' . $pm->mp_inj . '</strong>';
+			}
+			echo '</td>';
+		$zebracount++;
+	}
+}
+?>
+	</tbody>
+</table>
+</div>
+
 <?php
 
 	}
@@ -128,15 +291,14 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 		global $wpdb;
 ?>
 	<h2><?php echo __( 'Stage 1: Select a Player', 'bblm' ); ?></h2>
-	<p><?php echo __( 'only one team is selected for testing purposes. In the end it will show all teams with non-legacy players, who have at least one skill or injury recorded.', 'bblm' ); ?></p>
 	<form name="bblm_playertestselect" method="post" id="post">
 		<label for="bblm_rid"><?php echo __( 'Player', 'bblm' ); ?></label>
 		<select name="bblm_pid" id="bblm_pid">
 			<?php
-					$playerselectsql = 'SELECT WPID as PWPID FROM '.$wpdb->prefix.'player WHERE t_id = "142"';
+					$playerselectsql = 'SELECT P.WPID as PWPID, T.WPID as TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE T.t_id = P.t_id AND P.p_spp > 0 AND P.p_legacy = 0 and P.t_id != 52 ORDER BY P.t_id ASC, P.WPID ASC';
 					if ( $playerselect = $wpdb->get_results( $playerselectsql ) ) {
 						foreach ( $playerselect as $s ) {
-							echo '<option value="' . $s->PWPID . '">' . bblm_get_player_name( $s->PWPID ) . '</option>';
+							echo '<option value="' . $s->PWPID . '">' . bblm_get_team_name( $s->TWPID ) . ' - ' . bblm_get_player_name( $s->PWPID ) . '</option>';
 						}
 					}
 					else {

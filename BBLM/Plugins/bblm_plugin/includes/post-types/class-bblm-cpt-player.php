@@ -350,7 +350,7 @@ class BBLM_CPT_Player {
 	  public static function get_player_injuries( $ID ) {
 			global $wpdb;
 
-			$injurysql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'injury I WHERE P.inj_id = I.inj_id AND P.p_id = '. $ID . ' ORDER BY I.inj_id ASC';
+			$injurysql = 'SELECT * FROM '.$wpdb->prefix.'player_increase P, '.$wpdb->prefix.'injury I WHERE P.inj_id = I.inj_id AND P.p_id = '. $ID . ' AND I.inj_id > 2 ORDER BY I.inj_id ASC';
 			if ( $injury = $wpdb->get_results( $injurysql ) ) {
 				$first = 1;
 				$injlist = "";

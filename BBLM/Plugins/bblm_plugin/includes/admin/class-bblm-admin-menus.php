@@ -168,8 +168,8 @@ class BBLM_Admin_Menus {
 
 		add_submenu_page(
 			'bblm_plugin/pages/cutover.php',
-			__( 'Player Testing', 'bblm' ),
-			__( 'Player Testing', 'bblm' ),
+			__( 'Player Skills', 'bblm' ),
+			__( 'Player Skills', 'bblm' ),
 			'bblm_manage_league',
 			'bblm_plugin/pages/bb.admin.player.test.php'
 		);

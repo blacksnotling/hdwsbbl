@@ -247,8 +247,8 @@ td.bblm_char_dec {
 						}
 						//If a position has no skills byß default, and they have no increases display "none"
 						else if ( ( $pl->pos_skills == "none" ) && ( (int) BBLM_CPT_Player::get_player_increase_count( $pl->PWPID ) == 0 ) ) {
-							echo 'none';
-							echo BBLM_CPT_Player::get_player_injuries( $pl->PWPID );
+							echo 'None ';
+							echo '(' . BBLM_CPT_Player::get_player_injuries( $pl->PWPID ) . ')';
 						}
 						//otherwise follow the new logic
 						else {
