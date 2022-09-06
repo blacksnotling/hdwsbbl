@@ -18,10 +18,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 <?php
 if(isset($_POST['bblm_team_submit'])) {
 
-	//Determine the parent page
-	$options = get_option('bblm_config');
-	$bblm_page_parent = htmlspecialchars($options['page_team'], ENT_QUOTES);
-
 	//Determine if a new Owner was created or an existing one used
 	$bblm_tuser = "";
 	if ( empty( $_POST['bblm_tusernew'] ) ) {
@@ -55,11 +51,10 @@ if(isset($_POST['bblm_team_submit'])) {
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($_POST['bblm_tname']),
 		'post_content' => wp_filter_kses($_POST['bblm_tdesc']),
-		'post_type' => 'page',
+		'post_type' => 'bblm_team',
 		'post_status' => 'publish',
 		'comment_status' => 'closed',
-		'ping_status' => 'closed',
-		'post_parent' => $bblm_page_parent
+		'ping_status' => 'closed'
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
