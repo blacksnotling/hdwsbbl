@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Widget_TCteamlogo extends WP_Widget {
@@ -25,17 +25,11 @@ class BBLM_Widget_TCteamlogo extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
-
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
+    $post_type = get_post_type();
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
+    if ( $post_type == "bblm_team" ) {
 
       //pulling in the vars from the single-bblm_team template
       global $ti;

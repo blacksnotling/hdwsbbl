@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.3
+ * @version   1.4
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -26,20 +26,13 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
     global $wpdb;
     global $post;
 
-    $option = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $option[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $option[ 'page_stars' ], ENT_QUOTES );
-
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
+    $post_type = get_post_type();
 
 
     //Check we are on the correct poat_type before we display the widget
     //Checks to see if the parent of the page matches that in the bblm config
     //and that this isn't the star player page
-    if ( ( $parentoption == $parentpage ) && ( $post->ID != (int) $staplayerteam ) ) {
+    if ( $post_type == "bblm_team" ) {
 
       //pulling in the vars from the single-bblm_team template
       global $tid;
