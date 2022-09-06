@@ -1940,6 +1940,21 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 			<li><input type="submit" name="bblm_team_teamcpt" value="Convert Teams Post Types" title="Convert the Teams Post Types"/></li>
 			<li>You can now delete the old star players page and update any menus</li>
 		</ul>
+		<p>The following is a list of Teams who have a team record, but not a Wordpress page (I.E Orphans):</p>
+<?php
+		$teamorphansql = 'SELECT T.*, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T WHERE T.WPID = 0 ORDER BY T.t_id';
+		if ( $teamorphan = $wpdb->get_results( $teamorphansql ) ) {
+			echo '<ul>';
+			foreach ( $teamorphan as $tdeet ) {
+				echo '<li>' . bblm_get_team_name( $tdeet->TWPID ) . ' - ' . $tdeet->TWPID . '</li>';
+			}
+			echo '</ul>';
+
+		}
+		else {
+			echo '<p>No Orphans found! Excellent</p>';
+		}
+?>
 
 
 </form>
