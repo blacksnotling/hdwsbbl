@@ -82,6 +82,11 @@ class BBLM_Template_Loader {
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 			}
+			elseif ($post_type == "bblm_team") {
+				$file = 'single-' . $post_type . 'team.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+			}
 		}
 		elseif ( is_post_type_archive( 'bblm_stadium' ) ) {
 
@@ -140,6 +145,12 @@ class BBLM_Template_Loader {
 		elseif ( is_post_type_archive( 'bblm_star' ) ) {
 
 				$file = 'archive-bblm_star.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+		}
+		elseif ( is_post_type_archive( 'bblm_team' ) ) {
+
+				$file = 'archive-bblm_team.php';
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 		}

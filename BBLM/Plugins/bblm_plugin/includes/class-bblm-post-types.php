@@ -369,6 +369,40 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
+		register_post_type( 'bblm_team',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Teams', 'bblm' ),
+					'singular_name' 		=> __( 'Team', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Team', 'bblm' ),
+					'add_new' 			=> __( 'New Team', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Team', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Team', 'bblm' ),
+					'view_items' 			=> __( 'View Teams', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Teams', 'bblm' ),
+					'featured_image'		=> __( 'Team Logo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Logo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Logo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Logo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'teams' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-groups',
+			)
+		); //end of bblm_team
 	}
 
   /**
