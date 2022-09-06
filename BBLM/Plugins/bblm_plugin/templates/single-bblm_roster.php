@@ -127,7 +127,7 @@ td.bblm_char_dec {
 	}
 	.bblm_tbl_skills {
 		text-align:left;
-		font-size: smaller;
+		font-size: small;
 	}
 	.bblm_tbl_cost {
 		font-size: smaller;
