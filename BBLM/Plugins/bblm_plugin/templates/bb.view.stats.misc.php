@@ -37,7 +37,7 @@
 		$bblm_star_team = bblm_get_star_player_team();
 
 		/*-- Misc -- */
-		$mostexpplayersql = 'SELECT Z.post_title AS PLAYER, Z.guid AS PLAYERLink, P.p_cost AS VALUE, T.WPID, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X, '.$wpdb->posts.' Z WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND T.t_id != '.$bblm_star_team.' ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
+    $mostexpplayersql = 'SELECT P.WPID AS PWPID, P.p_cost AS VALUE, T.WPID AS TWPID, X.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.t_id = T.t_id AND T.t_id != '.$bblm_star_team.' ORDER BY VALUE DESC, P.p_id ASC LIMIT 1';
 		$mep = $wpdb->get_row($mostexpplayersql);
 		$biggestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 ORDER BY M.m_gate DESC, MDATE ASC LIMIT 1';
 		$bc = $wpdb->get_row($biggestattendcesql);
@@ -45,11 +45,11 @@
 		$bcn = $wpdb->get_row($biggestattendcenonfinalsql);
 		$lowestattendcesql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS MDATE, M.m_gate AS VALUE, M.WPID AS MWPID FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE M.c_id = C.WPID AND C.c_counts = 1 AND M.m_gate > 0 ORDER BY M.m_gate ASC, MDATE ASC LIMIT 1';
 		$lc = $wpdb->get_row($lowestattendcesql);
-		$highesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE DESC, MDATE ASC LIMIT 0, 30 ';
+		$highesttvsql = 'SELECT T.WPID AS TWPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE DESC, MDATE ASC LIMIT 0, 30 ';
 		$htv = $wpdb->get_row($highesttvsql);
-		$lowesttvsql = 'SELECT T.WPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE ASC, MDATE ASC LIMIT 0, 30 ';
+		$lowesttvsql = 'SELECT T.WPID AS TWPID, P.mt_tv AS VALUE, UNIX_TIMESTAMP(M.m_date) AS MDATE FROM '.$wpdb->prefix.'match_team P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 ORDER BY VALUE ASC, MDATE ASC LIMIT 0, 30 ';
 		$ltv = $wpdb->get_row($lowesttvsql);
-		$teammostplayerssql = 'SELECT COUNT(*) AS VALUE, T.WPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND T.t_id != '.$bblm_star_team.' GROUP BY P.t_id ORDER BY VALUE DESC, P.t_id ASC LIMIT 1';
+		$teammostplayerssql = 'SELECT COUNT(*) AS VALUE, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND T.t_id != '.$bblm_star_team.' GROUP BY P.t_id ORDER BY VALUE DESC, P.t_id ASC LIMIT 1';
 		$tmp = $wpdb->get_row($teammostplayerssql);
 
 		//Bits for the Player Career
@@ -64,15 +64,15 @@
 
 
 		<ul>
-			<li><strong>Most Expensive Player</strong>: <?php print(number_format($mep->VALUE)); ?>gp (<a href="<?php print($mep->PLAYERLink); ?>" title="Learn more about this player"><?php print($mep->PLAYER); ?></a> - <?php print(  esc_html( $mep->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mep->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $mep->WPID ) )  ); ?></a>)</li>
-			<li><strong>Highest Recorded Attendance (Final or Semi-Final)</strong>: <?php print(number_format($bc->VALUE)); ?> fans (<?php echo bblm_get_match_link_score( $bc->MWPID ) ?>)</li>
- 			<li><strong>Highest Recorded Attendance</strong>: <?php print(number_format($bcn->VALUE)); ?> fans (<?php echo bblm_get_match_link_score( $bcn->MWPID ) ?>)</li>
- 			<li><strong>Lowest Recorded Attendance</strong>: <?php print(number_format($lc->VALUE)); ?> fans (<?php echo  bblm_get_match_link_score( $lc->MWPID ) ?>)</li>
-			<li><strong>Highest Recorded TV</strong>: <?php print(number_format($htv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $htv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $htv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $htv->MDATE)); ?>)</li>
-			<li><strong>Lowest Recorded TV</strong>: <?php print(number_format($ltv->VALUE)); ?>gp (<a href="<?php print( get_post_permalink( $ltv->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $ltv->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $ltv->MDATE)); ?>)</li>
+			<li><strong>Most Expensive Player</strong>: <?php echo number_format( $mep->VALUE ); ?>gp (<?php echo bblm_get_player_link( $mep->PWPID ); ?> - <?php echo esc_html( $mep->pos_name ); ?> for <?php echo bblm_get_team_link( $mep->TWPID ); ?>)</li>
+			<li><strong>Highest Recorded Attendance (Final or Semi-Final)</strong>: <?php echo number_format( $bc->VALUE ); ?> fans (<?php echo bblm_get_match_link_score( $bc->MWPID ) ?>)</li>
+ 			<li><strong>Highest Recorded Attendance</strong>: <?php echo number_format( $bcn->VALUE ); ?> fans (<?php echo bblm_get_match_link_score( $bcn->MWPID ) ?>)</li>
+ 			<li><strong>Lowest Recorded Attendance</strong>: <?php echo number_format( $lc->VALUE ); ?> fans (<?php echo  bblm_get_match_link_score( $lc->MWPID ) ?>)</li>
+			<li><strong>Highest Recorded TV</strong>: <?php echo number_format( $htv->VALUE ); ?>gp (<?php echo bblm_get_team_link( $htv->TWPID ); ?> - <?php echo date( "d.m.25y", $htv->MDATE ); ?>)</li>
+			<li><strong>Lowest Recorded TV</strong>: <?php echo number_format( $ltv->VALUE ); ?>gp (<?php echo bblm_get_team_link( $ltv->TWPID ); ?> - <?php echo date( "d.m.25y", $ltv->MDATE ); ?>)</li>
 			<li><strong>Largest Recorded Transfer</strong>: <?php $trans->display_player_transfer_record(); ?> </li>
-			<li><strong>Team with most players</strong>: <a href="<?php print( get_post_permalink( $tmp->WPID ) ); ?>" title="Read more about this Team"><?php print( esc_html( get_the_title( $tmp->WPID ) )  ); ?></a> (<?php print($tmp->VALUE); ?>)</li>
-			<li><strong>Average Career length of a Player</strong>: <?php print(round($matchrec/$playernum,1)); ?> games</li>
+			<li><strong>Team with most players</strong>: <?php echo bblm_get_team_link( $tmp->TWPID ); ?> (<?php echo $tmp->VALUE; ?>)</li>
+			<li><strong>Average Career length of a Player</strong>: <?php echo round( $matchrec / $playernum , 1 ); ?> games</li>
 		</ul>
 
 
@@ -82,67 +82,67 @@
     <h3><?php echo __( 'Star Player Point Related','bblm'); ?></h3>
 <?php
 		 /*-- SPP -- */
-		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PLAYER, T.WPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
+		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
 		 $mxps = $wpdb->get_row($mostxplayerseasonsql);
-		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
+		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 10 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_spp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT P.WPID AS PWPID, T.WPID AS TWPID, M.mp_spp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
-			<li><strong>Most Star Player Points earnt in a Season (Player)</strong>: <?php print($mxps->VALUE); ?> (<?php echo bblm_get_player_link( $mxps->PLAYER ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->WPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
-			<li><strong>Most Star Player Points earnt in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <?php echo bblm_get_team_link( $mxpc->WPID ); ?> - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>)</li></li>
-			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Star Player Points earnt in a Season (Player)</strong>: <?php echo $mxps->VALUE; ?> (<?php echo bblm_get_player_link( $mxps->PWPID ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->TWPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
+			<li><strong>Most Star Player Points earnt in a Competition (Player)</strong>: <?php echo $mxpc->VALUE; ?> (<?php echo bblm_get_player_link( $mxpc->PWPID ); ?> - <?php echo esc_html( $mxpc->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpc->TWPID ); ?> - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>)</li>
+			<li><strong>Most Star Player Points earnt in a Match (Player)</strong>: <?php echo $mxpm->VALUE; ?> (<?php echo bblm_get_player_link( $mxpm->PWPID ); ?> - <?php echo esc_html( $mxpm->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpm->TWPID ); ?> - <?php echo date( "d.m.25y", $mxpm->MDATE ); ?>)</li>
 		</ul>
 
 		<h4><?php echo __( 'Completion Related','bblm'); ?></h4>
 <?php
 		 /*-- COMPLETIONS -- */
-		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
+		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID AS TWPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
 		 $mxts = $wpdb->get_row($mostxteamseasonsql);
-		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PLAYER, T.WPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
+		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
 		 $mxps = $wpdb->get_row($mostxplayerseasonsql);
-		 $mostxteamcompsql = 'SELECT A.atc_value AS VALUE, T.WPID, A.c_id AS CWPID FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
+		 $mostxteamcompsql = 'SELECT A.atc_value AS VALUE, T.WPID AS TWPID, A.c_id AS CWPID FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
-		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
+		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 14 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_comp AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID AS TWPID, M.mt_comp AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_comp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT P.WPID AS PWPID, T.WPID AS TWPID, M.mp_comp AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_comp > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
-			<li><strong>Most Passes completed in a Season (Team)</strong>: <?php echo $mxts->VALUE; ?> (<?php echo bblm_get_team_link( $mxts->WPID ); ?> - <?php echo bblm_get_season_link( $mxts->sea_id ); ?>)</li>
-			<li><strong>Most Passes completed in a Season (Player)</strong>: <?php echo $mxps->VALUE; ?> (<?php echo bblm_get_player_link( $mxps->PLAYER ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->WPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
-			<li><strong>Most Passes completed in a Competition (Team)</strong>: <?php print($mxtc->VALUE); ?> (<?php echo bblm_get_team_link( $mxtc->WPID ); ?> - <?php echo bblm_get_competition_link( $mxtc->CWPID ); ?>)</li>
-			<li><strong>Most Passes completed in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <?php echo bblm_get_team_link( $mxpc->WPID ); ?>) - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>))</li></li>
-			<li><strong>Most Passes completed in a Match (Team)</strong>: <?php print($mxtm->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxtm->MDATE)); ?>)</li>
-			<li><strong>Most Passes completed in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Passes completed in a Season (Team)</strong>: <?php echo $mxts->VALUE; ?> (<?php echo bblm_get_team_link( $mxts->TWPID ); ?> - <?php echo bblm_get_season_link( $mxts->sea_id ); ?>)</li>
+			<li><strong>Most Passes completed in a Season (Player)</strong>: <?php echo $mxps->VALUE; ?> (<?php echo bblm_get_player_link( $mxps->PWPID ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->TWPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
+			<li><strong>Most Passes completed in a Competition (Team)</strong>: <?php echo $mxtc->VALUE; ?> (<?php echo bblm_get_team_link( $mxtc->TWPID ); ?> - <?php echo bblm_get_competition_link( $mxtc->CWPID ); ?>)</li>
+			<li><strong>Most Passes completed in a Competition (Player)</strong>: <?php echo $mxpc->VALUE; ?> (<?php echo bblm_get_player_link( $mxpc->PWPID ); ?> - <?php echo esc_html( $mxpc->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpc->TWPID ); ?>) - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>))</li>
+			<li><strong>Most Passes completed in a Match (Team)</strong>: <?php echo $mxtm->VALUE; ?> (<?php echo bblm_get_team_link( $mxtm->TWPID ); ?> - <?php echo date( "d.m.25y", $mxtm->MDATE ); ?>)</li>
+			<li><strong>Most Passes completed in a Match (Player)</strong>: <?php echo $mxpm->VALUE; ?> (<?php echo bblm_get_player_link( $mxpm->PWPID ); ?> - <?php echo esc_html( $mxpm->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpm->TWPID ); ?> - <?php echo date( "d.m.25y", $mxpm->MDATE ); ?>)</li>
 		</ul>
 
     <h4><?php echo __( 'Interception Related','bblm'); ?></h4>
 <?php
 		 /*-- Interceptions -- */
-		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
+		 $mostxteamseasonsql = 'SELECT A.ats_value AS VALUE, T.WPID AS TWPID, A.sea_id FROM '.$wpdb->prefix.'awards_team_sea A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
 		 $mxts = $wpdb->get_row($mostxteamseasonsql);
-		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PLAYER, T.WPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
+		 $mostxplayerseasonsql = 'SELECT A.aps_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.sea_id, X.pos_name FROM '.$wpdb->prefix.'awards_player_sea A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.sea_id ASC LIMIT 1';
 		 $mxps = $wpdb->get_row($mostxplayerseasonsql);
-		 $mostxteamcompsql = 'SELECT A.atc_value AS VALUE, T.WPID, A.c_id AS CWPID FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
+		 $mostxteamcompsql = 'SELECT A.atc_value AS VALUE, T.WPID AS TWPID, A.c_id AS CWPID FROM '.$wpdb->prefix.'awards_team_comp A, '.$wpdb->prefix.'team T WHERE A.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxtc = $wpdb->get_row($mostxteamcompsql);
-		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, L.post_title AS PLAYER, L.guid AS PLAYERLink, T.WPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND P.p_id = K.tid AND K.prefix = \'p_\' AND K.pid = L.ID AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
+		 $mostxplayercompsql = 'SELECT A.apc_value AS VALUE, P.WPID AS PWPID, T.WPID AS TWPID, A.c_id AS CWPID, X.pos_name FROM '.$wpdb->prefix.'awards_player_comp A, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position X WHERE P.pos_id = X.pos_id AND A.p_id = P.p_id AND P.t_id = T.t_id AND A.a_id = 13 ORDER BY VALUE DESC, A.c_id ASC LIMIT 1';
 		 $mxpc = $wpdb->get_row($mostxplayercompsql);
-		 $mostxteammatchsql = 'SELECT T.WPID, M.mt_int AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxteammatchsql = 'SELECT T.WPID AS TWPID, M.mt_int AS VALUE, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_team M, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE T.t_id = M.t_id AND M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND M.mt_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxtm = $wpdb->get_row($mostxteammatchsql);
-		 $mostxplayermatchsql = 'SELECT Y.post_title AS PLAYER, T.WPID, Y.guid AS PLAYERLink, M.mp_int AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
+		 $mostxplayermatchsql = 'SELECT P.WPID AS PWPID, T.WPID AS TWPID, M.mp_int AS VALUE, R.pos_name, UNIX_TIMESTAMP(X.m_date) AS MDATE FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'comp C WHERE M.m_id = X.WPID AND C.WPID = X.c_id AND C.c_counts = 1 AND P.pos_id = R.pos_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_int > 0 ORDER BY VALUE DESC, M.m_id ASC LIMIT 1';
 		 $mxpm = $wpdb->get_row($mostxplayermatchsql);
 ?>
 		<ul>
-			<li><strong>Most Interceptions made in a Season (Team)</strong>: <?php echo $mxts->VALUE; ?> (<?php echo bblm_get_team_link( $mxts->WPID ); ?> - <?php echo bblm_get_season_link( $mxts->sea_id ); ?>)</li>
-			<li><strong>Most Interceptions made in a Season (Player)</strong>: <?php echo $mxps->VALUE; ?> (<?php echo bblm_get_player_link( $mxps->PLAYER ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->WPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
-			<li><strong>Most Interceptions made in a Competition (Team)</strong>: <?php print($mxtc->VALUE); ?> (<?php echo bblm_get_team_link( $mxtc->WPID ); ?>) - <?php echo bblm_get_competition_link( $mxtc->CWPID ); ?>))</li>
-			<li><strong>Most Interceptions made in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<a href="<?php print($mxpc->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpc->PLAYER); ?></a> - <?php print( esc_html( $mxpc->pos_name ) ); ?> for <?php echo bblm_get_team_link( $mxpc->WPID ); ?>) - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>))</li></li>
-			<li><strong>Most Interceptions made in a Match (Team)</strong>: <?php print($mxtm->VALUE); ?> (<a href="<?php print( get_post_permalink( $mxtm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxtm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxtm->MDATE)); ?>)</li>
-			<li><strong>Most Interceptions made in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<a href="<?php print($mxpm->PLAYERLink); ?>" title="See more on this Player"><?php print($mxpm->PLAYER); ?></a> - <?php print( esc_html( $mxpm->pos_name ) ); ?> for <a href="<?php print( get_post_permalink( $mxpm->WPID ) ); ?>" title="Learn more about this Team"><?php print( esc_html( get_the_title( $mxpm->WPID ) )  ); ?></a> - <?php print(date("d.m.25y", $mxpm->MDATE)); ?>)</li>
+			<li><strong>Most Interceptions made in a Season (Team)</strong>: <?php echo $mxts->VALUE; ?> (<?php echo bblm_get_team_link( $mxts->TWPID ); ?> - <?php echo bblm_get_season_link( $mxts->sea_id ); ?>)</li>
+			<li><strong>Most Interceptions made in a Season (Player)</strong>: <?php echo $mxps->VALUE; ?> (<?php echo bblm_get_player_link( $mxps->PWPID ); ?> - <?php echo esc_html( $mxps->pos_name ); ?> for <?php echo bblm_get_team_link( $mxps->TWPID ); ?> - <?php echo bblm_get_season_link( $mxps->sea_id ); ?>)</li>
+			<li><strong>Most Interceptions made in a Competition (Team)</strong>: <?php print($mxtc->VALUE); ?> (<?php echo bblm_get_team_link( $mxtc->TWPID ); ?>) - <?php echo bblm_get_competition_link( $mxtc->CWPID ); ?>))</li>
+			<li><strong>Most Interceptions made in a Competition (Player)</strong>: <?php print($mxpc->VALUE); ?> (<?php echo bblm_get_player_link( $mxpc->PWPID ); ?> - <?php echo esc_html( $mxpc->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpc->TWPID ); ?>) - <?php echo bblm_get_competition_link( $mxpc->CWPID ); ?>))</li></li>
+			<li><strong>Most Interceptions made in a Match (Team)</strong>: <?php print($mxtm->VALUE); ?> (<?php echo bblm_get_team_link( $mxtm->TWPID ); ?> - <?php echo date("d.m.25y", $mxtm->MDATE ); ?>)</li>
+			<li><strong>Most Interceptions made in a Match (Player)</strong>: <?php print($mxpm->VALUE); ?> (<?php echo bblm_get_player_link( $mxpm->PWPID ); ?> - <?php echo esc_html( $mxpm->pos_name ); ?> for <?php echo bblm_get_team_link( $mxpm->TWPID ); ?> - <?php echo date( "d.m.25y", $mxpm->MDATE ); ?>)</li>
 		</ul>
 
 
