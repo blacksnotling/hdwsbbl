@@ -83,7 +83,17 @@ class BBLM_Template_Loader {
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 			}
 			elseif ($post_type == "bblm_team") {
-				$file = 'single-' . $post_type . 'team.php';
+				$file = 'single-' . $post_type . '.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+			}
+			elseif ($post_type == "bblm_player") {
+				$file = 'single-' . $post_type . '.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+			}
+			elseif ($post_type == "bblm_roster") {
+				$file = 'single-' . $post_type . '.php';
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 			}
