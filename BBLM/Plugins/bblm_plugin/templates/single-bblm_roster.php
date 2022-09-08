@@ -410,8 +410,8 @@ else {
 						<td colspan="4" class="bblm_tbl_title bblm_tbl_label"><?php echo __('ReRolls', 'bblm'); ?></td>
 						<td><?php echo $ti->t_rr; ?></td>
 						<td class="bblm_tbl_enchance bblm_tbl_label">X</td>
-						<td class="bblm_tbl_enchance"><?php echo number_format( $rr_cost ); ?></td>
-						<td cclass="bblm_tbl_value"><?php echo number_format( $ti->t_rr*$rr_cost ); ?></td>
+						<td class="bblm_tbl_enchance"><?php echo number_format( $rr_cost ); ?>gp</td>
+						<td cclass="bblm_tbl_value"><?php echo number_format( $ti->t_rr*$rr_cost ); ?>gp</td>
 					</tr>
 					<tr>
 						<td colspan="5" class="bblm_tbl_label"><?php echo __('Race', 'bblm'); ?></td>
