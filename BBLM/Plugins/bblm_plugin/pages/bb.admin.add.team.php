@@ -67,6 +67,8 @@ if(isset($_POST['bblm_team_submit'])) {
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
+		$team_WPID = $bblm_submission;
+		$page_name = wp_filter_nohtml_kses( $_POST['bblm_tname'] );
 
 		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'t_\')';
 		$wpdb->query($bblmmappingsql);
@@ -82,9 +84,9 @@ if(isset($_POST['bblm_team_submit'])) {
 		$roster_added = 0;
 		if ($_POST['bblm_roster']) {
 			$my_post = array(
-				'post_title' => 'Roster',
+				'post_title' => 'Roster-'.$page_name,
 				'post_content' => '',
-				'post_type' => 'page',
+				'post_type' => 'bblm_roster',
 				'post_status' => 'publish',
 				'comment_status' => 'closed',
 				'ping_status' => 'closed',
@@ -92,6 +94,9 @@ if(isset($_POST['bblm_team_submit'])) {
 			);
 			if ($bblm_submission = wp_insert_post( $my_post )) {
 				add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_roster.php');
+				//Add meta to both teams and rosters to enable display
+				add_post_meta( $bblm_submission, 'roster_team', $team_WPID );
+				add_post_meta( $team_WPID, 'team_roster', $bblm_submission );
 
 				$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'roster\')';
 				$wpdb->query($bblmmappingsql);

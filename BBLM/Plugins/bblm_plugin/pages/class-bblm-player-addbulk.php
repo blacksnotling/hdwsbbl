@@ -9,7 +9,7 @@
   	 * @author 		Blacksnotling
   	 * @category 	Admin
   	 * @package 	BBowlLeagueMan/Admin
-  	 * @version   1.2
+  	 * @version   1.3
   	 */
 
   	class BBLM_Player_AddBulk {
@@ -116,7 +116,7 @@
               $my_post = array(
                 'post_title' => wp_filter_nohtml_kses( $name ),
                 'post_content' => $bblm_page_content,
-                'post_type' => 'page',
+                'post_type' => 'bblm_player',
                 'post_status' => 'publish',
                 'comment_status' => 'closed',
                 'ping_status' => 'closed',
@@ -125,7 +125,9 @@
 
               if ($bblm_submission = wp_insert_post( $my_post )) {
 
-                add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
+                add_post_meta( $bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php' );
+                add_post_meta( $bblm_submission, 'player_status', '1', true );
+                add_post_meta( $bblm_submission, 'player_team', $teamdeet->WPID, true );
 
 
                 $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_pa.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost_tv.'\', \''.$position_cost_tv.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
