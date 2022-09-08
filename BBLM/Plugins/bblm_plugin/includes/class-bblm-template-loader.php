@@ -164,6 +164,18 @@ class BBLM_Template_Loader {
 				$find[] = $file;
 				$find[] = BBLM_TEMPLATE_PATH . $file;
 		}
+		elseif ( is_post_type_archive( 'bblm_player' ) ) {
+
+				$file = 'archive-bblm_player.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+		}
+		elseif ( is_post_type_archive( 'bblm_roster' ) ) {
+
+				$file = 'archive-bblm_roster.php';
+				$find[] = $file;
+				$find[] = BBLM_TEMPLATE_PATH . $file;
+		}
 
 		if ( $file ) {
 			if ( file_exists( $find[1] ) ) {
