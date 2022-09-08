@@ -44,6 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include_once( 'post-types/class-bblm-admin-cpt-player.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-stars.php' );
 		include_once( 'post-types/class-bblm-admin-cpt-inducement.php' );
+		include_once( 'post-types/class-bblm-admin-cpt-roster.php' );
 
  }
 

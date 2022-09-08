@@ -1589,14 +1589,13 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																			*/
 																		if (isset($_POST['bblm_team_teamcpt'])) {
 
-																			$stadpostsql = "SELECT P.ID, R.*, P.post_title, R.WPID AS SWPID, P.post_name FROM ".$wpdb->prefix."team R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_' ORDER BY P.ID ASC";
+																			$stadpostsql = "SELECT P.ID, R.*, P.post_title, R.WPID AS TWPID, P.post_name FROM ".$wpdb->prefix."team R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_' ORDER BY P.ID ASC";
 																				if ($stadposts = $wpdb->get_results($stadpostsql)) {
 																					//echo '<ul>';
 																					foreach ($stadposts as $stad) {
 																						$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_team' WHERE `".$wpdb->posts."`.`ID` = '".$stad->SWPID."';";
 																						//print("<li>".$stadupdatesql."</li>");
 																						if ( $wpdb->query($stadupdatesql) ) {
-																							add_post_meta( $stad->PWPID, 'team_status', $stad->t_active, true
 																							$result = true;
 																						}
 																						else {
@@ -1610,6 +1609,34 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																					}
 																				}//end of if sql was successful
 																		} //end of if (isset($_POST['bblm_team_teamcpt'])) {
+																			/**
+																					*
+																					* ADDING META FIELDS TO Team CPT
+																					*/
+																				if (isset($_POST['bblm_team_teamcptmeta'])) {
+
+																					$stadpostsql = 'SELECT T.*, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE T.t_id = J.tid AND X.ID = J.pid AND J.prefix = "t_" ORDER BY X.ID ASC';
+																						if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																							//echo '<ul>';
+																							foreach ($stadposts as $stad) {
+																								echo '<p>Post: '.$stad->TWPID.', Status: '.$stad->t_active.' ('.$stad->t_name.')<p>';
+
+																								//print("<li>".$stadupdatesql."</li>");
+																								if ( update_post_meta( $stad->TWPID, 'team_status', $stad->t_active ) ) {
+																									$result = true;
+																								}
+																								else {
+																									$result = false;
+																								}
+
+																							} //end of foreach
+																							//echo '</ul>';
+																							if ( $result ) {
+																								print("<div id=\"updated\" class=\"updated fade\"><p>Player Meta has been added</p></div>\n");
+																							}
+																						}//end of if sql was successful
+																					} //end of if (isset($_POST['bblm_team_teamcptmetas'])) {
+
 																			/**
 																			*
 																			* UPDATING MAIN POST TABLE FOR THE PLAYER CPT
@@ -2023,6 +2050,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<h4>Teams</h4>
 		<ul>
 			<li><input type="submit" name="bblm_team_teamcpt" value="Convert Teams Post Types" title="Convert the Teams Post Types"/></li>
+			<li><input type="submit" name="bblm_team_teamcptmeta" value="Add Team Meta" title="Add Team Meta"/></li>
 			<li>You can now delete the old Teams page and update any menus</li>
 		</ul>
 		<p>The following is a list of Teams who have a team record, but not a Wordpress page (I.E Orphans):</p>
