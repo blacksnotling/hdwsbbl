@@ -472,3 +472,34 @@ function bblm_get_match_link_score( $ID, $formatted = 1 ) {
 		 return $number. $ends[$number % 10];
 	 }
  } //end of bblm_ordinal
+
+ /**
+  * Returns the name of a Race, properly escaped and formatted
+  * Takes in the ID of the Wordpress Page
+  */
+ function bblm_get_roster_name( $ID ) {
+
+   $output = "";
+
+   $output .= esc_html( get_the_title( $ID ) );
+
+   return $output;
+
+ }// end of bblm_get_season_name
+
+ /**
+  * Returns the link of a Roster, properly escaped and formatted
+  * Takes in the ID of the Wordpress Page of the TEAM
+	* Differs slightly to the other link functions as the output is consistant regardless of output
+  */
+ function bblm_get_roster_link( $ID ) {
+   $output = "";
+
+	 //Need to determine the ID of the Roster Page for this team
+	 $roster = get_post_meta( $ID, 'team_roster', true );
+
+   $output .= '<a title="View the full Roster" href="' . get_post_permalink( $roster ) . '">View Full Roster &gt;&gt;</a>';
+
+   return __( $output, 'bblm');
+
+ }// end of bblm_get_season_link

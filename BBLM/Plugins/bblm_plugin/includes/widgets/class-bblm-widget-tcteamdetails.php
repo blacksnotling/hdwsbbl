@@ -38,7 +38,6 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
       global $tid;
       global $has_played;
       global $ti;
-      global $rosterlink;
       global $has_cups;
       global $champs;
 
@@ -92,7 +91,7 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';
-          echo '<li><a href="' . $rosterlink . '" title="View the teams full roster">View Full Roster &gt;&gt;</a></li>';
+          echo '<li>' . bblm_get_roster_link( $ti->WPID ) . '</li>';
           echo '</ul>';
         }
 
