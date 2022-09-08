@@ -27,9 +27,8 @@ class BBLM_Widget_TCteamlogo extends WP_Widget {
 
     $post_type = get_post_type();
 
-    //Check we are on the correct poat_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    if ( $post_type == "bblm_team" ) {
+    //Check we are on the correct poat_type page, and not an archive before we display the widget
+    if ( $post_type == "bblm_team" && is_single() ) {
 
       //pulling in the vars from the single-bblm_team template
       global $ti;

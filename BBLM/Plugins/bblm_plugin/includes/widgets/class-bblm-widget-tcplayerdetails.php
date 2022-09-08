@@ -25,25 +25,10 @@ class BBLM_Widget_TCplayerdetails extends WP_Widget {
   public function widget( $args, $instance ) {
     global $wpdb;
 
-    $options = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $options[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $options[ 'page_stars' ], ENT_QUOTES );
+    $post_type = get_post_type();
 
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
-    $greatGrandparent = 0;
-    if ( $grandparent = get_post( $parentpage ) ) {
-      if( $grandparent->post_parent ){
-        $greatGrandparent = get_post( $grandparent->post_parent );
-        $greatGrandparent = $greatGrandparent->ID;
-      }
-    }
-
-    //Check we are on the correct post_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    if ( ( $parentoption == $greatGrandparent ) && ( $parentpage != $staplayerteam ) ) {
+    //Check we are on the correct poat_type page, and not an archive before we display the widget
+    if ( $post_type == "bblm_player" && is_single() ) {
 
       //pulling in the vars from the single-bblm_comp template
       global $pd;
