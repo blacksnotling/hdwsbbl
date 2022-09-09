@@ -59,6 +59,7 @@ if(isset($_POST['bblm_team_submit'])) {
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
 		add_post_meta($bblm_submission, 'team_motto', esc_textarea( $_POST['bblm_tmotto'] ) );
+		add_post_meta( $team_WPID, 'team_status', '1', true );
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
