@@ -85,31 +85,22 @@ function bblm_get_team_link_logo( $ID, $size='medium' ) {
   $team_name = bblm_get_team_name( $ID );
   $output = "";
 
-	$output .= '<a title="Read more about ' . $team_name . '" href="' . get_post_permalink( $ID ) . '">';
-
-	//Determine if a custom logo is present
 	$teamsql = 'SELECT * FROM '.$wpdb->prefix.'team T WHERE T.WPID = '. $ID;
 	$team = $wpdb->get_row ( $teamsql );
-	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/" . $team->t_sname . "_big.gif";
-	if (file_exists($filename)) {
-		$output .= '<img src="' . home_url() . '/images/teams/' . $team->t_sname . '_big.gif" alt="' . $team_name . ' Logo" />';
+
+	if ( $bblm_tbd_team == $team->t_id ) {
+		//If the team is TBD then display the logo of the star races (the league shiled)
+		$options = get_option( 'bblm_config' );
+		$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
+
+		$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, $size );
 	}
 	else {
-		if ( $bblm_tbd_team == $team->t_id ) {
-			//If the team is TBD then display the logo of the star races (the league shiled)
-			$options = get_option( 'bblm_config' );
-			$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
-
-			$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, $size );
-		}
-		else {
-			//otherwise display the race logo
-			$output .= BBLM_CPT_Race::get_race_icon( $team->r_id, $size );
-		}
+		$output .= '<a title="Read more about ' . $team_name . '" href="' . get_post_permalink( $ID ) . '">';
+		$output .= BBLM_CPT_Team::get_team_logo( $ID, $size );
+		$output .= '</a>';
 
 	}
-
-	$output .= '</a>';
 
   return __( $output, 'bblm');
 

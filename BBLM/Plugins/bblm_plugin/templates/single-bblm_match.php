@@ -38,24 +38,6 @@
 				$teamA = bblm_get_team_name( $tA->TWPID );
 				$teamB = bblm_get_team_name( $tB->TWPID );
 
-				//Check for custom logo and if found set the var for use later on
-				//Team A
-				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tA->t_sname."_big.gif";
-				if (file_exists($filename)) {
-					$tAimg = "<img src=\"".home_url()."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
-				}
-				else {
-          $tAimg = get_the_post_thumbnail( $tA->r_id, 'bblm-fit-medium' );
-				}
-				//Team B
-				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tB->t_sname."_big.gif";
-				if (file_exists($filename)) {
-					$tBimg = "<img src=\"".home_url()."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
-				}
-				else {
-          $tBimg = get_the_post_thumbnail( $tB->r_id, 'bblm-fit-medium' );
-				}
-
 ?>
 			<header class="entry-header">
 				<h2 class="entry-title"><?php echo bblm_get_team_link( $tA->TWPID ); ?> vs <?php echo bblm_get_team_link( $tB->TWPID ); ?></h2>
@@ -79,9 +61,9 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><strong><?php echo $tAimg;?></strong></td>
+							<td><strong><?php BBLM_CPT_Team::display_team_logo( $tA->TWPID, 'medium' ); ?></strong></td>
 							<th>&nbsp;</th>
-							<td><strong><?php echo $tBimg;?></strong></td>
+							<td><strong><?php BBLM_CPT_Team::display_team_logo( $tB->TWPID, 'medium' ); ?></strong></td>
 						</tr>
 						<tr>
 							<td class="bblm_score"><strong><?php echo $tA->mt_td;?></strong></td>

@@ -35,6 +35,10 @@ table tr.bblm_tbl_alt, table tr.odd {
 	background-color: #fff;
 }
 
+div#bblm_single-bblm_team-logo-widget {
+	text-align: center;
+}
+
 /***** Sponsors *****/
 .bblm-sponsors {
 	display: block;

@@ -34,8 +34,8 @@
 <?php
 	//Start of Custom content
 	//$teamsql = "SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team AS R, $wpdb->posts AS P, '.$wpdb->prefix.'bb2wp AS J WHERE R.t_id = J.tid AND P.ID = J.pid AND J.prefix = 't_' AND R.t_show = 1 ORDER BY t_name ASC";
-	$teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
-
+	//$teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
+  $teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
 
 if ($teams = $wpdb->get_results($teamsql)) {
 	$is_first_status = 0;
@@ -87,14 +87,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 			print("		<tr id=\"".$team->t_id."\">\n");
 		}
 		print("		<td>");
-
-		$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$team->t_sname."_small.gif";
-		if (file_exists($filename)) {
-			print("<img src=\"".home_url()."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
-		}
-		else {
-			BBLM_CPT_Race::display_race_icon( $team->r_id, 'icon' );
-		}
+    BBLM_CPT_Team::display_team_logo( $team->TWPID, 'icon' );
 		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>" . bblm_get_race_name( $team->r_id ) . "</td>\n		<td>".number_format($team->t_ctv)."gp</td>\n");
 
 

@@ -396,13 +396,7 @@ else {
 					<tr>
 						<td colspan="3" rowspan="5" class="bblm_tbl_image">
 <?php
-							$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
-							if (file_exists($filename)) {
-								echo "<img src=\"".home_url()."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
-							}
-							else {
-								BBLM_CPT_Race::display_race_icon( $ti->r_id, 'medium' );
-							}
+							BBLM_CPT_Team::display_team_logo( $ti->TWPID, 'medium' );
 ?>
 						</td>
 						<td colspan="5" class="bblm_tbl_title bblm_tbl_label"><?php echo __('Team Name', 'bblm'); ?></td>
