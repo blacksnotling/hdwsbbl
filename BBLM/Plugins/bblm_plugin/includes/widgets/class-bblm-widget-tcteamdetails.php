@@ -28,7 +28,6 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
 
     $post_type = get_post_type();
 
-
     //Check we are on the correct poat_type page, and not an archive before we display the widget
     if ( $post_type == "bblm_team" && is_single() ) {
 
@@ -86,6 +85,9 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         $meta = get_post_custom( $post->ID );
         $tmotto = ! isset( $meta['team_motto'][0] ) ? '' : $meta['team_motto'][0];
         echo '<li><strong>' . __( 'Motto', 'bblm' ) . ':</strong> <em>' . sanitize_text_field( $tmotto ) . '</em></li>';
+        if ( BBLM_CPT_Team::get_team_sponsors_count( $post->ID ) ) {
+          echo '<li><strong>' . __( 'Current Sponsors:', 'bblm' ) . '</strong> ' . strip_tags( get_the_term_list( $post->ID, 'team_sponsors', '', ', ', '' ) . '</li>' );
+        }
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';

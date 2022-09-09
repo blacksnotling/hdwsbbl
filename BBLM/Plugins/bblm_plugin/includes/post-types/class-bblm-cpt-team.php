@@ -138,6 +138,22 @@ class BBLM_CPT_Team {
 
   } //end of display_team_list_with_stats()
 
+	/**
+		* returns the number of sponsors the team has
+		* takes in the WPID of the team in question
+		*
+		* @param wordpress $query
+		* @return intiger
+		*/
+		public static function get_team_sponsors_count( $ID ) {
+
+			$terms = wp_get_post_terms( $ID, 'team_sponsors');
+			$terms_count = count ( $terms );
+
+			return $terms_count;
+
+		} //end of get_team_sponsors_count()
+
 
 } //end of class
 

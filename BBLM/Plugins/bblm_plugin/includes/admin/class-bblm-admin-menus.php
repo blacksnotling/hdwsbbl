@@ -127,6 +127,16 @@ class BBLM_Admin_Menus {
 			false
 		);
 
+		//Force the display of the Team Sponsorship tax page in the menu
+		add_submenu_page(
+			'bblm_main_menu',
+			__( 'Sponsors', 'bblm' ),
+			__( 'Sponsors', 'bblm' ),
+			'manage_options',
+			'edit-tags.php?taxonomy=team_sponsors',
+			false
+		);
+
 		//Load Legacy pages
 		//Adds the subpages to the master heading - League Admin Pages
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.welcome.php', 'Create an Award', 'Create Award', 'bblm_manage_league', 'bblm_plugin/pages/bb.admin.add.award.php');

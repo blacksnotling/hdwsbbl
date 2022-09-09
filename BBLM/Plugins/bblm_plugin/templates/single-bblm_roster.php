@@ -394,7 +394,7 @@ else {
 					?>
 					 <!-- End of player listing -->
 					<tr>
-						<td colspan="3" rowspan="6" class="bblm_tbl_image">
+						<td colspan="3" rowspan="5" class="bblm_tbl_image">
 <?php
 							$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
 							if (file_exists($filename)) {
@@ -446,7 +446,9 @@ else {
 						<td colspan="6" class="bblm_tbl_label"><?php echo __('Team value', 'bblm'); ?></td>
 						<td colspan=2 class="bblm_tbl_value"><?php echo number_format( $ti->t_tv ); ?>gp</td>
 					</tr>
-					<tr><td colspan="5" class="bblm_tbl_label"><?php echo __('Stadium', 'bblm'); ?></td>
+					<tr>
+						<td colspan="3" class="bblm_tbl_value"><strong><?php echo __( 'Sponsors', 'bblm' ); ?></strong>: <?php echo strip_tags( get_the_term_list( $ti->TWPID, 'team_sponsors', '', ', ', '' ) ); ?></td>
+						<td colspan="5" class="bblm_tbl_label"><?php echo __('Stadium', 'bblm'); ?></td>
 						<td colspan="3"><?php echo bblm_get_stadium_link( $ti->stad_id ); ?></td>
 						<td colspan="6" class="bblm_tbl_label"><?php echo __('Current Team Value', 'bblm'); ?></td>
 						<td colspan=2 class="bblm_tbl_value"><?php echo number_format( $ti->t_ctv ); ?>gp</td>

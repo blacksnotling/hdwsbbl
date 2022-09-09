@@ -498,7 +498,7 @@ class BBLM_Post_types {
        )
      );
 
-		 // Competitions Tax race rules / traits
+		 // Tax race special rules / traits
 		 register_taxonomy(
 			 'race_rules',
 			 array(
@@ -522,6 +522,29 @@ class BBLM_Post_types {
 				 'meta_box_cb' => 'post_categories_meta_box',
 			 )
 		 );
+
+		 // Tax for Sponsors
+		 register_taxonomy(
+			 'team_sponsors',
+			 'bblm_team',
+			 array(
+				 'labels' => array(
+					 'name' => _x( 'Team Sponsors', 'taxonomy general name', 'bblm' ),
+					 'singular_name' => _x( 'Team Sponsors', 'taxonomy singular name', 'bblm' ),
+					 'search_items' => __( 'Search Sponsors', 'bblm' ),
+					 'all_items' => __( 'All Sponsors', 'bblm' ),
+					 'edit_item' => __( 'Edit Sponsor', 'bblm' ),
+					 'update_item' => __( 'Update Sponsor', 'bblm' ),
+					 'add_new_item' => __( 'Add New Sponsor', 'bblm' ),
+					 'new_item_name' => __( 'New Sponsor Name', 'bblm' ),
+				 ),
+				 'sort' => true,
+				 'args' => array( 'orderby' => 'term_order' ),
+				 'rewrite' => array( 'slug' => 'race-rules' ),
+				 'meta_box_cb' => 'post_categories_meta_box',
+			)
+		);
+
 
    }
 

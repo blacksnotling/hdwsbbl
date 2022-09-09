@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	  } //end of hide_parent_dropdown_select
 
 		/**
- 	  * converts the taxonomy back to intigets to save correctly
+ 	  * converts the race rules taxonomy back to intigets to save correctly
  	  */
 		function convert_race_rules_terms_to_integers() {
 			$taxonomy = 'race_rules';
@@ -87,6 +87,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$_POST['tax_input'][ $taxonomy ] = $new_terms;
 			}
 		}
+
+		/**
+		 * Displays the Sponsors Taxonomy as a selection box rather than a tag cloud
+		 * despite it being non-hierarchical
+		 */
+		 function hide_team_sponsors_dropdown_select( $args ) {
+			if ( 'team_sponsors' == $args['taxonomy'] ) {
+				$args['echo'] = false;
+			}
+			return $args;
+		 } //end of hide_parent_dropdown_select
+
+		 /**
+		 * converts the sponsors taxonomy back to intigets to save correctly
+		 */
+		 function convert_team_sponsors_terms_to_integers() {
+			 $taxonomy = 'team_sponsors';
+			 if ( isset( $_POST['tax_input'][ $taxonomy ] ) && is_array( $_POST['tax_input'][ $taxonomy ] ) ) {
+				 $terms = $_POST['tax_input'][ $taxonomy ];
+				 $new_terms = array_map( 'intval', $terms );
+				 $_POST['tax_input'][ $taxonomy ] = $new_terms;
+			 }
+		 }
 
 
 }
