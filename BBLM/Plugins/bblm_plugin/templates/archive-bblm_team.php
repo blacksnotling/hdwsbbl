@@ -1,11 +1,16 @@
 <?php
-/*
-Template Name: List Teams
-*/
-/*
-*	Filename: bb.core.teams.php
-*	Description: Page template to list the teams.
-*/
+/**
+ * BBowlLeagueMan Teamplate View Team List
+ *
+ * Page Template to List the Teams in the League.
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
+ /*
+  * Template Name: View Team List
+  */
 ?>
 <?php get_header(); ?>
 <div id="primary" class="content-area content-area-right-sidebar">
@@ -13,19 +18,18 @@ Template Name: List Teams
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
 		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
 			<?php do_action( 'bblm_template_before_content' ); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<header class="page-header entry-header">
 
-			<h2 class="entry-title"><?php the_title(); ?></h2>
+			<h2 class="entry-title"><?php echo __( 'Teams', 'bblm'); ?></h2>
 
 		</header><!-- .page-header -->
 
 			<div class="entry-content">
 
-					<?php the_content(); ?>
+					<div class="archive-description"><?php echo bblm_echo_archive_desc( 'team' ) ?></div>
 
 <?php
 	//Start of Custom content
@@ -137,7 +141,6 @@ else {
 </article><!-- .post-ID -->
 
 <?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 <?php do_action( 'bblm_template_after_posts' ); ?>

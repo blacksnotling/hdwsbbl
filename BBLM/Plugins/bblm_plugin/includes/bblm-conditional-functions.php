@@ -30,6 +30,6 @@ function is_bblm() {
  */
 if ( ! function_exists( 'bblm_post_types' ) ) {
 	function bblm_post_types() {
-		return apply_filters( 'bblm_filter_post_types', array( 'bblm_dyk', 'bblm_owner', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_race', 'bblm_comp', 'bblm-match', 'bblm_star', 'bblm_inducement' ) );
+		return apply_filters( 'bblm_filter_post_types', array( 'bblm_dyk', 'bblm_owner', 'bblm_stadium', 'bblm_cup', 'bblm_season', 'bblm_race', 'bblm_comp', 'bblm-match', 'bblm_star', 'bblm_inducement', 'bblm_team', 'bblm_player', 'bblm_roster' ) );
 	}
 }

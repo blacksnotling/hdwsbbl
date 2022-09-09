@@ -64,12 +64,12 @@ else if (isset($_POST['bblm_stat_update'])) {
 
 	//Generate SQL
 	$tinfoupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_hcoach` = \''.$_POST['bblm_thcoach'].'\', `t_ff` = \''.$_POST['bblm_tff'].'\', `t_rr` = \''.$_POST['bblm_trr'].'\', `t_apoc` = \''.$_POST['bblm_tapoc'].'\', `t_cl` = \''.$_POST['bblm_tcl'].'\', `t_ac` = \''.$_POST['bblm_tac'].'\', `t_bank` = \''.$_POST['bblm_tbank'].'\', `t_tv` = \''.$_POST['bblm_ttv'].'\', `t_active` = \''.$_POST['bblm_tactive'].'\', `t_show` = \''.$_POST['bblm_tshow'].'\', `stad_id` = \''.$_POST['bblm_tstad'].'\' WHERE `t_id` = '.$_POST['bblm_tid'].' LIMIT 1';
-	//print("<p>".$tinfoupdatesql."</p>");
 
 	if (FALSE !== $wpdb->query($tinfoupdatesql)) {
 		$sucess = TRUE;
 		//Update Post Meta (Motto etc)
 		update_post_meta( $_POST['bblm_twid'], 'team_motto', sanitize_text_field( $_POST['bblm_tmotto'] ) );
+		update_post_meta( $_POST['bblm_twid'], 'team_status', (int) $_POST['bblm_tactive'] );
 		bblm_update_tv( (int) $_POST['bblm_tid'] );
 		do_action( 'bblm_post_submission' );
 	}

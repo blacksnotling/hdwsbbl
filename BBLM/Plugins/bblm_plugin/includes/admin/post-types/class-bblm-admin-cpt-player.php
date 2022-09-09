@@ -24,11 +24,165 @@ class BBLM_Admin_CPT_Player {
   */
   public function __construct() {
 
-		return true;
+		add_filter( 'manage_edit-bblm_player_columns', array( $this, 'my_edit_columns' ) );
+		add_action( 'manage_bblm_player_posts_custom_column', array( $this, 'my_manage_columns' ), 10, 2 );
+		add_filter( 'manage_edit-bblm_player_sortable_columns', array( $this, 'my_manage_sortable_columns' ) );
+		add_action( 'pre_get_posts', array( $this, 'manage_archives' ) );
+		add_filter( 'admin_url', array( $this, 'redirect_add_player_link' ), 10, 2 );
+		add_action( 'restrict_manage_posts', array( $this, 'player_filter_team' ) );
+		add_filter( 'parse_query', array( $this, 'comp_filter_player_by_team' ) );
 
-    //return TRUE;
+    return TRUE;
 
   }
+
+	/**
+   * Redirects the "Add New Players" link to the custom add players admin page
+   *
+   * @param string $url the url I wish to send them to
+	 * @param string $path where I am sending them
+   * @return string url the url of the custom admin page I wish ro redirect the user to
+   */
+   public function redirect_add_player_link( $url, $path ) {
+
+		 if( $path === 'post-new.php?post_type=bblm_player' ) {
+			 $url = get_bloginfo( 'url' ) . '/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php';
+		 }
+		 return $url;
+
+   }//end of redirect_add_player_link()
+
+	 /**
+		* Sets the Column headers for the CPT edit list screen
+		*/
+	 function my_edit_columns( $columns ) {
+
+		$columns = array(
+			'cb' => '<input type="checkbox" />',
+			'title' => __( 'Player Name', 'bblm' ),
+			'team' => __( 'Team', 'bblm' ),
+			'status' => __( 'Status', 'bblm' ),
+		);
+
+		return $columns;
+
+	 }
+
+	 /**
+		* Sets the Column content for the CPT edit list screen
+		*/
+	 function my_manage_columns( $column, $post_id ) {
+		global $post;
+
+		switch( $column ) {
+
+			// If displaying the 'status' column.
+			case 'status' :
+
+				$pstatus = get_post_meta( $post_id, 'player_status', true );
+				if ( (int) $pstatus ) {
+
+					echo __( 'Active', 'bblm' );
+				}
+
+				else {
+
+					echo __( 'Inactive', 'bblm' );
+
+				}
+
+			break;
+
+			// if displaying the team column
+			case 'team' :
+
+				echo bblm_get_team_name( get_post_meta( $post_id, 'player_team', true ) );
+
+			break;
+
+			 // Break out of the switch statement for anything else.
+			 default :
+			 break;
+
+		 }
+
+	 }
+
+	 /**
+	 * stops the CPT archive pages pagenating on the admin side and changes the display order
+	 *
+	 * @param wordpress $query
+	 * @return none
+	 */
+	 public function manage_archives( $query ) {
+
+			if( is_post_type_archive( 'bblm_player' ) && is_admin() && $query->is_main_query() ) {
+					$query->set( 'posts_per_page', 50 );
+					$query->set( 'orderby', 'title' );
+					$query->set( 'order', 'asc' );
+			}
+
+		}
+
+		/*
+ 		* Sets the columns that are filterable
+ 		*/
+ 		function my_manage_sortable_columns( $columns ) {
+ 			$columns['team'] = 'player_team_filter';
+ 			return $columns;
+ 		}
+
+ 	 /**
+ 		* Allow the page to be filtered on meta_values
+  		*/
+ 		function player_filter_team() {
+ 			global $typenow;
+ 			global $wpdb;
+
+ 			if ( $typenow == 'bblm_player' ) {
+
+ 				$query = $wpdb->prepare('
+ 				SELECT DISTINCT pm.meta_value FROM %1$s pm
+ 				LEFT JOIN %2$s p ON p.ID = pm.post_id
+ 				WHERE pm.meta_key = "%3$s"
+ 				AND p.post_status = "%4$s"
+ 				AND p.post_type = "%5$s"
+ 				ORDER BY "%3$s"',
+ 				$wpdb->postmeta,
+ 				$wpdb->posts,
+ 				'player_team',
+ 				'publish',
+ 				'bblm_player',
+ 				'player_team'
+ 			);
+ 			$results = $wpdb->get_col($query);
+ 			$current_team = '';
+ 			if( isset( $_GET['bblm_player-filter-team'] ) ) {
+ 				$current_team = $_GET['bblm_player-filter-team']; // Check if option has been selected
+ 			}
+ 	?>
+ 	 <select name="bblm_player-filter-team" id="bblm_player-filter-team">
+ 			<option value="all" <?php selected( 'all', $current_team ); ?>><?php _e( 'All Teams', 'bblm' ); ?></option>
+ 			<?php foreach( $results as $key ) { ?>
+ 				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $current_team ); ?>><?php echo bblm_get_season_name( $key ); ?></option>
+ 			<?php } ?>
+ 		</select>
+ 	<?php }
+ 		} // end of comp_filter_season()
+
+		/*
+ 		* *Modifies thre WP_Query to account for any selected filter
+ 		*/
+ 		function comp_filter_player_by_team( $query ) {
+ 			global $pagenow;
+ 			// Get the post type
+ 			$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+ 			if ( is_admin() && $pagenow=='edit.php' && $post_type == 'bblm_player' && isset( $_GET['bblm_player-filter-team'] ) && $_GET['bblm_player-filter-team'] !='all' ) {
+ 				$query->query_vars['meta_key'] = 'player_team';
+ 		    $query->query_vars['meta_value'] = $_GET['bblm_player-filter-team'];
+ 		    $query->query_vars['meta_compare'] = '=';
+ 		  }
+ 		} //end of comp_filter_comp_by_season()
 
   /**
    * Resets the injured status of a player

@@ -33,11 +33,6 @@
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
-				if ($ti->t_roster) {
-					$rosterlinksql = 'SELECT P.guid FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE J.prefix = \'roster\' AND J.pid = P.ID AND J.tid = '.$tid;
-					$rosterlink = $wpdb->get_var($rosterlinksql);
-				}
-
 		}
     if ( $ti->t_legacy ) {
       bblm_display_legacy_notice( "Team" );
@@ -335,7 +330,7 @@
 				/*		End of Star Players	*/
 
 				if ($ti->t_roster) {
-									print("<p><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></p>");
+                  echo '<p>' . bblm_get_roster_link( $ti->WPID ) . '</p>';
 				}
 
 				//Transfers

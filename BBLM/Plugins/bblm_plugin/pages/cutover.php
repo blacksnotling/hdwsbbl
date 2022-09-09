@@ -1583,6 +1583,143 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																      }
 																    }//end of if sql was successful
 																} //end of if (isset($_POST['bblm_star_starcpt'])) {
+																	/**
+																			*
+																			* UPDATING MAIN POST TABLE FOR THE Teams CPT
+																			*/
+																		if (isset($_POST['bblm_team_teamcpt'])) {
+
+																			$stadpostsql = "SELECT P.ID, R.*, P.post_title, R.WPID AS TWPID, P.post_name FROM ".$wpdb->prefix."team R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.t_id = J.tid AND P.ID = J.pid and J.prefix = 't_' ORDER BY P.ID ASC";
+																				if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																					//echo '<ul>';
+																					foreach ($stadposts as $stad) {
+																						$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_team' WHERE `".$wpdb->posts."`.`ID` = '".$stad->SWPID."';";
+																						//print("<li>".$stadupdatesql."</li>");
+																						if ( $wpdb->query($stadupdatesql) ) {
+																							$result = true;
+																						}
+																						else {
+																							$result = false;
+																						}
+
+																					} //end of foreach
+																					//echo '</ul>';
+																					if ( $result ) {
+																						print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Teams! <strong>Now you can delete the Teams page!</strong></p></div>\n");
+																					}
+																				}//end of if sql was successful
+																		} //end of if (isset($_POST['bblm_team_teamcpt'])) {
+																			/**
+																					*
+																					* ADDING META FIELDS TO Team CPT
+																					*/
+																				if (isset($_POST['bblm_team_teamcptmeta'])) {
+
+																					$stadpostsql = 'SELECT T.*, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE T.t_id = J.tid AND X.ID = J.pid AND J.prefix = "t_" ORDER BY X.ID ASC';
+																						if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																							//echo '<ul>';
+																							foreach ($stadposts as $stad) {
+																								echo '<p>Post: '.$stad->TWPID.', Status: '.$stad->t_active.' ('.$stad->t_name.')<p>';
+
+																								//print("<li>".$stadupdatesql."</li>");
+																								if ( update_post_meta( $stad->TWPID, 'team_status', $stad->t_active ) ) {
+																									$result = true;
+																								}
+																								else {
+																									$result = false;
+																								}
+
+																							} //end of foreach
+																							//echo '</ul>';
+																							if ( $result ) {
+																								print("<div id=\"updated\" class=\"updated fade\"><p>Player Meta has been added</p></div>\n");
+																							}
+																						}//end of if sql was successful
+																					} //end of if (isset($_POST['bblm_team_teamcptmetas'])) {
+
+																			/**
+																			*
+																			* UPDATING MAIN POST TABLE FOR THE PLAYER CPT
+																			*/
+																		if (isset($_POST['bblm_player_playercpt'])) {
+
+																			//Avoid converting Star Players into the wrong post type!
+																			$stadpostsql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE P.p_id = J.tid AND X.ID = J.pid AND J.prefix = "p_" AND T.t_id = P.t_id AND X.post_type = "page" ORDER BY X.ID ASC';
+																				if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																					//echo '<ul>';
+																					foreach ($stadposts as $stad) {
+																						$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_player' WHERE `".$wpdb->posts."`.`ID` = '".$stad->PWPID."';";
+																						//print("<li>".$stadupdatesql."</li>");
+																						if ( $wpdb->query($stadupdatesql) ) {
+																							$result = true;
+																						}
+																						else {
+																							$result = false;
+																						}
+
+																					} //end of foreach
+																					//echo '</ul>';
+																					if ( $result ) {
+																						print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Players!</p></div>\n");
+																					}
+																				}//end of if sql was successful
+																		} //end of if (isset($_POST['bblm_star_starcpt'])) {
+																			/**
+																					*
+																					* ADDING META FIELDS TO PLAYER CPT
+																					*/
+																				if (isset($_POST['bblm_player_playercptmeta'])) {
+
+																					$stadpostsql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X WHERE P.p_id = J.tid AND X.ID = J.pid AND J.prefix = "p_" AND T.t_id = P.t_id ORDER BY X.ID ASC';
+																						if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																							//echo '<ul>';
+																							foreach ($stadposts as $stad) {
+
+																								//print("<li>".$stadupdatesql."</li>");
+																								if ( add_post_meta( $stad->PWPID, 'player_status', $stad->p_status, true ) ) {
+																									add_post_meta( $stad->PWPID, 'player_team', $stad->TWPID, true );
+																									$result = true;
+																								}
+																								else {
+																									$result = false;
+																								}
+
+																							} //end of foreach
+																							//echo '</ul>';
+																							if ( $result ) {
+																								print("<div id=\"updated\" class=\"updated fade\"><p>Player Meta has been added</p></div>\n");
+																							}
+																						}//end of if sql was successful
+																					} //end of if (isset($_POST['bblm_star_starcptmetas'])) {
+																						/**
+																								*
+																								* UPDATING MAIN POST TABLE FOR THE ROSTERS CPT
+																								*/
+																							if (isset($_POST['bblm_roster_rostercpt'])) {
+
+																								$stadpostsql = 'SELECT J.*, J.pid AS RWPID, T.WPID AS TWPID, P.post_name FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team T, '.$wpdb->posts.' P WHERE P.ID = T.WPID AND T.t_id = J.tid AND J.prefix = "roster"';
+																									if ($stadposts = $wpdb->get_results($stadpostsql)) {
+																										//echo '<ul>';
+																										foreach ($stadposts as $stad) {
+																											$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_name` = 'roster-" . $stad->post_name . "', `post_type` = 'bblm_roster' WHERE `".$wpdb->posts."`.`ID` = '".$stad->RWPID."';";
+																											//print("<li>".$stadupdatesql."</li>");
+																											if ( $wpdb->query($stadupdatesql) ) {
+																												add_post_meta( $stad->RWPID, 'roster_team', $stad->TWPID, true ); //The page ID of the roster - roster meta
+																												add_post_meta( $stad->TWPID, 'team_roster', $stad->RWPID, true ); //The page ID of the team - team meta
+																												$result = true;
+																											}
+																											else {
+																												$result = false;
+																											}
+
+																										} //end of foreach
+																										//echo '</ul>';
+																										if ( $result ) {
+																											print("<div id=\"updated\" class=\"updated fade\"><p>Posts table updated for Rosters!</p></div>\n");
+																										}
+																									}//end of if sql was successful
+																							} //end of if (isset($_POST['bblm_roster_rostercpt'])) {
+
 
 /**
  *
@@ -1908,6 +2045,52 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 		<ul>
 			<li>Create and Populate new Database Tables. <a href="https://github.com/blacksnotling/HDWSBBL/files/7493106/198.txt">File is availible here</a></li>
 		</ul>
+
+		<h3>Soft Conversion of Teams, Players, and Rosters</h3>
+		<h4>Teams</h4>
+		<ul>
+			<li><input type="submit" name="bblm_team_teamcpt" value="Convert Teams Post Types" title="Convert the Teams Post Types"/></li>
+			<li><input type="submit" name="bblm_team_teamcptmeta" value="Add Team Meta" title="Add Team Meta"/></li>
+			<li>You can now delete the old Teams page and update any menus</li>
+		</ul>
+		<p>The following is a list of Teams who have a team record, but not a Wordpress page (I.E Orphans):</p>
+<?php
+		$teamorphansql = 'SELECT T.*, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T WHERE T.WPID = 0 ORDER BY T.t_id';
+		if ( $teamorphan = $wpdb->get_results( $teamorphansql ) ) {
+			echo '<ul>';
+			foreach ( $teamorphan as $tdeet ) {
+				echo '<li>' . bblm_get_team_name( $tdeet->TWPID ) . ' - ' . $tdeet->TWPID . '</li>';
+			}
+			echo '</ul>';
+
+		}
+		else {
+			echo '<p>No Orphans found! Excellent</p>';
+		}
+?>
+		<h4>Players</h4>
+		<p>The following is a list of Players who have a player record, but not a Wordpress page (I.E Orphans):</p>
+<?php
+		$playerorphansql = 'SELECT P.*, P.WPID AS PWPID, T.WPID AS TWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T WHERE T.t_id = P.t_id AND P.WPID = 0 ORDER BY P.p_id';
+		if ( $playerorphan = $wpdb->get_results( $playerorphansql ) ) {
+			echo '<ul>';
+			foreach ( $playerorphan as $pdeet ) {
+				echo '<li>[' . $pdeet->p_id . '] - ' . $pdeet->p_name . ' - ' . bblm_get_team_name( $pdeet->TWPID ) . ' - ' . $pdeet->PWPID . '</li>';
+			}
+			echo '</ul>';
+		}
+		else {
+			echo '<p>No Orphans found! Excellent</p>';
+		}
+?>
+		<ul>
+			<li><input type="submit" name="bblm_player_playercpt" value="Convert Player Post Types" title="Convert the Player Post Types"/></li>
+			<li><input type="submit" name="bblm_player_playercptmeta" value="Add Player Meta" title="Add Player Meta"/></li>
+		</ul>
+
+		<h4>Rosters</h4>
+		<li><input type="submit" name="bblm_roster_rostercpt" value="Convert Roster Post Types" title="Convert the Roster Post Types"/></li>
+		<p>NOW APPLY 301 REDIRECTS</p>
 
 
 </form>

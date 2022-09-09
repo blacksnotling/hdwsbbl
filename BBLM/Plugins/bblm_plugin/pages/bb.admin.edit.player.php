@@ -64,6 +64,7 @@ print("<p>".$fateinsertsql."</p>");*/
 
 if (FALSE !== $wpdb->query($playerupdatesql)) {
 	$sucess = TRUE;
+	update_post_meta( (int) $_POST['bblm_pwpid'], 'player_status', '0' );
 	do_action( 'bblm_post_submission' );
 }
 else {
@@ -315,6 +316,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 	if (FALSE !== $wpdb->query($pstatupdatesql)) {
 		$sucess = TRUE;
 		bblm_update_tv( (int) $_POST['bblm_tid'] );
+		update_post_meta( (int) $_POST['bblm_pwpid'], 'player_status', (int) $_POST['bblm_status'] );
 		do_action( 'bblm_post_submission' );
 	}
 ?>
@@ -402,6 +404,7 @@ else if ("edit" == $_GET['action']) {
 			<dd><textarea name="bblm_pinj" cols="60" rows="3"><?php print($p->p_injuries); ?></textarea></dd>
 		</dl>
 		<input type="hidden" name="bblm_pid" size="5" value="<?php print($pid); ?>" id="bblm_pid" maxlength="5">
+		<input type="hidden" name="bblm_pwpid" size="5" value="<?php echo $p->WPID; ?>" id="bblm_pwpid" maxlength="10">
 		<input type="hidden" name="bblm_tid" size="5" value="<?php print($p->t_id); ?>" id="bblm_tid" maxlength="5">
 		<p class="submit">
 		<input type="submit" name="bblm_stat_update" value="Update Player" title="Update Player"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($p->t_id); ?>" title="Cancel this and select another player">Cancel</a>
@@ -703,26 +706,28 @@ else if ("edit" == $_GET['action']) {
 		 	<th>CAS</th>
 		 	<th>COMP</th>
 		 	<th>INT</th>
-		 	<th>MVP</th
+		 	<th>MVP</th>
 		 	<th>SPP</th>
 		 </tr>
 		 </thead>
 		 <tbody>
 <?php
-		$statssql = 'SELECT P.p_name, P.p_cost_ng, Y.pos_name, P.t_id, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y WHERE M.p_id = P.p_id AND P.pos_id = Y.pos_id AND M.mp_counts = 1 AND M.p_id = '.$pid.' GROUP BY P.p_id';
+		$statssql = 'SELECT P.p_name, P.p_cost_ng, Y.pos_name, P.t_id, P.WPID as PWPID, COUNT(*) AS GAMES, SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(M.mp_mvp) AS MVP, SUM(M.mp_spp) AS SPP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y WHERE M.p_id = P.p_id AND P.pos_id = Y.pos_id AND M.mp_counts = 1 AND M.p_id = '.$pid.' GROUP BY P.p_id';
 			if ($stats = $wpdb->get_results($statssql)) {
 				foreach ($stats as $s) {
 					print (" <tr>\n  	<td>".$s->p_name."</td>\n  	<td>".$s->pos_name."</td>\n  	<td>".$s->GAMES."</td>\n  	<td>".$s->TD."</td>\n  	<td>".$s->CAS."</td>\n  	<td>".$s->COMP."</td>\n  	<td>".$s->MINT."</td>\n  	<td>".$s->MVP."</td>\n  	<td>".$s->SPP."</td>\n </tr>\n");
 					$t_id = $s->t_id;
+					$pwpid = $s->PWPID;
 				}
 				print("			</tbody>\n		</table>\n");
 			}
 			else {
 				//No match result was returned. We still need to establish team id
-				$playerdetailssql = 'SELECT Z.post_title, Y.pos_name, P.t_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Z WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND Y.pos_id = P.pos_id AND P.p_id = '.$pid;
+				$playerdetailssql = 'SELECT Z.post_title, Y.pos_name, P.t_id, P.WPID as PWPID FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Z WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND Y.pos_id = P.pos_id AND P.p_id = '.$pid;
 				$pd = $wpdb->get_row($playerdetailssql);
 				print(" <tr>\n  	<td>".$pd->post_title."</td>\n  	<td>".$pd->pos_name."</td>\n  	<td colspan=\"7\">According to the Leagues Archives, this player has done Nothing!</td>\n </tr>\n			</tbody>\n		</table>\n");
 				$t_id = $pd->t_id;
+				$pwpid = $pd->PWPID;
 
 			}
 ?>
@@ -796,6 +801,7 @@ else if ("edit" == $_GET['action']) {
 
 		<input type="hidden" name="bblm_pid" value="<?php print($pid); ?>">
 		<input type="hidden" name="bblm_tid" value="<?php print($t_id); ?>">
+		<input type="hidden" name="bblm_pwpid" value="<?php echo $pwpid; ?>">
 
 		<p class="submit">
 			<input type="submit" name="bblm_remove_player" tabindex="4" value="Remove Player" title="Remove Player"/>
