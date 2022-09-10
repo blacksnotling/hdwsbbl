@@ -367,6 +367,10 @@
             }
 
             echo '</tbody></table>';
+
+            if ( 16 != $teamplayercount->NUM) {
+                //Only display the form if there are spare positions
+
 ?>
           <form id="addbulk_player_detail" method="post" action="">
 
@@ -418,8 +422,10 @@
           <input type="submit" name="bblm_addbulk_addplayer" id="bblm_addbulk_addplayer" value="Add Players" title="Add Players" />
           </form>
 <?php
-
-
+            } //end of if there are spaces free on the roster
+            else {
+              echo '<p>' . __( 'There are no free positions on this roster', 'bblm' ) . '</p>';
+            }
 
         } //end of addbulk_player_details
 
