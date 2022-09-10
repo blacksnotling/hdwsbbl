@@ -1593,7 +1593,7 @@ if (isset($_POST['bblm_team_tbupdate'])) {
 																				if ($stadposts = $wpdb->get_results($stadpostsql)) {
 																					//echo '<ul>';
 																					foreach ($stadposts as $stad) {
-																						$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_team' WHERE `".$wpdb->posts."`.`ID` = '".$stad->SWPID."';";
+																						$stadupdatesql = "UPDATE `".$wpdb->posts."` SET `post_parent` = '0', `post_type` = 'bblm_team' WHERE `".$wpdb->posts."`.`ID` = '".$stad->TWPID."';";
 																						//print("<li>".$stadupdatesql."</li>");
 																						if ( $wpdb->query($stadupdatesql) ) {
 																							$result = true;
