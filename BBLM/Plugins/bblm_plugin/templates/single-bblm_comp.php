@@ -52,7 +52,8 @@
           echo '<div class="bblm_info"><p>This Competition is now <strong>complete</strong>. <a href="#awardsfull" title="See the rest of the awards assigned in this competition">See the Awards earnt this Competition</a></p></div>';
         }
 			}
-      if ( $meta['comp_legacy'][0] ) {
+      if ( array_key_exists('comp_legacy',$meta) ) {
+
         bblm_display_legacy_notice( "Competition" );
       }
 ?>
