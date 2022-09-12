@@ -885,7 +885,6 @@ table.bblm_brackets td {
 
     .single-post .has-post-thumbnail .entry-header .entry-title,
     .page .has-post-thumbnail .entry-header .entry-title {
-        position: absolute;
         bottom: 36px;
         padding: 0 0.5em;
         background: #fff;
