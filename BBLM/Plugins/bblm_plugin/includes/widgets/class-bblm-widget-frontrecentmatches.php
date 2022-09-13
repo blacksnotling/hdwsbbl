@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.0
+ * @version   1.1
  */
 
 class BBLM_Widget_FrontRecentMatchSum extends WP_Widget {
@@ -78,7 +78,7 @@ class BBLM_Widget_FrontRecentMatchSum extends WP_Widget {
                 <?php echo bblm_get_match_link( $o->ID ); ?>
               </h4>
               <h5 class="bblm-event-results">
-                <span class="bblm-result">1-0</span>
+                <span class="bblm-result"><?php echo (int) $match->m_teamAtd . ' - ' . (int) $match->m_teamBtd; ?></span>
               </h5>
               <div class="sp-event-comp"><?php echo bblm_get_competition_link( $match->CWPID ); ?></div>
               <time class="bblm-event-date">
