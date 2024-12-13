@@ -9,7 +9,7 @@
   	 * @author 		Blacksnotling
   	 * @category 	Admin
   	 * @package 	BBowlLeagueMan/Admin
-  	 * @version   1.0
+  	 * @version   1.2 (BB7)
   	 */
 
   	class BBLM_Player_AddBulk {
@@ -63,12 +63,19 @@
 
             if ( strlen( $name ) > 0) {
 
+              $low_cost_linos = 0;
+
               //The Player name submitted was not blank
               //Now we largly follow the script from add player
 
               //Get team information (name, ID, Slug)
               $teamdeetsql = 'SELECT * FROM '.$wpdb->prefix.'team WHERE t_id = ' . $addbulk_team;
               $teamdeet = $wpdb->get_row( $teamdeetsql );
+
+              //Check to see if players teams race has "low cost linos"
+              if ( BBLM_CPT_Race::is_race_cheap_linos( $teamdeet->r_id ) ) {
+                $low_cost_linos = 1;
+              }
 
               //Get Position Details
               $racedeetsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_id = ' . $position;
@@ -79,9 +86,17 @@
               $position_ma = $racedeet->pos_ma;
               $position_st = $racedeet->pos_st;
               $position_ag = $racedeet->pos_ag;
+              $position_pa = $racedeet->pos_pa;
               $position_av = $racedeet->pos_av;
               $position_skills = $racedeet->pos_skills;
-              $position_cost = $racedeet->pos_cost;
+              $position_cost_tv = $racedeet->pos_cost;
+              $position_cost_bank = $racedeet->pos_cost;
+              $position_default = $racedeet->pos_freebooter;
+
+              //If the player being added is permanent, the teams race has "low cost Linos", and the position is the default (freebooter) then the cost is zero
+            	if ( $position_default && $low_cost_linos ) {
+                $position_cost_tv = 0;
+              }
 
               //Generate Page content
               $bblm_page_content = '&quot;' . $name . '&quot; is a ' . $position_name . ' for ' . esc_html( get_the_title( $teamdeet->WPID ) ) . ' playing as number ' . $num;
@@ -93,8 +108,9 @@
               $bblm_guid = $bblm_guid."/";
               $bblm_guid .= $bblm_page_slug;
 
-              $teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$position_cost.'\'';
-            	$teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost.'\' ';
+              $teamupdatesql = 'UPDATE `'.$wpdb->prefix.'team` SET `t_tv` = t_tv+\''.$position_cost_tv.'\'';
+              $teamupdatesql .= ', `t_ctv` = t_ctv+\''.$position_cost_tv.'\' ';
+              $teamupdatesql .= ', `t_bank` = t_bank-\''.$position_cost_bank.'\' ';
               $teamupdatesql .= ' WHERE `t_id` = '.$addbulk_team.' LIMIT 1';
 
               $my_post = array(
@@ -109,9 +125,11 @@
 
               if ($bblm_submission = wp_insert_post( $my_post )) {
 
-                add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.player.php');
+                add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
 
-                $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost.'\', \''.$position_cost.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
+
+                $playersql = 'INSERT INTO `'.$wpdb->prefix.'player` (`p_id`, `t_id`, `pos_id`, `p_name`, `p_num`, `p_ma`, `p_st`, `p_ag`, `p_pa`, `p_av`, `p_spp`, `p_skills`, `p_mng`, `p_injuries`, `p_cost`, `p_cost_ng`, `p_status`, `p_img`, `p_former`, `WPID`) VALUES (\'\', \''.$addbulk_team.'\', \''.$position.'\', \''.$name.'\', \''.$num.'\', \''.$position_ma.'\', \''.$position_st.'\', \''.$position_ag.'\', \''.$position_pa.'\', \''.$position_av.'\', \'0\', \''.$position_skills.'\', \'0\', \'none\', \''.$position_cost_tv.'\', \''.$position_cost_tv.'\', \'1\', \'\', \'0\', \''.$bblm_submission.'\')';
+
 
                 //Insert into the Player table
                 $wpdb->query($playersql);

@@ -138,6 +138,108 @@ class BBLM_CPT_Team {
 
   } //end of display_team_list_with_stats()
 
+	/**
+		* returns the number of sponsors the team has
+		* takes in the WPID of the team in question
+		*
+		* @param wordpress $query
+		* @return intiger
+		*/
+		public static function get_team_sponsors_count( $ID ) {
+
+			$terms = wp_get_post_terms( $ID, 'team_sponsors');
+			$terms_count = count ( $terms );
+
+			return $terms_count;
+
+		} //end of get_team_sponsors_count()
+
+	/**
+		* displays the teams custom logo, or the race icon if it does not exixst
+		* takes in the WPID of the team in question
+		* This does not sanitise for the TBD team. For that use the bblm_get_team_link_logo() function
+		*
+		* @param wordpress $query
+		* @param size - the size required for the image
+		* @return none
+		*/
+		public static function display_team_logo( $ID, $size ) {
+			global $wpdb;
+
+			switch ( $size ) {
+			 case ( 'medium' == $size ):
+					 break;
+			 case ( 'icon' == $size ):
+					 break;
+			 case ( 'mini' == $size ):
+					 break;
+			 default :
+					 $size = 'icon';
+					 break;
+		 	 }
+
+			 //Determine if a custom logo is present
+			 if ( has_post_thumbnail( $ID ) ) {
+
+				 //The team has a thumbnail
+				 echo get_the_post_thumbnail( $ID, 'bblm-fit-' . $size );
+
+			 }
+			 else {
+				 //Display the race Icon
+				 $racesql = 'SELECT r_id FROM '.$wpdb->prefix.'team WHERE WPID = ' . $ID;
+				 $rid = $wpdb->get_var($racesql);
+
+				 BBLM_CPT_Race::display_race_icon( $rid, $size );
+			 }
+
+		} //end of display_team_logo()
+
+	/**
+		* returns the teams custom logo, or the race icon if it does not exixst
+		* takes in the WPID of the team in question
+		* This does not sanitise for the TBD team. For that use the bblm_get_team_link_logo() function
+		*
+		* @param wordpress $query
+		* @param size - the size required for the image
+		* @return the icon
+		*/
+		public static function get_team_logo( $ID, $size ) {
+				global $wpdb;
+
+				$output = '';
+
+				switch ( $size ) {
+				 case ( 'medium' == $size ):
+						 break;
+				 case ( 'icon' == $size ):
+						 break;
+				 case ( 'mini' == $size ):
+						 break;
+				 default :
+						 $size = 'icon';
+						 break;
+			 	 }
+
+				 //Determine if a custom logo is present
+				 if ( has_post_thumbnail( $ID ) ) {
+
+					 //The team has a thumbnail
+					 $output = get_the_post_thumbnail( $ID, 'bblm-fit-' . $size );
+
+				 }
+				 else {
+					 //Display the race Icon
+					 $racesql = 'SELECT r_id FROM '.$wpdb->prefix.'team WHERE WPID = ' . $ID;
+					 $rid = $wpdb->get_var( $racesql );
+
+					 $output = BBLM_CPT_Race::get_race_icon( $rid, $size );
+				 }
+
+				 return $output;
+
+			} //end of get_team_logo()
+
 
 } //end of class
 

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * THe class that handles the output of Statistics tables
  *
  * @class 		BBLM_Stat
- * @version		1.3.2
+ * @version		1.4
  * @package		BBowlLeagueMan/Statistics
  * @category	Class
  * @author 		blacksnotling
@@ -351,5 +351,73 @@ if ( ! defined( 'ABSPATH' ) ) {
       }
 
     }//end of display_stats_breakdown()
+
+		/**
+		 * Outputs the detailed statistics break down of all Star Players
+		 *
+		 *
+		 * @param wordpress $query
+		 * @return html
+		 */
+		 public static function display_stats_breakdown_star() {
+			 global $wpdb;
+
+			 $bblm_star_team = bblm_get_star_player_team();
+
+			 $stargmespldsql = 'SELECT COUNT(DISTINCT M.m_id) AS VALUE FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P WHERE P.p_id = M.P_id AND P.t_id = '.$bblm_star_team;
+			 if ( $matchnum = $wpdb->get_var( $stargmespldsql ) ) {
+
+				 //Stars have been used, generate the SQL now
+				 $matchstatssql = 'SELECT SUM(M.mp_td) AS TD, SUM(M.mp_cas) AS CAS, SUM(M.mp_comp) AS COMP, SUM(M.mp_int) AS MINT, SUM(P.p_cost) AS COST, SUM(M.mp_SPP) AS SPP, SUM(M.mp_mvp) AS MVP FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player P WHERE P.p_id = M.P_id AND M.mp_counts = 1 AND P.t_id = '.$bblm_star_team;
+				 if ( $matchstats = $wpdb->get_results( $matchstatssql ) ) {
+					 foreach ( $matchstats as $ms ) {
+						 $tottd = $ms->TD;
+						 $totcas = $ms->CAS;
+						 $totcomp = $ms->COMP;
+						 $totint = $ms->MINT;
+						 $totcost = $ms->COST;
+						 $totspp = $ms->SPP;
+						 $totmvp = $ms->MVP;
+					 }
+				 }
+				 $killsnumsql = 'SELECT COUNT(*) AS KILLS FROM '.$wpdb->prefix.'player_fate F, '.$wpdb->prefix.'player P WHERE (F.f_id = 1 OR F.f_id = 6 OR F.f_id = 7) AND F.pf_killer = P.p_id AND P.t_id = '.$bblm_star_team;
+				 $killnum = $wpdb->get_var( $killsnumsql );
+
+?>
+
+					 <p><?php echo __( 'Combined, the Star Players have' , 'bblm' ); ?></p>
+					 <ul>
+						 <li><?php echo __( 'Taken Part in', 'bblm' ); ?> <strong><?php echo $matchnum; ?></strong> <?php echo __( 'unique matches', 'bblm' ); ?></li>
+<?php
+
+						if ( 0 < $tottd ) {
+							echo '<li>' . __( 'Score', 'bblm' ) . ' <strong>' . $tottd . '</strong> ' . __( 'Touchdowns (average', 'bblm' ) . '  <strong>' . round( $tottd/$matchnum,1 ) . '</strong> ' . __( 'per appearance', 'bblm' ) . ')</li>';
+						}
+						if ( 0 < $totcas ) {
+							echo '<li>' . __( 'Cause', 'bblm' ) . ' <strong>' . $totcas . '</strong> ' . __( 'Casualties (average', 'bblm' ) . '  <strong>' . round( $totcas/$matchnum,1 ) . '</strong> ' . __( 'per appearance', 'bblm' ) . ')</li>';
+						}
+						if ( 0 < $totcomp ) {
+							echo '<li>' . __( 'Make', 'bblm' ) . ' <strong>' . $totcomp . '</strong> ' . __( 'successful Completions (average', 'bblm' ) . '  <strong>' . round( $totcomp/$matchnum,1 ) . '</strong> ' . __( 'per appearance', 'bblm' ) . ')</li>';
+						}
+						if ( 0 < $totint ) {
+							echo '<li>' . __( 'Catch', 'bblm' ) . ' <strong>' . $totint . '</strong> ' . __( 'Interceptions (average', 'bblm' ) . '  <strong>' . round( $totint/$matchnum,1 ) . '</strong> ' . __( 'per appearance', 'bblm' ) . ')</li>';
+						}
+						if ( 0 < $totmvp ) {
+							echo '<li>' . __( 'Deprive Players of', 'bblm' ) . ' <strong>' . $totmvp . '</strong> ' . __( 'MVP Awards', 'bblm' ) . '</li>';
+						}
+						if ( 0 < $totspp ) {
+							echo '<li>' . __( 'Earn a total of', 'bblm' ) . ' <strong>' . $totspp . '</strong> ' . __( 'Star Player Points', 'bblm' ) . '</li>';
+						}
+						if ( 0 < $killnum ) {
+							echo '<li>' . __( 'Kill', 'bblm' ) . ' <strong>' . $killnum . '</strong> ' . __( 'players (average', 'bblm' ) . '  <strong>' . round( $killnum/$matchnum,1 ) . '</strong> ' . __( 'per appearance', 'bblm' ) . ')</li>';
+						}
+?>
+
+					 </ul>
+					 <p><?php echo __( 'To date the teams of the league have spent ', 'bblm' ); ?><strong><?php echo number_format( $totcost ); ?></strong>gp <?php echo __( 'on hiring Star Players!' , 'bblm'); ?></p>
+
+<?php
+			} //end of if star Players have played a match
+		}//end of display_stats_breakdown_star()
 
  }//end of class

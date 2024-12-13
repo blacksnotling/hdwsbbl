@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Core
  * @package 	BBowlLeagueMan/Functions
- * @version   1.4
+ * @version   1.5
  */
 
  /**
@@ -85,31 +85,22 @@ function bblm_get_team_link_logo( $ID, $size='medium' ) {
   $team_name = bblm_get_team_name( $ID );
   $output = "";
 
-	$output .= '<a title="Read more about ' . $team_name . '" href="' . get_post_permalink( $ID ) . '">';
-
-	//Determine if a custom logo is present
 	$teamsql = 'SELECT * FROM '.$wpdb->prefix.'team T WHERE T.WPID = '. $ID;
 	$team = $wpdb->get_row ( $teamsql );
-	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/" . $team->t_sname . "_big.gif";
-	if (file_exists($filename)) {
-		$output .= '<img src="' . home_url() . '/images/teams/' . $team->t_sname . '_big.gif" alt="' . $team_name . ' Logo" />';
+
+	if ( $bblm_tbd_team == $team->t_id ) {
+		//If the team is TBD then display the logo of the star races (the league shiled)
+		$options = get_option( 'bblm_config' );
+		$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
+
+		$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, $size );
 	}
 	else {
-		if ( $bblm_tbd_team == $team->t_id ) {
-			//If the team is TBD then display the logo of the star races (the league shiled)
-			$options = get_option( 'bblm_config' );
-			$bblm_star_race = htmlspecialchars( $options[ 'race_star' ], ENT_QUOTES );
-
-			$output .= BBLM_CPT_Race::get_race_icon( $bblm_star_race, $size );
-		}
-		else {
-			//otherwise display the race logo
-			$output .= BBLM_CPT_Race::get_race_icon( $team->r_id, $size );
-		}
+		$output .= '<a title="Read more about ' . $team_name . '" href="' . get_post_permalink( $ID ) . '">';
+		$output .= BBLM_CPT_Team::get_team_logo( $ID, $size );
+		$output .= '</a>';
 
 	}
-
-	$output .= '</a>';
 
   return __( $output, 'bblm');
 
@@ -455,3 +446,51 @@ function bblm_get_match_link_score( $ID, $formatted = 1 ) {
   return __( $output, 'bblm');
 
 }// end of bblm_get_match_link_score
+
+/**
+ * returns the ordinal of a number (th, nd, rd, etc)
+ * Defaults to skills
+ *
+ * @param int the number to have the ordinal appended
+ * @return string
+ */
+ function bblm_ordinal( $number ) {
+	 $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+	 if ( ( ( $number % 100 ) >= 11 ) && ( ( $number%100 ) <= 13 ) ) {
+		 return $number. 'th';
+	 }
+	 else {
+		 return $number. $ends[$number % 10];
+	 }
+ } //end of bblm_ordinal
+
+ /**
+  * Returns the name of a Race, properly escaped and formatted
+  * Takes in the ID of the Wordpress Page
+  */
+ function bblm_get_roster_name( $ID ) {
+
+   $output = "";
+
+   $output .= esc_html( get_the_title( $ID ) );
+
+   return $output;
+
+ }// end of bblm_get_season_name
+
+ /**
+  * Returns the link of a Roster, properly escaped and formatted
+  * Takes in the ID of the Wordpress Page of the TEAM
+	* Differs slightly to the other link functions as the output is consistant regardless of output
+  */
+ function bblm_get_roster_link( $ID ) {
+   $output = "";
+
+	 //Need to determine the ID of the Roster Page for this team
+	 $roster = get_post_meta( $ID, 'team_roster', true );
+
+   $output .= '<a title="View the full Roster" href="' . get_post_permalink( $roster ) . '">View Full Roster &gt;&gt;</a>';
+
+   return __( $output, 'bblm');
+
+ }// end of bblm_get_season_link

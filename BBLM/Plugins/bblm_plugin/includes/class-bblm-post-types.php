@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registers post types and taxonomies required for BBowlLeagueMan
  *
  * @class 		BBLM_Post_types
- * @version		1.6
+ * @version		1.7
  * @package		BBowlLeagueMan/CPTCore
  * @category	Class
  * @author 		blacksnotling
@@ -304,7 +304,40 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
-
+		register_post_type( 'bblm_star',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Star Players', 'bblm' ),
+					'singular_name' 		=> __( 'Star Player', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Star', 'bblm' ),
+					'add_new' 			=> __( 'New Star', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Star', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Star Player', 'bblm' ),
+					'view_items' 			=> __( 'View Star Players', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Star Players', 'bblm' ),
+					'featured_image'		=> __( 'Star Photo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Photo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'star-players' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-star-filled',
+			)
+		); //end of bblm_star
 		//Start of inducements
 		register_post_type( 'bblm_inducement',
 			array(
@@ -336,6 +369,104 @@ class BBLM_Post_types {
 				'show_in_menu' => 'bblm_main_menu',
 			)
 		); //end of Match
+		register_post_type( 'bblm_team',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Teams', 'bblm' ),
+					'singular_name' 		=> __( 'Team', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Team', 'bblm' ),
+					'add_new' 			=> __( 'New Team', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Team', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Team', 'bblm' ),
+					'view_items' 			=> __( 'View Teams', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Teams', 'bblm' ),
+					'featured_image'		=> __( 'Team Logo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Logo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Logo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Logo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'teams' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-groups',
+			)
+		); //end of bblm_team
+		register_post_type( 'bblm_player',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Players', 'bblm' ),
+					'singular_name' 		=> __( 'Player', 'bblm' ),
+					'add_new_item' 			=> __( 'Add a new Player', 'bblm' ),
+					'add_new' 			=> __( 'New Player', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Player', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Player', 'bblm' ),
+					'view_items' 			=> __( 'View Players', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Players', 'bblm' ),
+					'featured_image'		=> __( 'Player Photo', 'bblm' ),
+					'set_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+					'remove_featured_image' => __( 'Remove Photo', 'bblm' ),
+					'use_featured_image' 	=> __( 'Select Photo', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'player' ),
+				'supports' 				=> array( 'title', 'editor', 'thumbnail' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-admin-users',
+			)
+		); //end of bblm_player
+		register_post_type( 'bblm_roster',
+			array(
+				'labels' => array(
+					'name' 					=> __( 'Rosters', 'bblm' ),
+					'singular_name' 		=> __( 'Roster', 'bblm' ),
+					'add_new_item' 			=> __( 'Create Roster', 'bblm' ),
+					'add_new' 			=> __( 'New Roster', 'bblm' ),
+					'edit_item' 			=> __( 'Edit Roster', 'bblm' ),
+					'new_item' 				=> __( 'New', 'bblm' ),
+					'view_item' 			=> __( 'View Roster', 'bblm' ),
+					'view_items' 			=> __( 'View Rosters', 'bblm' ),
+					'search_items' 			=> __( 'Search', 'bblm' ),
+					'not_found' 			=> __( 'No results found.', 'bblm' ),
+					'not_found_in_trash' 	=> __( 'No results found.', 'bblm' ),
+					'all_items' 			=> __( 'Rosters', 'bblm' ),
+				),
+				'public' 				=> true,
+				'show_ui' 				=> true,
+				'map_meta_cap' 			=> true,
+				'publicly_queryable' 	=> true,
+				'exclude_from_search' 	=> false, //don't exclude from search
+				'hierarchical' 			=> false,
+				'rewrite' 				=> array( 'slug' => 'roster' ),
+				'supports' 				=> array( 'title' ),
+				'has_archive' 			=> true,
+				'show_in_nav_menus' 	=> true,
+				'show_in_menu' => 'bblm_main_menu',
+				'menu_icon' 			=> 'dashicons-text-page',
+			)
+		); //end of bblm_roster
 	}
 
   /**
@@ -367,10 +498,13 @@ class BBLM_Post_types {
        )
      );
 
-		 // Competitions Tax race traits
+		 // Tax race special rules / traits
 		 register_taxonomy(
 			 'race_rules',
-			 'bblm_race',
+			 array(
+				 'bblm_race',
+				 'bblm_star'
+			 ),
 			 array(
 				 'labels' => array(
 					 'name' => _x( 'Race Traits / Special Rules', 'taxonomy general name', 'bblm' ),
@@ -385,8 +519,32 @@ class BBLM_Post_types {
 				 'sort' => true,
 				 'args' => array( 'orderby' => 'term_order' ),
 				 'rewrite' => array( 'slug' => 'race-rules' ),
+				 'meta_box_cb' => 'post_categories_meta_box',
 			 )
 		 );
+
+		 // Tax for Sponsors
+		 register_taxonomy(
+			 'team_sponsors',
+			 'bblm_team',
+			 array(
+				 'labels' => array(
+					 'name' => _x( 'Team Sponsors', 'taxonomy general name', 'bblm' ),
+					 'singular_name' => _x( 'Team Sponsors', 'taxonomy singular name', 'bblm' ),
+					 'search_items' => __( 'Search Sponsors', 'bblm' ),
+					 'all_items' => __( 'All Sponsors', 'bblm' ),
+					 'edit_item' => __( 'Edit Sponsor', 'bblm' ),
+					 'update_item' => __( 'Update Sponsor', 'bblm' ),
+					 'add_new_item' => __( 'Add New Sponsor', 'bblm' ),
+					 'new_item_name' => __( 'New Sponsor Name', 'bblm' ),
+				 ),
+				 'sort' => true,
+				 'args' => array( 'orderby' => 'term_order' ),
+				 'rewrite' => array( 'slug' => 'race-rules' ),
+				 'meta_box_cb' => 'post_categories_meta_box',
+			)
+		);
+
 
    }
 
@@ -405,6 +563,8 @@ class BBLM_Post_types {
 		include_once( 'post-types/class-bblm-cpt-comp.php' );
 		include_once( 'post-types/class-bblm-cpt-award.php' );
 		include_once( 'post-types/class-bblm-cpt-team.php' );
+		include_once( 'post-types/class-bblm-cpt-player.php' );
+		include_once( 'post-types/class-bblm-cpt-star.php' );
 		include_once( 'post-types/class-bblm-cpt-season.php' );
 		include_once( 'post-types/class-bblm-cpt-race.php' );
 

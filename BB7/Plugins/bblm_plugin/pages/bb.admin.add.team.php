@@ -49,6 +49,8 @@ if(isset($_POST['bblm_team_submit'])) {
 		add_post_meta( $bblm_tstad, 'stadium_featured', 'No' );
 	}
 
+	//Add the free Dedicated Fan
+	$bblm_tff = $_POST['bblm_tff']+1;
 
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($_POST['bblm_tname']),
@@ -60,12 +62,13 @@ if(isset($_POST['bblm_team_submit'])) {
 		'post_parent' => $bblm_page_parent
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.team.php');
+		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
+		add_post_meta($bblm_submission, 'team_motto', esc_textarea( $_POST['bblm_tmotto'] ) );
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
 
-		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$_POST['bblm_tff'].'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \''.$_POST['bblm_ttype'].'\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'team` (`t_id`, `t_name`, `r_id`, `ID`, `t_hcoach`, `t_ff`, `t_rr`, `t_apoc`, `t_cl`, `t_ac`, `t_bank`, `t_tv`, `t_ctv`, `t_active`, `t_show`, `type_id`, `t_sname`, `stad_id`, `t_img`, `t_roster`, `t_guid`, `WPID`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_tname']).'\', \''.$_POST['bblm_trace'].'\', \''.$bblm_tuser.'\', \''.$_POST['bblm_thcoach'].'\', \''.$bblm_tff.'\', \''.$_POST['bblm_trr'].'\', \''.$_POST['bblm_tapoc'].'\', \''.$_POST['bblm_tcl'].'\', \''.$_POST['bblm_tac'].'\', \''.$_POST['bblm_tbank'].'\', \''.$_POST['bblm_ttv'].'\', \''.$_POST['bblm_ttv'].'\', \'1\', \'1\', \'1\', \''.wp_filter_nohtml_kses($_POST['bblm_sname']).'\', \''.$bblm_tstad.'\', \'\', \''.$_POST['bblm_roster'].'\', \''.$bblmpageguid.'\',  \''.$bblm_submission.'\')';
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
@@ -93,7 +96,7 @@ if(isset($_POST['bblm_team_submit'])) {
 				'post_parent' => $bblm_submission
 			);
 			if ($bblm_submission = wp_insert_post( $my_post )) {
-				add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.roster.php');
+				add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_roster.php');
 
 				$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'roster\')';
 				$wpdb->query($bblmmappingsql);
@@ -161,6 +164,10 @@ else if(isset($_POST['bblm_race_select'])) {
 		<td><p><textarea rows="10" cols="50" name="bblm_tdesc" id="bblm_tdesc" class="large-text"></textarea></p></td>
 	</tr>
 	<tr valign="top">
+		<th scope="row"><label for="bblm_tdesc"><?php echo __( 'Team Motto','bblm');?></label></th>
+		<td><p><textarea rows="1" cols="50" name="bblm_tmotto" id="bblm_tmotto" class="large-text"></textarea></p></td>
+	</tr>
+	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_sname">Short Name</label></th>
 		<td><input type="text" name="bblm_sname" size="3" value="" id="bblm_sname" maxlength="5" class="small-text"/><br />
 		This will be displayed on various reports and pages.</td>
@@ -190,7 +197,7 @@ else if(isset($_POST['bblm_race_select'])) {
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
-		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="25" class="large-text"/></td>
+		<td><input type="text" name="bblm_thcoach" size="25" value="Unkown" maxlength="50" class="large-text"/></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tstad"><?php echo __( 'Home Stadium', 'bblm' ); ?></label></th>
@@ -221,19 +228,6 @@ else if(isset($_POST['bblm_race_select'])) {
 			<option value="0">No</option>
 		</select></td>
 	</tr>
-	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_ttype">Team Type</label></th>
-		  <td><select name="bblm_ttype" id="bblm_tuser">
-<?php
-		$typesql = 'SELECT type_id, type_name FROM '.$wpdb->prefix.'team_type ORDER BY type_id';
-		if ($types = $wpdb->get_results($typesql)) {
-			foreach ($types as $type) {
-				print("<option value=\"$type->type_id\">".$type->type_name."</option>\n");
-			}
-		}
-?>
-		</select></td>
-	</tr>
 
 	</table
 
@@ -244,30 +238,26 @@ else if(isset($_POST['bblm_race_select'])) {
 function UpdateBankTv() {
 	var tot_rr = document.getElementById('bblm_trr').value * document.getElementById('bblm_trrcost').value;
 
-	var tot_ff = document.getElementById('bblm_tff').value * 10000;
+	var tot_ff = document.getElementById('bblm_tff').value * 20000;
 
-	var tot_cl = document.getElementById('bblm_tcl').value * 10000;
+	var tot_cl = document.getElementById('bblm_tcl').value * 20000;
 
-	var tot_ac = document.getElementById('bblm_tac').value * 10000;
+	var tot_ac = document.getElementById('bblm_tac').value * 20000;
 
-	var tot_apoc = document.getElementById('bblm_tapoc').value * 50000;
+	var tot_apoc = document.getElementById('bblm_tapoc').value * 80000;
 
-	var tot_tv = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
+	var tot_tv = tot_rr + tot_cl + tot_ac + tot_apoc;
+	var tot_tvb = tot_rr + tot_ff + tot_cl + tot_ac + tot_apoc;
 	document.getElementById('bblm_ttv').value = tot_tv;
 
-	var tot_bank = 1000000 - tot_tv;
+	var tot_bank = 600000 - tot_tvb;
 	document.getElementById('bblm_tbank').value = tot_bank;
 }
 </script>
 
 <?php
-		$racesql = "SELECT r_id, r_name, r_rrcost FROM ".$wpdb->prefix."race WHERE r_id = ".$_POST['bblm_rid'];
-		if ($races = $wpdb->get_results($racesql)) {
-			foreach ($races as $race) {
-				$rid = $race->r_id;
-				$rrcost = $race->r_rrcost;
-			}
-		}
+		$rid = (int) $_POST['bblm_rid'];
+		$rrcost = BBLM_CPT_Race::get_reroll_cost( $rid );
 ?>
 
 	<table class="form-table">
@@ -277,24 +267,25 @@ function UpdateBankTv() {
 		@ <?php print($rrcost); ?> each</td>
 	</tr>
 	<tr valign="top">
-		<th scope="row" valign="top"><label for="bblm_tff">Fan Factor</label></th>
+		<th scope="row" valign="top"><label for="bblm_tff">Dedicated Fans</label></th>
 		  <td><input type="text" name="bblm_tff" size="2" value="0" maxlength="2" id="bblm_tff" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 20,000 each<br />
+		<strong><?php echo __( 'An extra Dedicated Fan will be added for free when the team is created','bblm' ); ?></strong></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tcl">Cheerleaders</label></th>
 		  <td><input type="text" name="bblm_tcl" size="2" value="0" maxlength="2" id="bblm_tcl" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 20,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tac">Assistant Coaches</label></th>
 		  <td><input type="text" name="bblm_tac" size="2" value="0" maxlength="2" id="bblm_tac" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 20,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tapoc">Apothecary</label></th>
 		  <td><input type="text" name="bblm_tapoc" size="1" value="0" maxlength="1" id="bblm_tapoc" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 80,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top">&nbsp;</th>
@@ -332,15 +323,22 @@ else {
 	<tr valign="top">
 		<th scope="row"><label for="bblm_rid">Race</label></th>
 		<td><select name="bblm_rid" id="bblm_rid">
-<?php
-		$racesql = "SELECT R.r_id, R.r_name FROM ".$wpdb->prefix."race R, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P WHERE R.r_id = J.tid AND J.pid = P.ID AND J.prefix = 'r_' ORDER BY R.r_name ASC";
-			if ($races = $wpdb->get_results($racesql)) {
-				foreach ($races as $race) {
-					print("			<option value=\"$race->r_id\">".$race->r_name."</option>\n");
-				}
-			}
-?>
-		</select></td>
+			<?php
+					//Grabs a list of 'posts' from the Stadiums CPT
+					$oposts = get_posts(
+						array(
+							'post_type' => 'bblm_race',
+							'numberposts' => -1,
+							'orderby' => 'post_title',
+							'order' => 'ASC'
+						)
+					);
+					if( ! $oposts ) return;
+					foreach( $oposts as $o ) {
+						echo '<option value="' . $o->ID . '">' . bblm_get_race_name( $o->ID ) . '</option>';
+					}
+
+			?></select></td>
 	</tr>
 	</table>
 

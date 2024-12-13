@@ -19,7 +19,7 @@
     </div><!-- .entry-content -->
 
     <footer class="entry-footer">
-      <p class="postmeta"></p>
+      <p class="postmeta">&nbsp;</p>
     </footer><!-- .entry-footer -->
 
   </article><!-- .post-ID -->

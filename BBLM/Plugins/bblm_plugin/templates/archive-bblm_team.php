@@ -1,11 +1,16 @@
 <?php
-/*
-Template Name: List Teams
-*/
-/*
-*	Filename: bb.core.teams.php
-*	Description: Page template to list the teams.
-*/
+/**
+ * BBowlLeagueMan Teamplate View Team List
+ *
+ * Page Template to List the Teams in the League.
+ *
+ * @author 		Blacksnotling
+ * @category 	Template
+ * @package 	BBowlLeagueMan/Templates
+ */
+ /*
+  * Template Name: View Team List
+  */
 ?>
 <?php get_header(); ?>
 <div id="primary" class="content-area content-area-right-sidebar">
@@ -13,53 +18,54 @@ Template Name: List Teams
   <?php do_action( 'bblm_template_before_posts' ); ?>
 	<?php if (have_posts()) : ?>
 		<?php do_action( 'bblm_template_before_loop' ); ?>
-		<?php while (have_posts()) : the_post(); ?>
 			<?php do_action( 'bblm_template_before_content' ); ?>
 			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<header class="page-header entry-header">
 
-			<h2 class="entry-title"><?php the_title(); ?></h2>
+			<h2 class="entry-title"><?php echo __( 'Teams', 'bblm'); ?></h2>
 
 		</header><!-- .page-header -->
 
 			<div class="entry-content">
 
-					<?php the_content(); ?>
+					<div class="archive-description"><?php echo bblm_echo_archive_desc( 'team' ) ?></div>
 
 <?php
 	//Start of Custom content
-	//$teamsql = "SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team AS R, $wpdb->posts AS P, '.$wpdb->prefix.'bb2wp AS J WHERE R.t_id = J.tid AND P.ID = J.pid AND J.prefix = 't_' AND R.t_show = 1 ORDER BY t_name ASC";
-	$teamsql = 'SELECT P.post_title, T.r_id, P.guid, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id FROM '.$wpdb->prefix.'team T, '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_id = J.tid AND P.ID = J.pid AND J.prefix = \'t_\' AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, P.post_title ASC';
+  $teamsql = 'SELECT T.r_id, T.t_active, T.t_tv, T.t_ctv, T.t_sname, X.type_name, T.t_id, T.WPID AS TWPID FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team_type X WHERE T.type_id = X.type_id AND T.r_id AND T.t_show = 1 ORDER BY T.type_id ASC, T.t_active DESC, T.t_name ASC';
 
-
-if ($teams = $wpdb->get_results($teamsql)) {
+if ( $teams = $wpdb->get_results( $teamsql ) ) {
 	$is_first_status = 0;
 	$current_status = "";
 	$is_first_type = 1;
 	$current_type = "";
 
 	$zebracount = 1;
-	foreach ($teams as $team) {
-		if ($team->type_name !== $current_type) {
+	foreach ( $teams as $team ) {
+		if ( $team->type_name !== $current_type ) {
 			$current_type = $team->type_name;
 			$current_status = $team->t_active;
-			if (1 !== $is_first_type) {
-				print(" 	</tbody>\n	</table>\n</div>");
+			if ( 1 !== $is_first_type ) {
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
 				$zebracount = 1;
 			}
 			$is_first_type = 1;
 		}
-		if ($team->t_active !== $current_status) {
+		if ( $team->t_active !== $current_status ) {
 			$current_status = $team->t_active;
-			if (1 !== $is_first_status) {
-				print(" 	</tbody>\n	</table>\n</div>");
+			if ( 1 !== $is_first_status ) {
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
 				$zebracount = 1;
 			}
 			$is_first_status = 1;
 		}
 
-		if (1 == $current_status) {
+		if ( 1 == $current_status ) {
 			$status_title = "Active Teams";
 		}
 		else {
@@ -67,61 +73,91 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		}
 
 
-		if ($is_first_type) {
-			print("<h3>".$team->type_name." Teams</h3>\n <h4 class=\"bblm-table-caption\">".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm__table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+		if ( $is_first_type ) {
+?>
+      <h3><?php echo $team->type_name . __( ' Teams', 'bblm' ); ?></h3>
+      <h4 class="bblm-table-caption"><?php echo $status_title ?></h4>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+        <table class="bblm__table bblm_sortable">
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamrace"><?php echo __( 'Race', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamvalue"><?php echo __( 'Team Value', 'bblm' ); ?></th>
+              <th class="bblm_tbl_stat"><?php echo __( 'Games', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamcup"><?php echo __( 'Championships', 'bblm' ); ?></th>
+            </tr>
+          </thead>
+        <tbody>
+<?php
 			$is_first_type = 0;
 			$is_first_status = 0;
 		}
-		if ($is_first_status) {
-			print("<h4 class=\"bblm-table-caption\">".$status_title."</h4>\n<div role=\"region\" aria-labelledby=\"Caption01\" tabindex=\"0\">  <table class=\"bblm_table bblm_sortable\">\n	<thead>\n	<tr>\n		<th>&nbsp;</th>\n		<th class=\"bblm_tbl_name\">Team</th>\n		<th class=\"bblm_tbl_teamrace\">Race</th>\n		<th class=\"bblm_tbl_teamvalue\">Team Value</th>\n		<th class=\"bblm_tbl_stat\">Games</th>\n		<th class=\"bblm_tbl_teamcup\">Championships</th>\n	</tr>\n	</thead>\n	<tbody>\n");
+		if ( $is_first_status ) {
+?>
+      <h4 class="bblm-table-caption"><?php echo $status_title ?></h4>
+      <div role="region" aria-labelledby="Caption01" tabindex="0">
+        <table class="bblm__table bblm_sortable">
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th class="bblm_tbl_name"><?php echo __( 'Team', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamrace"><?php echo __( 'Race', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamvalue"><?php echo __( 'Team Value', 'bblm' ); ?></th>
+              <th class="bblm_tbl_stat"><?php echo __( 'Games', 'bblm' ); ?></th>
+              <th class="bblm_tbl_teamcup"><?php echo __( 'Championships', 'bblm' ); ?></th>
+            </tr>
+          </thead>
+        <tbody>
+<?php
 			$is_first_status = 0;
 		}
-		if ($zebracount % 2) {
-      print("		<tr class=\"bblm_tbl_alt\" id=\"".$team->t_id."\">\n");
+		if ( $zebracount % 2 ) {
+      echo '<tr class="bblm_tbl_alt" id="' . $team->t_id . '">';
 		}
 		else {
-			print("		<tr id=\"".$team->t_id."\">\n");
+			echo '<tr id="' . $team->t_id . '">';
 		}
-		print("		<td>");
-
-		$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$team->t_sname."_small.gif";
-		if (file_exists($filename)) {
-			print("<img src=\"".home_url()."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
-		}
-		else {
-			BBLM_CPT_Race::display_race_icon( $team->r_id, 'icon' );
-		}
-		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>" . bblm_get_race_name( $team->r_id ) . "</td>\n		<td>".number_format($team->t_ctv)."gp</td>\n");
+		echo '<td>';
+    BBLM_CPT_Team::display_team_logo( $team->TWPID, 'icon' );
+    echo '</td>';
+    echo '<td>' . bblm_get_team_link( $team->TWPID ) .  '</td>';
+    echo '<td>' . bblm_get_race_name( $team->r_id ) . '</td>';
+    echo '<td>' . number_format( $team->t_ctv ) . 'gp</td>';
 
 
 		$nummatchsql = 'SELECT COUNT(*) AS NMATCH FROM '.$wpdb->prefix.'match_team T, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C WHERE T.m_id = M.WPID AND M.c_id = C.WPID AND C.c_counts = 1 AND T.t_id = '.$team->t_id;
-		$nummatch = $wpdb->get_var($nummatchsql);
+		$nummatch = $wpdb->get_var( $nummatchsql );
 		//If not more than 1 then team is new, set to 0 as the default result will be null).
-		if (NULL == $nummatch) {
+		if ( NULL == $nummatch ) {
 			$nummatch = 0;
 		}
 
-		print("		<td>".$nummatch."</td>\n");
+    echo '<td>' . $nummatch . '</td>';
 
 		$cupscountsql = 'SElECT B.a_id, A.a_name, COUNT(*) AS ANUM FROM '.$wpdb->prefix.'awards_team_comp AS B, '.$wpdb->prefix.'awards AS A WHERE A.a_id = B.a_id AND (B.a_id = 1 or B.a_id = 2 or B.a_id = 3) AND B.t_id = '.$team->t_id.' GROUP BY B.a_id ORDER BY B.a_id ASC';
 		if ($cups = $wpdb->get_results($cupscountsql)) {
-			print("		<td class=\"bblm_tbl_teamcup\">");
-			foreach ($cups as $cup) {
+			echo '<td class="bblm_tbl_teamcup">';
+			foreach ( $cups as $cup ) {
 			print("<img src=\"".home_url()."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
 			}
 			print("</td>\n	</tr>\n");
 		}
 		else {
 			//No Cups won, or error
-			print("		<td>&nbsp;</td>\n	</tr>\n");
+			echo '<td>&nbsp;</td>';
+      echo '</tr>';
 		}
 
 		$zebracount++;
 	}
-	print("	</tbody>\n	</table>\n</div>");
+  echo '</tbody>';
+  echo '</table>';
+  echo '</div>';
 }
 else {
-	print("	<div class=\"bblm_info\">\n		<p>There are no Teams currently set-up!</p>	</div>\n");
+	echo '<div class="bblm_info"> <p>There are no Teams currently set-up!</p>	</div>';
 }
 
 //End of Custom content
@@ -137,7 +173,6 @@ else {
 </article><!-- .post-ID -->
 
 <?php do_action( 'bblm_template_after_content' ); ?>
-<?php endwhile; ?>
 <?php do_action( 'bblm_template_after_loop' ); ?>
 <?php endif; ?>
 <?php do_action( 'bblm_template_after_posts' ); ?>

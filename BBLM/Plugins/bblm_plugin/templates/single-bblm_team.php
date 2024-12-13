@@ -33,11 +33,6 @@
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
 
-				if ($ti->t_roster) {
-					$rosterlinksql = 'SELECT P.guid FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE J.prefix = \'roster\' AND J.pid = P.ID AND J.tid = '.$tid;
-					$rosterlink = $wpdb->get_var($rosterlinksql);
-				}
-
 		}
     if ( $ti->t_legacy ) {
       bblm_display_legacy_notice( "Team" );
@@ -318,23 +313,24 @@
 				//grab the ID of the "Star Player team
 				$bblm_star_team = bblm_get_star_player_team();
 
-				$starplayerssql = 'SELECT P.post_title, P.guid, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player X WHERE P.ID = J.pid AND J.prefix = "p_" AND J.tid = X.p_id AND M.p_id = X.p_id AND X.t_id = '.$bblm_star_team.' AND M.t_id = '.$tid.' GROUP BY M.p_id ORDER BY P.post_title ASC';
-				if ($starplayers = $wpdb->get_results($starplayerssql)) {
-          echo '<h4>' . __('Star Players hired','bblm' ) . '</h4>';
+				$starplayerssql = 'SELECT X.WPID AS PWPID, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player X WHERE M.p_id = X.p_id AND X.t_id = '.$bblm_star_team.' AND M.t_id = '.$tid.' GROUP BY M.p_id ORDER BY X.p_name ASC';
+				if ( $starplayers = $wpdb->get_results( $starplayerssql ) ) {
+          echo '<h4>' . __('Star Players Hired','bblm' ) . '</h4>';
           echo '<ul>';
-					foreach ($starplayers as $spv) {
-						print("				<li><a href=\"".$spv->guid."\" title=\"View the details of this Star Player\">".$spv->post_title."</a>");
-						if (1 < $spv->VISITS) {
-							print(" (x".$spv->VISITS.")");
+					foreach ( $starplayers as $spv ) {
+            echo '<li>';
+            echo bblm_get_player_link( $spv->PWPID );
+						if ( 1 < $spv->VISITS ) {
+              echo ' (x' . $spv->VISITS . ')';
 						}
-						print("</li>\n");
+						echo '</li>';
 					}
-					print("			</ul>\n");
+					echo '</ul>';
 				}
 				/*		End of Star Players	*/
 
 				if ($ti->t_roster) {
-									print("<p><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></p>");
+                  echo '<p>' . bblm_get_roster_link( $ti->WPID ) . '</p>';
 				}
 
 				//Transfers

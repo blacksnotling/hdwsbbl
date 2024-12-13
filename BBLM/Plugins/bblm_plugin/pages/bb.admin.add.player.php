@@ -101,7 +101,7 @@ if (isset($_POST['bblm_team_add'])) {
 			$bblm_posid = 1;
 			//Also add the loner skill
 			if ( "none" == $bblm_posskills ) {
-				$bblm_posskills = "Loner (4+)"; 	
+				$bblm_posskills = "Loner (4+)";
 			}
 			else {
 				$bblm_posskills .= ", Loner (4+)";
@@ -174,14 +174,16 @@ if (isset($_POST['bblm_team_add'])) {
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($bblm_page_title),
 		'post_content' => $bblm_page_content,
-		'post_type' => 'page',
+		'post_type' => 'bblm_player',
 		'post_status' => 'publish',
 		'comment_status' => 'closed',
 		'ping_status' => 'closed',
 		'post_parent' => $bblm_pid
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
-		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php');
+		add_post_meta( $bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_player.php' );
+		add_post_meta( $bblm_submission, 'player_status', '1', true );
+		add_post_meta( $bblm_submission, 'player_team', $bblm_pid, true );
 
 		if ( ( $bblm_default && $low_cost_linos ) || "rrookie" == $freebooter_type ) {
 			$bblm_poscost = 0;

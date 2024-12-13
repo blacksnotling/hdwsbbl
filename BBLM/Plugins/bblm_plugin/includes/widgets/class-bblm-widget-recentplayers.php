@@ -8,7 +8,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1
+ * @version   1.2
  */
 
 class BBLM_Widget_RecentPlayers extends WP_Widget {
@@ -39,7 +39,9 @@ class BBLM_Widget_RecentPlayers extends WP_Widget {
       $instance['numshow'] = 6;
     }
 
-    $playersql = 'SELECT T.WPID, P.WPID AS PID, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND P.t_id = T.t_ID ORDER BY P.WPID DESC LIMIT ' . $instance['numshow'];
+    $bblm_star_team = bblm_get_star_player_team();
+
+    $playersql = 'SELECT T.WPID, P.WPID AS PID, H.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'position H WHERE H.pos_id = P.pos_ID AND T.t_id != '.$bblm_star_team.' AND P.t_id = T.t_ID ORDER BY P.WPID DESC LIMIT ' . $instance['numshow'];
     if ( $player = $wpdb->get_results( $playersql ) ) {
       $zebracount = 1;
 ?>

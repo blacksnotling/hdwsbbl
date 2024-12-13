@@ -38,24 +38,6 @@
 				$teamA = bblm_get_team_name( $tA->TWPID );
 				$teamB = bblm_get_team_name( $tB->TWPID );
 
-				//Check for custom logo and if found set the var for use later on
-				//Team A
-				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tA->t_sname."_big.gif";
-				if (file_exists($filename)) {
-					$tAimg = "<img src=\"".home_url()."/images/teams/".$tA->t_sname."_big.gif\" alt=\"".$tA->t_sname." Logo\" />";
-				}
-				else {
-          $tAimg = get_the_post_thumbnail( $tA->r_id, 'bblm-fit-medium' );
-				}
-				//Team B
-				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$tB->t_sname."_big.gif";
-				if (file_exists($filename)) {
-					$tBimg = "<img src=\"".home_url()."/images/teams/".$tB->t_sname."_big.gif\" alt=\"".$tB->t_sname." Logo\" />";
-				}
-				else {
-          $tBimg = get_the_post_thumbnail( $tB->r_id, 'bblm-fit-medium' );
-				}
-
 ?>
 			<header class="entry-header">
 				<h2 class="entry-title"><?php echo bblm_get_team_link( $tA->TWPID ); ?> vs <?php echo bblm_get_team_link( $tB->TWPID ); ?></h2>
@@ -79,9 +61,9 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><strong><?php echo $tAimg;?></strong></td>
+							<td><strong><?php BBLM_CPT_Team::display_team_logo( $tA->TWPID, 'medium' ); ?></strong></td>
 							<th>&nbsp;</th>
-							<td><strong><?php echo $tBimg;?></strong></td>
+							<td><strong><?php BBLM_CPT_Team::display_team_logo( $tB->TWPID, 'medium' ); ?></strong></td>
 						</tr>
 						<tr>
 							<td class="bblm_score"><strong><?php echo $tA->mt_td;?></strong></td>
@@ -171,8 +153,6 @@
         $taplayersql = 'SELECT M.*, Q.p_num, Q.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q WHERE Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamA.' ORDER BY Q.p_num ASC';
 				if ( $taplayer = $wpdb->get_results( $taplayersql ) ) {
 					//as we have players, initialize arrays to hold injuries and increases
-					$tainj = array();
-					$tainc = array();
 					$zebracount = 1;
 ?>
           <table class="bblm_table">
@@ -199,14 +179,6 @@
 							else {
 								$tamvp .=" and #".$tap->p_num;
 							}
-						}
-						if ( "none" !== $tap->mp_inj ) {
-						//if this player has an injury record it for later
-							$tainj[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inj;
-						}
-						if ( "none" !== $tap->mp_inc ) {
-						//if this player has an injury record it for later
-							$tainc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ( $zebracount % 2 ) {
               echo '<tr class="bblm_tbl_alt">';
@@ -247,8 +219,6 @@
         $tbplayersql = 'SELECT M.*, Q.p_num, Q.WPID AS PWPID FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'player Q WHERE Q.p_id = M.p_id AND M.m_id = '.$m->WPID.' AND M.t_id = '.$m->m_teamB.' ORDER BY Q.p_num ASC';
 				if ( $taplayer = $wpdb->get_results( $tbplayersql ) ) {
 					//as we have players, initialize arrays to hold injuries and increases
-					$tbinj = array();
-					$tbinc = array();
 					$zebracount = 1;
 ?>
           <table class="bblm_table">
@@ -275,14 +245,6 @@
 							else {
 								$tbmvp .=" and #".$tap->p_num;
 							}
-						}
-						if ("none" !== $tap->mp_inj) {
-						//if this player has an injury record it for later
-							$tbinj[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inj;
-						}
-						if ("none" !== $tap->mp_inc) {
-						//if this player has an injury record it for later
-							$tbinc[] = "#".$tap->p_num." - ".bblm_get_player_name( $tap->PWPID )." - ".$tap->mp_inc;
 						}
 						if ($zebracount % 2) {
               echo '<tr class="bblm_tbl_alt">';
@@ -325,92 +287,28 @@
 					</tr>
 					<tr>
 						<td>
-						<?php
-						if ( isset( $tainj ) ) {
-							if ( 0 !== count( $tainj ) ) {
-								//If players where inj, we have details
-								echo '<ul>';
-								foreach ( $tainj as $taijured ) {
-                  echo '<li>' . $taijured . '</li>';
-								}
-								echo '</ul>';
-							}
-							else {
-								echo 'None';
-							}
-						}
-						else {
-							//we have no player actions recorded
-							echo 'Not Recorded';
-						}
-						?>
+<?php
+            echo BBLM_CPT_Match::get_match_injuries( $m->WPID, $tA->TWPID );
+?>
 						</td>
 						<th class="bblm_tottux"><?php echo __( 'Inj', 'bblm' ); ?></th>
 						<td>
-						<?php
-						if ( isset( $tbinj ) ) {
-							if ( 0 !== count( $tbinj ) ) {
-								//If players where inj, we have details
-								echo '<ul>';
-								foreach ( $tbinj as $tbijured ) {
-									echo '<li>' . $tbijured . '</li>';
-								}
-								echo '</ul>';
-							}
-							else {
-								echo 'None';
-							}
-						}
-						else {
-							//we have no player actions recorded
-							echo 'Not Recorded';
-						}
-						?>
+<?php
+            echo BBLM_CPT_Match::get_match_injuries( $m->WPID, $tB->TWPID );
+?>
 						</td>
 					</tr>
 					<tr>
 						<td>
-						<?php
-						if ( isset( $tainc ) ) {
-							if ( 0 !== count( $tainc ) ) {
-								//If players where inj, we have details
-								echo '<ul>';
-								foreach ( $tainc as $taiinc ) {
-                  echo '<li>' . $taiinc . '</li>';
-								}
-								echo '</ul>';
-							}
-							else {
-								echo 'None';
-							}
-						}
-						else {
-							//we have no player actions recorded
-							echo 'Not Recorded';
-						}
-						?>
+<?php
+						echo BBLM_CPT_Match::get_match_increases( $m->WPID, $tA->TWPID );
+?>
 						</td>
 						<th class="bblm_tottux"><?php echo __( 'Inc', 'bblm' ); ?></th>
 						<td>
-						<?php
-						if ( isset( $tbinc ) ) {
-							if ( 0 !== count( $tbinc ) ) {
-								//If players where inj, we have details
-								echo '<ul>';
-								foreach ( $tbinc as $tbiinc ) {
-									echo '<li>' . $tbiinc . '</li>';
-								}
-								echo '</ul>';
-							}
-							else {
-								echo 'None';
-							}
-						}
-						else {
-							//we have no player actions recorded
-							echo 'Not Recorded';
-						}
-						?>
+<?php
+            echo BBLM_CPT_Match::get_match_increases( $m->WPID, $tB->TWPID );
+?>
 						</td>
 					</tr>
 					<tr>

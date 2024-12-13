@@ -51,10 +51,10 @@ class HWSBBL_Widget_RecentNews extends WP_Widget {
               $the_query->the_post();
 
               if ( $zebracount % 2 ) {
-                echo '<tr class="bblm_tbl_alt" id="F'. $m->f_id . '">';
+                echo '<tr class="bblm_tbl_alt">';
               }
               else {
-                echo '<tr id="F'. $m->f_id . '">';
+                echo '<tr>';
               }
 ?>
     <td><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></td>

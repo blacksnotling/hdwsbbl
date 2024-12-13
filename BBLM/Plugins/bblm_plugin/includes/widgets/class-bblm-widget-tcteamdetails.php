@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.3
+ * @version   1.4
  */
 
 class BBLM_Widget_TCteamdetails extends WP_Widget {
@@ -26,26 +26,15 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
     global $wpdb;
     global $post;
 
-    $option = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $option[ 'page_team' ], ENT_QUOTES );
-    $staplayerteam = htmlspecialchars( $option[ 'page_stars' ], ENT_QUOTES );
+    $post_type = get_post_type();
 
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
-
-
-    //Check we are on the correct poat_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    //and that this isn't the star player page
-    if ( ( $parentoption == $parentpage ) && ( $post->ID != (int) $staplayerteam ) ) {
+    //Check we are on the correct poat_type page, and not an archive before we display the widget
+    if ( $post_type == "bblm_team" && is_single() ) {
 
       //pulling in the vars from the single-bblm_team template
       global $tid;
       global $has_played;
       global $ti;
-      global $rosterlink;
       global $has_cups;
       global $champs;
 
@@ -96,10 +85,13 @@ class BBLM_Widget_TCteamdetails extends WP_Widget {
         $meta = get_post_custom( $post->ID );
         $tmotto = ! isset( $meta['team_motto'][0] ) ? '' : $meta['team_motto'][0];
         echo '<li><strong>' . __( 'Motto', 'bblm' ) . ':</strong> <em>' . sanitize_text_field( $tmotto ) . '</em></li>';
+        if ( BBLM_CPT_Team::get_team_sponsors_count( $post->ID ) ) {
+          echo '<li><strong>' . __( 'Current Sponsors:', 'bblm' ) . '</strong> ' . strip_tags( get_the_term_list( $post->ID, 'team_sponsors', '', ', ', '' ) . '</li>' );
+        }
         echo '</ul>';
         if ( $ti->t_roster ) {
           echo '<ul>';
-          echo '<li><a href="' . $rosterlink . '" title="View the teams full roster">View Full Roster &gt;&gt;</a></li>';
+          echo '<li>' . bblm_get_roster_link( $ti->WPID ) . '</li>';
           echo '</ul>';
         }
 

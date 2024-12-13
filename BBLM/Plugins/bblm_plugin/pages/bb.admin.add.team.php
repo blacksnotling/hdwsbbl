@@ -18,10 +18,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 <?php
 if(isset($_POST['bblm_team_submit'])) {
 
-	//Determine the parent page
-	$options = get_option('bblm_config');
-	$bblm_page_parent = htmlspecialchars($options['page_team'], ENT_QUOTES);
-
 	//Determine if a new Owner was created or an existing one used
 	$bblm_tuser = "";
 	if ( empty( $_POST['bblm_tusernew'] ) ) {
@@ -55,15 +51,15 @@ if(isset($_POST['bblm_team_submit'])) {
 	$my_post = array(
 		'post_title' => wp_filter_nohtml_kses($_POST['bblm_tname']),
 		'post_content' => wp_filter_kses($_POST['bblm_tdesc']),
-		'post_type' => 'page',
+		'post_type' => 'bblm_team',
 		'post_status' => 'publish',
 		'comment_status' => 'closed',
-		'ping_status' => 'closed',
-		'post_parent' => $bblm_page_parent
+		'ping_status' => 'closed'
 	);
 	if ($bblm_submission = wp_insert_post( $my_post )) {
 		add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_team.php');
 		add_post_meta($bblm_submission, 'team_motto', esc_textarea( $_POST['bblm_tmotto'] ) );
+		add_post_meta( $team_WPID, 'team_status', '1', true );
 
 		//Determine permlink for this page
 		$bblmpageguid = get_permalink($bblm_submission);
@@ -72,6 +68,8 @@ if(isset($_POST['bblm_team_submit'])) {
 		$wpdb->query($bblmdatasql);
 
 		$team_id = $wpdb->insert_id;
+		$team_WPID = $bblm_submission;
+		$page_name = wp_filter_nohtml_kses( $_POST['bblm_tname'] );
 
 		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'t_\')';
 		$wpdb->query($bblmmappingsql);
@@ -87,9 +85,9 @@ if(isset($_POST['bblm_team_submit'])) {
 		$roster_added = 0;
 		if ($_POST['bblm_roster']) {
 			$my_post = array(
-				'post_title' => 'Roster',
+				'post_title' => 'Roster-'.$page_name,
 				'post_content' => '',
-				'post_type' => 'page',
+				'post_type' => 'bblm_roster',
 				'post_status' => 'publish',
 				'comment_status' => 'closed',
 				'ping_status' => 'closed',
@@ -97,6 +95,9 @@ if(isset($_POST['bblm_team_submit'])) {
 			);
 			if ($bblm_submission = wp_insert_post( $my_post )) {
 				add_post_meta($bblm_submission, '_wp_page_template', BBLM_TEMPLATE_PATH . 'single-bblm_roster.php');
+				//Add meta to both teams and rosters to enable display
+				add_post_meta( $bblm_submission, 'roster_team', $team_WPID );
+				add_post_meta( $team_WPID, 'team_roster', $bblm_submission );
 
 				$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$team_id.'\', \''.$bblm_submission.'\', \'roster\')';
 				$wpdb->query($bblmmappingsql);
@@ -285,7 +286,7 @@ function UpdateBankTv() {
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_tapoc">Apothecary</label></th>
 		  <td><input type="text" name="bblm_tapoc" size="1" value="0" maxlength="1" id="bblm_tapoc" class="small-text"/><br />
-		  @ 10,000 each</td>
+		  @ 50,000 each</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top">&nbsp;</th>

@@ -9,7 +9,7 @@
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Widget
- * @version   1.1
+ * @version   2.0
  */
 
 class BBLM_Widget_TCteamlogo extends WP_Widget {
@@ -23,33 +23,17 @@ class BBLM_Widget_TCteamlogo extends WP_Widget {
 
   //The Widget Output in the front-end
   public function widget( $args, $instance ) {
-    global $wpdb;
 
-    $parentoption = get_option( 'bblm_config' );
-    $parentoption = htmlspecialchars( $parentoption[ 'page_team' ], ENT_QUOTES );
+    $post_type = get_post_type();
 
-    $parentpage = 0;
-    if ( is_singular() ) {
-      $parentpage = get_queried_object()->post_parent;
-    }
-
-    //Check we are on the correct poat_type before we display the widget
-    //Checks to see if the parent of the page matches that in the bblm config
-    if ( $parentoption == $parentpage ) {
-
-      //pulling in the vars from the single-bblm_team template
-      global $ti;
+    //Check we are on the correct poat_type page, and not an archive before we display the widget
+    if ( $post_type == "bblm_team" && is_single() ) {
 
       echo $args['before_widget'];
 
-      //Determine if a custom logo is present
-      $filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
-      if (file_exists($filename)) {
-        echo "<img src=\"".home_url()."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
-      }
-      else {
-        BBLM_CPT_Race::display_race_icon( $ti->r_id, 'medium' );
-      }
+      echo '<div id="bblm_single-bblm_team-logo-widget">';
+      BBLM_CPT_Team::display_team_logo( get_the_ID(), 'medium' );
+      echo '</div>';
 
       echo $args['after_widget'];
 
@@ -61,7 +45,7 @@ class BBLM_Widget_TCteamlogo extends WP_Widget {
   public function form( $instance ) {
 
     echo '<p>'.__( 'Displays the logo of a team (Team page only)', 'bblm' ).'</p>';
-    echo '<p>'.__( 'It will automatically know the team that is being displayed', 'bblm' ).'</p>';
+    echo '<p>'.__( 'It will automatically know the team that is being displayed. Fallback is the Race logo', 'bblm' ).'</p>';
 	?>
 	<?php
 

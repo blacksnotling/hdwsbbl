@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/Admin
- * @version   1.5
+ * @version   1.6
  */
 
 class BBLM_Settings_Admin {
@@ -212,6 +212,14 @@ class BBLM_Settings_Admin {
 						'placeholder' => 'Enter a description here',
 						'type' => 'textarea',
 						'helper' => __( 'Text entered here appears at the top of the Awards page', 'bblm' ),
+					),
+					array(
+						'uid' => 'archive_stars_text',
+						'label' => __( 'Star Players Page Text', 'bblm' ),
+						'section' => 'second_section',
+						'placeholder' => 'Enter a description here',
+						'type' => 'textarea',
+						'helper' => __( 'Text entered here appears at the top of the Star Players page', 'bblm' ),
 					),
           array(
         		'uid' => 'page_team',

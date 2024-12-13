@@ -7,7 +7,7 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<?php if ( get_the_post_thumbnail() ) { ?>
 		<a class="entry-thumbnail" href="<?php echo esc_url( get_permalink() ); ?>">
-			<?php the_post_thumbnail( 'thumbnail' ); ?>
+			<?php the_post_thumbnail( 'large' ); ?>
 		</a>
 	<?php } ?>
 

@@ -15,28 +15,23 @@ function UpdateSPP(theId) {
   var inc_col = "#5EFB6E"
   var old_spp = document.getElementById('bblm_oldspp' + theId).value;
   var new_SPP = Number(old_spp) + Number(tot_spp);
-  if (((old_spp) <= 5) && new_SPP > 3) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  var inc_count = Number(document.getElementById('bblm_incnum' + theId).value);
+  if ( inc_count = 0 && new_SPP >= 3 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
-  else if (((old_spp) <= 4) && new_SPP > 4) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  if ( inc_count = 1 && new_SPP >= 4 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
-  else if (((old_spp) <= 6) && new_SPP > 6) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  if ( inc_count = 2 && new_SPP >= 6 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
-  else if (((old_spp) <= 8) && new_SPP > 8) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  if ( inc_count = 3 && new_SPP >= 8 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
-  else if (((old_spp) <= 10) && new_SPP > 10) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  if ( inc_count = 4 && new_SPP >= 10 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
-  else if (((old_spp) <= 15) && new_SPP > 15) {
-    document.getElementById('bblm_increase' + theId).style.backgroundColor = inc_col;
-    document.getElementById('bblm_increase' + theId).value = "[Skill]";
+  if ( inc_count = 5 && new_SPP >= 15 ) {
+    document.getElementById('bblm_increased' + theId).style.backgroundColor = inc_col;
   }
 }

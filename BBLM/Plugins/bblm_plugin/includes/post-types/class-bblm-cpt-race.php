@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author 		Blacksnotling
  * @category 	Admin
  * @package 	BBowlLeagueMan/CPT
- * @version   1.2
+ * @version   1.3
  */
 
 class BBLM_CPT_Race {
@@ -186,20 +186,6 @@ class BBLM_CPT_Race {
 
    }// end of get_reroll_cost()
 
-	 /**
-    * Returns the Special Rules for a race
-    *
-    * @param wordpress $query
-    * @return int $rr_cost cost of reroll
-    */
-    public static function get_special_rules( $ID ) {
-
- 		 $rr_cost = get_post_meta( $ID, 'race_srules', true );
-
-      return $rr_cost;
-
-    }// end of get_special_rules
-
 		/**
 		 * Returns the status (active / retired) of the Race
 		 *
@@ -321,7 +307,7 @@ class BBLM_CPT_Race {
 					else {
 ?>
 						<td><?php echo $pos->pos_ag; ?>+</td>
-						<td><?php echo $pos->pos_pa; ?>+</td>
+						<td><?php if ( $pos->pos_pa ==0 ) { echo '-'; } else { echo $pos->pos_pa .'+'; } ?></td>
 						<td><?php echo $pos->pos_av; ?>+</td>
 <?php
 					}
@@ -352,10 +338,77 @@ class BBLM_CPT_Race {
  	  */
  	  public function display_stars_available( $ID ) {
  			global $wpdb;
+			global $post;
 
-			$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_id = S.p_id AND S.r_id = ' . $ID . ' AND X.p_status = 1 ORDER BY X.p_name ASC';
-			if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
-				$zebracount = 1;
+			$starsql = 0;
+
+			//Grab the list of Race Special Rules / Traits assigned to this race
+			$term_obj_list = get_the_terms( $post->ID, 'race_rules' );
+
+			if ( $term_obj_list && ! is_wp_error( $term_obj_list ) ) {
+				//Loop through them and add them to an array
+				$race_terms = array();
+				foreach ( $term_obj_list as $term ) {
+					$race_terms[] = $term->slug;
+				}
+
+				//Form the custom query, looking for stars who have the same traits as the race
+				$args = array(
+					'post_type' => 'bblm_star',
+					'orderby'   => 'title',
+					'order' => 'ASC',
+					'posts_per_page' => -1,
+					'tax_query' => array(
+						array(
+							'taxonomy' => 'race_rules',
+							'field' => 'slug',
+							'terms' => $race_terms
+						)
+					)
+				);
+
+				$starsqlarray = array();
+				$starsql = "(";
+
+				// The Query
+				$the_query = new WP_Query( $args );
+
+				// The Loop
+				if ( $the_query->have_posts() ) {
+					while ( $the_query->have_posts() ) {
+						$the_query->the_post();
+
+						//Loop though each one and form the sql
+						$starsqlarray[] =" X.WPID = " . get_the_ID();
+					}
+					$starsql .= join( " OR ", $starsqlarray );
+					$starsql .= ")";
+				}
+				else {
+					// no posts found
+					echo '<p>' . __( 'There are currently no Star Players assigned to this race','bblm' ) . '<p>';
+				}
+				/* Restore original Post Data */
+				wp_reset_postdata();
+
+			}//end of if the race has any terms assigned
+			else {
+				//nothing is returned
+				echo '<p>' . __( 'There are currently no Star Players assigned to this race','bblm' ) . '<p>';
+			}
+
+
+			//Check that Stars exist and were generated
+			if ( !$starsql ) {
+				//Stars don't exist, error message printed above
+
+			}
+			else {
+				//Stars do exist, and the SQL was generated in the loop above
+					$starplayersql = 'SELECT X.WPID AS PWPID, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_pa, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'player X WHERE X.p_legacy = 0 AND X.p_status = 1 AND '. $starsql .' ORDER BY X.p_name ASC';
+
+					if ( $starplayer = $wpdb->get_results( $starplayersql ) ) {
+						$zebracount = 1;
 ?>
 					<div role="region" aria-labelledby="Caption01" tabindex="0">
 					<table class="bblm_table bblm-tbl-scrollable">
@@ -373,16 +426,14 @@ class BBLM_CPT_Race {
 						</thead>
 						<tbody>
 <?php
-				foreach ( $starplayer as $star ) {
-					if ( $zebracount % 2 ) {
+					foreach ( $starplayer as $star ) {
 						if ( $zebracount % 2 ) {
-							echo '<tr>';
-						}
-						else {
 							echo '<tr class="bblm_tbl_alt">';
 						}
-					}
-						?>
+						else {
+							echo '<tr>';
+						}
+?>
 								<td><?php echo bblm_get_player_link( $star->PWPID ); ?></td>
 								<td><?php echo $star->p_ma; ?></td>
 								<td><?php echo $star->p_st; ?></td>
@@ -390,16 +441,17 @@ class BBLM_CPT_Race {
 								<td><?php echo $star->p_pa; ?>+</td>
 								<td><?php echo $star->p_av; ?>+</td>
 								<td class="bblm_tbl_skills"><?php echo $star->p_skills; ?></td>
-								<td><?php number_format( $star->p_cost ); ?> GP</td>
+								<td><?php echo number_format( $star->p_cost ); ?> GP</td>
 							</tr>
-						<?php
-					$zebracount++;
-				 }
+<?php
+						$zebracount++;
+					 }
 ?>
 						</tbody>
 					</table>
 				</div>
 <?php
+				}
 			}
 
  	  } //end of display_stars_available()
